@@ -1,24 +1,22 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.counter
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.gamekeeper.GameIcons
+import io.github.m0nkeysan.gamekeeper.ui.components.ColorSelectorRow
+import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,14 +33,10 @@ fun EditCounterScreen(
     var countText by remember { mutableStateOf(initialCount.toString()) }
     var selectedColor by remember { mutableStateOf(Color(initialColor)) }
     var showDeleteDialog by remember { mutableStateOf(false) }
-    var showColorPicker by remember { mutableStateOf(false) }
 
-    val presetColors = remember {
-        listOf(
-            Color(0xFFF44336), Color(0xFFE91E63), Color(0xFF9C27B0), Color(0xFF673AB7),
-            Color(0xFF3F51B5), Color(0xFF2196F3), Color(0xFF00BCD4), Color(0xFF4CAF50),
-            Color(0xFFFFC107)
-        )
+    val selectedColorHex = remember(selectedColor) {
+        val argb = selectedColor.toArgb()
+        String.format("#%06X", (0xFFFFFF and argb))
     }
 
     if (showDeleteDialog) {
@@ -67,16 +61,7 @@ fun EditCounterScreen(
         )
     }
 
-    if (showColorPicker) {
-        ColorPickerDialog(
-            initialColor = selectedColor,
-            onDismiss = { showColorPicker = false },
-            onColorSelected = { 
-                selectedColor = it
-                showColorPicker = false
-            }
-        )
-    }
+
 
     Scaffold(
         containerColor = Color.White,
@@ -157,39 +142,16 @@ fun EditCounterScreen(
         ) {
             Spacer(modifier = Modifier.height(8.dp))
 
-            // 1. Modern Color Selection
+            // 1. Unified Color Selection
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Label(text = "ACCENT COLOR")
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    presetColors.forEach { color ->
-                        ColorCircle(
-                            color = color,
-                            isSelected = color == selectedColor,
-                            size = 32.dp,
-                            onClick = { selectedColor = color }
-                        )
-                    }
-                    
-                    Box(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFFF5F5F5))
-                            .clickable { showColorPicker = true },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = GameIcons.Palette,
-                            contentDescription = "Custom",
-                            tint = Color.DarkGray,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                }
+                ColorSelectorRow(
+                    selectedColorHex = selectedColorHex,
+                    onColorSelected = { hex ->
+                        selectedColor = parseColor(hex)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
 
             // 2. Name Field
@@ -258,82 +220,4 @@ private fun FlatField(
     }
 }
 
-@Composable
-private fun ColorCircle(
-    color: Color,
-    isSelected: Boolean,
-    size: androidx.compose.ui.unit.Dp,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .size(size)
-            .clip(CircleShape)
-            .background(color)
-            .border(
-                width = if (isSelected) 3.dp else 0.dp,
-                color = Color.Black.copy(alpha = 0.3f),
-                shape = CircleShape
-            )
-            .clickable(onClick = onClick)
-    )
-}
 
-@Composable
-private fun ColorPickerDialog(
-    initialColor: Color,
-    onDismiss: () -> Unit,
-    onColorSelected: (Color) -> Unit
-) {
-    var hue by remember { mutableStateOf(0f) }
-    
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        containerColor = Color.White,
-        title = { 
-            Text(
-                "Pick a Color", 
-                fontWeight = FontWeight.Black,
-                style = MaterialTheme.typography.titleLarge
-            ) 
-        },
-        text = {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(24.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .background(Color.hsv(hue, 0.6f, 0.9f))
-                )
-                
-                Slider(
-                    value = hue,
-                    onValueChange = { hue = it },
-                    valueRange = 0f..360f,
-                    colors = SliderDefaults.colors(
-                        thumbColor = Color.hsv(hue, 0.6f, 0.9f),
-                        activeTrackColor = Color.hsv(hue, 0.6f, 0.9f).copy(alpha = 0.24f)
-                    )
-                )
-            }
-        },
-        confirmButton = {
-            Button(
-                onClick = { onColorSelected(Color.hsv(hue, 0.6f, 0.9f)) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.hsv(hue, 0.6f, 0.9f)),
-                shape = MaterialTheme.shapes.medium
-            ) {
-                Text("Select", fontWeight = FontWeight.Bold)
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel", color = Color.Gray)
-            }
-        }
-    )
-}

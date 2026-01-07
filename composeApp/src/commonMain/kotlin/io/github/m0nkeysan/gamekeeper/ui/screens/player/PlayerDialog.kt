@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.ui.components.ColorSelectorRow
+import io.github.m0nkeysan.gamekeeper.ui.components.DIALOG_COLOR_PRESETS
 
 @Composable
 fun PlayerDialog(
@@ -66,7 +67,8 @@ fun PlayerDialog(
                 ColorSelectorRow(
                     selectedColorHex = selectedColor,
                     onColorSelected = { selectedColor = it },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    presets = DIALOG_COLOR_PRESETS
                 )
             }
         },

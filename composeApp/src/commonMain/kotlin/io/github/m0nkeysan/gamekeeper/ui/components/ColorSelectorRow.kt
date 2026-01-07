@@ -33,25 +33,37 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlin.math.*
 
+val DEFAULT_COLOR_PRESETS = listOf(
+    "#F44336", // Red
+    "#E91E63", // Pink
+    "#9C27B0", // Purple
+    "#673AB7", // Deep Purple
+    "#3F51B5", // Indigo
+    "#2196F3", // Blue
+    "#00BCD4", // Cyan
+    "#4CAF50", // Green
+    "#FFC107", // Amber
+    "#FF9800", // Orange
+)
+
+val DIALOG_COLOR_PRESETS = listOf(
+    "#F44336", // Red
+    "#E91E63", // Pink
+    "#9C27B0", // Purple
+    "#2196F3", // Blue
+    "#4CAF50", // Green
+    "#FFC107", // Amber
+    "#FF9800", // Orange
+)
+
 @Composable
 fun ColorSelectorRow(
     selectedColorHex: String,
     onColorSelected: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    presets: List<String> = DEFAULT_COLOR_PRESETS
 ) {
     var showCustomPicker by remember { mutableStateOf(false) }
-
-    val presets = listOf(
-        "#E91E63", // Pink
-        "#F44336", // Red
-        "#FF9800", // Orange
-        "#FFEB3B", // Yellow
-        "#4CAF50", // Green
-        "#03A9F4", // Light Blue
-    )
-
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
 
     Row(
         modifier = modifier
@@ -72,7 +84,7 @@ fun ColorSelectorRow(
         }
 
         // 2. Spacer & Custom Picker Button
-        Spacer(modifier = Modifier.width(16.dp)) // Gap between ribbon and button
+        Spacer(modifier = Modifier.width(12.dp)) // Slightly reduced spacer to fit more
 
         val isCustomSelected = presets.none { it.equals(selectedColorHex, ignoreCase = true) }
         val customColor = if (isCustomSelected) parseColor(selectedColorHex) else Color(0xFF4CAF50)
@@ -104,7 +116,8 @@ fun ColorSwatchItem(
 ) {
     val color = remember(colorHex) { parseColor(colorHex) }
 
-    val width by animateDpAsState(if (isSelected) 48.dp else 32.dp, label = "width")
+    // Adjusted widths to fit more items in a single row without scrolling
+    val width by animateDpAsState(if (isSelected) 40.dp else 24.dp, label = "width")
     val height by animateDpAsState(if (isSelected) 64.dp else 40.dp, label = "height")
     val elevation by animateDpAsState(if (isSelected) 8.dp else 0.dp, label = "elevation")
 
@@ -126,7 +139,8 @@ fun CustomPickerSwatch(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val size by animateDpAsState(if (isSelected) 56.dp else 48.dp, label = "size")
+    // Fixed width and height as requested, matching the height of selected presets
+    val size = 48.dp
     val elevation by animateDpAsState(if (isSelected) 8.dp else 4.dp, label = "elevation")
 
     Surface(
@@ -136,7 +150,7 @@ fun CustomPickerSwatch(
         shape = RoundedCornerShape(8.dp), // Rounded corners for the button
         color = color,
         shadowElevation = elevation,
-        border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null
+        border = if (isSelected) BorderStroke(3.dp, MaterialTheme.colorScheme.primary) else null
     ) {
         Box(contentAlignment = Alignment.Center) {
             Icon(
