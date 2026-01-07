@@ -1,0 +1,291 @@
+package io.github.m0nkeysan.gamekeeper.ui.screens.tarot
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.m0nkeysan.gamekeeper.GameIcons
+import io.github.m0nkeysan.gamekeeper.core.model.*
+import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
+import io.github.m0nkeysan.gamekeeper.ui.viewmodel.TarotScoringViewModel
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TarotScoringScreen(
+    gameId: String,
+    onBack: () -> Unit,
+    onAddNewRound: (Long?) -> Unit,
+    viewModel: TarotScoringViewModel = viewModel { TarotScoringViewModel() }
+) {
+    val state by viewModel.state.collectAsState()
+    val hapticController = rememberHapticFeedbackController()
+
+    LaunchedEffect(gameId) {
+        viewModel.loadGame(gameId)
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(state.game?.id?.let { "Tarot Scoring" } ?: "Loading...")
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { onAddNewRound(null) }) {
+                Icon(GameIcons.Add, contentDescription = "Add Round")
+            }
+        }
+    ) { paddingValues ->
+        Surface(
+            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            if (state.game == null) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                MainScoringView(
+                    state = state,
+                    viewModel = viewModel,
+                    onEditRound = onAddNewRound
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MainScoringView(
+    state: TarotScoringState,
+    viewModel: TarotScoringViewModel,
+    onEditRound: (Long) -> Unit
+) {
+    val playerScores = remember(state.rounds) { viewModel.getCurrentTotalScores() }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        PlayerSummarySection(
+            players = state.players,
+            scores = playerScores
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Box(modifier = Modifier.weight(1f)) {
+            RoundHistorySection(
+                rounds = state.rounds,
+                players = state.players,
+                playerCount = state.game?.playerCount ?: state.players.size,
+                onEditRound = onEditRound
+            )
+        }
+    }
+}
+
+@Composable
+fun PlayerSummarySection(
+    players: List<Player>,
+    scores: Map<String, Int>
+) {
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        Text(
+            text = "Scores",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            players.forEach { player ->
+                val score = scores[player.id] ?: 0
+                val scoreColor = if (score > 0) Color(0xFF4CAF50)
+                else if (score < 0) MaterialTheme.colorScheme.error
+                else MaterialTheme.colorScheme.onSurface
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = scoreColor.copy(alpha = 0.1f)
+                    ),
+                    border = BorderStroke(1.dp, scoreColor.copy(alpha = 0.2f))
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Surface(
+                                shape = CircleShape,
+                                modifier = Modifier.size(32.dp),
+                                color = scoreColor.copy(alpha = 0.2f)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Text(
+                                        text = player.name.firstOrNull()?.uppercase() ?: "?",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = scoreColor
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.size(12.dp))
+
+                            Text(
+                                text = player.name,
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+
+                        Text(
+                            text = if (score >= 0) "+$score" else "$score",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = scoreColor,
+                            fontWeight = FontWeight.Black
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun RoundHistorySection(
+    rounds: List<TarotRound>,
+    players: List<Player>,
+    playerCount: Int,
+    onEditRound: (Long) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+    ) {
+        Text(
+            text = "History",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        if (rounds.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(
+                    text = "No rounds yet",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 80.dp)
+            ) {
+                items(rounds.reversed()) { round ->
+                    val taker = players.getOrNull(round.takerPlayerId.toInt())?.name ?: "Unknown"
+                    RoundHistoryItem(
+                        round = round, 
+                        takerName = taker,
+                        playerCount = playerCount,
+                        onClick = { onEditRound(round.id) }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun RoundHistoryItem(
+    round: TarotRound,
+    takerName: String,
+    playerCount: Int,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Round ${round.roundNumber} - $takerName",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
+                )
+
+                val displayScore = when (playerCount) {
+                    5 -> {
+                        val partnerId = round.calledPlayerId ?: round.takerPlayerId
+                        if (partnerId == round.takerPlayerId) round.score * 4 else round.score * 2
+                    }
+                    else -> round.score * (playerCount - 1)
+                }
+                val scoreColor = if (displayScore >= 0) Color(0xFF4CAF50) else MaterialTheme.colorScheme.error
+                Text(
+                    text = if (displayScore >= 0) "+$displayScore" else "$displayScore",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = scoreColor,
+                    fontWeight = FontWeight.Black
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(4.dp))
+            
+            Text(
+                text = "${round.bid.displayName} • ${round.bouts} bouts • ${round.pointsScored} pts",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            
+            val announces = mutableListOf<String>()
+            if (round.hasPetitAuBout) announces.add("Petit au bout")
+            if (round.hasPoignee) announces.add("Poignée ${round.poigneeLevel?.displayName}")
+            if (round.chelem != ChelemType.NONE) announces.add("Chelem: ${round.chelem.displayName}")
+            
+            if (announces.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = announces.joinToString(", "),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}

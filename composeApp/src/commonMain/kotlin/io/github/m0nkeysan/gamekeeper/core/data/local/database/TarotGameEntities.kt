@@ -1,0 +1,33 @@
+package io.github.m0nkeysan.gamekeeper.core.data.local.database
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "tarot_games")
+data class TarotGameEntity(
+    @PrimaryKey
+    val id: String,
+    val name: String,
+    val playerCount: Int,
+    val playerNames: String, // Comma-separated names
+    val createdAt: Long,
+    val updatedAt: Long
+)
+
+@Entity(tableName = "tarot_rounds")
+data class TarotRoundEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val gameId: String,
+    val roundNumber: Int,
+    val takerPlayerIndex: Int, // Index in the playerNames list
+    val bid: String,
+    val bouts: Int,
+    val pointsScored: Int,
+    val hasPetitAuBout: Boolean,
+    val hasPoignee: Boolean,
+    val poigneeLevel: String?,
+    val chelem: String,
+    val calledPlayerIndex: Int?,
+    val score: Int
+)
