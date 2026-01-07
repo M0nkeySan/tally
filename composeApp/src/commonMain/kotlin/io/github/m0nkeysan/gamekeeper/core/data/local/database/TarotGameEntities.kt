@@ -9,7 +9,7 @@ data class TarotGameEntity(
     val id: String,
     val name: String,
     val playerCount: Int,
-    val playerNames: String, // Comma-separated names
+    val playerIds: String, // Comma-separated player IDs
     val createdAt: Long,
     val updatedAt: Long
 )
@@ -20,7 +20,7 @@ data class TarotRoundEntity(
     val id: Long = 0,
     val gameId: String,
     val roundNumber: Int,
-    val takerPlayerIndex: Int, // Index in the playerNames list
+    val takerPlayerIndex: Int, // Index in the playerIds list
     val bid: String,
     val bouts: Int,
     val pointsScored: Int,

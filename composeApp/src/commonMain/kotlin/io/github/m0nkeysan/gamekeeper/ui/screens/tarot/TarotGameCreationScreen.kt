@@ -10,7 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
+import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.platform.getCurrentDateTimeString
+import io.github.m0nkeysan.gamekeeper.ui.components.PlayerSelectorField
+import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -21,7 +24,15 @@ fun TarotGameCreationScreen(
 ) {
     var gameName by remember { mutableStateOf(getCurrentDateTimeString()) }
     var playerCount by remember { mutableStateOf(4) }
-    val playerNames = remember { mutableStateListOf("", "", "", "", "") }
+    val allPlayers by viewModel.allPlayers.collectAsState(emptyList())
+    
+    // Using a Map to keep track of selected players for each slot
+    val selectedPlayers = remember { mutableStateMapOf<Int, Player?>() }
+
+    fun generateRandomColor(): String {
+        val color = Random.nextInt(0xFFFFFF)
+        return "#${color.toString(16).padStart(6, '0')}"
+    }
 
     Scaffold(
         topBar = {
@@ -72,28 +83,35 @@ fun TarotGameCreationScreen(
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text("Players", style = MaterialTheme.typography.titleMedium)
                 for (i in 0 until playerCount) {
-                    OutlinedTextField(
-                        value = playerNames[i],
-                        onValueChange = { playerNames[i] = it },
-                        label = { Text("Player ${i + 1} Name") },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
+                    val excludedIds = selectedPlayers.filter { it.key != i }.values.mapNotNull { it?.id }.toSet()
+                    PlayerSelectorField(
+                        label = "Player ${i + 1}",
+                        selectedPlayer = selectedPlayers[i],
+                        allPlayers = allPlayers,
+                        excludedPlayerIds = excludedIds,
+                        onPlayerSelected = { selectedPlayers[i] = it },
+                        onNewPlayerCreated = { name ->
+                            val newPlayer = Player.create(name, generateRandomColor())
+                            selectedPlayers[i] = newPlayer
+                        }
                     )
                 }
             }
 
             Button(
                 onClick = {
-                    val names = playerNames.take(playerCount).map { it.ifBlank { "Player" } }
-                    viewModel.createGame(
-                        name = gameName.ifBlank { "Tarot Game" },
-                        playerCount = playerCount,
-                        playerNames = names,
-                        onCreated = onGameCreated
-                    )
+                    val finalPlayers = (0 until playerCount).mapNotNull { selectedPlayers[it] }
+                    if (finalPlayers.size == playerCount) {
+                        viewModel.createGame(
+                            name = gameName.ifBlank { "Tarot Game" },
+                            playerCount = playerCount,
+                            players = finalPlayers,
+                            onCreated = onGameCreated
+                        )
+                    }
                 },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
-                enabled = gameName.isNotBlank() && playerNames.take(playerCount).all { it.isNotBlank() }
+                enabled = gameName.isNotBlank() && (0 until playerCount).all { selectedPlayers[it] != null }
             ) {
                 Text("Start Game")
             }

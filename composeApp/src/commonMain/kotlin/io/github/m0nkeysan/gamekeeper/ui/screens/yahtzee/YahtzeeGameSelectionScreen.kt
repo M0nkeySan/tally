@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.YahtzeeGameEntity
@@ -31,7 +32,7 @@ fun YahtzeeGameSelectionScreen(
     viewModel: YahtzeeGameViewModel = viewModel { YahtzeeGameViewModel() }
 ) {
     val state by viewModel.selectionState.collectAsState()
-    var gameToDelete by remember { mutableStateOf<YahtzeeGameEntity?>(null) }
+    var gameToDelete by remember { mutableStateOf<YahtzeeGameDisplayModel?>(null) }
 
     if (gameToDelete != null) {
         AlertDialog(
@@ -41,7 +42,7 @@ fun YahtzeeGameSelectionScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        gameToDelete?.let { viewModel.deleteGame(it) }
+                        gameToDelete?.let { viewModel.deleteGame(it.rawEntity) }
                         gameToDelete = null
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
@@ -65,6 +66,11 @@ fun YahtzeeGameSelectionScreen(
                     IconButton(onClick = onBack) {
                         Icon(GameIcons.ArrowBack, contentDescription = "Back")
                     }
+                },
+                actions = {
+                    IconButton(onClick = onCreateNewGame) {
+                        Icon(Icons.Default.Add, contentDescription = "New Game")
+                    }
                 }
             )
         },
@@ -79,12 +85,19 @@ fun YahtzeeGameSelectionScreen(
                 CircularProgressIndicator()
             }
         } else if (state.games.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
                 Text("No games yet. Start one!")
             }
         } else {
             LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(paddingValues),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -105,11 +118,18 @@ fun YahtzeeGameSelectionScreen(
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .background(MaterialTheme.colorScheme.errorContainer, shape = MaterialTheme.shapes.medium)
+                                    .background(
+                                        MaterialTheme.colorScheme.errorContainer,
+                                        shape = MaterialTheme.shapes.medium
+                                    )
                                     .padding(horizontal = 20.dp),
                                 contentAlignment = Alignment.CenterEnd
                             ) {
-                                Icon(Icons.Default.Delete, null, tint = MaterialTheme.colorScheme.onErrorContainer)
+                                Icon(
+                                    Icons.Default.Delete,
+                                    null,
+                                    tint = MaterialTheme.colorScheme.onErrorContainer
+                                )
                             }
                         }
                     ) {
@@ -122,12 +142,16 @@ fun YahtzeeGameSelectionScreen(
 }
 
 @Composable
-fun YahtzeeGameCard(game: YahtzeeGameEntity, onClick: () -> Unit) {
+fun YahtzeeGameCard(game: YahtzeeGameDisplayModel, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = if (game.isFinished) {
-            CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
         } else {
             CardDefaults.cardColors()
         }
@@ -140,24 +164,15 @@ fun YahtzeeGameCard(game: YahtzeeGameEntity, onClick: () -> Unit) {
             Column(modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = game.name, 
-                        style = MaterialTheme.typography.titleLarge, 
+                        text = game.name,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = if (game.isFinished) Color.Gray else MaterialTheme.colorScheme.onSurface
                     )
-                    if (game.isFinished) {
-                        Spacer(Modifier.width(8.dp))
-                        SuggestionChip(
-                            onClick = { },
-                            label = { Text("FINISHED", fontSize = 10.sp) },
-                            shape = CircleShape,
-                            modifier = Modifier.height(20.dp)
-                        )
-                    }
                 }
-                
+
                 Spacer(modifier = Modifier.height(4.dp))
-                
+
                 if (game.isFinished && game.winnerName != null) {
                     Text(
                         text = "Winner: ${game.winnerName}",
@@ -167,15 +182,15 @@ fun YahtzeeGameCard(game: YahtzeeGameEntity, onClick: () -> Unit) {
                     )
                 } else {
                     Text(
-                        text = "${game.playerCount} players", 
+                        text = "${game.playerCount} players",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
-                
+
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 Text(
-                    text = game.playerNames.split(",").joinToString(", "),
+                    text = game.playerNames,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

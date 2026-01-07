@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
+import io.github.m0nkeysan.gamekeeper.core.model.Player
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,16 +73,14 @@ fun YahtzeeGameView(
     onGameFinished: () -> Unit
 ) {
     val game = state.game!!
-    val players = game.playerNames.split(",")
+    val players = viewModel.getPlayers()
     var selectedPlayerIndex by remember { mutableStateOf(game.currentPlayerIndex) }
     var showPlayerDropdown by remember { mutableStateOf(false) }
     
-    // Automatically switch to current player when turn changes
     LaunchedEffect(game.currentPlayerIndex) {
         selectedPlayerIndex = game.currentPlayerIndex
     }
 
-    // Navigate to summary when game is finished
     LaunchedEffect(state.scores) {
         if (viewModel.isGameFinished()) {
             viewModel.markAsFinished()
@@ -90,7 +89,6 @@ fun YahtzeeGameView(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        // Player Selection Header
         Surface(
             color = MaterialTheme.colorScheme.surface,
             tonalElevation = 2.dp,
@@ -103,7 +101,6 @@ fun YahtzeeGameView(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Previous Player Arrow
                 IconButton(
                     onClick = { 
                         selectedPlayerIndex = if (selectedPlayerIndex > 0) selectedPlayerIndex - 1 else players.size - 1 
@@ -115,7 +112,6 @@ fun YahtzeeGameView(
                     )
                 }
 
-                // Player Name & Dropdown
                 Box(contentAlignment = Alignment.Center) {
                     Column(
                         modifier = Modifier
@@ -139,7 +135,7 @@ fun YahtzeeGameView(
                             }
                             
                             Text(
-                                text = players[selectedPlayerIndex],
+                                text = players.getOrNull(selectedPlayerIndex)?.name ?: "Unknown",
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.ExtraBold
                             )
@@ -162,7 +158,7 @@ fun YahtzeeGameView(
                         expanded = showPlayerDropdown,
                         onDismissRequest = { showPlayerDropdown = false }
                     ) {
-                        players.forEachIndexed { index, name ->
+                        players.forEachIndexed { index, player ->
                             DropdownMenuItem(
                                 text = { 
                                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -170,7 +166,7 @@ fun YahtzeeGameView(
                                             Text("● ", color = MaterialTheme.colorScheme.primary)
                                         }
                                         Text(
-                                            text = name,
+                                            text = player.name,
                                             fontWeight = if (index == selectedPlayerIndex) FontWeight.Bold else FontWeight.Normal
                                         )
                                         Spacer(Modifier.weight(1f))
@@ -190,7 +186,6 @@ fun YahtzeeGameView(
                     }
                 }
 
-                // Next Player Arrow
                 IconButton(
                     onClick = { 
                         selectedPlayerIndex = (selectedPlayerIndex + 1) % players.size 
@@ -204,13 +199,12 @@ fun YahtzeeGameView(
             }
         }
 
-        // Current Player Turn Indicator
         Surface(
             color = MaterialTheme.colorScheme.primaryContainer,
             modifier = Modifier.fillMaxWidth()
         ) {
             val isViewingSelf = selectedPlayerIndex == game.currentPlayerIndex
-            val displayedName = players[selectedPlayerIndex]
+            val displayedName = players.getOrNull(selectedPlayerIndex)?.name ?: "Unknown"
             
             Text(
                 text = if (isViewingSelf) "Your Turn" else "Viewing $displayedName's card",
@@ -221,7 +215,6 @@ fun YahtzeeGameView(
             )
         }
 
-        // Score Card
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(16.dp),

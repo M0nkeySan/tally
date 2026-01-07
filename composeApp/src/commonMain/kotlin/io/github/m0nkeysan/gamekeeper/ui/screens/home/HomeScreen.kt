@@ -47,8 +47,8 @@ fun HomeScreen(
             TopAppBar(
                 title = { Text("GameKeeper") },
                 actions = {
-                    IconButton(onClick = { onNavigateTo(Screen.AddPlayer.route) }) {
-                        Icon(GameIcons.Add, contentDescription = "Add Player")
+                    IconButton(onClick = { onNavigateTo(Screen.Players.route) }) {
+                        Icon(GameIcons.Group, contentDescription = "Players")
                     }
                     Spacer(modifier = Modifier.size(8.dp))
                     IconButton(onClick = { onNavigateTo(Screen.History.route) }) {

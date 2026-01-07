@@ -26,5 +26,6 @@ sealed class Screen(val route: String) {
             "edit_counter/$id?name=${name}&count=$count&color=$color"
     }
     data object History : Screen("history")
+    data object Players : Screen("players")
     data object AddPlayer : Screen("add_player")
 }

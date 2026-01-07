@@ -28,7 +28,7 @@ fun TarotGameSelectionScreen(
     viewModel: TarotGameViewModel = viewModel { TarotGameViewModel() }
 ) {
     val state by viewModel.selectionState.collectAsState()
-    var gameToDelete by remember { mutableStateOf<TarotGameEntity?>(null) }
+    var gameToDelete by remember { mutableStateOf<TarotGameDisplayModel?>(null) }
 
     if (gameToDelete != null) {
         AlertDialog(
@@ -38,7 +38,7 @@ fun TarotGameSelectionScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        gameToDelete?.let { viewModel.deleteGame(it) }
+                        gameToDelete?.let { viewModel.deleteGame(it.rawEntity) }
                         gameToDelete = null
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
@@ -134,7 +134,7 @@ fun TarotGameSelectionScreen(
 
 @Composable
 fun TarotGameCard(
-    game: TarotGameEntity, 
+    game: TarotGameDisplayModel, 
     onClick: () -> Unit
 ) {
     Card(
@@ -147,7 +147,7 @@ fun TarotGameCard(
             Text(text = "${game.playerCount} players", style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = game.playerNames.split(",").joinToString(", "),
+                text = game.playerNames,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

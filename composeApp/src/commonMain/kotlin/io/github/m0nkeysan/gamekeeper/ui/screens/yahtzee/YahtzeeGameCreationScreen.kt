@@ -13,7 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
+import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.platform.getCurrentDateTimeString
+import io.github.m0nkeysan.gamekeeper.ui.components.PlayerSelectorField
+import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,8 +26,14 @@ fun YahtzeeGameCreationScreen(
     viewModel: YahtzeeGameViewModel = viewModel { YahtzeeGameViewModel() }
 ) {
     var gameName by remember { mutableStateOf(getCurrentDateTimeString()) }
-    val playerNames = remember { mutableStateListOf("Player 1") }
+    val selectedPlayers = remember { mutableStateListOf<Player?>(null) }
+    val allPlayers by viewModel.allPlayers.collectAsState(emptyList())
     val maxPlayers = 8
+
+    fun generateRandomColor(): String {
+        val color = Random.nextInt(0xFFFFFF)
+        return "#${color.toString(16).padStart(6, '0')}"
+    }
 
     Scaffold(
         topBar = {
@@ -63,10 +72,10 @@ fun YahtzeeGameCreationScreen(
                 ) {
                     Text("Players", style = MaterialTheme.typography.titleMedium)
                     
-                    if (playerNames.size < maxPlayers) {
+                    if (selectedPlayers.size < maxPlayers) {
                         TextButton(
                             onClick = { 
-                                playerNames.add("Player ${playerNames.size + 1}")
+                                selectedPlayers.add(null)
                             }
                         ) {
                             Icon(Icons.Default.Add, contentDescription = null)
@@ -76,22 +85,28 @@ fun YahtzeeGameCreationScreen(
                     }
                 }
 
-                playerNames.forEachIndexed { index, name ->
+                selectedPlayers.forEachIndexed { index, player ->
+                    val excludedIds = selectedPlayers.filterIndexed { i, p -> i != index && p != null }.map { it!!.id }.toSet()
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        OutlinedTextField(
-                            value = name,
-                            onValueChange = { playerNames[index] = it },
-                            label = { Text("Player ${index + 1} Name") },
-                            modifier = Modifier.weight(1f),
-                            singleLine = true
+                        PlayerSelectorField(
+                            label = "Player ${index + 1}",
+                            selectedPlayer = player,
+                            allPlayers = allPlayers,
+                            excludedPlayerIds = excludedIds,
+                            onPlayerSelected = { selectedPlayers[index] = it },
+                            onNewPlayerCreated = { name ->
+                                val newPlayer = Player.create(name, generateRandomColor())
+                                selectedPlayers[index] = newPlayer
+                            },
+                            modifier = Modifier.weight(1f)
                         )
                         
-                        if (playerNames.size > 1) {
-                            IconButton(onClick = { playerNames.removeAt(index) }) {
+                        if (selectedPlayers.size > 1) {
+                            IconButton(onClick = { selectedPlayers.removeAt(index) }) {
                                 Icon(
                                     imageVector = Icons.Default.Remove,
                                     contentDescription = "Remove Player",
@@ -105,15 +120,18 @@ fun YahtzeeGameCreationScreen(
 
             Button(
                 onClick = {
-                    viewModel.createGame(
-                        name = gameName.ifBlank { "Yahtzee Game" },
-                        playerCount = playerNames.size,
-                        playerNames = playerNames.toList(),
-                        onCreated = onGameCreated
-                    )
+                    val finalPlayers = selectedPlayers.filterNotNull()
+                    if (finalPlayers.isNotEmpty()) {
+                        viewModel.createGame(
+                            name = gameName.ifBlank { "Yahtzee Game" },
+                            playerCount = finalPlayers.size,
+                            players = finalPlayers,
+                            onCreated = onGameCreated
+                        )
+                    }
                 },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
-                enabled = gameName.isNotBlank() && playerNames.all { it.isNotBlank() }
+                enabled = gameName.isNotBlank() && selectedPlayers.all { it != null }
             ) {
                 Text("Start Game")
             }

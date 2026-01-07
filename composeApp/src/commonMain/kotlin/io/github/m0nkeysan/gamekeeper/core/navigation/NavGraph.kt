@@ -7,19 +7,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import io.github.m0nkeysan.gamekeeper.ui.screens.home.HomeScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.fingerselector.FingerSelectorScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotScoringScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameSelectionScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameCreationScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotRoundAdditionScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeScoringScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeSummaryScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeGameSelectionScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeGameCreationScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.EditCounterScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.addplayer.AddPlayerScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.fingerselector.FingerSelectorScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.home.HomeScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameCreationScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameSelectionScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotRoundAdditionScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotScoringScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeGameCreationScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeGameSelectionScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeScoringScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeSummaryScreen
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterViewModel
 
 @Composable
@@ -43,14 +43,20 @@ fun GameNavGraph() {
             TarotGameSelectionScreen(
                 onBack = { navController.popBackStack() },
                 onCreateNewGame = { navController.navigate(Screen.TarotCreation.route) },
-                onSelectGame = { gameId -> navController.navigate(Screen.TarotScoring.createRoute(gameId)) }
+                onSelectGame = { gameId ->
+                    navController.navigate(
+                        Screen.TarotScoring.createRoute(
+                            gameId
+                        )
+                    )
+                }
             )
         }
 
         composable(route = Screen.TarotCreation.route) {
             TarotGameCreationScreen(
                 onBack = { navController.popBackStack() },
-                onGameCreated = { gameId -> 
+                onGameCreated = { gameId ->
                     navController.navigate(Screen.TarotScoring.createRoute(gameId)) {
                         popUpTo(Screen.Tarot.route)
                     }
@@ -66,8 +72,8 @@ fun GameNavGraph() {
             TarotScoringScreen(
                 gameId = gameId,
                 onBack = { navController.popBackStack() },
-                onAddNewRound = { roundId -> 
-                    navController.navigate(Screen.TarotRoundAddition.createRoute(gameId, roundId)) 
+                onAddNewRound = { roundId ->
+                    navController.navigate(Screen.TarotRoundAddition.createRoute(gameId, roundId))
                 }
             )
         }
@@ -76,7 +82,7 @@ fun GameNavGraph() {
             route = Screen.TarotRoundAddition.route,
             arguments = listOf(
                 navArgument("gameId") { type = NavType.StringType },
-                navArgument("roundId") { 
+                navArgument("roundId") {
                     type = NavType.StringType
                     nullable = true
                 }
@@ -85,7 +91,7 @@ fun GameNavGraph() {
             val gameId = entry.arguments?.getString("gameId") ?: ""
             val roundIdStr = entry.arguments?.getString("roundId")
             val roundId = roundIdStr?.toLongOrNull()
-            
+
             TarotRoundAdditionScreen(
                 gameId = gameId,
                 roundId = if (roundId != null && roundId > 0) roundId else null,
@@ -99,7 +105,13 @@ fun GameNavGraph() {
             YahtzeeGameSelectionScreen(
                 onBack = { navController.popBackStack() },
                 onCreateNewGame = { navController.navigate(Screen.YahtzeeCreation.route) },
-                onSelectGame = { gameId -> navController.navigate(Screen.YahtzeeScoring.createRoute(gameId)) }
+                onSelectGame = { gameId ->
+                    navController.navigate(
+                        Screen.YahtzeeScoring.createRoute(
+                            gameId
+                        )
+                    )
+                }
             )
         }
 
@@ -122,9 +134,11 @@ fun GameNavGraph() {
             YahtzeeScoringScreen(
                 gameId = gameId,
                 onBack = { navController.popBackStack() },
-                onGameFinished = { navController.navigate(Screen.YahtzeeSummary.createRoute(gameId)) {
-                    popUpTo(Screen.Yahtzee.route)
-                } }
+                onGameFinished = {
+                    navController.navigate(Screen.YahtzeeSummary.createRoute(gameId)) {
+                        popUpTo(Screen.Yahtzee.route)
+                    }
+                }
             )
         }
 
@@ -142,10 +156,10 @@ fun GameNavGraph() {
         // Counter
         composable(route = Screen.Counter.route) { entry ->
             val viewModel: CounterViewModel = viewModel()
-            
+
             val savedState = entry.savedStateHandle
             val resultType = savedState.get<String>("result_type")
-            
+
             if (resultType != null) {
                 if (resultType == "update") {
                     val id = savedState.get<String>("id") ?: ""
@@ -182,7 +196,7 @@ fun GameNavGraph() {
             val name = entry.arguments?.getString("name") ?: ""
             val count = entry.arguments?.getInt("count") ?: 0
             val color = entry.arguments?.getLong("color") ?: 0L
-            
+
             EditCounterScreen(
                 id = id,
                 initialName = name,
@@ -209,8 +223,12 @@ fun GameNavGraph() {
             )
         }
 
-        composable(route = Screen.AddPlayer.route) {
-            AddPlayerScreen(onBack = { navController.popBackStack() })
+        composable(route = Screen.Players.route) {
+            PlayerSelectionScreen(
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

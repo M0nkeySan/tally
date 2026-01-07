@@ -9,7 +9,7 @@ data class YahtzeeGameEntity(
     val id: String,
     val name: String,
     val playerCount: Int,
-    val playerNames: String, // Comma-separated names
+    val playerIds: String, // Comma-separated player IDs
     val firstPlayerIndex: Int,
     val currentPlayerIndex: Int,
     val isFinished: Boolean = false,

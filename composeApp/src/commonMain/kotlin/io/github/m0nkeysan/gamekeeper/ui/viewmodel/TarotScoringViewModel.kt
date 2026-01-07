@@ -8,50 +8,58 @@ import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotRoundInputState
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotScoringState
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.TarotRoundEntity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TarotScoringViewModel : ViewModel() {
     private val repository = PlatformRepositories.getTarotRepository()
+    private val playerRepository = PlatformRepositories.getPlayerRepository()
     private val scoringEngine = TarotScoringEngine()
-    
+
     private val _state = MutableStateFlow(TarotScoringState())
     val state: StateFlow<TarotScoringState> = _state.asStateFlow()
 
     fun loadGame(gameId: String) {
         viewModelScope.launch {
-            val gameEntity = repository.getGameById(gameId) ?: return@launch
-            
-            val players = gameEntity.playerNames.split(",").mapIndexed { index, name ->
-                Player(id = index.toString(), name = name)
-            }
-            
-            _state.update { it.copy(
-                game = TarotGame.create(players, gameEntity.playerCount).copy(id = gameId),
-                players = players
-            ) }
-            
-            repository.getRoundsForGame(gameId).collect { roundEntities ->
-                val rounds = roundEntities.map { entity ->
-                    TarotRound(
-                        id = entity.id,
-                        roundNumber = entity.roundNumber,
-                        takerPlayerId = entity.takerPlayerIndex.toString(),
-                        bid = TarotBid.valueOf(entity.bid),
-                        bouts = entity.bouts,
-                        pointsScored = entity.pointsScored,
-                        hasPetitAuBout = entity.hasPetitAuBout,
-                        hasPoignee = entity.hasPoignee,
-                        poigneeLevel = entity.poigneeLevel?.let { PoigneeLevel.valueOf(it) },
-                        chelem = ChelemType.valueOf(entity.chelem),
-                        calledPlayerId = entity.calledPlayerIndex?.toString(),
-                        score = entity.score
+            withContext(Dispatchers.IO) {
+                val gameEntity = repository.getGameById(gameId) ?: return@withContext
+
+                val playerIds = gameEntity.playerIds.split(",")
+                val players = playerIds.map { id ->
+                    playerRepository.getPlayerById(id) ?: Player(id = id, name = "Unknown")
+                }
+
+                _state.update {
+                    it.copy(
+                        game = TarotGame.create(players, gameEntity.playerCount).copy(id = gameId),
+                        players = players
                     )
                 }
-                _state.update { it.copy(rounds = rounds) }
+
+                repository.getRoundsForGame(gameId).collect { roundEntities ->
+                    val rounds = roundEntities.map { entity ->
+                        TarotRound(
+                            id = entity.id,
+                            roundNumber = entity.roundNumber,
+                            takerPlayerId = entity.takerPlayerIndex.toString(),
+                            bid = TarotBid.valueOf(entity.bid),
+                            bouts = entity.bouts,
+                            pointsScored = entity.pointsScored,
+                            hasPetitAuBout = entity.hasPetitAuBout,
+                            hasPoignee = entity.hasPoignee,
+                            poigneeLevel = entity.poigneeLevel?.let { PoigneeLevel.valueOf(it) },
+                            chelem = ChelemType.valueOf(entity.chelem),
+                            calledPlayerId = entity.calledPlayerIndex?.toString(),
+                            score = entity.score
+                        )
+                    }
+                    _state.update { it.copy(rounds = rounds) }
+                }
             }
         }
     }
@@ -72,7 +80,7 @@ class TarotScoringViewModel : ViewModel() {
 
         viewModelScope.launch {
             val currentState = _state.value
-            
+
             val existingRound = roundId?.let { id -> currentState.rounds.find { it.id == id } }
             val roundNumber = existingRound?.roundNumber ?: (currentState.rounds.size + 1)
 
@@ -102,7 +110,9 @@ class TarotScoringViewModel : ViewModel() {
                 score = result.totalScore
             )
 
-            repository.addRound(entity)
+            withContext(Dispatchers.IO) {
+                repository.addRound(entity)
+            }
         }
     }
 
@@ -114,32 +124,36 @@ class TarotScoringViewModel : ViewModel() {
 
         currentState.rounds.forEach { round ->
             val s = round.score
-            val takerId = round.takerPlayerId
-            val calledId = round.calledPlayerId
+            val takerIndex = round.takerPlayerId.toIntOrNull() ?: return@forEach
+            val takerUuid = players.getOrNull(takerIndex)?.id ?: return@forEach
+            val calledIndex = round.calledPlayerId?.toIntOrNull()
 
             when (playerCount) {
                 5 -> {
-                    val partnerId = calledId ?: takerId
-                    if (partnerId == takerId) {
-                        scores[takerId] = (scores[takerId] ?: 0) + (s * 4)
-                        players.forEach {
-                            if (it.id != takerId) scores[it.id] = (scores[it.id] ?: 0) - s
+                    if (calledIndex == null || calledIndex == takerIndex) {
+                        scores[takerUuid] = (scores[takerUuid] ?: 0) + (s * 4)
+                        players.forEachIndexed { index, p ->
+                            if (index != takerIndex) {
+                                scores[p.id] = (scores[p.id] ?: 0) - s
+                            }
                         }
                     } else {
-                        scores[takerId] = (scores[takerId] ?: 0) + (s * 2)
-                        scores[partnerId] = (scores[partnerId] ?: 0) + s
-                        players.forEach { p ->
-                            if (p.id != takerId && p.id != partnerId) {
+                        val partnerUuid = players.getOrNull(calledIndex)?.id ?: takerUuid
+                        scores[takerUuid] = (scores[takerUuid] ?: 0) + (s * 2)
+                        scores[partnerUuid] = (scores[partnerUuid] ?: 0) + s
+                        players.forEachIndexed { index, p ->
+                            if (index != takerIndex && index != calledIndex) {
                                 scores[p.id] = (scores[p.id] ?: 0) - s
                             }
                         }
                     }
                 }
+
                 else -> {
                     val multiplier = playerCount - 1
-                    scores[takerId] = (scores[takerId] ?: 0) + (s * multiplier)
-                    players.forEach { p ->
-                        if (p.id != takerId) {
+                    scores[takerUuid] = (scores[takerUuid] ?: 0) + (s * multiplier)
+                    players.forEachIndexed { index, p ->
+                        if (index != takerIndex) {
                             scores[p.id] = (scores[p.id] ?: 0) - s
                         }
                     }

@@ -31,7 +31,7 @@ class TarotScoringEngine {
         // diff is rounded up/down to nearest integer for calculation? 
         // Actually it's usually (25 + diff) where diff is points made - points needed
         val basePoints = 25 + diff.absoluteValue
-        var score = basePoints * bid.multiplier
+        val score = basePoints * bid.multiplier
         
         var bonus = 0
         

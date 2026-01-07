@@ -250,8 +250,8 @@ fun RoundHistoryItem(
 
                 val displayScore = when (playerCount) {
                     5 -> {
-                        val partnerId = round.calledPlayerId ?: round.takerPlayerId
-                        if (partnerId == round.takerPlayerId) round.score * 4 else round.score * 2
+                        val partnerId = round.calledPlayerId
+                        if (partnerId == null || partnerId == round.takerPlayerId) round.score * 4 else round.score * 2
                     }
                     else -> round.score * (playerCount - 1)
                 }
