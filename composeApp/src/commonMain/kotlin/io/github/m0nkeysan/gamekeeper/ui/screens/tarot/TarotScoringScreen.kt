@@ -20,6 +20,8 @@ import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.*
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
+import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
+import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.TarotScoringViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,9 +33,17 @@ fun TarotScoringScreen(
     viewModel: TarotScoringViewModel = viewModel { TarotScoringViewModel() }
 ) {
     val state by viewModel.state.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(gameId) {
         viewModel.loadGame(gameId)
+    }
+
+    // Show error in Snackbar
+    LaunchedEffect(state.error) {
+        state.error?.let { errorMessage ->
+            showErrorSnackbar(snackbarHostState, errorMessage)
+        }
     }
 
     Scaffold(
@@ -53,6 +63,9 @@ fun TarotScoringScreen(
             FloatingActionButton(onClick = { onAddNewRound(null) }) {
                 Icon(GameIcons.Add, contentDescription = "Add Round")
             }
+        },
+        snackbarHost = {
+            GameKeeperSnackbarHost(hostState = snackbarHostState)
         }
     ) { paddingValues ->
         Surface(
