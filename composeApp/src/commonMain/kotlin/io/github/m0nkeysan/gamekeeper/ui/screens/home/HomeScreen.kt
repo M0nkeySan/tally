@@ -24,6 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.navigation.Screen
 import io.github.m0nkeysan.gamekeeper.ui.components.GameCard
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import kotlin.math.sqrt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,7 +48,7 @@ fun HomeScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text("GameKeeper") }
+                title = { Text(AppStrings.HOME_TITLE) }
             )
         }
     ) { paddingValues ->
@@ -177,22 +178,22 @@ private val gameFeatureMap = mapOf(
     "tarot" to GameFeature(
         id = "tarot",
         icon = { Icon(GameIcons.Casino, contentDescription = null) },
-        title = "Tarot",
-        description = "Score Tarot games for 3, 4, or 5 players",
+        title = AppStrings.GAME_TAROT,
+        description = AppStrings.DESC_TAROT,
         route = Screen.Tarot.route
     ),
     "yahtzee" to GameFeature(
         id = "yahtzee",
         icon = { Icon(GameIcons.GridView, contentDescription = null) },
-        title = "Yahtzee",
-        description = "Complete Yahtzee scorecard with automatic bonuses",
+        title = AppStrings.GAME_YAHTZEE,
+        description = AppStrings.DESC_YAHTZEE,
         route = Screen.Yahtzee.route
     ),
     "counter" to GameFeature(
         id = "counter",
         icon = { Icon(GameIcons.Add, contentDescription = null) },
-        title = "Counter",
-        description = "Simple counter for any board game",
+        title = AppStrings.GAME_COUNTER,
+        description = AppStrings.DESC_COUNTER,
         route = Screen.Counter.route
     )
 )
