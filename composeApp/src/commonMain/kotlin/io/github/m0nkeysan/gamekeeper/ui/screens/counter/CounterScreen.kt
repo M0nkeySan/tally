@@ -51,6 +51,7 @@ import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterItem
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CounterScreen(
+    onBack: () -> Unit,
     onEditCounter: (String, String, Int, Long) -> Unit,
     viewModel: CounterViewModel = viewModel { CounterViewModel() }
 ) {
@@ -95,6 +96,11 @@ fun CounterScreen(
                         Text("$emoji ${leader.name}", fontWeight = FontWeight.ExtraBold)
                     } else {
                         Text("Counter")
+                    }
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {

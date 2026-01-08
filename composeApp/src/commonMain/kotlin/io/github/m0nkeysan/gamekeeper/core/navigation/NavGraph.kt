@@ -174,6 +174,7 @@ fun GameNavGraph() {
             }
 
             CounterScreen(
+                onBack = { navController.popBackStack() },
                 onEditCounter = { id, name, count, color ->
                     navController.navigate(Screen.EditCounter.createRoute(id, name, count, color))
                 },
