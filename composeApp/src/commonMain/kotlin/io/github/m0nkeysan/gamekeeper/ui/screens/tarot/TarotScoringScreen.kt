@@ -182,10 +182,11 @@ fun PlayerSummarySection(
                             )
                         }
 
+                        val scoreColor = if (score >= 0) GameColors.Success else GameColors.Error
                         Text(
-                            text = if (score >= 0) "+$score" else "$score",
+                            text = if (score >= 0) "+$score" else "-${kotlin.math.abs(score)}",
                             style = MaterialTheme.typography.titleLarge,
-                            color = contentColor,
+                            color = scoreColor,
                             fontWeight = FontWeight.Black
                         )
                     }
@@ -284,7 +285,7 @@ fun RoundHistoryItem(
                 val scoreColor =
                     if (displayScore >= 0) GameColors.Success else GameColors.Error
                 Text(
-                    text = if (displayScore >= 0) "+ $displayScore" else "- ${kotlin.math.abs(displayScore)}",
+                    text = if (displayScore >= 0) "+$displayScore" else "-${kotlin.math.abs(displayScore)}",
                     style = MaterialTheme.typography.bodyLarge,
                     color = scoreColor,
                     fontWeight = FontWeight.Black
