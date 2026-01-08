@@ -28,7 +28,8 @@ import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
 @Composable
 fun PlayerSelectionScreen(
     onBack: () -> Unit,
-    viewModel: PlayerSelectionViewModel = viewModel { PlayerSelectionViewModel() }
+    viewModel: PlayerSelectionViewModel = viewModel { PlayerSelectionViewModel() },
+    showBackButton: Boolean = true
 ) {
     val players by viewModel.players.collectAsState()
     
@@ -84,19 +85,30 @@ fun PlayerSelectionScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Players") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+            if (showBackButton) {
+                TopAppBar(
+                    title = { Text("Players") },
+                    navigationIcon = {
+                        IconButton(onClick = onBack) {
+                            Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                        }
+                    },
+                    actions = {
+                        IconButton(onClick = { showAddDialog = true }) {
+                            Icon(Icons.Default.Add, contentDescription = "Add Player")
+                        }
                     }
-                },
-                actions = {
-                    IconButton(onClick = { showAddDialog = true }) {
-                        Icon(Icons.Default.Add, contentDescription = "Add Player")
+                )
+            } else {
+                TopAppBar(
+                    title = { Text("Players") },
+                    actions = {
+                        IconButton(onClick = { showAddDialog = true }) {
+                            Icon(Icons.Default.Add, contentDescription = "Add Player")
+                        }
                     }
-                }
-            )
+                )
+            }
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddDialog = true }) {

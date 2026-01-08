@@ -7,10 +7,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import io.github.m0nkeysan.gamekeeper.ui.screens.common.HomeNavigationTemplate
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.EditCounterScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.fingerselector.FingerSelectorScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.home.HomeScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameCreationScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameSelectionScreen
@@ -31,7 +31,7 @@ fun GameNavGraph() {
         startDestination = Screen.Home.route
     ) {
         composable(route = Screen.Home.route) {
-            HomeScreen(onNavigateTo = { route -> navController.navigate(route) })
+            HomeNavigationTemplate(onNavigateTo = { route -> navController.navigate(route) })
         }
 
         composable(route = Screen.FingerSelector.route) {

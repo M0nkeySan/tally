@@ -30,7 +30,8 @@ import kotlin.math.sqrt
 @Composable
 fun HomeScreen(
     onNavigateTo: (String) -> Unit,
-    viewModel: HomeViewModel = viewModel { HomeViewModel() }
+    viewModel: HomeViewModel = viewModel { HomeViewModel() },
+    modifier: Modifier = Modifier
 ) {
     val cardOrder by viewModel.cardOrder.collectAsState()
     val features = remember(cardOrder) {
@@ -43,18 +44,10 @@ fun HomeScreen(
     val itemSizes = remember { mutableStateMapOf<Int, IntSize>() }
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text("GameKeeper") },
-                actions = {
-                    IconButton(onClick = { onNavigateTo(Screen.Players.route) }) {
-                        Icon(GameIcons.Group, contentDescription = "Players")
-                    }
-                    Spacer(modifier = Modifier.size(8.dp))
-                    IconButton(onClick = { onNavigateTo(Screen.History.route) }) {
-                        Icon(GameIcons.History, contentDescription = "Statistics")
-                    }
-                }
+                title = { Text("GameKeeper") }
             )
         }
     ) { paddingValues ->
