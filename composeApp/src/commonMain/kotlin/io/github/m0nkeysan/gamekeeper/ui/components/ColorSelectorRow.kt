@@ -1,7 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.ui.components
 
 import androidx.compose.animation.core.animateDpAsState
-import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -32,6 +31,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlin.math.*
+import io.github.m0nkeysan.gamekeeper.ui.utils.colorToHSV
+import io.github.m0nkeysan.gamekeeper.ui.utils.hsvToColor
 
 val DEFAULT_COLOR_PRESETS = listOf(
     "#F44336", // Red
@@ -169,9 +170,7 @@ fun ColorPickerDialog(
     onColorSelected: (String) -> Unit
 ) {
     val initialHsv = remember(initialColor) {
-        val floatArray = FloatArray(3)
-        AndroidColor.colorToHSV(parseColor(initialColor).toArgb(), floatArray)
-        floatArray
+        colorToHSV(parseColor(initialColor))
     }
 
     var hue by remember { mutableFloatStateOf(initialHsv[0]) }
@@ -179,7 +178,7 @@ fun ColorPickerDialog(
     var value by remember { mutableFloatStateOf(initialHsv[2]) }
 
     val currentColor = remember(hue, saturation, value) {
-        Color(AndroidColor.HSVToColor(floatArrayOf(hue, saturation, value)))
+        hsvToColor(floatArrayOf(hue, saturation, value))
     }
 
     AlertDialog(
@@ -334,7 +333,7 @@ fun BrightnessSlider(
 ) {
     // The color at standard brightness (Value = 1)
     val baseColor = remember(hue, saturation) {
-        Color(AndroidColor.HSVToColor(floatArrayOf(hue, saturation, 1f)))
+        hsvToColor(floatArrayOf(hue, saturation, 1f))
     }
 
     BoxWithConstraints(modifier = modifier) {
