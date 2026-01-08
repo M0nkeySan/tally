@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.GameIcons
@@ -134,8 +135,16 @@ fun GameSelectionTemplate(
                                 Box(
                                     modifier = Modifier
                                         .fillMaxSize()
-                                        .padding(horizontal = 20.dp)
-                                )
+                                        .padding(horizontal = 20.dp),
+                                    contentAlignment = Alignment.CenterEnd
+                                ) {
+                                    Icon(
+                                        imageVector = GameIcons.Delete,
+                                        contentDescription = "Delete game",
+                                        tint = GameColors.Error,
+                                        modifier = Modifier.size(32.dp)
+                                    )
+                                }
                             }
                         ) {
                             GameSelectionCard(
