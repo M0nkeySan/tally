@@ -4,7 +4,22 @@ import androidx.compose.ui.graphics.Color
 
 /**
  * Centralized color system for GameKeeper flat design.
- * All colors should be referenced from this object.
+ * All colors should be referenced from this object instead of using hardcoded hex values.
+ *
+ * This theme provides:
+ * - Primary & Secondary colors for main interactions
+ * - Semantic colors (Success, Error, Warning, Info) for status feedback
+ * - Neutral palette for backgrounds and text
+ * - Game-specific accents (Tarot purple, Yahtzee cyan)
+ * - Player avatar colors for consistent visual identification
+ * - Trophy colors for achievement display
+ *
+ * Example usage:
+ * ```
+ * Text("Hello", color = GameColors.TextPrimary)
+ * Surface(color = GameColors.Primary) { ... }
+ * Icon(Icons.Default.Check, tint = GameColors.Success)
+ * ```
  */
 object GameColors {
     // Primary Colors (Indigo - modern, professional)

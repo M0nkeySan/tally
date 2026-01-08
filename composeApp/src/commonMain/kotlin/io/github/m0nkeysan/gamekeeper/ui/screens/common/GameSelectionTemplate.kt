@@ -15,8 +15,38 @@ import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
 /**
  * Reusable template for game selection screens.
- * Handles loading, error, and empty states.
- * Provides consistent UI for Tarot and Yahtzee game selection.
+ * Eliminates code duplication between Tarot and Yahtzee game selection screens.
+ *
+ * Features:
+ * - Automatic handling of loading, empty, and error states
+ * - Swipe-to-delete functionality with confirmation
+ * - Floating action button for creating new games
+ * - Error feedback via Snackbar notifications
+ * - Consistent flat design with GameColors theme
+ *
+ * @param title Title displayed in TopAppBar
+ * @param games List of games to display
+ * @param onGameSelect Callback when game is selected
+ * @param onCreateNew Callback when FAB is clicked
+ * @param onDeleteGame Callback when game is swiped to delete
+ * @param onBack Callback for back navigation
+ * @param isLoading Whether data is loading
+ * @param error Error message to display, if any
+ * @param modifier Optional layout modifier
+ *
+ * Example usage:
+ * ```
+ * GameSelectionTemplate(
+ *     title = "Tarot Games",
+ *     games = games,
+ *     onGameSelect = { viewModel.selectGame(it) },
+ *     onCreateNew = { navController.navigate("create") },
+ *     onDeleteGame = { viewModel.deleteGame(it) },
+ *     onBack = { navController.popBackStack() },
+ *     isLoading = state.isLoading,
+ *     error = state.error
+ * )
+ * ```
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

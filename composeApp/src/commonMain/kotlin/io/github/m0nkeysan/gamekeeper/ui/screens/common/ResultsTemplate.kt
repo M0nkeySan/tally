@@ -18,7 +18,34 @@ import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
 /**
  * Reusable template for game results/summary screens.
- * Displays winners and ranked results consistently.
+ * Eliminates code duplication between different game result displays.
+ *
+ * Features:
+ * - Trophy icon and winner announcement
+ * - Tie detection and display ("IT'S A TIE!")
+ * - Ranked results display using ResultsCard components
+ * - Bottom sticky home button for navigation
+ * - Consistent flat design with GameColors theme
+ *
+ * @param winners List of winner names with their scores
+ * @param allResults List of all players with scores, sorted by rank
+ * @param onHome Callback when home button is clicked
+ * @param modifier Optional layout modifier
+ *
+ * Example usage:
+ * ```
+ * val winners = listOf("Alice" to 150, "Bob" to 150)  // Tie
+ * val allResults = listOf(
+ *     "Alice" to 150,
+ *     "Bob" to 150,
+ *     "Charlie" to 120
+ * )
+ * ResultsTemplate(
+ *     winners = winners,
+ *     allResults = allResults,
+ *     onHome = { navController.popBackStack() }
+ * )
+ * ```
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

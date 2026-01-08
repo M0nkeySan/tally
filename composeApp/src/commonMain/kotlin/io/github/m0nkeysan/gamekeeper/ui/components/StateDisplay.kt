@@ -14,7 +14,18 @@ import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
 /**
- * Loading state with spinner and optional message.
+ * Loading state display with centered spinner and message.
+ * Used to show content is being loaded from the network or database.
+ *
+ * @param message Text message to display below the spinner (e.g., "Loading games...")
+ * @param modifier Optional modifier for layout customization
+ *
+ * Example usage:
+ * ```
+ * if (isLoading) {
+ *     LoadingState(message = "Loading games...")
+ * }
+ * ```
  */
 @Composable
 fun LoadingState(
@@ -40,7 +51,25 @@ fun LoadingState(
 }
 
 /**
- * Empty state with icon, message, and optional action.
+ * Empty state display with icon, message, and optional action button.
+ * Used when a list or collection is empty.
+ *
+ * @param icon Icon vector to display (default: Folder icon)
+ * @param message Main message explaining the empty state
+ * @param actionLabel Optional label for the action button (e.g., "Create Game")
+ * @param onAction Optional callback when action button is clicked
+ * @param modifier Optional modifier for layout customization
+ *
+ * Example usage:
+ * ```
+ * if (games.isEmpty()) {
+ *     EmptyState(
+ *         message = "No games yet. Create one!",
+ *         actionLabel = "Create Game",
+ *         onAction = { viewModel.createGame() }
+ *     )
+ * }
+ * ```
  */
 @Composable
 fun EmptyState(
@@ -86,7 +115,22 @@ fun EmptyState(
 }
 
 /**
- * Error state with error icon, message, and optional retry button.
+ * Error state display with error icon, message, and optional retry button.
+ * Used to display errors from failed network or database operations.
+ *
+ * @param message Error message to display to the user
+ * @param onRetry Optional callback when retry button is clicked
+ * @param modifier Optional modifier for layout customization
+ *
+ * Example usage:
+ * ```
+ * if (state.error != null) {
+ *     ErrorState(
+ *         message = state.error,
+ *         onRetry = { viewModel.retry() }
+ *     )
+ * }
+ * ```
  */
 @Composable
 fun ErrorState(
