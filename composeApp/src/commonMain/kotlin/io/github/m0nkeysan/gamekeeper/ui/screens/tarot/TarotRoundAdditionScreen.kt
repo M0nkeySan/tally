@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.*
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.TarotScoringViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,7 +79,7 @@ fun TarotRoundAdditionScreen(
         else -> 56f
     }
     val isWinner = pAtqFloat >= targetPoints
-    val statusColor = if (isWinner) Color(0xFF4CAF50) else Color(0xFFF44336)
+    val statusColor = if (isWinner) GameColors.Success else GameColors.Error
 
     Scaffold(
         topBar = {

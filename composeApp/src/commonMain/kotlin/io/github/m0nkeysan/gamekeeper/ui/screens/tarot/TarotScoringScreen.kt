@@ -22,6 +22,7 @@ import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.TarotScoringViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -278,7 +279,7 @@ fun RoundHistoryItem(
                     else -> round.score * (playerCount - 1)
                 }
                 val scoreColor =
-                    if (displayScore >= 0) Color(0xFF4CAF50) else MaterialTheme.colorScheme.error
+                    if (displayScore >= 0) GameColors.Success else GameColors.Error
                 Text(
                     text = if (displayScore >= 0) "+$displayScore" else "$displayScore",
                     style = MaterialTheme.typography.bodyLarge,

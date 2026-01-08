@@ -25,6 +25,7 @@ import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -448,7 +449,7 @@ fun UpperBonusRow(score: Int) {
             Text(
                 text = if (score >= 63) "+35" else "0",
                 fontWeight = FontWeight.Bold,
-                color = if (score >= 63) Color(0xFF4CAF50) else Color.Gray
+                color = if (score >= 63) GameColors.Success else GameColors.TextSecondary
             )
         }
     }
