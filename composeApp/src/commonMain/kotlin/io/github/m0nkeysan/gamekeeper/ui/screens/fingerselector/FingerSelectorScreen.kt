@@ -242,7 +242,7 @@ fun FingerSelectorGame(
         if (countdownStartTime != null && fingers.size >= minFingers && winners.isEmpty() && !isSelecting) {
             delay(500)
             
-            for (i in 5 downTo 1) {
+            for (i in 3 downTo 1) {
                 if (fingers.size < minFingers || winners.isNotEmpty() || isSelecting) {
                     countdownSeconds = null
                     return@LaunchedEffect
@@ -289,8 +289,6 @@ fun FingerSelectorGame(
                 isSelecting = false
                 // Clean up fingers that might still be detected if user held down
                 fingers.clear()
-                
-                // Reset colors for groups mode logic handled by clear()
             }
         }
     }
@@ -351,7 +349,6 @@ fun FingerSelectorGame(
                 
                 val baseRadius = 80f
                 var radius = baseRadius
-                var alpha = 1f
                 
                 if (winners.isNotEmpty()) {
                     if (config.mode == SelectionMode.WINNERS && config.count == 1 && isWinner) {
