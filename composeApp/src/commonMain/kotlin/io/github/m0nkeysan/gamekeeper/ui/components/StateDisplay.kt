@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
@@ -171,4 +172,29 @@ fun ErrorState(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LoadingStatePreview() {
+    LoadingState(message = "Loading games...")
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun EmptyStatePreview() {
+    EmptyState(
+        message = "No games yet",
+        actionLabel = "Create Game",
+        onAction = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ErrorStatePreview() {
+    ErrorState(
+        message = "Failed to load games",
+        onRetry = {}
+    )
 }

@@ -2,6 +2,8 @@ package io.github.m0nkeysan.gamekeeper.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -10,8 +12,18 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import io.github.m0nkeysan.gamekeeper.GameIcons
 
+/**
+ * Reusable game feature card for displaying games on home screen.
+ * Shows icon, title, and description with click handling.
+ *
+ * @param icon Composable icon to display
+ * @param title Game title text
+ * @param description Game description text
+ * @param onClick Callback when card is clicked
+ */
 @Composable
 fun GameCard(
     icon: @Composable () -> Unit,
@@ -60,4 +72,15 @@ fun GameCard(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun GameCardPreview() {
+    GameCard(
+        icon = { Icon(Icons.Default.Casino, contentDescription = null) },
+        title = "Tarot",
+        description = "Score Tarot games for 3-5 players",
+        onClick = {}
+    )
 }

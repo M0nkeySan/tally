@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
 /**
@@ -90,4 +91,38 @@ fun GameSelectionCard(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun GameSelectionCardPreview_Active() {
+    GameSelectionCard(
+        game = GameDisplay(
+            id = "123",
+            name = "Tarot Game 1",
+            playerCount = 4,
+            playerNames = "Alice, Bob, Charlie, Diana",
+            isFinished = false,
+            createdAt = System.currentTimeMillis(),
+            updatedAt = System.currentTimeMillis()
+        ),
+        onClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun GameSelectionCardPreview_Finished() {
+    GameSelectionCard(
+        game = GameDisplay(
+            id = "456",
+            name = "Tarot Game 2",
+            playerCount = 3,
+            playerNames = "Eve, Frank, Grace",
+            isFinished = true,
+            createdAt = System.currentTimeMillis(),
+            updatedAt = System.currentTimeMillis()
+        ),
+        onClick = {}
+    )
 }

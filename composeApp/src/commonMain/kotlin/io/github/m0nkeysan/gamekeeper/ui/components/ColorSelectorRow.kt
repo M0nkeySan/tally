@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.compose.ui.tooling.preview.Preview
 import kotlin.math.*
 import io.github.m0nkeysan.gamekeeper.ui.utils.colorToHSV
 import io.github.m0nkeysan.gamekeeper.ui.utils.hsvToColor
@@ -383,4 +384,13 @@ fun parseColor(colorHex: String): Color {
     } catch (e: Exception) {
         Color.Gray
     }
+}
+@Preview(showBackground = true)
+@Composable
+private fun ColorSelectorRowPreview() {
+    var selectedColor by remember { mutableStateOf("#FF5722") }
+    ColorSelectorRow(
+        selectedColorHex = selectedColor,
+        onColorSelected = { selectedColor = it }
+    )
 }
