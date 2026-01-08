@@ -182,11 +182,10 @@ fun PlayerSummarySection(
                             )
                         }
 
-                        val scoreColor = if (score >= 0) GameColors.Success else GameColors.Error
                         Text(
                             text = if (score >= 0) "+$score" else "-${kotlin.math.abs(score)}",
                             style = MaterialTheme.typography.titleLarge,
-                            color = scoreColor,
+                            color = contentColor,
                             fontWeight = FontWeight.Black
                         )
                     }
