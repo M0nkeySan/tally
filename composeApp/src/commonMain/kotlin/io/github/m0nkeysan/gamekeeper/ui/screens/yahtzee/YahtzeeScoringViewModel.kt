@@ -15,7 +15,8 @@ import kotlinx.coroutines.withContext
 data class YahtzeeScoringState(
     val game: YahtzeeGame? = null,
     val scores: Map<Int, Map<YahtzeeCategory, Int>> = emptyMap(),
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val error: String? = null
 )
 
 class YahtzeeScoringViewModel : ViewModel() {

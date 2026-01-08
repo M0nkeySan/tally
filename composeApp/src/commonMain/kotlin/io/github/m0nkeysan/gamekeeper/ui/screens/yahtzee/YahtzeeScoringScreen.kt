@@ -23,6 +23,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
 import io.github.m0nkeysan.gamekeeper.core.model.Player
+import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
+import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,9 +35,17 @@ fun YahtzeeScoringScreen(
     viewModel: YahtzeeScoringViewModel = viewModel { YahtzeeScoringViewModel() }
 ) {
     val state by viewModel.state.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
     
     LaunchedEffect(gameId) {
         viewModel.loadGame(gameId)
+    }
+
+    // Show error in Snackbar
+    LaunchedEffect(state.error) {
+        state.error?.let { errorMessage ->
+            showErrorSnackbar(snackbarHostState, errorMessage)
+        }
     }
 
     Scaffold(
@@ -48,6 +58,9 @@ fun YahtzeeScoringScreen(
                     }
                 }
             )
+        },
+        snackbarHost = {
+            GameKeeperSnackbarHost(hostState = snackbarHostState)
         }
     ) { paddingValues ->
         if (state.game == null) {
