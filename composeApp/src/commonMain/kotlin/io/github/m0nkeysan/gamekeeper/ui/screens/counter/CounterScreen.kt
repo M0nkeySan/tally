@@ -3,6 +3,7 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.counter
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -42,13 +43,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
+import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
+import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterDisplayMode
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterViewModel
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CounterScreen(
-    onBack: () -> Unit,
     onEditCounter: (String, String, Int, Long) -> Unit,
     viewModel: CounterViewModel = viewModel { CounterViewModel() }
 ) {
@@ -69,15 +71,30 @@ fun CounterScreen(
     // Direct Score Set Modal State
     var scoreSetTarget by remember { mutableStateOf<CounterItem?>(null) }
     
+    var showMenu by remember { mutableStateOf(false) }
+    var showSettingsDialog by remember { mutableStateOf(false) }
+    var showResetConfirmation by remember { mutableStateOf(false) }
+    var showDeleteAllConfirmation by remember { mutableStateOf(false) }
+
     val sheetState = rememberModalBottomSheetState()
+
+    val leader = remember(state.counters, state.displayMode) {
+        if (state.displayMode == io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterDisplayMode.MOST_POINTS) {
+            state.counters.maxByOrNull { it.count }
+        } else {
+            state.counters.minByOrNull { it.count }
+        }
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Counter") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                title = {
+                    if (leader != null && state.counters.isNotEmpty()) {
+                        val emoji = if (state.displayMode == io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterDisplayMode.MOST_POINTS) "📈" else "📉"
+                        Text("$emoji ${leader.name}", fontWeight = FontWeight.ExtraBold)
+                    } else {
+                        Text("Counter")
                     }
                 },
                 actions = {
@@ -89,6 +106,40 @@ fun CounterScreen(
                     }
                     IconButton(onClick = { /* TODO: Navigate to history */ }) {
                         Icon(GameIcons.History, contentDescription = "History")
+                    }
+                    Box {
+                        IconButton(onClick = { showMenu = true }) {
+                            Icon(GameIcons.MoreVert, contentDescription = "Menu")
+                        }
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Settings") },
+                                onClick = {
+                                    showMenu = false
+                                    showSettingsDialog = true
+                                },
+                                leadingIcon = { Icon(GameIcons.Settings, contentDescription = null) }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Reinitialise all") },
+                                onClick = {
+                                    showMenu = false
+                                    showResetConfirmation = true
+                                },
+                                leadingIcon = { Icon(GameIcons.Refresh, contentDescription = null) }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Delete everything") },
+                                onClick = {
+                                    showMenu = false
+                                    showDeleteAllConfirmation = true
+                                },
+                                leadingIcon = { Icon(GameIcons.Delete, contentDescription = null) }
+                            )
+                        }
                     }
                 }
             )
@@ -285,6 +336,91 @@ fun CounterScreen(
                 )
             }
         }
+
+        // --- Settings Dialog ---
+        if (showSettingsDialog) {
+            AlertDialog(
+                onDismissRequest = { showSettingsDialog = false },
+                title = { Text("Counter Settings") },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Text(
+                            "Highlight player with:",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        
+                        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            SettingsOption(
+                                text = "📈 Most points",
+                                isSelected = state.displayMode == CounterDisplayMode.MOST_POINTS,
+                                onClick = { viewModel.setDisplayMode(CounterDisplayMode.MOST_POINTS) }
+                            )
+                            
+                            SettingsOption(
+                                text = "📉 Least points",
+                                isSelected = state.displayMode == CounterDisplayMode.LEAST_POINTS,
+                                onClick = { viewModel.setDisplayMode(CounterDisplayMode.LEAST_POINTS) }
+                            )
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showSettingsDialog = false }) {
+                        Text("CLOSE")
+                    }
+                }
+            )
+        }
+
+        // --- Reset All Confirmation ---
+        if (showResetConfirmation) {
+            AlertDialog(
+                onDismissRequest = { showResetConfirmation = false },
+                title = { Text("Reset All Counters") },
+                text = { Text("Are you sure you want to reset all counter values to 0?") },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel.resetAll()
+                            showResetConfirmation = false
+                        }
+                    ) {
+                        Text("Reset")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showResetConfirmation = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
+
+        // --- Delete All Confirmation ---
+        if (showDeleteAllConfirmation) {
+            AlertDialog(
+                onDismissRequest = { showDeleteAllConfirmation = false },
+                title = { Text("Delete Everything") },
+                text = { Text("Are you sure you want to delete all counters? This action cannot be undone.") },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel.deleteAll()
+                            showDeleteAllConfirmation = false
+                        },
+                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                    ) {
+                        Text("Delete Everything")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDeleteAllConfirmation = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -313,7 +449,7 @@ fun QuickAdjustContent(
             .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header with Background Color (Matching SetScoreContent design)
+        // Header with Background Color
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -385,14 +521,13 @@ fun QuickAdjustContent(
                 )
             }
 
-            OutlinedTextField(
+            FlatTextField(
                 value = manualValue,
                 onValueChange = { if (it.all { char -> char.isDigit() || char == '-' }) manualValue = it },
-                label = { Text("Manual Value") },
-                placeholder = { Text("0") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester),
+                label = "MANUAL ADJUST",
+                placeholder = "0",
+                accentColor = Color(counter.color),
+                focusRequester = focusRequester,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
@@ -402,8 +537,7 @@ fun QuickAdjustContent(
                         val value = manualValue.toIntOrNull() ?: 0
                         onAdjust(if (isAddition) value else -value)
                     }
-                ),
-                singleLine = true
+                )
             )
         }
         
@@ -451,14 +585,13 @@ fun SetScoreContent(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedTextField(
+            FlatTextField(
                 value = scoreValue,
                 onValueChange = { if (it.isEmpty() || it == "-" || it.all { char -> char.isDigit() || char == '-' }) scoreValue = it },
-                placeholder = { Text(counter.count.toString()) },
-                label = { Text("Set New Score") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester),
+                placeholder = counter.count.toString(),
+                label = "SET NEW SCORE",
+                accentColor = Color(counter.color),
+                focusRequester = focusRequester,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
@@ -468,8 +601,7 @@ fun SetScoreContent(
                         val value = scoreValue.toIntOrNull() ?: counter.count
                         onSet(value)
                     }
-                ),
-                singleLine = true
+                )
             )
 
             Row(
@@ -495,12 +627,42 @@ fun SetScoreContent(
                     ),
                     shape = MaterialTheme.shapes.medium
                 ) {
-                    Text("EDIT", fontWeight = FontWeight.Bold)
+                    Text("SAVE", fontWeight = FontWeight.Bold)
                 }
             }
         }
         
         Spacer(modifier = Modifier.height(16.dp))
+    }
+}
+
+
+@Composable
+fun SettingsOption(
+    text: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        shape = MaterialTheme.shapes.large,
+        color = if (isSelected) Color(0xFFFBFBFB) else Color(0xFFF5F5F5),
+        border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = if (isSelected) FontWeight.Black else FontWeight.Bold,
+                color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
+            )
+        }
     }
 }
 

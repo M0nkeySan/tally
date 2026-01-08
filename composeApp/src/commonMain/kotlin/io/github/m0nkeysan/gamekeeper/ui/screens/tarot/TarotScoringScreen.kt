@@ -12,12 +12,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.*
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
+import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.TarotScoringViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,11 +27,10 @@ import io.github.m0nkeysan.gamekeeper.ui.viewmodel.TarotScoringViewModel
 fun TarotScoringScreen(
     gameId: String,
     onBack: () -> Unit,
-    onAddNewRound: (Long?) -> Unit,
+    onAddNewRound: (String?) -> Unit,
     viewModel: TarotScoringViewModel = viewModel { TarotScoringViewModel() }
 ) {
     val state by viewModel.state.collectAsState()
-    val hapticController = rememberHapticFeedbackController()
 
     LaunchedEffect(gameId) {
         viewModel.loadGame(gameId)
@@ -55,7 +56,9 @@ fun TarotScoringScreen(
         }
     ) { paddingValues ->
         Surface(
-            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
             color = MaterialTheme.colorScheme.background
         ) {
             if (state.game == null) {
@@ -77,7 +80,7 @@ fun TarotScoringScreen(
 fun MainScoringView(
     state: TarotScoringState,
     viewModel: TarotScoringViewModel,
-    onEditRound: (Long) -> Unit
+    onEditRound: (String?) -> Unit
 ) {
     val playerScores = remember(state.rounds) { viewModel.getCurrentTotalScores() }
 
@@ -94,7 +97,7 @@ fun MainScoringView(
                 rounds = state.rounds,
                 players = state.players,
                 playerCount = state.game?.playerCount ?: state.players.size,
-                onEditRound = onEditRound
+                onEditRound = { onEditRound(it) }
             )
         }
     }
@@ -117,17 +120,17 @@ fun PlayerSummarySection(
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             players.forEach { player ->
                 val score = scores[player.id] ?: 0
-                val scoreColor = if (score > 0) Color(0xFF4CAF50)
-                else if (score < 0) MaterialTheme.colorScheme.error
-                else MaterialTheme.colorScheme.onSurface
+                val playerColor = remember(player.avatarColor) { parseColor(player.avatarColor) }
+                val contentColor =
+                    if (playerColor.luminance() > 0.5f) Color.Black.copy(alpha = 0.8f) else Color.White
 
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = scoreColor.copy(alpha = 0.1f)
-                    ),
-                    border = BorderStroke(1.dp, scoreColor.copy(alpha = 0.2f))
+                        containerColor = playerColor,
+                        contentColor = contentColor
+                    )
                 ) {
                     Row(
                         modifier = Modifier
@@ -140,14 +143,14 @@ fun PlayerSummarySection(
                             Surface(
                                 shape = CircleShape,
                                 modifier = Modifier.size(32.dp),
-                                color = scoreColor.copy(alpha = 0.2f)
+                                color = contentColor.copy(alpha = 0.2f)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
                                     Text(
                                         text = player.name.firstOrNull()?.uppercase() ?: "?",
                                         style = MaterialTheme.typography.bodyMedium,
                                         fontWeight = FontWeight.Bold,
-                                        color = scoreColor
+                                        color = contentColor
                                     )
                                 }
                             }
@@ -157,14 +160,15 @@ fun PlayerSummarySection(
                             Text(
                                 text = player.name,
                                 style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                color = contentColor
                             )
                         }
 
                         Text(
                             text = if (score >= 0) "+$score" else "$score",
                             style = MaterialTheme.typography.titleLarge,
-                            color = scoreColor,
+                            color = contentColor,
                             fontWeight = FontWeight.Black
                         )
                     }
@@ -179,7 +183,7 @@ fun RoundHistorySection(
     rounds: List<TarotRound>,
     players: List<Player>,
     playerCount: Int,
-    onEditRound: (Long) -> Unit
+    onEditRound: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -209,9 +213,9 @@ fun RoundHistorySection(
                 contentPadding = PaddingValues(bottom = 80.dp)
             ) {
                 items(rounds.reversed()) { round ->
-                    val taker = players.getOrNull(round.takerPlayerId.toInt())?.name ?: "Unknown"
+                    val taker = players.getOrNull(round.takerPlayerId.toIntOrNull() ?: -1)?.name ?: "Unknown"
                     RoundHistoryItem(
-                        round = round, 
+                        round = round,
                         takerName = taker,
                         playerCount = playerCount,
                         onClick = { onEditRound(round.id) }
@@ -234,7 +238,11 @@ fun RoundHistoryItem(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(
+                alpha = 0.5f
+            )
+        )
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(
@@ -253,9 +261,11 @@ fun RoundHistoryItem(
                         val partnerId = round.calledPlayerId
                         if (partnerId == null || partnerId == round.takerPlayerId) round.score * 4 else round.score * 2
                     }
+
                     else -> round.score * (playerCount - 1)
                 }
-                val scoreColor = if (displayScore >= 0) Color(0xFF4CAF50) else MaterialTheme.colorScheme.error
+                val scoreColor =
+                    if (displayScore >= 0) Color(0xFF4CAF50) else MaterialTheme.colorScheme.error
                 Text(
                     text = if (displayScore >= 0) "+$displayScore" else "$displayScore",
                     style = MaterialTheme.typography.bodyLarge,
@@ -263,20 +273,20 @@ fun RoundHistoryItem(
                     fontWeight = FontWeight.Black
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(4.dp))
-            
+
             Text(
                 text = "${round.bid.displayName} • ${round.bouts} bouts • ${round.pointsScored} pts",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            
+
             val announces = mutableListOf<String>()
             if (round.hasPetitAuBout) announces.add("Petit au bout")
             if (round.hasPoignee) announces.add("Poignée ${round.poigneeLevel?.displayName}")
             if (round.chelem != ChelemType.NONE) announces.add("Chelem: ${round.chelem.displayName}")
-            
+
             if (announces.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(

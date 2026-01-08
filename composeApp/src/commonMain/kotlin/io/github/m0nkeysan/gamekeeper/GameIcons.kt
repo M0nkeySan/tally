@@ -16,4 +16,5 @@ expect object GameIcons {
     val Group: ImageVector
     val Palette: ImageVector
     val Delete: ImageVector
+    val MoreVert: ImageVector
 }

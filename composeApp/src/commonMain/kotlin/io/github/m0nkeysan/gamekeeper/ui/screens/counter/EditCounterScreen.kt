@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.ui.components.ColorSelectorRow
+import io.github.m0nkeysan.gamekeeper.ui.components.FieldLabel
+import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -144,7 +146,7 @@ fun EditCounterScreen(
 
             // 1. Unified Color Selection
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Label(text = "ACCENT COLOR")
+                FieldLabel(text = "ACCENT COLOR")
                 ColorSelectorRow(
                     selectedColorHex = selectedColorHex,
                     onColorSelected = { hex ->
@@ -155,7 +157,7 @@ fun EditCounterScreen(
             }
 
             // 2. Name Field
-            FlatField(
+            FlatTextField(
                 value = name,
                 onValueChange = { name = it },
                 label = "NAME",
@@ -164,59 +166,15 @@ fun EditCounterScreen(
             )
 
             // 3. Value Field
-            FlatField(
+            FlatTextField(
                 value = countText,
                 onValueChange = { if (it.isEmpty() || it == "-" || it.all { char -> char.isDigit() || char == '-' }) countText = it },
                 label = "VALUE",
                 placeholder = "0",
                 accentColor = selectedColor,
-                keyboardType = KeyboardType.Number
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
-    }
-}
-
-@Composable
-private fun Label(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.labelLarge,
-        fontWeight = FontWeight.Black,
-        color = Color.LightGray,
-        letterSpacing = 1.2.sp
-    )
-}
-
-@Composable
-private fun FlatField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    placeholder: String,
-    accentColor: Color,
-    keyboardType: KeyboardType = KeyboardType.Text
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Label(text = label)
-        TextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text(placeholder, color = Color.Gray) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color(0xFFFBFBFB),
-                unfocusedContainerColor = Color(0xFFF5F5F5),
-                focusedIndicatorColor = accentColor,
-                unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = accentColor,
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
-            ),
-            shape = MaterialTheme.shapes.large,
-            textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
-        )
     }
 }
 

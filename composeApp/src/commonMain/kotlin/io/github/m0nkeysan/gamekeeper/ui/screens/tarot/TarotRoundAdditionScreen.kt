@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -18,13 +19,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.*
+import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.TarotScoringViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TarotRoundAdditionScreen(
     gameId: String,
-    roundId: Long? = null,
+    roundId: String? = null,
     onBack: () -> Unit,
     onRoundAdded: () -> Unit,
     viewModel: TarotScoringViewModel = viewModel { TarotScoringViewModel() }
@@ -149,10 +151,18 @@ fun TarotRoundAdditionScreen(
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 state.players.forEachIndexed { index, player ->
+                                    val isSelected = takerIndex == index
+                                    val playerColor = remember(player.avatarColor) { parseColor(player.avatarColor) }
+                                    val contentColor = if (playerColor.luminance() > 0.5f) Color.Black else Color.White
+
                                     FilterChip(
-                                        selected = takerIndex == index,
+                                        selected = isSelected,
                                         onClick = { takerIndex = index },
-                                        label = { Text(player.name) }
+                                        label = { Text(player.name) },
+                                        colors = FilterChipDefaults.filterChipColors(
+                                            selectedContainerColor = playerColor,
+                                            selectedLabelColor = contentColor
+                                        )
                                     )
                                 }
                             }
@@ -167,10 +177,18 @@ fun TarotRoundAdditionScreen(
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
                                     state.players.forEachIndexed { index, player ->
+                                        val isSelected = calledPlayerIndex == index
+                                        val playerColor = remember(player.avatarColor) { parseColor(player.avatarColor) }
+                                        val contentColor = if (playerColor.luminance() > 0.5f) Color.Black else Color.White
+
                                         FilterChip(
-                                            selected = calledPlayerIndex == index,
+                                            selected = isSelected,
                                             onClick = { calledPlayerIndex = index },
-                                            label = { Text(player.name) }
+                                            label = { Text(player.name) },
+                                            colors = FilterChipDefaults.filterChipColors(
+                                                selectedContainerColor = playerColor,
+                                                selectedLabelColor = contentColor
+                                            )
                                         )
                                     }
                                 }

@@ -28,4 +28,12 @@ class UserPreferencesRepositoryImpl(
             )
         )
     }
+
+    override fun getString(key: String, defaultValue: String): Flow<String> {
+        return dao.getValue(key).map { it ?: defaultValue }
+    }
+
+    override suspend fun saveString(key: String, value: String) {
+        dao.setValue(UserPreferencesEntity(key, value))
+    }
 }

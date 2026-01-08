@@ -16,11 +16,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.Player
+import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -164,48 +166,30 @@ fun PlayerSelectionScreen(
 
 @Composable
 fun PlayerCard(player: Player, onClick: () -> Unit) {
+    val color = remember(player.avatarColor) { parseColor(player.avatarColor) }
+    val contentColor = if (color.luminance() > 0.5f) Color.Black.copy(alpha = 0.8f) else Color.White
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(
+            containerColor = color,
+            contentColor = contentColor
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Avatar
-            val color = remember(player.avatarColor) {
-                try {
-                    Color(0xFF000000 or player.avatarColor.removePrefix("#").toLong(16))
-                } catch (e: Exception) {
-                    Color.Gray
-                }
-            }
-            
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(color, CircleShape)
-                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = player.name.take(1).uppercase(),
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
             // Info
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = player.name,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = contentColor
                 )
             }
 
@@ -213,7 +197,7 @@ fun PlayerCard(player: Player, onClick: () -> Unit) {
             Icon(
                 imageVector = Icons.Default.Edit,
                 contentDescription = "Edit",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = contentColor
             )
         }
     }

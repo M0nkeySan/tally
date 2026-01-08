@@ -14,6 +14,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
 data class YahtzeeGameDisplayModel(
     val id: String,
     val name: String,
@@ -72,13 +75,14 @@ class YahtzeeGameViewModel : ViewModel() {
         }
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     fun createGame(
         name: String,
         playerCount: Int,
         players: List<Player>,
         onCreated: (String) -> Unit
     ) {
-        val id = Random.nextLong().toString()
+        val id = Uuid.random().toString()
         val now = System.currentTimeMillis()
         val firstPlayerIndex = Random.nextInt(playerCount)
 

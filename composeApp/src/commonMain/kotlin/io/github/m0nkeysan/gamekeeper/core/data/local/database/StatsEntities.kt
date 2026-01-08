@@ -4,6 +4,9 @@ import androidx.room.*
 import io.github.m0nkeysan.gamekeeper.core.model.PlayerStats
 import kotlinx.coroutines.flow.Flow
 
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
 @Entity(tableName = "player_stats")
 data class PlayerStatsEntity(
     @PrimaryKey
@@ -25,9 +28,9 @@ data class PlayerStatsEntity(
 )
 
 @Entity(tableName = "game_participants")
-data class GameParticipantEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+data class GameParticipantEntity @OptIn(ExperimentalUuidApi::class) constructor(
+    @PrimaryKey
+    val id: String = Uuid.random().toString(),
     val gameId: String,
     val playerId: String,
     val gameType: String,

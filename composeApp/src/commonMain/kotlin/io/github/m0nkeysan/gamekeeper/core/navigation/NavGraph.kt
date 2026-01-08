@@ -89,12 +89,11 @@ fun GameNavGraph() {
             )
         ) { entry ->
             val gameId = entry.arguments?.getString("gameId") ?: ""
-            val roundIdStr = entry.arguments?.getString("roundId")
-            val roundId = roundIdStr?.toLongOrNull()
+            val roundId = entry.arguments?.getString("roundId")
 
             TarotRoundAdditionScreen(
                 gameId = gameId,
-                roundId = if (roundId != null && roundId > 0) roundId else null,
+                roundId = roundId,
                 onBack = { navController.popBackStack() },
                 onRoundAdded = { navController.popBackStack() }
             )
@@ -175,7 +174,6 @@ fun GameNavGraph() {
             }
 
             CounterScreen(
-                onBack = { navController.popBackStack() },
                 onEditCounter = { id, name, count, color ->
                     navController.navigate(Screen.EditCounter.createRoute(id, name, count, color))
                 },

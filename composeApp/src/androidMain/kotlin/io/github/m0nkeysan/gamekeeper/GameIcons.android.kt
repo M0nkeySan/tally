@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.ui.graphics.vector.ImageVector
 
 actual object GameIcons {
@@ -30,4 +31,5 @@ actual object GameIcons {
     actual val Group: ImageVector = Icons.Default.Group
     actual val Palette: ImageVector = Icons.Default.Palette
     actual val Delete: ImageVector = Icons.Default.Delete
+    actual val MoreVert: ImageVector = Icons.Default.MoreVert
 }

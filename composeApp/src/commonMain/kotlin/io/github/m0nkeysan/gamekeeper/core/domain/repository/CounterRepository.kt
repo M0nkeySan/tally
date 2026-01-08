@@ -10,4 +10,6 @@ interface CounterRepository {
     suspend fun updateCount(id: String, count: Int)
     suspend fun updateCounter(counter: PersistentCounterEntity)
     suspend fun updateOrder(id: String, order: Int)
+    suspend fun resetAllCounts()
+    suspend fun deleteAllCounters()
 }

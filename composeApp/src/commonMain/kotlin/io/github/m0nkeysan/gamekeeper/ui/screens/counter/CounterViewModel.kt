@@ -13,6 +13,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
 data class CounterItem(
     val id: String,
     val name: String,
@@ -20,13 +23,23 @@ data class CounterItem(
     val color: Long
 )
 
+enum class CounterDisplayMode {
+    MOST_POINTS, LEAST_POINTS
+}
+
 data class CounterUiState(
-    val counters: List<CounterItem> = emptyList()
+    val counters: List<CounterItem> = emptyList(),
+    val displayMode: CounterDisplayMode = CounterDisplayMode.MOST_POINTS
 )
 
 class CounterViewModel : ViewModel() {
     private val counterRepository = PlatformRepositories.getCounterRepository()
+    private val prefsRepository = PlatformRepositories.getUserPreferencesRepository()
     
+    companion object {
+        private const val KEY_DISPLAY_MODE = "counter_display_mode"
+    }
+
     private val _state = MutableStateFlow(CounterUiState())
     val state = _state.asStateFlow()
 
@@ -39,6 +52,27 @@ class CounterViewModel : ViewModel() {
 
     init {
         loadCounters()
+        loadPreferences()
+    }
+
+    private fun loadPreferences() {
+        viewModelScope.launch {
+            prefsRepository.getString(KEY_DISPLAY_MODE, CounterDisplayMode.MOST_POINTS.name)
+                .collect { modeName ->
+                    val mode = try {
+                        CounterDisplayMode.valueOf(modeName)
+                    } catch (e: Exception) {
+                        CounterDisplayMode.MOST_POINTS
+                    }
+                    _state.update { it.copy(displayMode = mode) }
+                }
+        }
+    }
+
+    fun setDisplayMode(mode: CounterDisplayMode) {
+        viewModelScope.launch {
+            prefsRepository.saveString(KEY_DISPLAY_MODE, mode.name)
+        }
     }
 
     private fun loadCounters() {
@@ -58,9 +92,10 @@ class CounterViewModel : ViewModel() {
         }
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     fun addRandomCounter() {
         val randomName = "${funnyNames.random()} ${Random.nextInt(1, 99)}"
-        val id = Random.nextLong().toString()
+        val id = Uuid.random().toString()
         val color = generateRandomPastelColor()
         val timestamp = System.currentTimeMillis()
         val nextOrder = _state.value.counters.size
@@ -150,5 +185,15 @@ class CounterViewModel : ViewModel() {
         }
     }
 
-    fun reset() {}
+    fun resetAll() {
+        viewModelScope.launch {
+            counterRepository.resetAllCounts()
+        }
+    }
+
+    fun deleteAll() {
+        viewModelScope.launch {
+            counterRepository.deleteAllCounters()
+        }
+    }
 }

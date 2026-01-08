@@ -14,6 +14,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
 data class TarotGameDisplayModel(
     val id: String,
     val name: String,
@@ -68,13 +71,14 @@ class TarotGameViewModel : ViewModel() {
         }
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     fun createGame(
         name: String,
         playerCount: Int,
         players: List<Player>,
         onCreated: (String) -> Unit
     ) {
-        val id = kotlin.random.Random.nextLong().toString()
+        val id = Uuid.random().toString()
         val now = System.currentTimeMillis()
 
         viewModelScope.launch {

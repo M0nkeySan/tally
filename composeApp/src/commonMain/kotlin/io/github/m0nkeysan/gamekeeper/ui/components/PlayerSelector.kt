@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.Player
@@ -33,12 +35,26 @@ fun PlayerSelectorField(
     excludedPlayerIds: Set<String> = emptySet()
 ) {
     var showSheet by remember { mutableStateOf(false) }
+    
+    val playerColor = selectedPlayer?.let { remember(it.avatarColor) { parseColor(it.avatarColor) } } ?: MaterialTheme.colorScheme.surface
+    val isSelected = selectedPlayer != null
+    val contentColor = if (isSelected) {
+        if (playerColor.luminance() > 0.5f) Color.Black.copy(alpha = 0.8f) else Color.White
+    } else {
+        MaterialTheme.colorScheme.onSurface
+    }
 
-    OutlinedCard(
+    Card(
         modifier = modifier
             .fillMaxWidth()
             .clickable { showSheet = true },
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor = playerColor,
+            contentColor = contentColor
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isSelected) 2.dp else 0.dp),
+        border = if (!isSelected) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null
     ) {
         Row(
             modifier = Modifier
@@ -48,10 +64,32 @@ fun PlayerSelectorField(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             if (selectedPlayer != null) {
-                PlayerAvatar(color = selectedPlayer.avatarColor, letter = selectedPlayer.name.firstOrNull()?.toString() ?: "P")
-                Column {
-                    Text(text = label, style = MaterialTheme.typography.labelSmall, color = Color.Gray)
-                    Text(text = selectedPlayer.name, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                Surface(
+                    shape = CircleShape,
+                    modifier = Modifier.size(40.dp),
+                    color = contentColor.copy(alpha = 0.2f)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(
+                            text = selectedPlayer.name.firstOrNull()?.uppercase() ?: "P",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = contentColor
+                        )
+                    }
+                }
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = label, 
+                        style = MaterialTheme.typography.labelSmall, 
+                        color = contentColor.copy(alpha = 0.7f)
+                    )
+                    Text(
+                        text = selectedPlayer.name, 
+                        style = MaterialTheme.typography.bodyLarge, 
+                        fontWeight = FontWeight.Bold,
+                        color = contentColor
+                    )
                 }
             } else {
                 Box(
@@ -61,15 +99,23 @@ fun PlayerSelectorField(
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.Person, contentDescription = null, tint = Color.Gray)
+                    Icon(Icons.Default.Person, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                Text(text = "Select $label", style = MaterialTheme.typography.bodyLarge, color = Color.Gray)
+                Text(
+                    text = "Select $label", 
+                    style = MaterialTheme.typography.bodyLarge, 
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.weight(1f)
+                )
             }
             
-            Spacer(Modifier.weight(1f))
-            
-            TextButton(onClick = { showSheet = true }) {
-                Text("CHANGE")
+            TextButton(
+                onClick = { showSheet = true },
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = if (isSelected) contentColor else MaterialTheme.colorScheme.primary
+                )
+            ) {
+                Text(if (isSelected) "CHANGE" else "SELECT", fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -160,32 +206,84 @@ fun PlayerSelectorContent(
         ) {
             if (searchQuery.isNotBlank() && !allPlayers.any { it.name.equals(searchQuery, ignoreCase = true) }) {
                 item {
-                    ListItem(
-                        headlineContent = { Text("Create \"$searchQuery\"") },
-                        leadingContent = { 
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onCreate(searchQuery) },
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
                             Box(
-                                modifier = Modifier.size(40.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primary),
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.primary),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Icon(Icons.Default.Add, null, tint = Color.White)
+                                Icon(Icons.Default.Add, null, tint = Color.White, modifier = Modifier.size(20.dp))
                             }
-                        },
-                        modifier = Modifier.clickable { onCreate(searchQuery) }
-                    )
+                            Text(
+                                text = "Create \"$searchQuery\"",
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
                 }
             }
 
             items(filteredPlayers) { player ->
-                ListItem(
-                    headlineContent = { Text(player.name) },
-                    leadingContent = { 
-                        PlayerAvatar(color = player.avatarColor, letter = player.name.firstOrNull()?.toString() ?: "P")
-                    },
-                    trailingContent = {
-                        // Icon(Icons.Default.ChevronRight, null)
-                    },
-                    modifier = Modifier.clickable { onSelect(player) }
-                )
+                val playerColor = remember(player.avatarColor) { parseColor(player.avatarColor) }
+                val contentColor = if (playerColor.luminance() > 0.5f) Color.Black.copy(alpha = 0.8f) else Color.White
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onSelect(player) },
+                    colors = CardDefaults.cardColors(
+                        containerColor = playerColor,
+                        contentColor = contentColor
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Surface(
+                            shape = CircleShape,
+                            modifier = Modifier.size(32.dp),
+                            color = contentColor.copy(alpha = 0.2f)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Text(
+                                    text = player.name.firstOrNull()?.uppercase() ?: "P",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = contentColor
+                                )
+                            }
+                        }
+                        Text(
+                            text = player.name,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = contentColor
+                        )
+                    }
+                }
             }
         }
     }

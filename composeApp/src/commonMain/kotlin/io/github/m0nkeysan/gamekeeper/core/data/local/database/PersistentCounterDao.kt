@@ -22,4 +22,10 @@ interface PersistentCounterDao {
 
     @Query("UPDATE counters SET sortOrder = :order WHERE id = :id")
     suspend fun updateOrder(id: String, order: Int)
+
+    @Query("UPDATE counters SET count = 0")
+    suspend fun resetAllCounts()
+
+    @Query("DELETE FROM counters")
+    suspend fun deleteAllCounters()
 }

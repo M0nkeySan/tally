@@ -29,4 +29,12 @@ class CounterRepositoryImpl(
     override suspend fun updateOrder(id: String, order: Int) {
         dao.updateOrder(id, order)
     }
+
+    override suspend fun resetAllCounts() {
+        dao.resetAllCounts()
+    }
+
+    override suspend fun deleteAllCounters() {
+        dao.deleteAllCounters()
+    }
 }

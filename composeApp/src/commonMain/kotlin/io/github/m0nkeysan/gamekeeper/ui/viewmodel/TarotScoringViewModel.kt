@@ -8,6 +8,8 @@ import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotRoundInputState
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotScoringState
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.TarotRoundEntity
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -64,8 +66,9 @@ class TarotScoringViewModel : ViewModel() {
         }
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     fun addRoundManual(
-        roundId: Long? = null,
+        roundId: String? = null,
         takerIndex: Int,
         bid: TarotBid,
         bouts: Int,
@@ -95,7 +98,7 @@ class TarotScoringViewModel : ViewModel() {
             )
 
             val entity = TarotRoundEntity(
-                id = roundId ?: 0L,
+                id = roundId ?: Uuid.random().toString(),
                 gameId = gameId,
                 roundNumber = roundNumber,
                 takerPlayerIndex = takerIndex,
