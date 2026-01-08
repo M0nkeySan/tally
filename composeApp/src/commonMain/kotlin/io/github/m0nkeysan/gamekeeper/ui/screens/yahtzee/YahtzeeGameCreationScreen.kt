@@ -55,7 +55,7 @@ fun YahtzeeGameCreationScreen(
             )
 
             FlexiblePlayerSelector(
-                minPlayers = 2,
+                minPlayers = 1,
                 maxPlayers = 8,
                 allPlayers = allPlayers,
                 onPlayersChange = { players ->

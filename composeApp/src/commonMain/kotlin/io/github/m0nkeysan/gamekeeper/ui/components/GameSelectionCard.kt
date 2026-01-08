@@ -53,35 +53,15 @@ fun GameSelectionCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = game.name,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = if (game.isFinished) 
-                            GameColors.TextSecondary 
-                        else 
-                            GameColors.TextPrimary
-                    )
-                    
-                    if (game.isFinished) {
-                        Surface(
-                            shape = MaterialTheme.shapes.small,
-                            color = GameColors.Success
-                        ) {
-                            Text(
-                                text = "FINISHED",
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = GameColors.Surface0,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
+                Text(
+                    text = game.name,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = if (game.isFinished) 
+                        GameColors.TextSecondary 
+                    else 
+                        GameColors.TextPrimary
+                )
                 
                 Spacer(modifier = Modifier.height(4.dp))
                 

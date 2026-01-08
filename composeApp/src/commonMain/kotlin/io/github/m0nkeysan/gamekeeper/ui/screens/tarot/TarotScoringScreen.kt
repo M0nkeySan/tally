@@ -61,7 +61,10 @@ fun TarotScoringScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { onAddNewRound(null) }) {
+            FloatingActionButton(
+                onClick = { onAddNewRound(null) },
+                containerColor = GameColors.Primary
+            ) {
                 Icon(GameIcons.Add, contentDescription = "Add Round")
             }
         },
@@ -281,7 +284,7 @@ fun RoundHistoryItem(
                 val scoreColor =
                     if (displayScore >= 0) GameColors.Success else GameColors.Error
                 Text(
-                    text = if (displayScore >= 0) "+$displayScore" else "$displayScore",
+                    text = if (displayScore >= 0) "+ $displayScore" else "- ${kotlin.math.abs(displayScore)}",
                     style = MaterialTheme.typography.bodyLarge,
                     color = scoreColor,
                     fontWeight = FontWeight.Black
