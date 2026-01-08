@@ -43,13 +43,13 @@ object GameColors {
     val Warning = Color(0xFFF59E0B)
     val Info = Color(0xFF3B82F6)
     
-    // Neutral Palette (Flat Design)
-    val Surface0 = Color(0xFFFFFFFF)     // White
-    val Surface1 = Color(0xFFF9FAFB)     // Almost white
-    val Surface2 = Color(0xFFF3F4F6)     // Light gray
-    val TextPrimary = Color(0xFF111827)   // Dark text
-    val TextSecondary = Color(0xFF6B7280) // Medium gray
-    val Divider = Color(0xFFE5E7EB)       // Light divider
+     // Neutral Palette (Flat Design)
+     val Surface0 = Color(0xFFFFFFFF)     // White
+     val Surface1 = Color(0xFFF3F4F6)     // Light gray (for active cards)
+     val Surface2 = Color(0xFFE5E7EB)     // Medium gray (for finished cards)
+     val TextPrimary = Color(0xFF111827)   // Dark text
+     val TextSecondary = Color(0xFF6B7280) // Medium gray
+     val Divider = Color(0xFFE5E7EB)       // Light divider
     
     // Game-Specific Accent Colors
     val TarotAccent = Color(0xFF9333EA)   // Purple - mystical
