@@ -160,14 +160,20 @@ fun YahtzeeGameView(
                             )
                         }
                         
+                        val selectedPlayerTotal = remember(selectedPlayerIndex, state.scores) {
+                            "Total: ${viewModel.calculateTotalScore(selectedPlayerIndex)}"
+                        }
                         Text(
-                            text = "Total: ${viewModel.calculateTotalScore(selectedPlayerIndex)}",
+                            text = selectedPlayerTotal,
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
                         )
                     }
 
+                    val playerTotals = remember(state.scores) {
+                        players.indices.map { index -> viewModel.calculateTotalScore(index) }
+                    }
                     DropdownMenu(
                         expanded = showPlayerDropdown,
                         onDismissRequest = { showPlayerDropdown = false }
@@ -185,7 +191,7 @@ fun YahtzeeGameView(
                                         )
                                         Spacer(Modifier.weight(1f))
                                         Text(
-                                            text = viewModel.calculateTotalScore(index).toString(),
+                                            text = playerTotals[index].toString(),
                                             style = MaterialTheme.typography.labelMedium,
                                             color = Color.Gray
                                         )
@@ -267,8 +273,11 @@ fun YahtzeeGameView(
             }
             
             item {
+                val selectedPlayerTotal = remember(selectedPlayerIndex, state.scores) {
+                    viewModel.calculateTotalScore(selectedPlayerIndex)
+                }
                 TotalScoreRow(
-                    total = viewModel.calculateTotalScore(selectedPlayerIndex)
+                    total = selectedPlayerTotal
                 )
             }
         }
