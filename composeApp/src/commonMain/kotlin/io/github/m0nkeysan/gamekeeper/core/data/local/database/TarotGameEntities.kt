@@ -1,6 +1,7 @@
 package io.github.m0nkeysan.gamekeeper.core.data.local.database
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 import kotlin.uuid.ExperimentalUuidApi
@@ -17,7 +18,10 @@ data class TarotGameEntity @OptIn(ExperimentalUuidApi::class) constructor(
     val updatedAt: Long
 )
 
-@Entity(tableName = "tarot_rounds")
+@Entity(
+    tableName = "tarot_rounds",
+    indices = [Index(value = ["gameId"])]
+)
 data class TarotRoundEntity @OptIn(ExperimentalUuidApi::class) constructor(
     @PrimaryKey
     val id: String = Uuid.random().toString(),

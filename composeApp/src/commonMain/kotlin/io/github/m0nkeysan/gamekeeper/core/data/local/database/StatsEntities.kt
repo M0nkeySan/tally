@@ -27,7 +27,10 @@ data class PlayerStatsEntity(
     val lastPlayedAt: Long
 )
 
-@Entity(tableName = "game_participants")
+@Entity(
+    tableName = "game_participants",
+    indices = [Index(value = ["playerId"]), Index(value = ["gameId"])]
+)
 data class GameParticipantEntity @OptIn(ExperimentalUuidApi::class) constructor(
     @PrimaryKey
     val id: String = Uuid.random().toString(),

@@ -15,7 +15,7 @@ import androidx.room.RoomDatabase
         YahtzeeGameEntity::class,
         YahtzeeScoreEntity::class
     ],
-    version = 13
+    version = 14
 )
 abstract class GameDatabase : RoomDatabase() {
     abstract fun playerDao(): PlayerDao

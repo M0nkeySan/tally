@@ -3,7 +3,7 @@ package io.github.m0nkeysan.gamekeeper.ui.viewmodel
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.m0nkeysan.gamekeeper.core.data.local.database.PersistentCounterEntity
+import io.github.m0nkeysan.gamekeeper.core.model.Counter
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,17 +77,17 @@ class CounterViewModel : ViewModel() {
 
     private fun loadCounters() {
         viewModelScope.launch {
-            counterRepository.getAllCounters().collect { entities ->
-                val counters = entities.map { entity ->
-                    playerTimestamps[entity.id] = entity.updatedAt
+            counterRepository.getAllCounters().collect { counters ->
+                val counterItems = counters.map { counter ->
+                    playerTimestamps[counter.id] = counter.updatedAt
                     CounterItem(
-                        id = entity.id,
-                        name = entity.name,
-                        count = entity.count,
-                        color = entity.color
+                        id = counter.id,
+                        name = counter.name,
+                        count = counter.count,
+                        color = counter.color
                     )
                 }
-                _state.update { it.copy(counters = counters) }
+                _state.update { it.copy(counters = counterItems) }
             }
         }
     }
@@ -95,19 +95,15 @@ class CounterViewModel : ViewModel() {
     @OptIn(ExperimentalUuidApi::class)
     fun addRandomCounter() {
         val randomName = "${funnyNames.random()} ${Random.nextInt(1, 99)}"
-        val id = Uuid.random().toString()
         val color = generateRandomPastelColor()
-        val timestamp = System.currentTimeMillis()
         val nextOrder = _state.value.counters.size
         
         viewModelScope.launch {
             counterRepository.addCounter(
-                PersistentCounterEntity(
-                    id = id,
+                Counter.create(
                     name = randomName,
                     count = 0,
                     color = color,
-                    updatedAt = timestamp,
                     sortOrder = nextOrder
                 )
             )
@@ -120,7 +116,7 @@ class CounterViewModel : ViewModel() {
         
         viewModelScope.launch {
             counterRepository.updateCounter(
-                PersistentCounterEntity(
+                Counter(
                     id = id,
                     name = name,
                     count = count,

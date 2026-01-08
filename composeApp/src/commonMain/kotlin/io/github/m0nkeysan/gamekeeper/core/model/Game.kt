@@ -19,12 +19,14 @@ data class TarotGame(
     override val createdAt: Long = 0L,
     override val updatedAt: Long = 0L,
     val rounds: List<TarotRound> = emptyList(),
-    val playerCount: Int
+    val playerCount: Int,
+    val name: String = "Tarot Game",
+    val playerIds: String = "" // Comma-separated player IDs for backward compatibility
 ) : Game() {
 
     companion object {
         @OptIn(ExperimentalUuidApi::class)
-        fun create(players: List<Player>, playerCount: Int? = null): TarotGame {
+        fun create(players: List<Player>, playerCount: Int? = null, name: String = "Tarot Game"): TarotGame {
             val now = getCurrentTimeMillis()
 
             // On utilise le playerCount passé en paramètre, sinon la taille de la liste
@@ -41,7 +43,9 @@ data class TarotGame(
                 createdAt = now,
                 updatedAt = now,
                 playerCount = finalPlayerCount,
-                rounds = emptyList()
+                rounds = emptyList(),
+                name = name,
+                playerIds = players.joinToString(",") { it.id }
             )
         }
     }
@@ -53,17 +57,28 @@ data class YahtzeeGame(
     override val players: List<Player>,
     override val createdAt: Long = 0L,
     override val updatedAt: Long = 0L,
-    val scores: Map<String, List<YahtzeeScore>> = emptyMap()
+    val scores: Map<String, List<YahtzeeScore>> = emptyMap(),
+    val name: String = "Yahtzee Game",
+    val playerIds: String = "", // Comma-separated player IDs for backward compatibility
+    val firstPlayerIndex: Int = 0,
+    val currentPlayerIndex: Int = 0,
+    val isFinished: Boolean = false,
+    val winnerName: String? = null
 ) : Game() {
+    
+    val playerCount: Int get() = if (playerIds.isNotEmpty()) playerIds.split(",").size else players.size
+    
     companion object {
         @OptIn(ExperimentalUuidApi::class)
-        fun create(players: List<Player>): YahtzeeGame {
+        fun create(players: List<Player>, name: String = "Yahtzee Game"): YahtzeeGame {
             val now = getCurrentTimeMillis()
             return YahtzeeGame(
                 id = Uuid.random().toString(),
                 players = players,
                 createdAt = now,
-                updatedAt = now
+                updatedAt = now,
+                name = name,
+                playerIds = players.joinToString(",") { it.id }
             )
         }
     }

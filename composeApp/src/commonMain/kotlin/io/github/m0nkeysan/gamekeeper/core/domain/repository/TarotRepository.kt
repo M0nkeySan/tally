@@ -1,14 +1,14 @@
 package io.github.m0nkeysan.gamekeeper.core.domain.repository
 
-import io.github.m0nkeysan.gamekeeper.core.data.local.database.TarotGameEntity
-import io.github.m0nkeysan.gamekeeper.core.data.local.database.TarotRoundEntity
+import io.github.m0nkeysan.gamekeeper.core.model.TarotGame
+import io.github.m0nkeysan.gamekeeper.core.model.TarotRound
 import kotlinx.coroutines.flow.Flow
 
 interface TarotRepository {
-    fun getAllGames(): Flow<List<TarotGameEntity>>
-    suspend fun getGameById(id: String): TarotGameEntity?
-    suspend fun saveGame(game: TarotGameEntity)
-    suspend fun deleteGame(game: TarotGameEntity)
-    fun getRoundsForGame(gameId: String): Flow<List<TarotRoundEntity>>
-    suspend fun addRound(round: TarotRoundEntity)
+    fun getAllGames(): Flow<List<TarotGame>>
+    suspend fun getGameById(id: String): TarotGame?
+    suspend fun saveGame(game: TarotGame)
+    suspend fun deleteGame(game: TarotGame)
+    fun getRoundsForGame(gameId: String): Flow<List<TarotRound>>
+    suspend fun addRound(round: TarotRound, gameId: String)
 }

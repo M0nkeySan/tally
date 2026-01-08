@@ -1,30 +1,110 @@
 package io.github.m0nkeysan.gamekeeper.core.data.local.repository
 
+import androidx.room.withTransaction
+import io.github.m0nkeysan.gamekeeper.core.data.local.database.GameDatabase
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.YahtzeeDao
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.YahtzeeGameEntity
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.YahtzeeScoreEntity
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeRepository
+import io.github.m0nkeysan.gamekeeper.core.model.PlayerYahtzeeScore
+import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
+import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeGame
+import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeScore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class YahtzeeRepositoryImpl(
-    private val dao: YahtzeeDao
+    private val dao: YahtzeeDao,
+    private val database: GameDatabase
 ) : YahtzeeRepository {
-    override fun getAllGames(): Flow<List<YahtzeeGameEntity>> = dao.getAllGames()
-
-    override suspend fun getGameById(id: String): YahtzeeGameEntity? = dao.getGameById(id)
-
-    override suspend fun saveGame(game: YahtzeeGameEntity) {
-        dao.insertGame(game)
+    
+    override fun getAllGames(): Flow<List<YahtzeeGame>> = dao.getAllGames().map { entities ->
+        entities.map { it.toDomain() }
     }
 
-    override suspend fun deleteGame(game: YahtzeeGameEntity) {
-        dao.deleteScoresForGame(game.id)
-        dao.deleteGame(game)
+    override suspend fun getGameById(id: String): YahtzeeGame? = try {
+        dao.getGameById(id)?.toDomain()
+    } catch (e: Exception) {
+        null
     }
 
-    override fun getScoresForGame(gameId: String): Flow<List<YahtzeeScoreEntity>> = dao.getScoresForGame(gameId)
+    override suspend fun saveGame(game: YahtzeeGame) {
+        try {
+            dao.insertGame(game.toEntity())
+        } catch (e: Exception) {
+            throw Exception("Failed to save Yahtzee game: ${e.message}", e)
+        }
+    }
 
-    override suspend fun saveScore(score: YahtzeeScoreEntity) {
-        dao.insertScore(score)
+    override suspend fun deleteGame(game: YahtzeeGame) {
+        try {
+            // Use transaction for atomic delete operation
+            database.withTransaction {
+                dao.deleteScoresForGame(game.id)
+                dao.deleteGame(game.toEntity())
+            }
+        } catch (e: Exception) {
+            throw Exception("Failed to delete Yahtzee game: ${e.message}", e)
+        }
+    }
+
+    override fun getScoresForGame(gameId: String): Flow<List<PlayerYahtzeeScore>> = 
+        dao.getScoresForGame(gameId).map { entities ->
+            entities.map { 
+                PlayerYahtzeeScore(
+                    playerIndex = it.playerIndex,
+                    score = it.toDomain()
+                )
+            }
+        }
+
+    override suspend fun saveScore(score: YahtzeeScore, gameId: String, playerIndex: Int) {
+        try {
+            dao.insertScore(score.toEntity(gameId, playerIndex))
+        } catch (e: Exception) {
+            throw Exception("Failed to save Yahtzee score: ${e.message}", e)
+        }
     }
 }
+
+// Mapper functions - Entity to Domain
+private fun YahtzeeGameEntity.toDomain() = YahtzeeGame(
+    id = id,
+    players = emptyList(), // Players are resolved separately by ViewModel
+    createdAt = createdAt,
+    updatedAt = updatedAt,
+    scores = emptyMap(), // Scores are loaded separately
+    name = name,
+    playerIds = playerIds,
+    firstPlayerIndex = firstPlayerIndex,
+    currentPlayerIndex = currentPlayerIndex,
+    isFinished = isFinished,
+    winnerName = winnerName
+)
+
+private fun YahtzeeScoreEntity.toDomain() = YahtzeeScore(
+    category = YahtzeeCategory.valueOf(category),
+    value = score,
+    isScored = true
+)
+
+// Mapper functions - Domain to Entity
+private fun YahtzeeGame.toEntity() = YahtzeeGameEntity(
+    id = id,
+    name = name,
+    playerCount = playerCount,
+    playerIds = playerIds.ifEmpty { players.joinToString(",") { it.id } },
+    firstPlayerIndex = firstPlayerIndex,
+    currentPlayerIndex = currentPlayerIndex,
+    isFinished = isFinished,
+    winnerName = winnerName,
+    createdAt = createdAt,
+    updatedAt = updatedAt
+)
+
+private fun YahtzeeScore.toEntity(gameId: String, playerIndex: Int) = YahtzeeScoreEntity(
+    gameId = gameId,
+    playerIndex = playerIndex,
+    category = category.name,
+    score = value
+)

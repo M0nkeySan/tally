@@ -9,6 +9,14 @@ data class YahtzeeScore(
     val isScored: Boolean = false
 )
 
+/**
+ * Yahtzee score associated with a specific player in a game
+ */
+data class PlayerYahtzeeScore(
+    val playerIndex: Int,
+    val score: YahtzeeScore
+)
+
 @Serializable
 enum class YahtzeeCategory(val displayName: String) {
     ACES("Ones"),

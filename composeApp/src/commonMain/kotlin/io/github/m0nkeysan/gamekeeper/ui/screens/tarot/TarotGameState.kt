@@ -11,7 +11,8 @@ data class TarotScoringState(
     val players: List<Player> = emptyList(),
     val rounds: List<TarotRound> = emptyList(),
     val inputState: TarotRoundInputState = TarotRoundInputState(),
-    val isCalculating: Boolean = false
+    val isCalculating: Boolean = false,
+    val error: String? = null
 )
 
 data class TarotRoundInputState(

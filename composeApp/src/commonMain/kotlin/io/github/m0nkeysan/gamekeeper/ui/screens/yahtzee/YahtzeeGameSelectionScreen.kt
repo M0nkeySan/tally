@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
-import io.github.m0nkeysan.gamekeeper.core.data.local.database.YahtzeeGameEntity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +41,7 @@ fun YahtzeeGameSelectionScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        gameToDelete?.let { viewModel.deleteGame(it.rawEntity) }
+                        gameToDelete?.let { viewModel.deleteGame(it.game) }
                         gameToDelete = null
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)

@@ -2,8 +2,8 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.tarot
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.m0nkeysan.gamekeeper.core.data.local.database.TarotGameEntity
 import io.github.m0nkeysan.gamekeeper.core.model.Player
+import io.github.m0nkeysan.gamekeeper.core.model.TarotGame
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -24,12 +24,13 @@ data class TarotGameDisplayModel(
     val playerNames: String,
     val createdAt: Long,
     val updatedAt: Long,
-    val rawEntity: TarotGameEntity
+    val game: TarotGame
 )
 
 data class TarotGameSelectionState(
     val games: List<TarotGameDisplayModel> = emptyList(),
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val error: String? = null
 )
 
 class TarotGameViewModel : ViewModel() {
@@ -47,26 +48,34 @@ class TarotGameViewModel : ViewModel() {
 
     private fun loadGames() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                repository.getAllGames().collect { games ->
-                    val displayModels = games.map { game ->
-                        val names = game.playerIds.split(",").map { id ->
-                            playerRepository.getPlayerById(id)?.name ?: "Unknown"
-                        }.joinToString(", ")
+            try {
+                withContext(Dispatchers.IO) {
+                    repository.getAllGames().collect { games ->
+                        val displayModels = games.map { game ->
+                            val names = game.playerIds.split(",").map { id ->
+                                playerRepository.getPlayerById(id)?.name ?: "Unknown"
+                            }.joinToString(", ")
 
-                        TarotGameDisplayModel(
-                            id = game.id,
-                            name = game.name,
-                            playerCount = game.playerCount,
-                            playerNames = names,
-                            createdAt = game.createdAt,
-                            updatedAt = game.updatedAt,
-                            rawEntity = game
-                        )
+                            TarotGameDisplayModel(
+                                id = game.id,
+                                name = game.name,
+                                playerCount = game.playerCount,
+                                playerNames = names,
+                                createdAt = game.createdAt,
+                                updatedAt = game.updatedAt,
+                                game = game
+                            )
+                        }
+                        _selectionState.value =
+                            TarotGameSelectionState(games = displayModels, isLoading = false)
                     }
-                    _selectionState.value =
-                        TarotGameSelectionState(games = displayModels, isLoading = false)
                 }
+            } catch (e: Exception) {
+                _selectionState.value = TarotGameSelectionState(
+                    games = emptyList(),
+                    isLoading = false,
+                    error = "Failed to load games: ${e.message}"
+                )
             }
         }
     }
@@ -76,37 +85,42 @@ class TarotGameViewModel : ViewModel() {
         name: String,
         playerCount: Int,
         players: List<Player>,
-        onCreated: (String) -> Unit
+        onCreated: (String) -> Unit,
+        onError: (String) -> Unit = {}
     ) {
-        val id = Uuid.random().toString()
-        val now = System.currentTimeMillis()
-
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                players.forEach { player ->
-                    if (playerRepository.getPlayerById(player.id) == null) {
-                        playerRepository.insertPlayer(player)
+            try {
+                val gameId = withContext(Dispatchers.IO) {
+                    players.forEach { player ->
+                        if (playerRepository.getPlayerById(player.id) == null) {
+                            playerRepository.insertPlayer(player)
+                        }
                     }
-                }
 
-                val game = TarotGameEntity(
-                    id = id,
-                    name = name,
-                    playerCount = playerCount,
-                    playerIds = players.joinToString(",") { it.id },
-                    createdAt = now,
-                    updatedAt = now
-                )
-                repository.saveGame(game)
+                    val game = TarotGame.create(
+                        players = players,
+                        playerCount = playerCount,
+                        name = name
+                    )
+                    repository.saveGame(game)
+                    game.id
+                }
+                // Call onCreated on the main thread (viewModelScope uses Main dispatcher)
+                onCreated(gameId)
+            } catch (e: Exception) {
+                onError("Failed to create game: ${e.message}")
             }
-            onCreated(id)
         }
     }
 
-    fun deleteGame(game: TarotGameEntity) {
+    fun deleteGame(game: TarotGame, onError: (String) -> Unit = {}) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                repository.deleteGame(game)
+            try {
+                withContext(Dispatchers.IO) {
+                    repository.deleteGame(game)
+                }
+            } catch (e: Exception) {
+                onError("Failed to delete game: ${e.message}")
             }
         }
     }

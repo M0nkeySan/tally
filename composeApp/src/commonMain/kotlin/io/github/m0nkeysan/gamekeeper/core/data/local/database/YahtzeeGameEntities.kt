@@ -1,6 +1,7 @@
 package io.github.m0nkeysan.gamekeeper.core.data.local.database
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 import kotlin.uuid.ExperimentalUuidApi
@@ -21,7 +22,10 @@ data class YahtzeeGameEntity @OptIn(ExperimentalUuidApi::class) constructor(
     val updatedAt: Long
 )
 
-@Entity(tableName = "yahtzee_scores")
+@Entity(
+    tableName = "yahtzee_scores",
+    indices = [Index(value = ["gameId"])]
+)
 data class YahtzeeScoreEntity @OptIn(ExperimentalUuidApi::class) constructor(
     @PrimaryKey
     val id: String = Uuid.random().toString(),

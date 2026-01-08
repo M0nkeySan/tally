@@ -2,9 +2,9 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.m0nkeysan.gamekeeper.core.data.local.database.YahtzeeGameEntity
-import io.github.m0nkeysan.gamekeeper.core.data.local.database.YahtzeeScoreEntity
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
+import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeGame
+import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeScore
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 data class YahtzeeScoringState(
-    val game: YahtzeeGameEntity? = null,
+    val game: YahtzeeGame? = null,
     val scores: Map<Int, Map<YahtzeeCategory, Int>> = emptyMap(),
     val isLoading: Boolean = true
 )
@@ -40,11 +40,12 @@ class YahtzeeScoringViewModel : ViewModel() {
 
                 _state.update { it.copy(game = game) }
 
-                repository.getScoresForGame(gameId).collect { scoreEntities ->
+                repository.getScoresForGame(gameId).collect { playerScores ->
+                    // Map PlayerYahtzeeScore list to our state structure
                     val scoresMap = mutableMapOf<Int, MutableMap<YahtzeeCategory, Int>>()
-                    scoreEntities.forEach { entity ->
-                        val playerMap = scoresMap.getOrPut(entity.playerIndex) { mutableMapOf() }
-                        playerMap[YahtzeeCategory.valueOf(entity.category)] = entity.score
+                    playerScores.forEach { playerScore ->
+                        val playerMap = scoresMap.getOrPut(playerScore.playerIndex) { mutableMapOf() }
+                        playerMap[playerScore.score.category] = playerScore.score.value
                     }
                     _state.update { it.copy(scores = scoresMap, isLoading = false) }
                 }
@@ -64,14 +65,21 @@ class YahtzeeScoringViewModel : ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 repository.saveScore(
-                    YahtzeeScoreEntity(
-                        gameId = currentGame.id,
-                        playerIndex = playerIndex,
-                        category = category.name,
-                        score = score
-                    )
+                    YahtzeeScore(
+                        category = category,
+                        value = score,
+                        isScored = true
+                    ),
+                    currentGame.id,
+                    playerIndex
                 )
 
+                // Update local state
+                val currentScores = _state.value.scores.toMutableMap()
+                val playerScores = currentScores.getOrPut(playerIndex) { mutableMapOf() }.toMutableMap()
+                playerScores[category] = score
+                currentScores[playerIndex] = playerScores
+                
                 if (moveTurn) {
                     val nextPlayerIndex = (playerIndex + 1) % currentGame.playerCount
                     val updatedGame = currentGame.copy(
@@ -79,7 +87,9 @@ class YahtzeeScoringViewModel : ViewModel() {
                         updatedAt = System.currentTimeMillis()
                     )
                     repository.saveGame(updatedGame)
-                    _state.update { it.copy(game = updatedGame) }
+                    _state.update { it.copy(game = updatedGame, scores = currentScores) }
+                } else {
+                    _state.update { it.copy(scores = currentScores) }
                 }
             }
         }
@@ -122,7 +132,6 @@ class YahtzeeScoringViewModel : ViewModel() {
 
     fun getWinners(): List<Pair<String, Int>> {
         val game = _state.value.game ?: return emptyList()
-        val players = game.playerIds.split(",") // Actually names in entities? No I renamed to ids
 
         val playerTotalScores = (0 until game.playerCount).map { index ->
             getPlayerName(index) to calculateTotalScore(index)

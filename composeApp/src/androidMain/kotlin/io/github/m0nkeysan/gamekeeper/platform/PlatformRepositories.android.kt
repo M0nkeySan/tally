@@ -15,10 +15,17 @@ import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotRepository
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.TarotRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeRepository
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.YahtzeeRepositoryImpl
-import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories.database
 
 actual object PlatformRepositories {
     private var database: GameDatabase? = null
+    
+    // Singleton instances for repositories
+    private var playerRepository: PlayerRepository? = null
+    private var playerStatsRepository: PlayerStatsRepository? = null
+    private var userPreferencesRepository: UserPreferencesRepository? = null
+    private var counterRepository: CounterRepository? = null
+    private var tarotRepository: TarotRepository? = null
+    private var yahtzeeRepository: YahtzeeRepository? = null
 
     fun init(context: Context) {
         if (database == null) {
@@ -37,26 +44,38 @@ actual object PlatformRepositories {
     }
 
     actual fun getPlayerRepository(): PlayerRepository {
-        return PlayerRepositoryImpl(getDatabase().playerDao())
+        return playerRepository ?: PlayerRepositoryImpl(getDatabase().playerDao()).also {
+            playerRepository = it
+        }
     }
 
     actual fun getPlayerStatsRepository(): PlayerStatsRepository {
-        return PlayerStatsRepositoryImpl(getDatabase().statsDao())
+        return playerStatsRepository ?: PlayerStatsRepositoryImpl(getDatabase().statsDao()).also {
+            playerStatsRepository = it
+        }
     }
 
     actual fun getUserPreferencesRepository(): UserPreferencesRepository {
-        return UserPreferencesRepositoryImpl(getDatabase().userPreferencesDao())
+        return userPreferencesRepository ?: UserPreferencesRepositoryImpl(getDatabase().userPreferencesDao()).also {
+            userPreferencesRepository = it
+        }
     }
 
     actual fun getCounterRepository(): CounterRepository {
-        return CounterRepositoryImpl(getDatabase().persistentCounterDao())
+        return counterRepository ?: CounterRepositoryImpl(getDatabase().persistentCounterDao()).also {
+            counterRepository = it
+        }
     }
 
     actual fun getTarotRepository(): TarotRepository {
-        return TarotRepositoryImpl(getDatabase().tarotDao())
+        return tarotRepository ?: TarotRepositoryImpl(getDatabase().tarotDao(), getDatabase()).also {
+            tarotRepository = it
+        }
     }
 
     actual fun getYahtzeeRepository(): YahtzeeRepository {
-        return YahtzeeRepositoryImpl(getDatabase().yahtzeeDao())
+        return yahtzeeRepository ?: YahtzeeRepositoryImpl(getDatabase().yahtzeeDao(), getDatabase()).also {
+            yahtzeeRepository = it
+        }
     }
 }

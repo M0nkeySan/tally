@@ -4,6 +4,7 @@ import io.github.m0nkeysan.gamekeeper.core.data.local.database.*
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.*
 import io.github.m0nkeysan.gamekeeper.core.model.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class PlayerStatsRepositoryImpl(
@@ -39,9 +40,136 @@ class PlayerStatsRepositoryImpl(
         ))
     }
 
-    override suspend fun recordTarotGame(gameId: String, players: List<Player>, scores: Map<String, Int>, timestamp: Long) {}
-    override suspend fun recordYahtzeeGame(gameId: String, players: List<Player>, scores: Map<String, Int>, timestamp: Long) {}
-    override suspend fun recordCounterGame(gameId: String, players: List<Player>, counts: Map<String, Int>, timestamp: Long) {}
+    override suspend fun recordTarotGame(
+        gameId: String,
+        players: List<Player>,
+        scores: Map<String, Int>,
+        timestamp: Long
+    ) {
+        // Find the winner(s) - highest score wins
+        val maxScore = scores.values.maxOrNull() ?: 0
+        val winnerIds = scores.filterValues { it == maxScore }.keys
+        
+        // Record participation for each player
+        players.forEach { player ->
+            val playerScore = scores[player.id] ?: 0
+            val isWinner = player.id in winnerIds
+            
+            // Insert game participant record
+            dao.insertGameParticipant(
+                GameParticipantEntity(
+                    gameId = gameId,
+                    playerId = player.id,
+                    gameType = GameType.TAROT.name,
+                    score = playerScore,
+                    isWinner = isWinner,
+                    playedAt = timestamp
+                )
+            )
+            
+            // Update player stats
+            val currentStats = dao.getPlayerStats(player.id).first()
+            if (currentStats != null) {
+                dao.insertPlayerStats(
+                    currentStats.copy(
+                        totalGamesPlayed = currentStats.totalGamesPlayed + 1,
+                        tarotGamesPlayed = currentStats.tarotGamesPlayed + 1,
+                        tarotGamesWon = if (isWinner) currentStats.tarotGamesWon + 1 else currentStats.tarotGamesWon,
+                        tarotTotalScore = currentStats.tarotTotalScore + playerScore,
+                        lastPlayedAt = timestamp
+                    )
+                )
+            }
+        }
+    }
+    
+    override suspend fun recordYahtzeeGame(
+        gameId: String,
+        players: List<Player>,
+        scores: Map<String, Int>,
+        timestamp: Long
+    ) {
+        // Find the winner(s) - highest score wins
+        val maxScore = scores.values.maxOrNull() ?: 0
+        val winnerIds = scores.filterValues { it == maxScore }.keys
+        
+        // Record participation for each player
+        players.forEach { player ->
+            val playerScore = scores[player.id] ?: 0
+            val isWinner = player.id in winnerIds
+            
+            // Insert game participant record
+            dao.insertGameParticipant(
+                GameParticipantEntity(
+                    gameId = gameId,
+                    playerId = player.id,
+                    gameType = GameType.YAHTZEE.name,
+                    score = playerScore,
+                    isWinner = isWinner,
+                    playedAt = timestamp
+                )
+            )
+            
+            // Update player stats
+            val currentStats = dao.getPlayerStats(player.id).first()
+            if (currentStats != null) {
+                dao.insertPlayerStats(
+                    currentStats.copy(
+                        totalGamesPlayed = currentStats.totalGamesPlayed + 1,
+                        yahtzeeGamesPlayed = currentStats.yahtzeeGamesPlayed + 1,
+                        yahtzeeGamesWon = if (isWinner) currentStats.yahtzeeGamesWon + 1 else currentStats.yahtzeeGamesWon,
+                        yahtzeeHighestScore = maxOf(currentStats.yahtzeeHighestScore, playerScore),
+                        yahtzeeTotalScore = currentStats.yahtzeeTotalScore + playerScore,
+                        lastPlayedAt = timestamp
+                    )
+                )
+            }
+        }
+    }
+    
+    override suspend fun recordCounterGame(
+        gameId: String,
+        players: List<Player>,
+        counts: Map<String, Int>,
+        timestamp: Long
+    ) {
+        // Find the winner(s) - highest count wins
+        val maxCount = counts.values.maxOrNull() ?: 0
+        val winnerIds = counts.filterValues { it == maxCount }.keys
+        
+        // Record participation for each player
+        players.forEach { player ->
+            val playerCount = counts[player.id] ?: 0
+            val isWinner = player.id in winnerIds
+            
+            // Insert game participant record
+            dao.insertGameParticipant(
+                GameParticipantEntity(
+                    gameId = gameId,
+                    playerId = player.id,
+                    gameType = GameType.COUNTER.name,
+                    score = playerCount,
+                    isWinner = isWinner,
+                    playedAt = timestamp
+                )
+            )
+            
+            // Update player stats
+            val currentStats = dao.getPlayerStats(player.id).first()
+            if (currentStats != null) {
+                dao.insertPlayerStats(
+                    currentStats.copy(
+                        totalGamesPlayed = currentStats.totalGamesPlayed + 1,
+                        counterGamesPlayed = currentStats.counterGamesPlayed + 1,
+                        counterGamesWon = if (isWinner) currentStats.counterGamesWon + 1 else currentStats.counterGamesWon,
+                        counterTotalScore = currentStats.counterTotalScore + playerCount,
+                        lastPlayedAt = timestamp
+                    )
+                )
+            }
+        }
+    }
+    
     override suspend fun deleteGameParticipants(gameId: String) {
         dao.deleteGameParticipants(gameId)
     }
@@ -51,7 +179,7 @@ class PlayerStatsRepositoryImpl(
     }
 }
 
-fun PlayerStatsEntity.toDomain() = PlayerStats(
+private fun PlayerStatsEntity.toDomain() = PlayerStats(
     playerId = playerId,
     playerName = playerName,
     avatarColor = avatarColor,
@@ -69,7 +197,7 @@ fun PlayerStatsEntity.toDomain() = PlayerStats(
     lastPlayedAt = lastPlayedAt
 )
 
-fun GameParticipantEntity.toDomain() = GameParticipant(
+private fun GameParticipantEntity.toDomain() = GameParticipant(
     gameId = gameId,
     playerId = playerId,
     gameType = GameType.valueOf(gameType),

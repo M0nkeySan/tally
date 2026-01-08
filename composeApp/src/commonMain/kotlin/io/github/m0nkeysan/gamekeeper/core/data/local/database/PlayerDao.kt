@@ -14,7 +14,7 @@ interface PlayerDao {
     fun getAllPlayers(): Flow<List<PlayerEntity>>
     
     @Query("SELECT * FROM players WHERE id = :id")
-    fun getPlayerById(id: String): PlayerEntity?
+    suspend fun getPlayerById(id: String): PlayerEntity?
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlayer(player: PlayerEntity): Long
