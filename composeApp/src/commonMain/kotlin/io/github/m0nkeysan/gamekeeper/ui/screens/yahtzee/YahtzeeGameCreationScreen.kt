@@ -34,7 +34,7 @@ fun YahtzeeGameCreationScreen(
         onBack = onBack,
         onCreate = {
             val finalPlayers = selectedPlayers.filterNotNull()
-            if (finalPlayers.size in 2..8) {
+            if (finalPlayers.size in 1..8) {
                 viewModel.createGame(
                     name = gameName.ifBlank { "Yahtzee Game" },
                     playerCount = finalPlayers.size,
