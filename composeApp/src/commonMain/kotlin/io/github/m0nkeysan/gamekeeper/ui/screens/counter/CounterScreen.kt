@@ -66,11 +66,13 @@ fun CounterScreen(
     val itemPositions = remember { mutableStateMapOf<Int, Offset>() }
     val itemSizes = remember { mutableStateMapOf<Int, IntSize>() }
 
-    // Clean up stale position/size entries when counter list changes
-    LaunchedEffect(state.counters.size) {
-        val validIndices = state.counters.indices.toSet()
-        itemPositions.keys.removeAll { it !in validIndices }
-        itemSizes.keys.removeAll { it !in validIndices }
+    // Clean up stale position/size entries when counter list changes (only when not dragging)
+    LaunchedEffect(state.counters.size, draggedItemIndex) {
+        if (draggedItemIndex == null) {
+            val validIndices = state.counters.indices.toSet()
+            itemPositions.keys.removeAll { it !in validIndices }
+            itemSizes.keys.removeAll { it !in validIndices }
+        }
     }
 
     // Quick Adjust Modal State

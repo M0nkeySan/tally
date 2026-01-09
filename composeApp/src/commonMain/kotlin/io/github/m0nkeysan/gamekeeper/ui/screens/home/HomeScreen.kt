@@ -43,11 +43,13 @@ fun HomeScreen(
     val itemPositions = remember { mutableStateMapOf<Int, Offset>() }
     val itemSizes = remember { mutableStateMapOf<Int, IntSize>() }
 
-    // Clean up stale position/size entries when features list changes
-    LaunchedEffect(features.size) {
-        val validIndices = features.indices.toSet()
-        itemPositions.keys.removeAll { it !in validIndices }
-        itemSizes.keys.removeAll { it !in validIndices }
+    // Clean up stale position/size entries when features list changes (only when not dragging)
+    LaunchedEffect(features.size, draggedItemIndex) {
+        if (draggedItemIndex == null) {
+            val validIndices = features.indices.toSet()
+            itemPositions.keys.removeAll { it !in validIndices }
+            itemSizes.keys.removeAll { it !in validIndices }
+        }
     }
 
     Scaffold(
