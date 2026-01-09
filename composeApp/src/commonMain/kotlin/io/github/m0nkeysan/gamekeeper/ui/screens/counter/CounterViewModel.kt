@@ -137,6 +137,7 @@ class CounterViewModel : ViewModel() {
     }
     
     fun deleteCounter(id: String) {
+        playerTimestamps.remove(id)
         viewModelScope.launch {
             counterRepository.deleteCounter(id)
             // Re-normalize orders
@@ -188,8 +189,14 @@ class CounterViewModel : ViewModel() {
     }
 
     fun deleteAll() {
+        playerTimestamps.clear()
         viewModelScope.launch {
             counterRepository.deleteAllCounters()
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        playerTimestamps.clear()
     }
 }

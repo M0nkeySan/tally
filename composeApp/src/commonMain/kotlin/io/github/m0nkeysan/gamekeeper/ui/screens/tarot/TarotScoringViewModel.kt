@@ -1,12 +1,10 @@
-package io.github.m0nkeysan.gamekeeper.ui.viewmodel
+package io.github.m0nkeysan.gamekeeper.ui.screens.tarot
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.gamekeeper.core.domain.engine.TarotScoringEngine
 import io.github.m0nkeysan.gamekeeper.core.model.*
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
-import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotRoundInputState
-import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotScoringState
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +27,7 @@ class TarotScoringViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
-                    val game = repository.getGameById(gameId) 
+                    val game = repository.getGameById(gameId)
                     if (game == null) {
                         _state.update { it.copy(error = "Game not found") }
                         return@withContext

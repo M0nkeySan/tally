@@ -21,7 +21,6 @@ import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.*
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import io.github.m0nkeysan.gamekeeper.ui.viewmodel.TarotScoringViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

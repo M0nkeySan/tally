@@ -27,7 +27,7 @@ fun YahtzeeGameCreationScreen(
         return "#${color.toString(16).padStart(6, '0')}"
     }
 
-    val canCreate = gameName.isNotBlank() && selectedPlayers.size in 2..8 && selectedPlayers.all { it != null }
+    val canCreate = gameName.isNotBlank() && selectedPlayers.size in 1..8 && selectedPlayers.all { it != null }
 
     GameCreationTemplate(
         title = "New Yahtzee Game",

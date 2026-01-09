@@ -196,6 +196,7 @@ fun FingerSelectorGame(
     
     // Reset state when config changes
     LaunchedEffect(config) {
+        fingers.clear()
         winners = emptySet()
         isSelecting = false
         countdownSeconds = null
