@@ -2,7 +2,6 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.home
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -14,9 +13,6 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -25,7 +21,10 @@ import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.navigation.Screen
 import io.github.m0nkeysan.gamekeeper.ui.components.GameCard
 import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
-import kotlin.math.sqrt
+import io.github.m0nkeysan.gamekeeper.ui.utils.DragConfig
+import io.github.m0nkeysan.gamekeeper.ui.utils.DragDetectionMode
+import io.github.m0nkeysan.gamekeeper.ui.utils.draggableGridItem
+import io.github.m0nkeysan.gamekeeper.ui.utils.trackItemPosition
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,62 +84,34 @@ fun HomeScreen(
                             }
                             .scale(scale)
                             .shadow(elevation, shape = MaterialTheme.shapes.medium)
-                            .onGloballyPositioned { coordinates ->
-                                itemPositions[index] = coordinates.positionInParent()
-                                itemSizes[index] = coordinates.size
-                            }
-                            .pointerInput(Unit) {
-                                detectDragGesturesAfterLongPress(
-                                    onDragStart = {
-                                        draggedItemIndex = index
-                                        dragOffset = Offset.Zero
-                                    },
-                                    onDrag = { change, dragAmount ->
-                                        change.consume()
-                                        dragOffset += dragAmount
-
-                                        // Find target position for swap
-                                        val draggedPos = itemPositions[index] ?: return@detectDragGesturesAfterLongPress
-                                        val currentCenter = Offset(
-                                            draggedPos.x + dragOffset.x + (itemSizes[index]?.width ?: 0) / 2f,
-                                            draggedPos.y + dragOffset.y + (itemSizes[index]?.height ?: 0) / 2f
-                                        )
-
-                                        // Check if we should swap with another item
-                                        for ((otherIndex, otherPos) in itemPositions) {
-                                            if (otherIndex == index) continue
-                                            val otherSize = itemSizes[otherIndex] ?: continue
-
-                                            val otherCenterX = otherPos.x + otherSize.width / 2f
-                                            val otherCenterY = otherPos.y + otherSize.height / 2f
-
-                                            val distance = sqrt(
-                                                (currentCenter.x - otherCenterX) * (currentCenter.x - otherCenterX) +
-                                                        (currentCenter.y - otherCenterY) * (currentCenter.y - otherCenterY)
-                                            )
-
-                                            // Swap if close enough to another item's center
-                                            if (distance < otherSize.width / 2f) {
-                                                val currentOrder = cardOrder.toMutableList()
-                                                val draggedId = currentOrder.removeAt(index)
-                                                currentOrder.add(otherIndex, draggedId)
-                                                viewModel.updateCardOrder(currentOrder)
-                                                draggedItemIndex = otherIndex
-                                                dragOffset = Offset.Zero
-                                                break
-                                            }
-                                        }
-                                    },
-                                    onDragEnd = {
-                                        draggedItemIndex = null
-                                        dragOffset = Offset.Zero
-                                    },
-                                    onDragCancel = {
-                                        draggedItemIndex = null
-                                        dragOffset = Offset.Zero
-                                    }
-                                )
-                            }
+                            .trackItemPosition(index, itemPositions, itemSizes)
+                            .draggableGridItem(
+                                itemIndex = index,
+                                draggedItemIndex = draggedItemIndex,
+                                dragOffset = dragOffset,
+                                itemPositions = itemPositions,
+                                itemSizes = itemSizes,
+                                items = features,
+                                config = DragConfig(detectionMode = DragDetectionMode.GRID_2D),
+                                onDragStart = {
+                                    draggedItemIndex = index
+                                    dragOffset = Offset.Zero
+                                },
+                                onSwap = { fromIndex, toIndex ->
+                                    val currentOrder = cardOrder.toMutableList()
+                                    val draggedId = currentOrder.removeAt(fromIndex)
+                                    currentOrder.add(toIndex, draggedId)
+                                    viewModel.updateCardOrder(currentOrder)
+                                    draggedItemIndex = toIndex
+                                },
+                                onDragEnd = {
+                                    draggedItemIndex = null
+                                    dragOffset = Offset.Zero
+                                },
+                                onDragOffsetChange = { newOffset ->
+                                    dragOffset = newOffset
+                                }
+                            )
                     ) {
                         GameCard(
                             icon = feature.icon,

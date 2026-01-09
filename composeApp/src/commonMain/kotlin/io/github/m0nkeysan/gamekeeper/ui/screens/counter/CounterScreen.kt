@@ -7,7 +7,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -27,10 +26,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,6 +44,11 @@ import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterDisplayMode
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterViewModel
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterItem
+import io.github.m0nkeysan.gamekeeper.ui.utils.DragConfig
+import io.github.m0nkeysan.gamekeeper.ui.utils.DragDetectionMode
+import io.github.m0nkeysan.gamekeeper.ui.utils.HapticFeedbackType
+import io.github.m0nkeysan.gamekeeper.ui.utils.draggableGridItem
+import io.github.m0nkeysan.gamekeeper.ui.utils.trackItemPosition
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,10 +61,10 @@ fun CounterScreen(
     val hapticController = rememberHapticFeedbackController()
 
     var draggedItemIndex by remember { mutableStateOf<Int?>(null) }
-    var dragOffset by remember { mutableStateOf(androidx.compose.ui.geometry.Offset.Zero) }
+    var dragOffset by remember { mutableStateOf(Offset.Zero) }
     
-    val itemPositions = remember { mutableStateMapOf<String, androidx.compose.ui.geometry.Offset>() }
-    val itemSizes = remember { mutableStateMapOf<String, IntSize>() }
+    val itemPositions = remember { mutableStateMapOf<Int, Offset>() }
+    val itemSizes = remember { mutableStateMapOf<Int, IntSize>() }
 
     // Quick Adjust Modal State
     var quickAdjustTarget by remember { mutableStateOf<CounterItem?>(null) }
@@ -201,66 +203,43 @@ fun CounterScreen(
                             }
                             .scale(scale)
                             .shadow(elevation, shape = MaterialTheme.shapes.medium)
-                            .onGloballyPositioned { coordinates ->
-                                itemPositions[counter.id] = coordinates.positionInParent()
-                                itemSizes[counter.id] = coordinates.size
-                            }
-                            .pointerInput(state.counters) {
-                                detectDragGesturesAfterLongPress(
-                                    onDragStart = {
-                                        draggedItemIndex = index
-                                        dragOffset = androidx.compose.ui.geometry.Offset.Zero
-                                        hapticController.performHapticFeedback(HapticType.MEDIUM)
-                                    },
-                                    onDrag = { change, dragAmount ->
-                                        change.consume()
-                                        dragOffset += dragAmount
-
-                                        val currentDraggedId = state.counters[draggedItemIndex ?: index].id
-                                        val currentPos = itemPositions[currentDraggedId] ?: return@detectDragGesturesAfterLongPress
-                                        val currentCenterY = currentPos.y + dragOffset.y + (itemSizes[currentDraggedId]?.height ?: 0) / 2f
-
-                                        var targetIndex = -1
-                                        for (i in state.counters.indices) {
-                                            if (i == (draggedItemIndex ?: index)) continue
-                                            val otherId = state.counters[i].id
-                                            val otherPos = itemPositions[otherId] ?: continue
-                                            val otherSize = itemSizes[otherId] ?: continue
-                                            
-                                            val otherTop = otherPos.y
-                                            val otherBottom = otherPos.y + otherSize.height
-                                            
-                                            if (currentCenterY in otherTop..otherBottom) {
-                                                targetIndex = i
-                                                break
-                                            }
+                            .trackItemPosition(index, itemPositions, itemSizes)
+                            .draggableGridItem(
+                                itemIndex = index,
+                                draggedItemIndex = draggedItemIndex,
+                                dragOffset = dragOffset,
+                                itemPositions = itemPositions,
+                                itemSizes = itemSizes,
+                                items = state.counters,
+                                config = DragConfig(
+                                    detectionMode = DragDetectionMode.LIST_VERTICAL,
+                                    onHapticFeedback = { feedbackType ->
+                                        val hapticType = when (feedbackType) {
+                                            HapticFeedbackType.MEDIUM -> HapticType.MEDIUM
+                                            HapticFeedbackType.SELECTION -> HapticType.SELECTION
                                         }
-
-                                        if (targetIndex != -1) {
-                                            val currentIndex = draggedItemIndex ?: index
-                                            val newOrder = state.counters.toMutableList()
-                                            val movedItem = newOrder.removeAt(currentIndex)
-                                            newOrder.add(targetIndex, movedItem)
-                                            
-                                            val oldY = itemPositions[state.counters[currentIndex].id]?.y ?: 0f
-                                            val targetY = itemPositions[state.counters[targetIndex].id]?.y ?: 0f
-                                            dragOffset = dragOffset.copy(y = dragOffset.y - (targetY - oldY))
-
-                                            viewModel.reorderCounters(newOrder.map { it.id })
-                                            draggedItemIndex = targetIndex
-                                            hapticController.performHapticFeedback(HapticType.SELECTION)
-                                        }
-                                    },
-                                    onDragEnd = {
-                                        draggedItemIndex = null
-                                        dragOffset = androidx.compose.ui.geometry.Offset.Zero
-                                    },
-                                    onDragCancel = {
-                                        draggedItemIndex = null
-                                        dragOffset = androidx.compose.ui.geometry.Offset.Zero
+                                        hapticController.performHapticFeedback(hapticType)
                                     }
-                                )
-                            }
+                                ),
+                                onDragStart = {
+                                    draggedItemIndex = index
+                                    dragOffset = Offset.Zero
+                                },
+                                onSwap = { fromIndex, toIndex ->
+                                    val newOrder = state.counters.toMutableList()
+                                    val movedItem = newOrder.removeAt(fromIndex)
+                                    newOrder.add(toIndex, movedItem)
+                                    viewModel.reorderCounters(newOrder.map { it.id })
+                                    draggedItemIndex = toIndex
+                                },
+                                onDragEnd = {
+                                    draggedItemIndex = null
+                                    dragOffset = Offset.Zero
+                                },
+                                onDragOffsetChange = { newOffset ->
+                                    dragOffset = newOffset
+                                }
+                            )
                     ) {
                         CounterCard(
                             name = counter.name,
