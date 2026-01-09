@@ -2,17 +2,19 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.counter
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -23,18 +25,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
@@ -42,13 +42,8 @@ import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterDisplayMode
-import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterViewModel
 import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterItem
-import io.github.m0nkeysan.gamekeeper.ui.utils.DragConfig
-import io.github.m0nkeysan.gamekeeper.ui.utils.DragDetectionMode
-import io.github.m0nkeysan.gamekeeper.ui.utils.HapticFeedbackType
-import io.github.m0nkeysan.gamekeeper.ui.utils.draggableGridItem
-import io.github.m0nkeysan.gamekeeper.ui.utils.trackItemPosition
+import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,30 +54,22 @@ fun CounterScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val hapticController = rememberHapticFeedbackController()
+    val listState = rememberLazyListState()
 
-    var draggedItemIndex by remember { mutableStateOf<Int?>(null) }
+    var draggedItemId by remember { mutableStateOf<Any?>(null) }
     var dragOffset by remember { mutableStateOf(Offset.Zero) }
 
-    val itemPositions = remember { mutableStateMapOf<Int, Offset>() }
-    val itemSizes = remember { mutableStateMapOf<Int, IntSize>() }
+    // Preview order during drag
+    var previewOrder by remember { mutableStateOf<List<CounterItem>?>(null) }
 
-    // Clean up stale position/size entries when counter list changes (only when not dragging)
-    LaunchedEffect(state.counters.size, draggedItemIndex) {
-        if (draggedItemIndex == null) {
-            val validIndices = state.counters.indices.toSet()
-            itemPositions.keys.removeAll { it !in validIndices }
-            itemSizes.keys.removeAll { it !in validIndices }
-        }
-    }
+    val displayCounters = previewOrder ?: state.counters
 
-    // Quick Adjust Modal State
     var quickAdjustTarget by remember { mutableStateOf<CounterItem?>(null) }
     var initialIsAddition by remember { mutableStateOf(true) }
     var autoFocusModal by remember { mutableStateOf(false) }
-    
-    // Direct Score Set Modal State
+
     var scoreSetTarget by remember { mutableStateOf<CounterItem?>(null) }
-    
+
     var showMenu by remember { mutableStateOf(false) }
     var showSettingsDialog by remember { mutableStateOf(false) }
     var showResetConfirmation by remember { mutableStateOf(false) }
@@ -91,7 +78,7 @@ fun CounterScreen(
     val sheetState = rememberModalBottomSheetState()
 
     val leader = remember(state.counters, state.displayMode) {
-        if (state.displayMode == io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterDisplayMode.MOST_POINTS) {
+        if (state.displayMode == CounterDisplayMode.MOST_POINTS) {
             state.counters.maxByOrNull { it.count }
         } else {
             state.counters.minByOrNull { it.count }
@@ -103,7 +90,7 @@ fun CounterScreen(
             TopAppBar(
                 title = {
                     if (leader != null && state.counters.isNotEmpty()) {
-                        val emoji = if (state.displayMode == io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterDisplayMode.MOST_POINTS) "📈" else "📉"
+                        val emoji = if (state.displayMode == CounterDisplayMode.MOST_POINTS) "📈" else "📉"
                         Text("$emoji ${leader.name}", fontWeight = FontWeight.ExtraBold)
                     } else {
                         Text("Counter")
@@ -115,7 +102,7 @@ fun CounterScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { 
+                    IconButton(onClick = {
                         viewModel.addRandomCounter()
                         hapticController.performHapticFeedback(HapticType.LIGHT)
                     }) {
@@ -171,8 +158,8 @@ fun CounterScreen(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
-                        GameIcons.Add, 
-                        contentDescription = null, 
+                        GameIcons.Add,
+                        contentDescription = null,
                         modifier = Modifier.size(64.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     )
@@ -186,69 +173,98 @@ fun CounterScreen(
             }
         } else {
             LazyColumn(
+                state = listState,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp),
-                userScrollEnabled = draggedItemIndex == null
+                userScrollEnabled = draggedItemId == null
             ) {
                 itemsIndexed(
-                    items = state.counters,
+                    items = displayCounters,
                     key = { _, counter -> counter.id }
-                ) { index, counter ->
-                    val isDragging = draggedItemIndex == index
+                ) { _, counter ->
+                    val isDragging = draggedItemId == counter.id
                     val scale by animateFloatAsState(if (isDragging) 1.05f else 1f)
-                    val elevation by animateDpAsState(if (isDragging) 8.dp else 0.dp)
+                    val elevation by animateDpAsState(if (isDragging) 12.dp else 0.dp)
+                    val zIndex = if (isDragging) 1f else 0f
 
                     Box(
                         modifier = Modifier
-                            .zIndex(if (isDragging) 1f else 0f)
+                            .zIndex(zIndex)
                             .graphicsLayer {
                                 if (isDragging) {
                                     translationY = dragOffset.y
+                                    rotationZ = 2f
                                 }
                             }
                             .scale(scale)
                             .shadow(elevation, shape = MaterialTheme.shapes.medium)
-                            .trackItemPosition(index, itemPositions, itemSizes)
-                            .draggableGridItem(
-                                itemIndex = index,
-                                draggedItemIndex = draggedItemIndex,
-                                dragOffset = dragOffset,
-                                itemPositions = itemPositions,
-                                itemSizes = itemSizes,
-                                items = state.counters,
-                                config = DragConfig(
-                                    detectionMode = DragDetectionMode.LIST_VERTICAL,
-                                    onHapticFeedback = { feedbackType ->
-                                        val hapticType = when (feedbackType) {
-                                            HapticFeedbackType.MEDIUM -> HapticType.MEDIUM
-                                            HapticFeedbackType.SELECTION -> HapticType.SELECTION
+                            .pointerInput(counter.id) {
+                                detectDragGesturesAfterLongPress(
+                                    onDragStart = {
+                                        draggedItemId = counter.id
+                                        previewOrder = state.counters.toList()
+                                        dragOffset = Offset.Zero
+                                        hapticController.performHapticFeedback(HapticType.MEDIUM)
+                                    },
+                                    onDrag = { change, dragAmount ->
+                                        change.consume()
+                                        dragOffset += dragAmount
+
+                                        val currentList = previewOrder ?: return@detectDragGesturesAfterLongPress
+                                        val activeId = draggedItemId ?: return@detectDragGesturesAfterLongPress
+
+                                        val currentIdx = currentList.indexOfFirst { it.id == activeId }
+                                        if (currentIdx == -1) return@detectDragGesturesAfterLongPress
+
+                                        val visibleItems = listState.layoutInfo.visibleItemsInfo
+                                        val currentItemInfo = visibleItems.find { it.index == currentIdx } ?: return@detectDragGesturesAfterLongPress
+
+                                        // Calculate center using layout info + drag offset
+                                        val currentItemCenterY = currentItemInfo.offset + dragOffset.y + (currentItemInfo.size / 2f)
+
+                                        // Find swap target
+                                        val targetItem = visibleItems.find {
+                                            it.index != currentIdx &&
+                                                    currentItemCenterY > it.offset &&
+                                                    currentItemCenterY < (it.offset + it.size)
                                         }
-                                        hapticController.performHapticFeedback(hapticType)
+
+                                        if (targetItem != null) {
+                                            val targetIdx = targetItem.index
+
+                                            // Perform swap
+                                            val newOrder = currentList.toMutableList()
+                                            val item = newOrder.removeAt(currentIdx)
+                                            newOrder.add(targetIdx, item)
+
+                                            previewOrder = newOrder
+
+                                            // Offset compensation
+                                            val distance = targetItem.offset - currentItemInfo.offset
+                                            dragOffset -= Offset(0f, distance.toFloat())
+
+                                            hapticController.performHapticFeedback(HapticType.SELECTION)
+                                        }
+                                    },
+                                    onDragEnd = {
+                                        previewOrder?.let { finalOrder ->
+                                            viewModel.reorderCounters(finalOrder.map { it.id })
+                                        }
+                                        draggedItemId = null
+                                        previewOrder = null
+                                        dragOffset = Offset.Zero
+                                    },
+                                    onDragCancel = {
+                                        draggedItemId = null
+                                        previewOrder = null
+                                        dragOffset = Offset.Zero
                                     }
-                                ),
-                                onDragStart = {
-                                    draggedItemIndex = index
-                                    dragOffset = Offset.Zero
-                                },
-                                onSwap = { fromIndex, toIndex ->
-                                    val newOrder = state.counters.toMutableList()
-                                    val movedItem = newOrder.removeAt(fromIndex)
-                                    newOrder.add(toIndex, movedItem)
-                                    viewModel.reorderCounters(newOrder.map { it.id })
-                                    draggedItemIndex = toIndex
-                                },
-                                onDragEnd = {
-                                    draggedItemIndex = null
-                                    dragOffset = Offset.Zero
-                                },
-                                onDragOffsetChange = { newOffset ->
-                                    dragOffset = newOffset
-                                }
-                            )
+                                )
+                            }
                     ) {
                         CounterCard(
                             name = counter.name,
@@ -286,7 +302,7 @@ fun CounterScreen(
                                 scoreSetTarget = counter
                             },
                             onClick = {
-                                if (draggedItemIndex == null) {
+                                if (draggedItemId == null) {
                                     onEditCounter(counter.id, counter.name, counter.count, counter.color)
                                 }
                             }
@@ -295,7 +311,7 @@ fun CounterScreen(
                 }
             }
         }
-        
+
         if (quickAdjustTarget != null) {
             ModalBottomSheet(
                 onDismissRequest = { quickAdjustTarget = null },
@@ -343,14 +359,14 @@ fun CounterScreen(
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold
                         )
-                        
+
                         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             SettingsOption(
                                 text = "📈 Most points",
                                 isSelected = state.displayMode == CounterDisplayMode.MOST_POINTS,
                                 onClick = { viewModel.setDisplayMode(CounterDisplayMode.MOST_POINTS) }
                             )
-                            
+
                             SettingsOption(
                                 text = "📉 Least points",
                                 isSelected = state.displayMode == CounterDisplayMode.LEAST_POINTS,
@@ -428,7 +444,7 @@ fun QuickAdjustContent(
     var isAddition by remember { mutableStateOf(initialIsAddition) }
     var manualValue by remember { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
-    
+
     val quickValues = listOf(5, 10, 15, 20, 50, 100, 200)
 
     LaunchedEffect(Unit) {
@@ -443,7 +459,6 @@ fun QuickAdjustContent(
             .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header with Background Color
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -534,7 +549,7 @@ fun QuickAdjustContent(
                 )
             )
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
     }
 }
@@ -625,7 +640,7 @@ fun SetScoreContent(
                 }
             }
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
     }
 }
