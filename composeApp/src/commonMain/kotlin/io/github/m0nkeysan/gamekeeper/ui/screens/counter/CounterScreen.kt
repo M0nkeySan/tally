@@ -692,7 +692,9 @@ fun CounterCard(
     onClick: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(
             containerColor = color,
             contentColor = contentColor
@@ -707,9 +709,7 @@ fun CounterCard(
         ) {
             Text(
                 text = name,
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable(onClick = onClick),
+                modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = contentColor
