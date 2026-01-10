@@ -150,7 +150,11 @@ fun PlayerSelectionScreen(
             }
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { showAddDialog = true }) {
+            FloatingActionButton(
+                onClick = { showAddDialog = true },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ) {
                 Icon(Icons.Default.Add, contentDescription = "Add Player")
             }
         },
@@ -245,24 +249,21 @@ fun PlayerSelectionScreen(
                             state = dismissState,
                             enableDismissFromEndToStart = false,
                             backgroundContent = {
-                                // Only show background when actively swiping
-                                if (dismissState.progress > 0f) {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .background(
-                                                MaterialTheme.colorScheme.secondaryContainer,
-                                                shape = MaterialTheme.shapes.medium
-                                            )
-                                            .padding(horizontal = 20.dp),
-                                        contentAlignment = Alignment.CenterStart
-                                    ) {
-                                        Icon(
-                                            Icons.Default.Add,
-                                            null,
-                                            tint = MaterialTheme.colorScheme.onSecondaryContainer
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(
+                                            MaterialTheme.colorScheme.secondaryContainer,
+                                            shape = MaterialTheme.shapes.medium
                                         )
-                                    }
+                                        .padding(horizontal = 20.dp),
+                                    contentAlignment = Alignment.CenterStart
+                                ) {
+                                    Icon(
+                                        Icons.Default.Add,
+                                        null,
+                                        tint = MaterialTheme.colorScheme.onSecondaryContainer
+                                    )
                                 }
                             }
                         ) {
@@ -282,16 +283,15 @@ fun PlayerSelectionScreen(
 @Composable
 fun PlayerCard(player: Player, isActive: Boolean = true, onClick: () -> Unit) {
     val color = remember(player.avatarColor) { parseColor(player.avatarColor) }
-    val cardColor = if (isActive) color else color.copy(alpha = 0.5f)
     val contentColor = if (color.luminance() > 0.5f) Color.Black.copy(alpha = 0.8f) else Color.White
-    val textAlpha = if (isActive) 1f else 0.6f
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .alpha(if (isActive) 1f else 0.5f)
             .clickable(enabled = isActive, onClick = onClick),
         colors = CardDefaults.cardColors(
-            containerColor = cardColor,
+            containerColor = color,
             contentColor = contentColor
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -306,7 +306,7 @@ fun PlayerCard(player: Player, isActive: Boolean = true, onClick: () -> Unit) {
                     text = player.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = contentColor.copy(alpha = textAlpha),
+                    color = contentColor,
                     textDecoration = if (isActive) TextDecoration.None else TextDecoration.LineThrough
                 )
             }
