@@ -130,7 +130,8 @@ class TarotGameViewModel : ViewModel() {
             try {
                 withContext(Dispatchers.IO) {
                     if (playerRepository.getPlayerById(player.id) == null) {
-                        playerRepository.insertPlayer(player)
+                        // Use createPlayerOrReactivate to check for deactivated players
+                        playerRepository.createPlayerOrReactivate(player.name, player.avatarColor)
                     }
                 }
             } catch (e: Exception) {

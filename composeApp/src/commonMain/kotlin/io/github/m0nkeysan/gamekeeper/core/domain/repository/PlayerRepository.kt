@@ -13,4 +13,12 @@ interface PlayerRepository {
     suspend fun deletePlayer(player: Player)
     suspend fun reactivatePlayer(player: Player)
     suspend fun deleteAllPlayers()
+    
+    /**
+     * Creates a new player or reactivates a deactivated player with the same name.
+     * If a deactivated player with the sanitized name exists, reactivates it.
+     * Otherwise, creates a new player.
+     * Returns the resulting player (newly created or reactivated).
+     */
+    suspend fun createPlayerOrReactivate(name: String, avatarColor: String): Player?
 }

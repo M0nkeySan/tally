@@ -32,11 +32,9 @@ class PlayerSelectionViewModel : ViewModel() {
     fun addPlayer(name: String, color: String) {
         viewModelScope.launch {
             try {
-                playerRepository.insertPlayer(
-                    Player.create(name = name, avatarColor = color)
-                )
+                playerRepository.createPlayerOrReactivate(name, color)
             } catch (e: Exception) {
-                // Handle error (e.g., duplicate name) if necessary
+                // Handle error if necessary
             }
         }
     }

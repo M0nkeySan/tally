@@ -5,6 +5,9 @@ import io.github.m0nkeysan.gamekeeper.core.data.local.database.PlayerEntity
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.toDomain
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.toEntity
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
+import io.github.m0nkeysan.gamekeeper.core.model.Player
+import io.github.m0nkeysan.gamekeeper.core.model.playerNamesEqual
+import io.github.m0nkeysan.gamekeeper.core.model.sanitizePlayerName
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -50,5 +53,24 @@ class PlayerRepositoryImpl(
     
     override suspend fun deleteAllPlayers() {
         playerDao.deleteAllPlayers()
+    }
+    
+    override suspend fun createPlayerOrReactivate(name: String, avatarColor: String): Player? {
+        val sanitized = sanitizePlayerName(name) ?: return null
+        
+        // Check if a deactivated player with this name exists
+        val deactivatedPlayer = playerDao.getPlayerByName(sanitized)?.toDomain()
+        
+        return if (deactivatedPlayer != null && !deactivatedPlayer.isActive) {
+            // Reactivate the deactivated player
+            playerDao.reactivatePlayer(deactivatedPlayer.id)
+            // Return the reactivated player
+            playerDao.getPlayerById(deactivatedPlayer.id)?.toDomain()
+        } else {
+            // Create a new player with the sanitized name
+            val newPlayer = Player.create(sanitized, avatarColor)
+            insertPlayer(newPlayer)
+            newPlayer
+        }
     }
 }
