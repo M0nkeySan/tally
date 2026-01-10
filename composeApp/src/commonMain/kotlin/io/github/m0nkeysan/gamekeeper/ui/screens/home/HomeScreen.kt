@@ -62,6 +62,7 @@ fun HomeScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
+            Spacer(modifier = Modifier.height(16.dp))
 
             LazyVerticalGrid(
                 state = gridState,
