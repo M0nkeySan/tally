@@ -705,16 +705,21 @@ fun CounterCard(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Left side: clickable name area
-            Text(
-                text = name,
+            // Left side: large clickable area for name
+            Box(
                 modifier = Modifier
                     .weight(1f)
+                    .fillMaxHeight()
                     .clickable(onClick = onClick),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = contentColor
-            )
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = contentColor
+                )
+            }
 
             // Right side: buttons (not clickable for editing)
             Row(
