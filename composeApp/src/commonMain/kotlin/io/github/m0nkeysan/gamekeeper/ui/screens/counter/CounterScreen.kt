@@ -709,7 +709,7 @@ fun CounterCard(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight()
+                    .padding(vertical = 12.dp)
                     .clickable(onClick = onClick),
                 contentAlignment = Alignment.CenterStart
             ) {
