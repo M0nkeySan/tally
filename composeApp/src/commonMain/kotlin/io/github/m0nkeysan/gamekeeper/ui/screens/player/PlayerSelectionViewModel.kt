@@ -41,7 +41,7 @@ class PlayerSelectionViewModel : ViewModel() {
 
     fun deletePlayer(player: Player) {
         viewModelScope.launch {
-            playerRepository.deletePlayer(player)
+            playerRepository.smartDeletePlayer(player)
         }
     }
 

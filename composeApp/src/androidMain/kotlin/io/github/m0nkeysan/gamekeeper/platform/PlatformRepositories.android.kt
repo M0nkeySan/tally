@@ -46,7 +46,10 @@ actual object PlatformRepositories {
     }
 
     actual fun getPlayerRepository(): PlayerRepository {
-        return playerRepository ?: PlayerRepositoryImpl(getDatabase().playerDao()).also {
+        return playerRepository ?: PlayerRepositoryImpl(
+            getDatabase().playerDao(),
+            getGameQueryHelper()
+        ).also {
             playerRepository = it
         }
     }

@@ -12,7 +12,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class PlayerRepositoryImpl(
-    private val playerDao: PlayerDao
+    private val playerDao: PlayerDao,
+    private val gameQueryHelper: GameQueryHelper? = null
 ) : PlayerRepository {
     
     override fun getAllPlayers(): Flow<List<io.github.m0nkeysan.gamekeeper.core.model.Player>> {
@@ -71,6 +72,24 @@ class PlayerRepositoryImpl(
             val newPlayer = Player.create(sanitized, avatarColor)
             insertPlayer(newPlayer)
             newPlayer
+        }
+    }
+    
+    override suspend fun smartDeletePlayer(player: Player): Boolean {
+        return try {
+            // Check if player is linked to any games
+            val gameCount = gameQueryHelper?.getGameCountForPlayer(player.id) ?: 0
+            
+            if (gameCount == 0) {
+                // No games linked - hard delete the player completely
+                playerDao.deletePlayer(player.id)
+            } else {
+                // Has games linked - soft delete (mark as inactive)
+                playerDao.softDeletePlayer(player.id)
+            }
+            true
+        } catch (e: Exception) {
+            false
         }
     }
 }

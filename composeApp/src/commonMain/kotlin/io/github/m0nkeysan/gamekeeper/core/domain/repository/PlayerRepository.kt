@@ -21,4 +21,12 @@ interface PlayerRepository {
      * Returns the resulting player (newly created or reactivated).
      */
     suspend fun createPlayerOrReactivate(name: String, avatarColor: String): Player?
+    
+    /**
+     * Deletes a player, choosing between hard and soft delete based on game links.
+     * If the player is not linked to any games: hard delete (remove completely)
+     * If the player is linked to games: soft delete (mark as inactive)
+     * Returns true if deleted (hard or soft), false if operation failed
+     */
+    suspend fun smartDeletePlayer(player: Player): Boolean
 }

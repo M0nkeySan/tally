@@ -68,13 +68,17 @@ fun PlayerSelectionScreen(
         
         AlertDialog(
             onDismissRequest = { playerToDelete = null },
-            title = { Text("Deactivate Player?") },
+            title = { 
+                Text(
+                    if (gameCount > 0) "Deactivate Player?" else "Delete Player?"
+                ) 
+            },
             text = { 
                 Text(
                     if (gameCount > 0) {
-                        "Linked to $gameCount game(s)"
+                        "Linked to $gameCount game(s). Player will be deactivated to preserve game history."
                     } else {
-                        "Are you sure?"
+                        "This player has no game history. They will be permanently deleted."
                     }
                 )
             },
@@ -84,13 +88,20 @@ fun PlayerSelectionScreen(
                         playerToDelete?.let { player ->
                             viewModel.deletePlayer(player)
                             scope.launch {
-                                showSuccessSnackbar(snackbarHostState, "Player '${player.name}' deactivated")
+                                val message = if (gameCount > 0) {
+                                    "Player '${player.name}' deactivated"
+                                } else {
+                                    "Player '${player.name}' deleted"
+                                }
+                                showSuccessSnackbar(snackbarHostState, message)
                             }
                         }
                         playerToDelete = null
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
-                ) { Text("Deactivate") }
+                ) { 
+                    Text(if (gameCount > 0) "Deactivate" else "Delete") 
+                }
             },
             dismissButton = {
                 TextButton(onClick = { playerToDelete = null }) { Text("Cancel") }

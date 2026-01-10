@@ -40,6 +40,9 @@ interface PlayerDao {
     @Query("UPDATE players SET isActive = true, deactivatedAt = null WHERE id = :id")
     suspend fun reactivatePlayer(id: String)
     
+    @Query("DELETE FROM players WHERE id = :id")
+    suspend fun deletePlayer(id: String)
+    
     @Query("DELETE FROM players")
     suspend fun deleteAllPlayers()
 }
