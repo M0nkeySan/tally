@@ -54,11 +54,6 @@ fun HomeNavigationTemplate(
     }
 
     var showAddPlayerDialog by remember { mutableStateOf(false) }
-    
-    if (showAddPlayerDialog) {
-        // This will be handled by PlayerSelectionScreen's dialog
-        showAddPlayerDialog = false
-    }
 
     Scaffold(
         modifier = modifier,
