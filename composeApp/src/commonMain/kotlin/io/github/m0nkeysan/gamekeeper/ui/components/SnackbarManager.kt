@@ -43,3 +43,18 @@ suspend fun showErrorSnackbar(
         withDismissAction = true
     )
 }
+
+/**
+ * Helper function to show success message in Snackbar.
+ * Auto-dismisses after 3 seconds.
+ */
+suspend fun showSuccessSnackbar(
+    hostState: SnackbarHostState,
+    message: String
+) {
+    hostState.showSnackbar(
+        message = message,
+        duration = SnackbarDuration.Short, // 3 seconds
+        withDismissAction = false
+    )
+}

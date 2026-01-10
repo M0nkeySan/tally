@@ -10,7 +10,9 @@ data class PlayerEntity(
     val id: String,
     val name: String,
     val avatarColor: String,
-    val createdAt: Long
+    val createdAt: Long,
+    val isActive: Boolean = true,
+    val deactivatedAt: Long? = null
 )
 
 fun PlayerEntity.toDomain(): Player {
@@ -18,7 +20,9 @@ fun PlayerEntity.toDomain(): Player {
         id = id,
         name = name,
         avatarColor = avatarColor,
-        createdAt = createdAt
+        createdAt = createdAt,
+        isActive = isActive,
+        deactivatedAt = deactivatedAt
     )
 }
 
@@ -27,6 +31,8 @@ fun Player.toEntity(): PlayerEntity {
         id = id,
         name = name,
         avatarColor = avatarColor,
-        createdAt = createdAt
+        createdAt = createdAt,
+        isActive = isActive,
+        deactivatedAt = deactivatedAt
     )
 }

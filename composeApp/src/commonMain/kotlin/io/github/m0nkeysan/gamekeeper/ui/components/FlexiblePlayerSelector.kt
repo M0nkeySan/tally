@@ -25,7 +25,8 @@ fun FlexiblePlayerSelector(
     allPlayers: List<Player>,
     onPlayersChange: (List<Player?>) -> Unit,
     onCreatePlayer: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onReactivatePlayer: ((Player) -> Unit)? = null
 ) {
     var selectedPlayers by remember { mutableStateOf(List<Player?>(minPlayers) { null }) }
     var showError by remember { mutableStateOf(false) }
@@ -125,7 +126,8 @@ fun FlexiblePlayerSelector(
                     .filterNotNull()
                     .filter { it != player }
                     .map { it.id }
-                    .toSet()
+                    .toSet(),
+                onReactivatePlayer = onReactivatePlayer
             )
         }
     }

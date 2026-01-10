@@ -9,7 +9,9 @@ data class Player(
     val id: String = "",
     val name: String,
     val avatarColor: String = "#FF6200",
-    val createdAt: Long = 0L
+    val createdAt: Long = 0L,
+    val isActive: Boolean = true,
+    val deactivatedAt: Long? = null
 ) {
     companion object {
         @OptIn(ExperimentalUuidApi::class)
@@ -21,7 +23,9 @@ data class Player(
                 id = Uuid.random().toString(),
                 name = name,
                 avatarColor = avatarColor,
-                createdAt = getCurrentTimeMillis()
+                createdAt = getCurrentTimeMillis(),
+                isActive = true,
+                deactivatedAt = null
             )
         }
     }

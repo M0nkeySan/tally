@@ -25,4 +25,7 @@ interface YahtzeeDao {
 
     @Query("DELETE FROM yahtzee_scores WHERE gameId = :gameId")
     suspend fun deleteScoresForGame(gameId: String)
+    
+    @Query("SELECT COUNT(*) FROM yahtzee_games WHERE playerIds LIKE '%' || :playerId || '%'")
+    suspend fun countGamesWithPlayer(playerId: String): Int
 }

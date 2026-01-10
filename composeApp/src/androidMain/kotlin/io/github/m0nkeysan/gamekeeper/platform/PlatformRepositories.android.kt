@@ -3,6 +3,7 @@ package io.github.m0nkeysan.gamekeeper.platform
 import android.content.Context
 import androidx.room.Room
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.GameDatabase
+import io.github.m0nkeysan.gamekeeper.core.data.local.repository.GameQueryHelper
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.PlayerRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.PlayerStatsRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.UserPreferencesRepositoryImpl
@@ -26,6 +27,7 @@ actual object PlatformRepositories {
     private var counterRepository: CounterRepository? = null
     private var tarotRepository: TarotRepository? = null
     private var yahtzeeRepository: YahtzeeRepository? = null
+    private var gameQueryHelper: GameQueryHelper? = null
 
     fun init(context: Context) {
         if (database == null) {
@@ -76,6 +78,12 @@ actual object PlatformRepositories {
     actual fun getYahtzeeRepository(): YahtzeeRepository {
         return yahtzeeRepository ?: YahtzeeRepositoryImpl(getDatabase().yahtzeeDao(), getDatabase()).also {
             yahtzeeRepository = it
+        }
+    }
+
+    actual fun getGameQueryHelper(): GameQueryHelper {
+        return gameQueryHelper ?: GameQueryHelper(getDatabase().tarotDao(), getDatabase().yahtzeeDao()).also {
+            gameQueryHelper = it
         }
     }
 }

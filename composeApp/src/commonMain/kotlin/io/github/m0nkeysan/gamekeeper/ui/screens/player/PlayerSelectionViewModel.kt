@@ -2,17 +2,27 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.player
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.m0nkeysan.gamekeeper.core.data.local.repository.GameQueryHelper
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class PlayerSelectionViewModel : ViewModel() {
     private val playerRepository = PlatformRepositories.getPlayerRepository()
+    private val gameQueryHelper = PlatformRepositories.getGameQueryHelper()
 
     val players: StateFlow<List<Player>> = playerRepository.getAllPlayers()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+    
+    val allPlayersIncludingInactive: StateFlow<List<Player>> = playerRepository.getAllPlayersIncludingInactive()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -44,6 +54,18 @@ class PlayerSelectionViewModel : ViewModel() {
                 avatarColor = newColor
             )
             playerRepository.updatePlayer(updatedPlayer)
+        }
+    }
+    
+    fun reactivatePlayer(player: Player) {
+        viewModelScope.launch {
+            playerRepository.reactivatePlayer(player)
+        }
+    }
+    
+    fun getGameCountForPlayer(playerId: String): Int {
+        return runBlocking {
+            gameQueryHelper.getGameCountForPlayer(playerId)
         }
     }
 }

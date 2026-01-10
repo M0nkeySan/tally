@@ -13,13 +13,23 @@ class PlayerRepositoryImpl(
 ) : PlayerRepository {
     
     override fun getAllPlayers(): Flow<List<io.github.m0nkeysan.gamekeeper.core.model.Player>> {
-        return playerDao.getAllPlayers().map { entities ->
+        return playerDao.getAllActivePlayers().map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+    
+    override fun getAllPlayersIncludingInactive(): Flow<List<io.github.m0nkeysan.gamekeeper.core.model.Player>> {
+        return playerDao.getAllPlayersIncludingInactive().map { entities ->
             entities.map { it.toDomain() }
         }
     }
     
     override suspend fun getPlayerById(id: String): io.github.m0nkeysan.gamekeeper.core.model.Player? {
         return playerDao.getPlayerById(id)?.toDomain()
+    }
+    
+    override suspend fun getPlayerByName(name: String): io.github.m0nkeysan.gamekeeper.core.model.Player? {
+        return playerDao.getPlayerByName(name)?.toDomain()
     }
     
     override suspend fun insertPlayer(player: io.github.m0nkeysan.gamekeeper.core.model.Player) {
@@ -31,7 +41,11 @@ class PlayerRepositoryImpl(
     }
     
     override suspend fun deletePlayer(player: io.github.m0nkeysan.gamekeeper.core.model.Player) {
-        playerDao.deletePlayer(player.toEntity())
+        playerDao.softDeletePlayer(player.id)
+    }
+    
+    override suspend fun reactivatePlayer(player: io.github.m0nkeysan.gamekeeper.core.model.Player) {
+        playerDao.reactivatePlayer(player.id)
     }
     
     override suspend fun deleteAllPlayers() {

@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.platform
 
+import io.github.m0nkeysan.gamekeeper.core.data.local.repository.GameQueryHelper
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerStatsRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.UserPreferencesRepository
@@ -14,4 +15,5 @@ expect object PlatformRepositories {
     fun getCounterRepository(): CounterRepository
     fun getTarotRepository(): TarotRepository
     fun getYahtzeeRepository(): YahtzeeRepository
+    fun getGameQueryHelper(): GameQueryHelper
 }

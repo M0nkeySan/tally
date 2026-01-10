@@ -25,4 +25,7 @@ interface TarotDao {
     
     @Query("DELETE FROM tarot_rounds WHERE gameId = :gameId")
     suspend fun deleteRoundsForGame(gameId: String)
+    
+    @Query("SELECT COUNT(*) FROM tarot_games WHERE playerIds LIKE '%' || :playerId || '%'")
+    suspend fun countGamesWithPlayer(playerId: String): Int
 }

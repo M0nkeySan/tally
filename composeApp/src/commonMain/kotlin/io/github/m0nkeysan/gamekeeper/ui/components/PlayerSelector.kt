@@ -32,7 +32,8 @@ fun PlayerSelectorField(
     onPlayerSelected: (Player) -> Unit,
     onNewPlayerCreated: (String) -> Unit,
     modifier: Modifier = Modifier,
-    excludedPlayerIds: Set<String> = emptySet()
+    excludedPlayerIds: Set<String> = emptySet(),
+    onReactivatePlayer: ((Player) -> Unit)? = null
 ) {
     var showSheet by remember { mutableStateOf(false) }
     var lastCreatedPlayerName by remember { mutableStateOf<String?>(null) }
@@ -40,7 +41,7 @@ fun PlayerSelectorField(
     // Auto-select newly created player when it appears in allPlayers
     LaunchedEffect(lastCreatedPlayerName, allPlayers) {
         if (lastCreatedPlayerName != null) {
-            val newPlayer = allPlayers.find { it.name == lastCreatedPlayerName }
+            val newPlayer = allPlayers.find { it.name == lastCreatedPlayerName && it.isActive }
             if (newPlayer != null && newPlayer.id !in excludedPlayerIds) {
                 onPlayerSelected(newPlayer)
                 lastCreatedPlayerName = null
@@ -147,7 +148,8 @@ fun PlayerSelectorField(
                 onCreate = { name ->
                     lastCreatedPlayerName = name
                     onNewPlayerCreated(name)
-                }
+                },
+                onReactivate = onReactivatePlayer
             )
         }
     }
@@ -177,13 +179,31 @@ fun PlayerSelectorContent(
     allPlayers: List<Player>,
     excludedPlayerIds: Set<String> = emptySet(),
     onSelect: (Player) -> Unit,
-    onCreate: (String) -> Unit
+    onCreate: (String) -> Unit,
+    onReactivate: ((Player) -> Unit)? = null
 ) {
     var searchQuery by remember { mutableStateOf("") }
     val filteredPlayers = remember(searchQuery, allPlayers, excludedPlayerIds) {
-        val baseList = allPlayers.filter { it.id !in excludedPlayerIds }
+        val activeList = allPlayers.filter { it.isActive }
+        val baseList = activeList.filter { it.id !in excludedPlayerIds }
         if (searchQuery.isBlank()) baseList
         else baseList.filter { it.name.contains(searchQuery, ignoreCase = true) }
+    }
+
+    // Helper function to handle player creation or reactivation
+    val handleCreateOrReactivate = { name: String ->
+        val deactivatedPlayer = allPlayers.find {
+            !it.isActive && it.name.equals(name, ignoreCase = true)
+        }
+        
+        if (deactivatedPlayer != null && onReactivate != null) {
+            // Reactivate existing player
+            onReactivate(deactivatedPlayer)
+            onSelect(deactivatedPlayer)
+        } else {
+            // Create new player
+            onCreate(name)
+        }
     }
 
     Column(
@@ -202,10 +222,9 @@ fun PlayerSelectorContent(
             placeholder = { Text("Search or add new...") },
             leadingIcon = { Icon(Icons.Default.Search, null) },
             trailingIcon = {
-                if (searchQuery.isNotBlank() && !allPlayers.any { it.name.equals(searchQuery, ignoreCase = true) }) {
+                if (searchQuery.isNotBlank() && !allPlayers.any { it.isActive && it.name.equals(searchQuery, ignoreCase = true) }) {
                     IconButton(onClick = { 
-                        onCreate(searchQuery)
-                        // The new player will be automatically selected after onCreate
+                        handleCreateOrReactivate(searchQuery)
                         searchQuery = ""
                     }) {
                         Icon(Icons.Default.Add, contentDescription = "Add New")
@@ -221,14 +240,18 @@ fun PlayerSelectorContent(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            if (searchQuery.isNotBlank() && !allPlayers.any { it.name.equals(searchQuery, ignoreCase = true) }) {
+            if (searchQuery.isNotBlank() && !allPlayers.any { it.isActive && it.name.equals(searchQuery, ignoreCase = true) }) {
                 item {
+                    // Check if there's a deactivated player with this name
+                    val deactivatedPlayer = allPlayers.find {
+                        !it.isActive && it.name.equals(searchQuery, ignoreCase = true)
+                    }
+                    
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable { 
-                                onCreate(searchQuery)
-                                // The new player will be automatically selected after onCreate
+                                handleCreateOrReactivate(searchQuery)
                                 searchQuery = ""
                             },
                         colors = CardDefaults.cardColors(
@@ -253,7 +276,11 @@ fun PlayerSelectorContent(
                                 Icon(Icons.Default.Add, null, tint = Color.White, modifier = Modifier.size(20.dp))
                             }
                             Text(
-                                text = "Create \"$searchQuery\"",
+                                text = if (deactivatedPlayer != null && onReactivate != null) {
+                                    "Reactivate \"$searchQuery\""
+                                } else {
+                                    "Create \"$searchQuery\""
+                                },
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.Bold
                             )
