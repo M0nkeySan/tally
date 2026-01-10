@@ -64,7 +64,7 @@ fun TarotGameCreationScreen(
                 },
                 onCreatePlayer = { name ->
                     val newPlayer = Player.create(name, generateRandomColor())
-                    // The FlexiblePlayerSelector will handle adding it via the dialog
+                    viewModel.savePlayer(newPlayer)
                 }
             )
         }

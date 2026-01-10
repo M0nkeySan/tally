@@ -124,4 +124,18 @@ class TarotGameViewModel : ViewModel() {
             }
         }
     }
+
+    fun savePlayer(player: Player, onError: (String) -> Unit = {}) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    if (playerRepository.getPlayerById(player.id) == null) {
+                        playerRepository.insertPlayer(player)
+                    }
+                }
+            } catch (e: Exception) {
+                onError("Failed to save player: ${e.message}")
+            }
+        }
+    }
 }

@@ -35,6 +35,19 @@ fun PlayerSelectorField(
     excludedPlayerIds: Set<String> = emptySet()
 ) {
     var showSheet by remember { mutableStateOf(false) }
+    var lastCreatedPlayerName by remember { mutableStateOf<String?>(null) }
+    
+    // Auto-select newly created player when it appears in allPlayers
+    LaunchedEffect(lastCreatedPlayerName, allPlayers) {
+        if (lastCreatedPlayerName != null) {
+            val newPlayer = allPlayers.find { it.name == lastCreatedPlayerName }
+            if (newPlayer != null && newPlayer.id !in excludedPlayerIds) {
+                onPlayerSelected(newPlayer)
+                lastCreatedPlayerName = null
+                showSheet = false
+            }
+        }
+    }
     
     val playerColor = selectedPlayer?.let { remember(it.avatarColor) { parseColor(it.avatarColor) } } ?: MaterialTheme.colorScheme.surface
     val isSelected = selectedPlayer != null
@@ -132,8 +145,8 @@ fun PlayerSelectorField(
                     showSheet = false
                 },
                 onCreate = { name ->
+                    lastCreatedPlayerName = name
                     onNewPlayerCreated(name)
-                    showSheet = false
                 }
             )
         }
@@ -190,7 +203,11 @@ fun PlayerSelectorContent(
             leadingIcon = { Icon(Icons.Default.Search, null) },
             trailingIcon = {
                 if (searchQuery.isNotBlank() && !allPlayers.any { it.name.equals(searchQuery, ignoreCase = true) }) {
-                    IconButton(onClick = { onCreate(searchQuery) }) {
+                    IconButton(onClick = { 
+                        onCreate(searchQuery)
+                        // The new player will be automatically selected after onCreate
+                        searchQuery = ""
+                    }) {
                         Icon(Icons.Default.Add, contentDescription = "Add New")
                     }
                 }
@@ -209,7 +226,11 @@ fun PlayerSelectorContent(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onCreate(searchQuery) },
+                            .clickable { 
+                                onCreate(searchQuery)
+                                // The new player will be automatically selected after onCreate
+                                searchQuery = ""
+                            },
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
