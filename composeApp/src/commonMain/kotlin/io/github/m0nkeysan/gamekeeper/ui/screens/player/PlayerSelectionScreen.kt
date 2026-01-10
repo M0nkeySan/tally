@@ -279,15 +279,16 @@ fun PlayerSelectionScreen(
 @Composable
 fun PlayerCard(player: Player, isActive: Boolean = true, onClick: () -> Unit) {
     val color = remember(player.avatarColor) { parseColor(player.avatarColor) }
+    val cardColor = if (isActive) color else color.copy(alpha = 0.5f)
     val contentColor = if (color.luminance() > 0.5f) Color.Black.copy(alpha = 0.8f) else Color.White
+    val textAlpha = if (isActive) 1f else 0.6f
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .alpha(if (isActive) 1f else 0.5f)
             .clickable(enabled = isActive, onClick = onClick),
         colors = CardDefaults.cardColors(
-            containerColor = color,
+            containerColor = cardColor,
             contentColor = contentColor
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -302,7 +303,7 @@ fun PlayerCard(player: Player, isActive: Boolean = true, onClick: () -> Unit) {
                     text = player.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = contentColor,
+                    color = contentColor.copy(alpha = textAlpha),
                     textDecoration = if (isActive) TextDecoration.None else TextDecoration.LineThrough
                 )
             }

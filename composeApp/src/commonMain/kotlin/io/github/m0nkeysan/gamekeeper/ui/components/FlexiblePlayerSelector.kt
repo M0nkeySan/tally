@@ -16,7 +16,7 @@ import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 /**
  * Flexible player selector that supports min/max player constraints.
  * - Tarot: minPlayers=3, maxPlayers=5
- * - Yahtzee: minPlayers=2, maxPlayers=8
+ * - Yahtzee: minPlayers=1, maxPlayers=8
  */
 @Composable
 fun FlexiblePlayerSelector(
@@ -49,7 +49,7 @@ fun FlexiblePlayerSelector(
                 text = "Players (${selectedPlayers.size}/$maxPlayers)",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = GameColors.TextPrimary
+                color = MaterialTheme.colorScheme.onSurface
             )
             
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
