@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.activity.compose.BackHandler
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.*
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
@@ -45,6 +46,11 @@ fun TarotRoundAdditionScreen(
 
     val isEditMode = roundId != null
     var isDataLoaded by remember { mutableStateOf(false) }
+
+    // Handle system back gesture
+    BackHandler {
+        onBack()
+    }
 
     // Pre-fill data if in edit mode
     LaunchedEffect(state.rounds) {
@@ -81,16 +87,6 @@ fun TarotRoundAdditionScreen(
     val statusColor = if (isWinner) GameColors.Success else GameColors.Error
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(if (isEditMode) "Edit Round" else "Add Round", fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        },
         bottomBar = {
             Surface(shadowElevation = 8.dp) {
                 Button(

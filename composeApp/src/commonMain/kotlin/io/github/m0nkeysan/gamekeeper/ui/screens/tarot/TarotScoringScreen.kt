@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.activity.compose.BackHandler
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.*
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
@@ -35,6 +36,11 @@ fun TarotScoringScreen(
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    // Handle system back gesture
+    BackHandler {
+        onBack()
+    }
+
     LaunchedEffect(gameId) {
         viewModel.loadGame(gameId)
     }
@@ -47,18 +53,6 @@ fun TarotScoringScreen(
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(state.game?.id?.let { "Tarot Scoring" } ?: "Loading...")
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { onAddNewRound(null) },

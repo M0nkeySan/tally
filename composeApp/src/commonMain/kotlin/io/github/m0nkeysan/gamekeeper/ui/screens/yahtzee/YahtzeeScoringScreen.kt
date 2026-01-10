@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.activity.compose.BackHandler
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
 import io.github.m0nkeysan.gamekeeper.core.model.Player
@@ -38,6 +39,11 @@ fun YahtzeeScoringScreen(
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     
+    // Handle system back gesture
+    BackHandler {
+        onBack()
+    }
+    
     LaunchedEffect(gameId) {
         viewModel.loadGame(gameId)
     }
@@ -50,16 +56,6 @@ fun YahtzeeScoringScreen(
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Yahtzee Scoring") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        },
         snackbarHost = {
             GameKeeperSnackbarHost(hostState = snackbarHostState)
         }
