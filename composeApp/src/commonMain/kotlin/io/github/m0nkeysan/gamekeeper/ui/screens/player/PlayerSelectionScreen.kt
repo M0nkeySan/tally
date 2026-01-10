@@ -245,21 +245,24 @@ fun PlayerSelectionScreen(
                             state = dismissState,
                             enableDismissFromEndToStart = false,
                             backgroundContent = {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(
-                                            MaterialTheme.colorScheme.secondaryContainer,
-                                            shape = MaterialTheme.shapes.medium
+                                // Only show background when actively swiping
+                                if (dismissState.progress > 0f) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(
+                                                MaterialTheme.colorScheme.secondaryContainer,
+                                                shape = MaterialTheme.shapes.medium
+                                            )
+                                            .padding(horizontal = 20.dp),
+                                        contentAlignment = Alignment.CenterStart
+                                    ) {
+                                        Icon(
+                                            Icons.Default.Add,
+                                            null,
+                                            tint = MaterialTheme.colorScheme.onSecondaryContainer
                                         )
-                                        .padding(horizontal = 20.dp),
-                                    contentAlignment = Alignment.CenterStart
-                                ) {
-                                    Icon(
-                                        Icons.Default.Add,
-                                        null,
-                                        tint = MaterialTheme.colorScheme.onSecondaryContainer
-                                    )
+                                    }
                                 }
                             }
                         ) {
