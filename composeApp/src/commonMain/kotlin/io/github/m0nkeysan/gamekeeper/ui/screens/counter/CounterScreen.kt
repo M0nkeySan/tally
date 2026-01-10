@@ -702,15 +702,15 @@ fun CounterCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .height(IntrinsicSize.Min),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Left side: large clickable area for name
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(vertical = 12.dp)
-                    .clickable(onClick = onClick),
+                    .fillMaxHeight()
+                    .clickable(onClick = onClick)
+                    .padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
                 contentAlignment = Alignment.CenterStart
             ) {
                 Text(
@@ -721,12 +721,12 @@ fun CounterCard(
                 )
             }
 
-            // Right side: buttons (not clickable for editing)
             Row(
+                modifier = Modifier
+                    .padding(end = 16.dp, top = 16.dp, bottom = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Decrement Button
                 Box(
                     modifier = Modifier
                         .size(40.dp)
@@ -755,7 +755,6 @@ fun CounterCard(
                     color = contentColor
                 )
 
-                // Increment Button
                 Box(
                     modifier = Modifier
                         .size(40.dp)
