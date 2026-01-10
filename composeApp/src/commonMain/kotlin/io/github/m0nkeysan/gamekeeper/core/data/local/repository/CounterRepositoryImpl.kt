@@ -26,6 +26,7 @@ class CounterRepositoryImpl(
 
     override suspend fun deleteCounter(id: String) {
         dao.deleteCounter(id)
+        changeDao.deleteChangesForCounter(id)
     }
 
     override suspend fun updateCount(id: String, count: Int) {
