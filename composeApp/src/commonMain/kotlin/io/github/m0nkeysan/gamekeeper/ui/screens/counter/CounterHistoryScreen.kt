@@ -1,0 +1,166 @@
+package io.github.m0nkeysan.gamekeeper.ui.screens.counter
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.activity.compose.BackHandler
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.m0nkeysan.gamekeeper.GameIcons
+import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
+import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CounterHistoryScreen(
+    onBackPressed: () -> Unit,
+    viewModel: CounterViewModel = viewModel()
+) {
+    val mergedHistory by viewModel.mergedHistory.collectAsState()
+    
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Counter History") },
+                navigationIcon = {
+                    IconButton(onClick = onBackPressed) {
+                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
+        if (mergedHistory.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "No counter changes yet",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                items(mergedHistory) { mergedChange ->
+                    CounterHistoryItem(mergedChange)
+                }
+            }
+        }
+    }
+    
+    BackHandler { onBackPressed() }
+}
+
+@Composable
+fun CounterHistoryItem(mergedChange: MergedCounterChange) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Color indicator box
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(
+                    color = Color(mergedChange.counterColor),
+                    shape = RoundedCornerShape(8.dp)
+                )
+        )
+        
+        // Counter name and info
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 16.dp)
+        ) {
+            Text(
+                text = mergedChange.counterName,
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                maxLines = 1
+            )
+            
+            Text(
+                text = formatTimestamp(mergedChange.lastTimestamp),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        
+        // Total delta display
+        Column(
+            horizontalAlignment = Alignment.End
+        ) {
+            Text(
+                text = "${if (mergedChange.totalDelta > 0) "+" else ""}${mergedChange.totalDelta}",
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                ),
+                color = if (mergedChange.totalDelta > 0) {
+                    Color(0xFF4CAF50)  // Green
+                } else if (mergedChange.totalDelta < 0) {
+                    Color(0xFFF44336)  // Red
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                }
+            )
+            
+            // Show count of merged changes if > 1
+            if (mergedChange.count > 1) {
+                Text(
+                    text = "×${mergedChange.count}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.End
+                )
+            }
+        }
+    }
+}
+
+private fun formatTimestamp(timestamp: Long): String {
+    return try {
+        val sdf = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        val date = Date(timestamp)
+        sdf.format(date)
+    } catch (e: Exception) {
+        "N/A"
+    }
+}

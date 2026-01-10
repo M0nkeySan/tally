@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.HomeNavigationTemplate
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterHistoryScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.EditCounterScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.fingerselector.FingerSelectorScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionScreen
@@ -178,6 +179,7 @@ fun GameNavGraph() {
                 onEditCounter = { id, name, count, color ->
                     navController.navigate(Screen.EditCounter.createRoute(id, name, count, color))
                 },
+                onNavigateToHistory = { navController.navigate(Screen.History.route) },
                 viewModel = viewModel
             )
         }
@@ -219,6 +221,12 @@ fun GameNavGraph() {
                     }
                     navController.popBackStack()
                 }
+            )
+        }
+
+        composable(route = Screen.History.route) {
+            CounterHistoryScreen(
+                onBackPressed = { navController.popBackStack() }
             )
         }
 

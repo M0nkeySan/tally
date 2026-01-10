@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.gamekeeper.core.model.Counter
+import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,6 +43,9 @@ class CounterViewModel : ViewModel() {
 
     private val _state = MutableStateFlow(CounterUiState())
     val state = _state.asStateFlow()
+    
+    private val _mergedHistory = MutableStateFlow<List<MergedCounterChange>>(emptyList())
+    val mergedHistory: StateFlow<List<MergedCounterChange>> = _mergedHistory.asStateFlow()
 
     private val funnyNames = listOf(
         "Unicorn", "Dragon", "Potato", "Ninja", "Pirate", "Wizard", "Robot", "Alien", "Ghost", "Cactus",
@@ -53,6 +57,15 @@ class CounterViewModel : ViewModel() {
     init {
         loadCounters()
         loadPreferences()
+        loadHistory()
+    }
+    
+    private fun loadHistory() {
+        viewModelScope.launch {
+            counterRepository.getMergedCounterHistory().collect { history ->
+                _mergedHistory.value = history
+            }
+        }
     }
 
     private fun loadPreferences() {
@@ -157,27 +170,59 @@ class CounterViewModel : ViewModel() {
 
     fun incrementCount(playerId: String) {
         val counter = _state.value.counters.find { it.id == playerId } ?: return
+        val newCount = counter.count + 1
         viewModelScope.launch {
-            counterRepository.updateCount(playerId, counter.count + 1)
+            counterRepository.logCounterChange(
+                counterId = playerId,
+                counterName = counter.name,
+                counterColor = counter.color,
+                previousValue = counter.count,
+                newValue = newCount
+            )
+            counterRepository.updateCount(playerId, newCount)
         }
     }
 
     fun decrementCount(playerId: String) {
         val counter = _state.value.counters.find { it.id == playerId } ?: return
+        val newCount = counter.count - 1
         viewModelScope.launch {
-            counterRepository.updateCount(playerId, counter.count - 1)
+            counterRepository.logCounterChange(
+                counterId = playerId,
+                counterName = counter.name,
+                counterColor = counter.color,
+                previousValue = counter.count,
+                newValue = newCount
+            )
+            counterRepository.updateCount(playerId, newCount)
         }
     }
 
     fun adjustCount(playerId: String, amount: Int) {
         val counter = _state.value.counters.find { it.id == playerId } ?: return
+        val newCount = counter.count + amount
         viewModelScope.launch {
-            counterRepository.updateCount(playerId, counter.count + amount)
+            counterRepository.logCounterChange(
+                counterId = playerId,
+                counterName = counter.name,
+                counterColor = counter.color,
+                previousValue = counter.count,
+                newValue = newCount
+            )
+            counterRepository.updateCount(playerId, newCount)
         }
     }
 
     fun setCount(playerId: String, newCount: Int) {
+        val counter = _state.value.counters.find { it.id == playerId } ?: return
         viewModelScope.launch {
+            counterRepository.logCounterChange(
+                counterId = playerId,
+                counterName = counter.name,
+                counterColor = counter.color,
+                previousValue = counter.count,
+                newValue = newCount
+            )
             counterRepository.updateCount(playerId, newCount)
         }
     }
@@ -185,6 +230,7 @@ class CounterViewModel : ViewModel() {
     fun resetAll() {
         viewModelScope.launch {
             counterRepository.resetAllCounts()
+            counterRepository.clearCounterHistory()
         }
     }
 
@@ -192,6 +238,7 @@ class CounterViewModel : ViewModel() {
         playerTimestamps.clear()
         viewModelScope.launch {
             counterRepository.deleteAllCounters()
+            counterRepository.clearCounterHistory()
         }
     }
 

@@ -50,6 +50,7 @@ import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterViewModel
 fun CounterScreen(
     onBack: () -> Unit,
     onEditCounter: (String, String, Int, Long) -> Unit,
+    onNavigateToHistory: () -> Unit = {},
     viewModel: CounterViewModel = viewModel { CounterViewModel() }
 ) {
     val state by viewModel.state.collectAsState()
@@ -108,7 +109,7 @@ fun CounterScreen(
                     }) {
                         Icon(GameIcons.Add, contentDescription = "Add Counter")
                     }
-                    IconButton(onClick = { /* TODO: Navigate to history */ }) {
+                    IconButton(onClick = { onNavigateToHistory() }) {
                         Icon(GameIcons.History, contentDescription = "History")
                     }
                     Box {

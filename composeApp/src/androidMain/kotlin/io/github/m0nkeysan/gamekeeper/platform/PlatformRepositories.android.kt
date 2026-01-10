@@ -67,7 +67,10 @@ actual object PlatformRepositories {
     }
 
     actual fun getCounterRepository(): CounterRepository {
-        return counterRepository ?: CounterRepositoryImpl(getDatabase().persistentCounterDao()).also {
+        return counterRepository ?: CounterRepositoryImpl(
+            getDatabase().persistentCounterDao(),
+            getDatabase().counterChangeDao()
+        ).also {
             counterRepository = it
         }
     }
