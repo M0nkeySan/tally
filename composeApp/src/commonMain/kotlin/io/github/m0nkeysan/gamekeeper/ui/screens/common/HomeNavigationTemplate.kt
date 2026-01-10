@@ -10,6 +10,7 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.home.HomeViewModel
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionViewModel
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import androidx.activity.compose.BackHandler
 
 /**
  * Navigation template for the home screen with bottom bar for switching between Games and Players tabs.
@@ -44,6 +45,11 @@ fun HomeNavigationTemplate(
     modifier: Modifier = Modifier
 ) {
     var selectedTab by remember { mutableStateOf(0) }
+
+    // Handle system back gesture - go to home screen when on players tab
+    BackHandler(enabled = selectedTab == 1) {
+        selectedTab = 0
+    }
 
     Scaffold(
         modifier = modifier,
