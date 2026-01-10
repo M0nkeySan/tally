@@ -5,23 +5,20 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Casino
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.GridView
+import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Group
-import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.graphics.vector.path
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 actual object GameIcons {
