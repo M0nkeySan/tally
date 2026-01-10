@@ -177,7 +177,7 @@ fun PlayerSelectionScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
-                contentPadding = PaddingValues(16.dp),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 80.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 // ACTIVE PLAYERS SECTION
