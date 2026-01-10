@@ -1,6 +1,8 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
 import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,6 +53,13 @@ fun HomeNavigationTemplate(
         selectedTab = 0
     }
 
+    var showAddPlayerDialog by remember { mutableStateOf(false) }
+    
+    if (showAddPlayerDialog) {
+        // This will be handled by PlayerSelectionScreen's dialog
+        showAddPlayerDialog = false
+    }
+
     Scaffold(
         modifier = modifier,
         bottomBar = {
@@ -84,6 +93,17 @@ fun HomeNavigationTemplate(
                     alwaysShowLabel = false
                 )
             }
+        },
+        floatingActionButton = {
+            if (selectedTab == 1) {
+                FloatingActionButton(
+                    onClick = { showAddPlayerDialog = true },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ) {
+                    Icon(androidx.compose.material.icons.Icons.Default.Add, contentDescription = "Add Player")
+                }
+            }
         }
     ) { paddingValues ->
         when (selectedTab) {
@@ -98,7 +118,9 @@ fun HomeNavigationTemplate(
                 PlayerSelectionScreen(
                     onBack = { /* No-op: staying in tab */ },
                     viewModel = playerViewModel,
-                    showBackButton = false
+                    showBackButton = false,
+                    triggerAddDialog = showAddPlayerDialog,
+                    onAddDialogHandled = { showAddPlayerDialog = false }
                 )
             }
         }

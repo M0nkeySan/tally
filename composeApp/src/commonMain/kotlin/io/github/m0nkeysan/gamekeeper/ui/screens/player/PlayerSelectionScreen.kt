@@ -37,7 +37,9 @@ import kotlin.math.roundToInt
 fun PlayerSelectionScreen(
     onBack: () -> Unit,
     viewModel: PlayerSelectionViewModel = viewModel { PlayerSelectionViewModel() },
-    showBackButton: Boolean = true
+    showBackButton: Boolean = true,
+    triggerAddDialog: Boolean = false,
+    onAddDialogHandled: () -> Unit = {}
 ) {
     val allPlayers by viewModel.allPlayersIncludingInactive.collectAsState(emptyList())
     val snackbarHostState = remember { SnackbarHostState() }
@@ -47,6 +49,14 @@ fun PlayerSelectionScreen(
     var showAddDialog by remember { mutableStateOf(false) }
     var playerToDelete by remember { mutableStateOf<Player?>(null) }
     var playerToEdit by remember { mutableStateOf<Player?>(null) }
+    
+    // Handle external trigger from parent Scaffold FAB
+    LaunchedEffect(triggerAddDialog) {
+        if (triggerAddDialog) {
+            showAddDialog = true
+            onAddDialogHandled()
+        }
+    }
 
     if (showAddDialog) {
         PlayerDialog(
@@ -149,15 +159,7 @@ fun PlayerSelectionScreen(
                 )
             }
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { showAddDialog = true },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Player")
-            }
-        },
+
         snackbarHost = { GameKeeperSnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
         val activePlayers = allPlayers.filter { it.isActive }
