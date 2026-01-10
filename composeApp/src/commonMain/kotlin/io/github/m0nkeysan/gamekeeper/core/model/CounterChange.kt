@@ -8,6 +8,7 @@ data class CounterChange(
     val previousValue: Int,
     val newValue: Int,
     val changeDelta: Int,
+    val isDeleted: Boolean,
     val timestamp: Long,
     val createdAt: Long
 )

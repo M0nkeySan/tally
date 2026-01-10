@@ -94,15 +94,32 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Color indicator box
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .background(
-                    color = Color(mergedChange.counterColor),
-                    shape = RoundedCornerShape(8.dp)
+        // Color indicator box or trash icon
+        if (mergedChange.isDeleted) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(
+                        color = Color(0xFFCCCCCC),
+                        shape = RoundedCornerShape(8.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "🗑️",
+                    style = MaterialTheme.typography.headlineSmall
                 )
-        )
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(
+                        color = Color(mergedChange.counterColor),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+            )
+        }
         
         // Counter name and info
         Column(
@@ -113,7 +130,12 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
             Text(
                 text = mergedChange.counterName,
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                maxLines = 1
+                maxLines = 1,
+                color = if (mergedChange.isDeleted) {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                }
             )
             
             Text(
@@ -123,33 +145,44 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
             )
         }
         
-        // Total delta display
+        // Total delta display or "Deleted" text
         Column(
             horizontalAlignment = Alignment.End
         ) {
-            Text(
-                text = "${if (mergedChange.totalDelta > 0) "+" else ""}${mergedChange.totalDelta}",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-                ),
-                color = if (mergedChange.totalDelta > 0) {
-                    Color(0xFF4CAF50)  // Green
-                } else if (mergedChange.totalDelta < 0) {
-                    Color(0xFFF44336)  // Red
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                }
-            )
-            
-            // Show count of merged changes if > 1
-            if (mergedChange.count > 1) {
+            if (mergedChange.isDeleted) {
                 Text(
-                    text = "×${mergedChange.count}",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.End
+                    text = "Deleted",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    ),
+                    color = Color(0xFFCCCCCC)
                 )
+            } else {
+                Text(
+                    text = "${if (mergedChange.totalDelta > 0) "+" else ""}${mergedChange.totalDelta}",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    ),
+                    color = if (mergedChange.totalDelta > 0) {
+                        Color(0xFF4CAF50)  // Green
+                    } else if (mergedChange.totalDelta < 0) {
+                        Color(0xFFF44336)  // Red
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    }
+                )
+                
+                // Show count of merged changes if > 1
+                if (mergedChange.count > 1) {
+                    Text(
+                        text = "×${mergedChange.count}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.End
+                    )
+                }
             }
         }
     }

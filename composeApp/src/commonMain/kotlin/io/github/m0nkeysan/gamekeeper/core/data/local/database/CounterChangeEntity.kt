@@ -17,6 +17,8 @@ data class CounterChangeEntity(
     val newValue: Int,               // State after change
     val changeDelta: Int,            // newValue - previousValue
     
+    val isDeleted: Boolean = false,  // True if this is a deletion entry
+    
     val timestamp: Long = System.currentTimeMillis(),
     val createdAt: Long = System.currentTimeMillis()
 )

@@ -150,8 +150,15 @@ class CounterViewModel : ViewModel() {
     }
     
     fun deleteCounter(id: String) {
+        val counter = _state.value.counters.find { it.id == id } ?: return
         playerTimestamps.remove(id)
         viewModelScope.launch {
+            // Log the deletion as a history entry
+            counterRepository.logCounterDeletion(
+                counterId = id,
+                counterName = counter.name,
+                counterColor = counter.color
+            )
             counterRepository.deleteCounter(id)
             // Re-normalize orders
             _state.value.counters.filter { it.id != id }.forEachIndexed { index, counter ->

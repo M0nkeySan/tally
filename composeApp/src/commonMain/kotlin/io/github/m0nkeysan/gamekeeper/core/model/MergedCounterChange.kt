@@ -8,5 +8,6 @@ data class MergedCounterChange(
     val count: Int,                   // How many changes were merged
     val firstTimestamp: Long,         // Earliest change in group
     val lastTimestamp: Long,          // Latest change in group
+    val isDeleted: Boolean = false,   // True if this is a deletion entry
     val changes: List<CounterChange>  // Original changes for reference
 )

@@ -24,6 +24,12 @@ interface CounterRepository {
         newValue: Int
     )
     
+    suspend fun logCounterDeletion(
+        counterId: String,
+        counterName: String,
+        counterColor: Long
+    )
+    
     fun getCounterHistory(): Flow<List<CounterChange>>
     
     fun getMergedCounterHistory(): Flow<List<MergedCounterChange>>

@@ -26,7 +26,6 @@ class CounterRepositoryImpl(
 
     override suspend fun deleteCounter(id: String) {
         dao.deleteCounter(id)
-        changeDao.deleteChangesForCounter(id)
     }
 
     override suspend fun updateCount(id: String, count: Int) {
@@ -62,7 +61,25 @@ class CounterRepositoryImpl(
             counterColor = counterColor,
             previousValue = previousValue,
             newValue = newValue,
-            changeDelta = newValue - previousValue
+            changeDelta = newValue - previousValue,
+            isDeleted = false
+        )
+        changeDao.insertChange(change)
+    }
+
+    override suspend fun logCounterDeletion(
+        counterId: String,
+        counterName: String,
+        counterColor: Long
+    ) {
+        val change = CounterChangeEntity(
+            counterId = counterId,
+            counterName = counterName,
+            counterColor = counterColor,
+            previousValue = 0,
+            newValue = 0,
+            changeDelta = 0,
+            isDeleted = true
         )
         changeDao.insertChange(change)
     }
@@ -112,6 +129,7 @@ class CounterRepositoryImpl(
         val firstTimestamp = changes.minOf { it.timestamp }
         val lastTimestamp = changes.maxOf { it.timestamp }
         val first = changes.first()
+        val isDeleted = changes.any { it.isDeleted }
 
         return MergedCounterChange(
             counterId = first.counterId,
@@ -121,6 +139,7 @@ class CounterRepositoryImpl(
             count = changes.size,
             firstTimestamp = firstTimestamp,
             lastTimestamp = lastTimestamp,
+            isDeleted = isDeleted,
             changes = changes
         )
     }
@@ -153,6 +172,7 @@ private fun CounterChangeEntity.toDomain() = CounterChange(
     previousValue = previousValue,
     newValue = newValue,
     changeDelta = changeDelta,
+    isDeleted = isDeleted,
     timestamp = timestamp,
     createdAt = createdAt
 )
