@@ -32,3 +32,23 @@ data class Player(
 }
 
 expect fun getCurrentTimeMillis(): Long
+
+/**
+ * Sanitizes a player name by:
+ * - Trimming leading/trailing whitespace
+ * - Converting to lowercase for consistency
+ * - Returning null if name becomes empty after sanitization
+ */
+fun sanitizePlayerName(name: String): String? {
+    return name.trim().takeIf { it.isNotEmpty() }
+}
+
+/**
+ * Checks if two player names should be considered the same
+ * (case-insensitive comparison of sanitized names)
+ */
+fun playerNamesEqual(name1: String, name2: String): Boolean {
+    val sanitized1 = sanitizePlayerName(name1)?.lowercase() ?: return false
+    val sanitized2 = sanitizePlayerName(name2)?.lowercase() ?: return false
+    return sanitized1 == sanitized2
+}

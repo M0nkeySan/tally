@@ -13,6 +13,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import io.github.m0nkeysan.gamekeeper.core.model.Player
+import io.github.m0nkeysan.gamekeeper.core.model.sanitizePlayerName
+import io.github.m0nkeysan.gamekeeper.core.model.playerNamesEqual
 import io.github.m0nkeysan.gamekeeper.ui.components.ColorSelectorRow
 import io.github.m0nkeysan.gamekeeper.ui.components.DIALOG_COLOR_PRESETS
 import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
@@ -34,16 +36,17 @@ fun PlayerDialog(
     val contentColor = if (composeColor.luminance() > 0.5f) Color.Black else Color.White
 
     val isNameTaken = remember(name, existingPlayers, initialPlayer) {
-        val cleanName = name.trim()
-        cleanName.isNotEmpty() && 
-        !cleanName.equals(initialPlayer?.name?.trim(), ignoreCase = true) &&
-        existingPlayers.any {
-            it.name.equals(cleanName, ignoreCase = true)
+        val sanitized = sanitizePlayerName(name)
+        sanitized != null && 
+        (initialPlayer == null || !playerNamesEqual(sanitized, initialPlayer.name)) &&
+        existingPlayers.any { existingPlayer ->
+            // Check both active and inactive players
+            playerNamesEqual(sanitized, existingPlayer.name)
         }
     }
 
     // Simple validation
-    val isNameValid = name.isNotBlank() && !isNameTaken
+    val isNameValid = sanitizePlayerName(name) != null && !isNameTaken
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -117,7 +120,11 @@ fun PlayerDialog(
                     }
                     Spacer(Modifier.width(8.dp))
                     Button(
-                        onClick = { onConfirm(name.trim(), selectedColor) },
+                        onClick = { 
+                            sanitizePlayerName(name)?.let { sanitized ->
+                                onConfirm(sanitized, selectedColor)
+                            }
+                        },
                         enabled = isNameValid,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = composeColor,

@@ -22,6 +22,8 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.Player
+import io.github.m0nkeysan.gamekeeper.core.model.sanitizePlayerName
+import io.github.m0nkeysan.gamekeeper.core.model.playerNamesEqual
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -192,17 +194,20 @@ fun PlayerSelectorContent(
 
     // Helper function to handle player creation or reactivation
     val handleCreateOrReactivate = { name: String ->
-        val deactivatedPlayer = allPlayers.find {
-            !it.isActive && it.name.equals(name, ignoreCase = true)
-        }
-        
-        if (deactivatedPlayer != null && onReactivate != null) {
-            // Reactivate existing player
-            onReactivate(deactivatedPlayer)
-            onSelect(deactivatedPlayer)
-        } else {
-            // Create new player
-            onCreate(name)
+        sanitizePlayerName(name)?.let { sanitized ->
+            // Look for deactivated player with matching sanitized name
+            val deactivatedPlayer = allPlayers.find { existingPlayer ->
+                !existingPlayer.isActive && playerNamesEqual(sanitized, existingPlayer.name)
+            }
+            
+            if (deactivatedPlayer != null && onReactivate != null) {
+                // Reactivate existing player
+                onReactivate(deactivatedPlayer)
+                onSelect(deactivatedPlayer)
+            } else {
+                // Create new player with sanitized name
+                onCreate(sanitized)
+            }
         }
     }
 
@@ -222,7 +227,8 @@ fun PlayerSelectorContent(
             placeholder = { Text("Search or add new...") },
             leadingIcon = { Icon(Icons.Default.Search, null) },
             trailingIcon = {
-                if (searchQuery.isNotBlank() && !allPlayers.any { it.isActive && it.name.equals(searchQuery, ignoreCase = true) }) {
+                val sanitized = sanitizePlayerName(searchQuery)
+                if (sanitized != null && !allPlayers.any { it.isActive && playerNamesEqual(sanitized, it.name) }) {
                     IconButton(onClick = { 
                         handleCreateOrReactivate(searchQuery)
                         searchQuery = ""
@@ -240,11 +246,12 @@ fun PlayerSelectorContent(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            if (searchQuery.isNotBlank() && !allPlayers.any { it.isActive && it.name.equals(searchQuery, ignoreCase = true) }) {
+            val sanitizedQuery = sanitizePlayerName(searchQuery)
+            if (sanitizedQuery != null && !allPlayers.any { it.isActive && playerNamesEqual(sanitizedQuery, it.name) }) {
                 item {
-                    // Check if there's a deactivated player with this name
-                    val deactivatedPlayer = allPlayers.find {
-                        !it.isActive && it.name.equals(searchQuery, ignoreCase = true)
+                    // Check if there's a deactivated player with this sanitized name
+                    val deactivatedPlayer = allPlayers.find { existingPlayer ->
+                        !existingPlayer.isActive && playerNamesEqual(sanitizedQuery, existingPlayer.name)
                     }
                     
                     Card(
