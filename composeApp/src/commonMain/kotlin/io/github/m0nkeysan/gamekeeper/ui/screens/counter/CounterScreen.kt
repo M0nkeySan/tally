@@ -531,27 +531,27 @@ fun QuickAdjustContent(
                 )
             }
 
-            FlatTextField(
-                value = manualValue,
-                onValueChange = { if (it.all { char -> char.isDigit() || char == '-' }) manualValue = it },
-                label = "MANUAL ADJUST",
-                placeholder = "0",
-                accentColor = Color(counter.color),
-                focusRequester = focusRequester,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        val value = manualValue.toIntOrNull() ?: 0
-                        onAdjust(if (isAddition) value else -value)
-                    }
-                )
-            )
-        }
+              FlatTextField(
+                  value = manualValue,
+                  onValueChange = { if (it.all { char -> char.isDigit() || char == '-' }) manualValue = it },
+                  label = "MANUAL ADJUST",
+                  placeholder = "0",
+                  accentColor = Color(counter.color),
+                  focusRequester = focusRequester,
+                  keyboardOptions = KeyboardOptions(
+                      keyboardType = KeyboardType.Number,
+                      imeAction = ImeAction.Done
+                  ),
+                  keyboardActions = KeyboardActions(
+                      onDone = {
+                          val value = manualValue.toIntOrNull() ?: 0
+                          onAdjust(if (isAddition) value else -value)
+                      }
+                  )
+              )
+          }
 
-        Spacer(modifier = Modifier.height(16.dp))
+         Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
