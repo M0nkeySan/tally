@@ -105,7 +105,8 @@ fun GameCreationTemplate(
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = GameColors.Primary,
-                            disabledContainerColor = GameColors.Surface2
+                            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     ) {
                         Text("Create Game")
