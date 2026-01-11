@@ -314,39 +314,45 @@ fun CounterScreen(
         }
 
         if (quickAdjustTarget != null) {
-            ModalBottomSheet(
-                onDismissRequest = { quickAdjustTarget = null },
-                sheetState = sheetState
-            ) {
-                QuickAdjustContent(
-                    counter = quickAdjustTarget!!,
-                    initialIsAddition = initialIsAddition,
-                    autoFocus = autoFocusModal,
-                    onAdjust = { amount ->
-                        viewModel.adjustCount(quickAdjustTarget!!.id, amount)
-                        hapticController.performHapticFeedback(HapticType.SUCCESS)
-                        quickAdjustTarget = null
-                    }
-                )
-            }
-        }
+             LaunchedEffect(quickAdjustTarget) {
+                 sheetState.expand()
+             }
+             ModalBottomSheet(
+                 onDismissRequest = { quickAdjustTarget = null },
+                 sheetState = sheetState
+             ) {
+                 QuickAdjustContent(
+                     counter = quickAdjustTarget!!,
+                     initialIsAddition = initialIsAddition,
+                     autoFocus = autoFocusModal,
+                     onAdjust = { amount ->
+                         viewModel.adjustCount(quickAdjustTarget!!.id, amount)
+                         hapticController.performHapticFeedback(HapticType.SUCCESS)
+                         quickAdjustTarget = null
+                     }
+                 )
+             }
+         }
 
-        if (scoreSetTarget != null) {
-            ModalBottomSheet(
-                onDismissRequest = { scoreSetTarget = null },
-                sheetState = sheetState
-            ) {
-                SetScoreContent(
-                    counter = scoreSetTarget!!,
-                    onSet = { newScore ->
-                        viewModel.setCount(scoreSetTarget!!.id, newScore)
-                        hapticController.performHapticFeedback(HapticType.SUCCESS)
-                        scoreSetTarget = null
-                    },
-                    onCancel = { scoreSetTarget = null }
-                )
-            }
-        }
+         if (scoreSetTarget != null) {
+             LaunchedEffect(scoreSetTarget) {
+                 sheetState.expand()
+             }
+             ModalBottomSheet(
+                 onDismissRequest = { scoreSetTarget = null },
+                 sheetState = sheetState
+             ) {
+                 SetScoreContent(
+                     counter = scoreSetTarget!!,
+                     onSet = { newScore ->
+                         viewModel.setCount(scoreSetTarget!!.id, newScore)
+                         hapticController.performHapticFeedback(HapticType.SUCCESS)
+                         scoreSetTarget = null
+                     },
+                     onCancel = { scoreSetTarget = null }
+                 )
+             }
+         }
 
         // --- Settings Dialog ---
         if (showSettingsDialog) {
