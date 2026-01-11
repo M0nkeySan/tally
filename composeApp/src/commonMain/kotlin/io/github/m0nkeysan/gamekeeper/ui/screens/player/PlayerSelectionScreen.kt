@@ -31,6 +31,7 @@ import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.showSuccessSnackbar
 import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,12 +51,30 @@ fun PlayerSelectionScreen(
     var showAddDialog by remember { mutableStateOf(false) }
     var playerToDelete by remember { mutableStateOf<Player?>(null) }
     var playerToEdit by remember { mutableStateOf<Player?>(null) }
+    var playerToReactivate by remember { mutableStateOf<Player?>(null) }
+    var snackbarMessage by remember { mutableStateOf("") }
     
     // Handle external trigger from parent Scaffold FAB
     LaunchedEffect(triggerAddDialog) {
         if (triggerAddDialog) {
             showAddDialog = true
             onAddDialogHandled()
+        }
+    }
+    
+    // Show snackbar when player is reactivated
+    LaunchedEffect(playerToReactivate) {
+        if (playerToReactivate != null) {
+            showSuccessSnackbar(snackbarHostState, "Player '${playerToReactivate!!.name}' has been reactivated")
+            playerToReactivate = null
+        }
+    }
+    
+    // Show snackbar for deletion/deactivation
+    LaunchedEffect(snackbarMessage) {
+        if (snackbarMessage.isNotEmpty()) {
+            showSuccessSnackbar(snackbarHostState, snackbarMessage)
+            snackbarMessage = ""
         }
     }
 
@@ -93,27 +112,24 @@ fun PlayerSelectionScreen(
                     }
                 )
             },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        playerToDelete?.let { player ->
-                            viewModel.deletePlayer(player)
-                            scope.launch {
-                                val message = if (gameCount > 0) {
-                                    "Player '${player.name}' deactivated"
-                                } else {
-                                    "Player '${player.name}' deleted"
-                                }
-                                showSuccessSnackbar(snackbarHostState, message)
-                            }
-                        }
-                        playerToDelete = null
-                    },
-                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
-                ) { 
-                    Text(if (gameCount > 0) "Deactivate" else "Delete") 
-                }
-            },
+             confirmButton = {
+                 TextButton(
+                     onClick = {
+                         playerToDelete?.let { player ->
+                             viewModel.deletePlayer(player)
+                             snackbarMessage = if (gameCount > 0) {
+                                 "Player '${player.name}' deactivated"
+                             } else {
+                                 "Player '${player.name}' deleted"
+                             }
+                         }
+                         playerToDelete = null
+                     },
+                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                 ) { 
+                     Text(if (gameCount > 0) "Deactivate" else "Delete") 
+                 }
+             },
             dismissButton = {
                 TextButton(onClick = { playerToDelete = null }) { Text("Cancel") }
             }
@@ -235,18 +251,16 @@ fun PlayerSelectionScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                         Text("Deactivated", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     }
-                    items(deactivatedPlayers, key = { it.id }) { player ->
-                        val dismissState = rememberSwipeToDismissBoxState(
-                            confirmValueChange = {
-                                if (it == SwipeToDismissBoxValue.StartToEnd) {
+                     items(deactivatedPlayers, key = { it.id }) { player ->
+                         val dismissState = rememberSwipeToDismissBoxState(
+                             confirmValueChange = {
+                                 if (it == SwipeToDismissBoxValue.StartToEnd) {
                                     viewModel.reactivatePlayer(player)
-                                    scope.launch {
-                                        showSuccessSnackbar(snackbarHostState, "Player '${player.name}' has been reactivated")
-                                    }
-                                }
-                                false
-                            }
-                        )
+                                    playerToReactivate = player
+                                 }
+                                 false
+                             }
+                         )
 
                         SwipeToDismissBox(
                             state = dismissState,
