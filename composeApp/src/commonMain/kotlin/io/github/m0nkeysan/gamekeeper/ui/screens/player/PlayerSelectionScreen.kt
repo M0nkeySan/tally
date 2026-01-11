@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.*
 import kotlinx.coroutines.CoroutineScope
 import androidx.compose.ui.Alignment
@@ -71,7 +72,7 @@ fun PlayerSelectionScreen(
 
     // --- Delete Confirmation Dialog ---
     if (playerToDelete != null) {
-        var gameCount by remember { mutableStateOf(0) }
+        var gameCount by remember { mutableIntStateOf(0) }
         LaunchedEffect(playerToDelete) {
             gameCount = viewModel.getGameCountForPlayer(playerToDelete!!.id)
         }
@@ -290,7 +291,6 @@ fun PlayerCard(player: Player, isActive: Boolean = true, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .alpha(if (isActive) 1f else 0.5f)
             .clickable(enabled = isActive, onClick = onClick),
         colors = CardDefaults.cardColors(
             containerColor = color,
