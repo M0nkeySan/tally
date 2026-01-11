@@ -60,15 +60,43 @@ fun GameSelectionTemplate(
     onBack: () -> Unit,
     isLoading: Boolean,
     error: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onDeleteAllGames: (() -> Unit)? = null
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    var showMenu by remember { mutableStateOf(false) }
+    var showDeleteAllDialog by remember { mutableStateOf(false) }
     
     // Show error in Snackbar
     LaunchedEffect(error) {
         if (error != null) {
             showErrorSnackbar(snackbarHostState, error)
         }
+    }
+    
+    // Delete all confirmation dialog
+    if (showDeleteAllDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteAllDialog = false },
+            title = { Text("Delete All Games") },
+            text = { Text("Are you sure you want to delete all games? This cannot be undone.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onDeleteAllGames?.invoke()
+                        showDeleteAllDialog = false
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                ) {
+                    Text("Delete All")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteAllDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
     
     Scaffold(
@@ -79,6 +107,36 @@ fun GameSelectionTemplate(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    Box {
+                        IconButton(onClick = { showMenu = true }) {
+                            Text("⋯", fontSize = MaterialTheme.typography.headlineSmall.fontSize)
+                        }
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Create Game") },
+                                onClick = {
+                                    showMenu = false
+                                    onCreateNew()
+                                },
+                                leadingIcon = { Icon(Icons.Default.Add, contentDescription = null) }
+                            )
+                            if (onDeleteAllGames != null && games.isNotEmpty()) {
+                                DropdownMenuItem(
+                                    text = { Text("Delete All Games") },
+                                    onClick = {
+                                        showMenu = false
+                                        showDeleteAllDialog = true
+                                    },
+                                    leadingIcon = { Icon(GameIcons.Delete, contentDescription = null) }
+                                )
+                            }
+                        }
                     }
                 }
             )

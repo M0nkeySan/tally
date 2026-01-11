@@ -61,6 +61,7 @@ fun TarotGameSelectionScreen(
         },
         onBack = onBack,
         isLoading = state.isLoading,
-        error = state.error
+        error = state.error,
+        onDeleteAllGames = { viewModel.deleteAllGames() }
     )
 }

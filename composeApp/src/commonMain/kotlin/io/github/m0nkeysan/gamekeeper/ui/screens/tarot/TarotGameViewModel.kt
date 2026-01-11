@@ -125,6 +125,18 @@ class TarotGameViewModel : ViewModel() {
         }
     }
 
+    fun deleteAllGames(onError: (String) -> Unit = {}) {
+        viewModelScope.launch {
+            try {
+                selectionState.value.games.forEach { displayModel ->
+                    deleteGame(displayModel.game)
+                }
+            } catch (e: Exception) {
+                onError("Failed to delete all games: ${e.message}")
+            }
+        }
+    }
+
     fun savePlayer(player: Player, onError: (String) -> Unit = {}) {
         viewModelScope.launch {
             try {
