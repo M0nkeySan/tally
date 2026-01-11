@@ -177,14 +177,13 @@ fun GameSelectionTemplate(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(games, key = { it.id }) { game ->
-                        val dismissState = rememberSwipeToDismissBoxState(
-                            confirmValueChange = {
-                                if (it == SwipeToDismissBoxValue.EndToStart) {
-                                    onDeleteGame(game)
-                                }
-                                false
+                        val dismissState = rememberSwipeToDismissBoxState()
+                        LaunchedEffect(dismissState.currentValue) {
+                            if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+                                onDeleteGame(game)
+                                dismissState.snapTo(SwipeToDismissBoxValue.Settled)
                             }
-                        )
+                        }
                         
                         SwipeToDismissBox(
                             state = dismissState,
