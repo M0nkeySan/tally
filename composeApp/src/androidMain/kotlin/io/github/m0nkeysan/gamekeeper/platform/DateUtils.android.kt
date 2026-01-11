@@ -6,5 +6,5 @@ import java.time.format.DateTimeFormatter
 actual fun getCurrentDateTimeString(): String {
     val current = LocalDateTime.now()
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy 'at' HH:mm")
-    return "Game of ${current.format(formatter)}"
+    return "${current.format(formatter)}"
 }
