@@ -76,7 +76,7 @@ fun CounterScreen(
     var showResetConfirmation by remember { mutableStateOf(false) }
     var showDeleteAllConfirmation by remember { mutableStateOf(false) }
 
-    val sheetState = rememberModalBottomSheetState()
+     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val leader = remember(state.counters, state.displayMode) {
         if (state.displayMode == CounterDisplayMode.MOST_POINTS) {
@@ -313,10 +313,7 @@ fun CounterScreen(
             }
         }
 
-        if (quickAdjustTarget != null) {
-             LaunchedEffect(quickAdjustTarget) {
-                 sheetState.expand()
-             }
+         if (quickAdjustTarget != null) {
              ModalBottomSheet(
                  onDismissRequest = { quickAdjustTarget = null },
                  sheetState = sheetState
@@ -335,9 +332,6 @@ fun CounterScreen(
          }
 
          if (scoreSetTarget != null) {
-             LaunchedEffect(scoreSetTarget) {
-                 sheetState.expand()
-             }
              ModalBottomSheet(
                  onDismissRequest = { scoreSetTarget = null },
                  sheetState = sheetState
