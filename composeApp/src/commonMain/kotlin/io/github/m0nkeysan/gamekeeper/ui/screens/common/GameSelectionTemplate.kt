@@ -112,7 +112,7 @@ fun GameSelectionTemplate(
                 actions = {
                     Box {
                         IconButton(onClick = { showMenu = true }) {
-                            Text("⋯", fontSize = MaterialTheme.typography.headlineSmall.fontSize)
+                            Icon(GameIcons.MoreVert, contentDescription = "Menu")
                         }
                         DropdownMenu(
                             expanded = showMenu,
