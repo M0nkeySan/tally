@@ -42,31 +42,31 @@ fun EditCounterScreen(
     }
 
     if (showDeleteDialog) {
-        AlertDialog(
-            onDismissRequest = { showDeleteDialog = false },
-            containerColor = Color.White,
-            title = { Text("Delete Counter", fontWeight = FontWeight.Bold) },
-            text = { Text("Are you sure you want to delete this counter? This action cannot be undone.") },
-            confirmButton = {
-                TextButton(onClick = {
-                    showDeleteDialog = false
-                    onDelete(id)
-                }) {
-                    Text("Delete", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel", color = Color.Gray)
-                }
-            }
-        )
-    }
+         AlertDialog(
+             onDismissRequest = { showDeleteDialog = false },
+             containerColor = MaterialTheme.colorScheme.surface,
+             title = { Text("Delete Counter", fontWeight = FontWeight.Bold) },
+             text = { Text("Are you sure you want to delete this counter? This action cannot be undone.") },
+             confirmButton = {
+                 TextButton(onClick = {
+                     showDeleteDialog = false
+                     onDelete(id)
+                 }) {
+                     Text("Delete", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
+                 }
+             },
+             dismissButton = {
+                 TextButton(onClick = { showDeleteDialog = false }) {
+                     Text("Cancel", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                 }
+             }
+         )
+     }
 
 
 
     Scaffold(
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             // Flat, Immersive Header
             Surface(
@@ -98,11 +98,11 @@ fun EditCounterScreen(
             }
         },
         bottomBar = {
-            // Prominent Flat Save Button
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = Color.White
-            ) {
+             // Prominent Flat Save Button
+             Surface(
+                 modifier = Modifier.fillMaxWidth(),
+                 color = MaterialTheme.colorScheme.surface
+             ) {
                 Button(
                     onClick = {
                         val count = countText.toIntOrNull() ?: 0
