@@ -11,8 +11,6 @@ import androidx.room.RoomDatabase
         CounterChangeEntity::class,
         TarotGameEntity::class,
         TarotRoundEntity::class,
-        PlayerStatsEntity::class,
-        GameParticipantEntity::class,
         YahtzeeGameEntity::class,
         YahtzeeScoreEntity::class
     ],
@@ -24,6 +22,5 @@ abstract class GameDatabase : RoomDatabase() {
     abstract fun persistentCounterDao(): PersistentCounterDao
     abstract fun counterChangeDao(): CounterChangeDao
     abstract fun tarotDao(): TarotDao
-    abstract fun statsDao(): StatsDao
     abstract fun yahtzeeDao(): YahtzeeDao
 }

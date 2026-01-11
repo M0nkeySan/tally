@@ -30,14 +30,10 @@ actual object GameIcons {
     actual val Refresh: ImageVector = Icons.Default.Refresh
     actual val Remove: ImageVector = Icons.Default.Remove
     actual val ArrowBack: ImageVector = Icons.AutoMirrored.Filled.ArrowBack
-    actual val KeyboardArrowRight: ImageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight
     actual val Settings: ImageVector = Icons.Default.Settings
     actual val Group: ImageVector = Icons.Default.Group
-    actual val Palette: ImageVector = Icons.Default.Palette
     actual val Delete: ImageVector = Icons.Default.Delete
     actual val MoreVert: ImageVector = Icons.Default.MoreVert
-    actual val Dice: ImageVector = Icons.Default.Casino
-    actual val Cards: ImageVector = Icons.Default.Casino
     actual val Tarot: ImageVector = ImageVector.Builder(
         name = "Tarot",
         defaultWidth = 24.dp,

@@ -3,26 +3,23 @@ package io.github.m0nkeysan.gamekeeper.platform
 import android.content.Context
 import androidx.room.Room
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.GameDatabase
+import io.github.m0nkeysan.gamekeeper.core.data.local.repository.CounterRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.GameQueryHelper
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.PlayerRepositoryImpl
-import io.github.m0nkeysan.gamekeeper.core.data.local.repository.PlayerStatsRepositoryImpl
-import io.github.m0nkeysan.gamekeeper.core.data.local.repository.UserPreferencesRepositoryImpl
-import io.github.m0nkeysan.gamekeeper.core.data.local.repository.CounterRepositoryImpl
-import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
-import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerStatsRepository
-import io.github.m0nkeysan.gamekeeper.core.domain.repository.UserPreferencesRepository
-import io.github.m0nkeysan.gamekeeper.core.domain.repository.CounterRepository
-import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotRepository
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.TarotRepositoryImpl
-import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeRepository
+import io.github.m0nkeysan.gamekeeper.core.data.local.repository.UserPreferencesRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.YahtzeeRepositoryImpl
+import io.github.m0nkeysan.gamekeeper.core.domain.repository.CounterRepository
+import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
+import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotRepository
+import io.github.m0nkeysan.gamekeeper.core.domain.repository.UserPreferencesRepository
+import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeRepository
 
 actual object PlatformRepositories {
     private var database: GameDatabase? = null
     
     // Singleton instances for repositories
     private var playerRepository: PlayerRepository? = null
-    private var playerStatsRepository: PlayerStatsRepository? = null
     private var userPreferencesRepository: UserPreferencesRepository? = null
     private var counterRepository: CounterRepository? = null
     private var tarotRepository: TarotRepository? = null
@@ -51,12 +48,6 @@ actual object PlatformRepositories {
             getGameQueryHelper()
         ).also {
             playerRepository = it
-        }
-    }
-
-    actual fun getPlayerStatsRepository(): PlayerStatsRepository {
-        return playerStatsRepository ?: PlayerStatsRepositoryImpl(getDatabase().statsDao()).also {
-            playerStatsRepository = it
         }
     }
 

@@ -1,6 +1,5 @@
 package io.github.m0nkeysan.gamekeeper
 
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 
 expect object GameIcons {
@@ -12,13 +11,9 @@ expect object GameIcons {
     val Refresh: ImageVector
     val Remove: ImageVector
     val ArrowBack: ImageVector
-    val KeyboardArrowRight: ImageVector
     val Settings: ImageVector
     val Group: ImageVector
-    val Palette: ImageVector
     val Delete: ImageVector
     val MoreVert: ImageVector
-    val Dice: ImageVector
-    val Cards: ImageVector
     val Tarot: ImageVector
 }
