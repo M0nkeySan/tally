@@ -88,9 +88,9 @@ fun CounterHistoryScreen(
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("Counter History")
+                            Text("History")
                             Text(
-                                "History is cleared when you close the app",
+                                "⚠\uFE0F History is cleared when you close the app",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
