@@ -10,7 +10,7 @@ import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.platform.getCurrentDateTimeString
 import io.github.m0nkeysan.gamekeeper.ui.components.FlexiblePlayerSelector
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameCreationTemplate
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameConfig
+import io.github.m0nkeysan.gamekeeper.core.domain.GameConfig
 import kotlin.random.Random
 
 @Composable
