@@ -1,19 +1,19 @@
 package io.github.m0nkeysan.gamekeeper.core.data.local.repository
 
-import io.github.m0nkeysan.gamekeeper.core.data.local.database.CounterChangeDao
-import io.github.m0nkeysan.gamekeeper.core.data.local.database.CounterChangeEntity
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.PersistentCounterDao
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.PersistentCounterEntity
+import io.github.m0nkeysan.gamekeeper.core.domain.CounterHistoryStore
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.CounterRepository
 import io.github.m0nkeysan.gamekeeper.core.model.Counter
 import io.github.m0nkeysan.gamekeeper.core.model.CounterChange
 import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.UUID
 
 class CounterRepositoryImpl(
     private val dao: PersistentCounterDao,
-    private val changeDao: CounterChangeDao
+    private val historyStore: CounterHistoryStore
 ) : CounterRepository {
     
     override fun getAllCounters(): Flow<List<Counter>> = dao.getAllCounters().map { entities ->
@@ -55,16 +55,19 @@ class CounterRepositoryImpl(
         previousValue: Int,
         newValue: Int
     ) {
-        val change = CounterChangeEntity(
+        val change = CounterChange(
+            id = UUID.randomUUID().toString(),
             counterId = counterId,
             counterName = counterName,
             counterColor = counterColor,
             previousValue = previousValue,
             newValue = newValue,
             changeDelta = newValue - previousValue,
-            isDeleted = false
+            isDeleted = false,
+            timestamp = System.currentTimeMillis(),
+            createdAt = System.currentTimeMillis()
         )
-        changeDao.insertChange(change)
+        historyStore.addChange(change)
     }
 
     override suspend fun logCounterDeletion(
@@ -72,76 +75,30 @@ class CounterRepositoryImpl(
         counterName: String,
         counterColor: Long
     ) {
-        val change = CounterChangeEntity(
+        val change = CounterChange(
+            id = UUID.randomUUID().toString(),
             counterId = counterId,
             counterName = counterName,
             counterColor = counterColor,
             previousValue = 0,
             newValue = 0,
             changeDelta = 0,
-            isDeleted = true
+            isDeleted = true,
+            timestamp = System.currentTimeMillis(),
+            createdAt = System.currentTimeMillis()
         )
-        changeDao.insertChange(change)
+        historyStore.addChange(change)
     }
 
-    override fun getCounterHistory(): Flow<List<CounterChange>> =
-        changeDao.getAllChanges().map { entities ->
-            entities.map { it.toDomain() }
-        }
+    override fun getCounterHistory(): Flow<List<CounterChange>> = historyStore.history
 
     override fun getMergedCounterHistory(): Flow<List<MergedCounterChange>> =
-        getCounterHistory().map { changes ->
-            mergeConsecutiveChanges(changes)
+        historyStore.history.map { changes ->
+            historyStore.getMergedHistory()
         }
 
     override suspend fun clearCounterHistory() {
-        changeDao.deleteAllChanges()
-    }
-
-    private fun mergeConsecutiveChanges(changes: List<CounterChange>): List<MergedCounterChange> {
-        if (changes.isEmpty()) return emptyList()
-
-        val merged = mutableListOf<MergedCounterChange>()
-        var currentGroup = mutableListOf(changes[0])
-
-        for (i in 1 until changes.size) {
-            val current = changes[i]
-            val previous = changes[i - 1]
-
-            if (current.counterId == previous.counterId) {
-                // Same counter, add to current group
-                currentGroup.add(current)
-            } else {
-                // Different counter, finalize current group and start new one
-                merged.add(createMergedChange(currentGroup))
-                currentGroup = mutableListOf(current)
-            }
-        }
-
-        // Don't forget the last group
-        merged.add(createMergedChange(currentGroup))
-
-        return merged
-    }
-
-    private fun createMergedChange(changes: List<CounterChange>): MergedCounterChange {
-        val totalDelta = changes.sumOf { it.changeDelta }
-        val firstTimestamp = changes.minOf { it.timestamp }
-        val lastTimestamp = changes.maxOf { it.timestamp }
-        val first = changes.first()
-        val isDeleted = changes.any { it.isDeleted }
-
-        return MergedCounterChange(
-            counterId = first.counterId,
-            counterName = first.counterName,
-            counterColor = first.counterColor,
-            totalDelta = totalDelta,
-            count = changes.size,
-            firstTimestamp = firstTimestamp,
-            lastTimestamp = lastTimestamp,
-            isDeleted = isDeleted,
-            changes = changes
-        )
+        historyStore.deleteAllChanges()
     }
 }
 
@@ -162,17 +119,4 @@ private fun Counter.toEntity() = PersistentCounterEntity(
     color = color,
     updatedAt = updatedAt,
     sortOrder = sortOrder
-)
-
-private fun CounterChangeEntity.toDomain() = CounterChange(
-    id = id,
-    counterId = counterId,
-    counterName = counterName,
-    counterColor = counterColor,
-    previousValue = previousValue,
-    newValue = newValue,
-    changeDelta = changeDelta,
-    isDeleted = isDeleted,
-    timestamp = timestamp,
-    createdAt = createdAt
 )

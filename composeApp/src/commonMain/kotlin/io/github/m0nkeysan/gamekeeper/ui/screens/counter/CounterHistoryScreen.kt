@@ -14,8 +14,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -56,7 +56,7 @@ fun CounterHistoryScreen(
     if (showDeleteAllDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteAllDialog = false },
-            title = { Text("Delete All Histories") },
+            title = { Text("Delete all histories") },
             text = { Text("Are you sure you want to delete all counter change histories? This cannot be undone.") },
             confirmButton = {
                 TextButton(
@@ -85,7 +85,16 @@ fun CounterHistoryScreen(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Counter History")
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text("Counter History")
+                            Text(
+                                "History is cleared when you close the app",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
                 },
                 navigationIcon = {
@@ -103,37 +112,40 @@ fun CounterHistoryScreen(
             )
         }
     ) { paddingValues ->
-        if (mergedHistory.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "No counter changes yet",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            if (mergedHistory.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        "No counter changes yet",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(mergedHistory.size) { index ->
+                        CounterHistoryItem(mergedHistory[index])
+                        if (index < mergedHistory.size - 1) {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                color = MaterialTheme.colorScheme.outlineVariant,
+                                thickness = 1.dp
+                            )
+                        }
+                    }
+                }
             }
-         } else {
-             LazyColumn(
-                 modifier = Modifier
-                     .fillMaxSize()
-                     .padding(paddingValues)
-             ) {
-                 items(mergedHistory.size) { index ->
-                     CounterHistoryItem(mergedHistory[index])
-                     if (index < mergedHistory.size - 1) {
-                         Divider(
-                             modifier = Modifier.padding(horizontal = 16.dp),
-                             color = MaterialTheme.colorScheme.outlineVariant,
-                             thickness = 1.dp
-                         )
-                     }
-                 }
-             }
-         }
+        }
     }
     
     BackHandler { onBackPressed() }

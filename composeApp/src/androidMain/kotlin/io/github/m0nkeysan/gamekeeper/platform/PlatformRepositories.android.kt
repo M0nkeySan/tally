@@ -9,6 +9,7 @@ import io.github.m0nkeysan.gamekeeper.core.data.local.repository.PlayerRepositor
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.TarotRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.UserPreferencesRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.YahtzeeRepositoryImpl
+import io.github.m0nkeysan.gamekeeper.core.domain.CounterHistoryStore
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.CounterRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotRepository
@@ -25,6 +26,7 @@ actual object PlatformRepositories {
     private var tarotRepository: TarotRepository? = null
     private var yahtzeeRepository: YahtzeeRepository? = null
     private var gameQueryHelper: GameQueryHelper? = null
+    private var historyStore: CounterHistoryStore? = null
 
     fun init(context: Context) {
         if (database == null) {
@@ -40,6 +42,12 @@ actual object PlatformRepositories {
 
     private fun getDatabase(): GameDatabase {
         return database ?: throw IllegalStateException("Database not initialized. Call PlatformRepositories.init(context) first.")
+    }
+
+    private fun getHistoryStore(): CounterHistoryStore {
+        return historyStore ?: CounterHistoryStore().also {
+            historyStore = it
+        }
     }
 
     actual fun getPlayerRepository(): PlayerRepository {
@@ -60,7 +68,7 @@ actual object PlatformRepositories {
     actual fun getCounterRepository(): CounterRepository {
         return counterRepository ?: CounterRepositoryImpl(
             getDatabase().persistentCounterDao(),
-            getDatabase().counterChangeDao()
+            getHistoryStore()
         ).also {
             counterRepository = it
         }

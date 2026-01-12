@@ -15,7 +15,11 @@ interface CounterRepository {
     suspend fun resetAllCounts()
     suspend fun deleteAllCounters()
     
-    // Counter change tracking
+    // Counter change tracking (session-based, in-memory only)
+    /**
+     * Log a counter value change to the session history.
+     * History is stored in memory only and cleared when the app closes.
+     */
     suspend fun logCounterChange(
         counterId: String,
         counterName: String,
@@ -24,15 +28,31 @@ interface CounterRepository {
         newValue: Int
     )
     
+    /**
+     * Log a counter deletion to the session history.
+     * History is stored in memory only and cleared when the app closes.
+     */
     suspend fun logCounterDeletion(
         counterId: String,
         counterName: String,
         counterColor: Long
     )
     
+    /**
+     * Get the raw counter history from the session.
+     * Returns all counter changes made during this app session.
+     */
     fun getCounterHistory(): Flow<List<CounterChange>>
     
+    /**
+     * Get the merged counter history from the session.
+     * Consecutive changes for the same counter are grouped together.
+     * History persists only for the current app session.
+     */
     fun getMergedCounterHistory(): Flow<List<MergedCounterChange>>
     
+    /**
+     * Clear all counter history from the session.
+     */
     suspend fun clearCounterHistory()
 }
