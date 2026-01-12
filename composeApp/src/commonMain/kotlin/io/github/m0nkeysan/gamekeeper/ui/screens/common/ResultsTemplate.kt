@@ -60,10 +60,15 @@ fun ResultsTemplate(
         topBar = {
             TopAppBar(
                 title = { 
-                    Text(
-                        "Game Over", 
-                        fontWeight = FontWeight.Bold
-                    )
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            "Game Over", 
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             )
         },

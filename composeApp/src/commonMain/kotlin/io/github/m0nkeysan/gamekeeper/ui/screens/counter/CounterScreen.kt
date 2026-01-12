@@ -87,11 +87,16 @@ fun CounterScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    if (leader != null && state.counters.isNotEmpty()) {
-                        val emoji = if (state.displayMode == CounterDisplayMode.MOST_POINTS) "📈" else "📉"
-                        Text("$emoji ${leader.name}", fontWeight = FontWeight.ExtraBold)
-                    } else {
-                        Text("Counter")
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (leader != null && state.counters.isNotEmpty()) {
+                            val emoji = if (state.displayMode == CounterDisplayMode.MOST_POINTS) "📈" else "📉"
+                            Text("$emoji ${leader.name}", fontWeight = FontWeight.ExtraBold)
+                        } else {
+                            Text("Counter")
+                        }
                     }
                 },
                 navigationIcon = {

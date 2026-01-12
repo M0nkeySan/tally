@@ -80,7 +80,14 @@ fun CounterHistoryScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Counter History") },
+                title = { 
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("Counter History")
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = onBackPressed) {
                         Icon(GameIcons.ArrowBack, contentDescription = "Back")

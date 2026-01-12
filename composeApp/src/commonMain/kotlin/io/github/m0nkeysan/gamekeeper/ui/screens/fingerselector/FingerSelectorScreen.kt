@@ -67,15 +67,22 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
         topBar = {
             TopAppBar(
                 title = { 
-                    Column {
-                        Text("Finger Selector")
-                        Text(
-                            text = when(config.mode) {
-                                SelectionMode.FINGERS -> "${config.count} Finger${if(config.count > 1) "s" else ""}"
-                                SelectionMode.GROUPS -> "${config.count} Groups"
-                            },
-                            style = MaterialTheme.typography.bodySmall
-                        )
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text("Finger Selector")
+                            Text(
+                                text = when(config.mode) {
+                                    SelectionMode.FINGERS -> "${config.count} Finger${if(config.count > 1) "s" else ""}"
+                                    SelectionMode.GROUPS -> "${config.count} Groups"
+                                },
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
                     }
                 },
                 navigationIcon = {

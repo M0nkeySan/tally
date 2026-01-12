@@ -175,7 +175,14 @@ fun PlayerSelectionScreen(
         topBar = {
             if (showBackButton) {
                 TopAppBar(
-                    title = { Text("Players") },
+                    title = { 
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("Players")
+                        }
+                    },
                     navigationIcon = {
                         IconButton(onClick = onBack) {
                             Icon(GameIcons.ArrowBack, contentDescription = "Back")
@@ -189,7 +196,14 @@ fun PlayerSelectionScreen(
                 )
             } else {
                 TopAppBar(
-                    title = { Text("Players") },
+                    title = { 
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("Players")
+                        }
+                    },
                     actions = {
                         IconButton(onClick = { showAddDialog = true }) {
                             Icon(Icons.Default.Add, contentDescription = "Add Player")

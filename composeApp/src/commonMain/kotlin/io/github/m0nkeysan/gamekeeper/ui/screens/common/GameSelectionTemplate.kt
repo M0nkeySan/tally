@@ -103,7 +103,14 @@ fun GameSelectionTemplate(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text(title) },
+                title = { 
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(title)
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(GameIcons.ArrowBack, contentDescription = "Back")
