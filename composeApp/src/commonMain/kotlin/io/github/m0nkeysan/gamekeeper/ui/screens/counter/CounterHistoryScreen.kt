@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -108,17 +109,24 @@ fun CounterHistoryScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                items(mergedHistory) { mergedChange ->
-                    CounterHistoryItem(mergedChange)
-                }
-            }
-        }
+         } else {
+             LazyColumn(
+                 modifier = Modifier
+                     .fillMaxSize()
+                     .padding(paddingValues)
+             ) {
+                 items(mergedHistory.size) { index ->
+                     CounterHistoryItem(mergedHistory[index])
+                     if (index < mergedHistory.size - 1) {
+                         Divider(
+                             modifier = Modifier.padding(horizontal = 16.dp),
+                             color = MaterialTheme.colorScheme.outlineVariant,
+                             thickness = 1.dp
+                         )
+                     }
+                 }
+             }
+         }
     }
     
     BackHandler { onBackPressed() }
@@ -197,30 +205,20 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                     color = Color(0xFFCCCCCC)
                 )
             } else {
-                Text(
-                    text = "${if (mergedChange.totalDelta > 0) "+" else ""}${mergedChange.totalDelta}",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    ),
-                    color = if (mergedChange.totalDelta > 0) {
-                        Color(0xFF4CAF50)  // Green
-                    } else if (mergedChange.totalDelta < 0) {
-                        Color(0xFFF44336)  // Red
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    }
-                )
-                
-                // Show count of merged changes if > 1
-                if (mergedChange.count > 1) {
-                    Text(
-                        text = "×${mergedChange.count}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.End
-                    )
-                }
+                 Text(
+                     text = "${if (mergedChange.totalDelta > 0) "+" else ""}${mergedChange.totalDelta}",
+                     style = MaterialTheme.typography.titleMedium.copy(
+                         fontWeight = FontWeight.Bold,
+                         fontSize = 18.sp
+                     ),
+                     color = if (mergedChange.totalDelta > 0) {
+                         Color(0xFF4CAF50)  // Green
+                     } else if (mergedChange.totalDelta < 0) {
+                         Color(0xFFF44336)  // Red
+                     } else {
+                         MaterialTheme.colorScheme.onSurfaceVariant
+                     }
+                 )
             }
         }
     }
