@@ -10,6 +10,7 @@ import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.platform.getCurrentDateTimeString
 import io.github.m0nkeysan.gamekeeper.ui.components.FlexiblePlayerSelector
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameCreationTemplate
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameConfig
 import kotlin.random.Random
 
 @Composable
@@ -27,14 +28,14 @@ fun YahtzeeGameCreationScreen(
         return "#${color.toString(16).padStart(6, '0')}"
     }
 
-    val canCreate = gameName.isNotBlank() && selectedPlayers.size in 1..8 && selectedPlayers.all { it != null }
+    val canCreate = gameName.isNotBlank() && selectedPlayers.size in GameConfig.yahtzeeMinPlayers..GameConfig.yahtzeeMaxPlayers && selectedPlayers.all { it != null }
 
     GameCreationTemplate(
         title = "New Yahtzee Game",
         onBack = onBack,
         onCreate = {
             val finalPlayers = selectedPlayers.filterNotNull()
-            if (finalPlayers.size in 1..8) {
+            if (finalPlayers.size in GameConfig.yahtzeeMinPlayers..GameConfig.yahtzeeMaxPlayers) {
                 viewModel.createGame(
                     name = gameName.ifBlank { "Yahtzee Game" },
                     playerCount = finalPlayers.size,
@@ -54,9 +55,9 @@ fun YahtzeeGameCreationScreen(
                 singleLine = true
             )
 
-            FlexiblePlayerSelector(
-                minPlayers = 1,
-                maxPlayers = 8,
+             FlexiblePlayerSelector(
+                minPlayers = GameConfig.yahtzeeMinPlayers,
+                maxPlayers = GameConfig.yahtzeeMaxPlayers,
                 allPlayers = allPlayers,
                 onPlayersChange = { players ->
                     selectedPlayers = players

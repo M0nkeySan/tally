@@ -10,6 +10,7 @@ import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.platform.getCurrentDateTimeString
 import io.github.m0nkeysan.gamekeeper.ui.components.FlexiblePlayerSelector
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameCreationTemplate
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameConfig
 import kotlin.random.Random
 
 @Composable
@@ -27,7 +28,7 @@ fun TarotGameCreationScreen(
         return "#${color.toString(16).padStart(6, '0')}"
     }
 
-    val canCreate = gameName.isNotBlank() && selectedPlayers.size in 3..5 && selectedPlayers.all { it != null }
+    val canCreate = gameName.isNotBlank() && selectedPlayers.size in GameConfig.tarotMinPlayers..GameConfig.tarotMaxPlayers && selectedPlayers.all { it != null }
 
     GameCreationTemplate(
         title = "New Tarot Game",
@@ -35,7 +36,7 @@ fun TarotGameCreationScreen(
         onCreate = {
             @Suppress("UNCHECKED_CAST")
             val finalPlayers = selectedPlayers.filterNotNull()
-            if (finalPlayers.size in 3..5) {
+            if (finalPlayers.size in GameConfig.tarotMinPlayers..GameConfig.tarotMaxPlayers) {
                 viewModel.createGame(
                     name = gameName.ifBlank { "Tarot Game" },
                     playerCount = finalPlayers.size,
@@ -56,8 +57,8 @@ fun TarotGameCreationScreen(
             )
 
             FlexiblePlayerSelector(
-                minPlayers = 3,
-                maxPlayers = 5,
+                minPlayers = GameConfig.tarotMinPlayers,
+                maxPlayers = GameConfig.tarotMaxPlayers,
                 allPlayers = allPlayers,
                 onPlayersChange = { players ->
                     selectedPlayers = players
