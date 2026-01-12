@@ -41,9 +41,6 @@ import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
-import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterDisplayMode
-import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterItem
-import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

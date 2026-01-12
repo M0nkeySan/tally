@@ -1,11 +1,10 @@
-package io.github.m0nkeysan.gamekeeper.ui.viewmodel
+package io.github.m0nkeysan.gamekeeper.ui.screens.counter
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.gamekeeper.core.model.Counter
 import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
-import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +14,6 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 data class CounterItem(
     val id: String,

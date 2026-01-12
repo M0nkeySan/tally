@@ -46,7 +46,7 @@ fun HomeNavigationTemplate(
     playerViewModel: PlayerSelectionViewModel = viewModel { PlayerSelectionViewModel() },
     modifier: Modifier = Modifier
 ) {
-    var selectedTab by remember { mutableStateOf(0) }
+    var selectedTab by remember { mutableIntStateOf(0) }
 
     // Handle system back gesture - go to home screen when on players tab
     BackHandler(enabled = selectedTab == 1) {

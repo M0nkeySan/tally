@@ -189,7 +189,7 @@ fun FingerSelectorGame(
     var winners by remember { mutableStateOf<Set<Long>>(emptySet()) }
     var countdownSeconds by remember { mutableStateOf<Int?>(null) }
     var isSelecting by remember { mutableStateOf(false) }
-    var lastFingerCount by remember { mutableStateOf(0) }
+    var lastFingerCount by remember { mutableIntStateOf(0) }
     var countdownStartTime by remember { mutableStateOf<Long?>(null) }
     
     val hapticController = rememberHapticFeedbackController()

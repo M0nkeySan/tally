@@ -36,7 +36,7 @@ fun TarotRoundAdditionScreen(
     
     var takerIndex by remember { mutableStateOf<Int?>(null) }
     var bid by remember { mutableStateOf(TarotBid.PRISE) }
-    var bouts by remember { mutableStateOf(0) }
+    var bouts by remember { mutableIntStateOf(0) }
     var pointsAtq by remember { mutableStateOf("46") }
     var hasPetitAuBout by remember { mutableStateOf(false) }
     var hasPoignee by remember { mutableStateOf(false) }

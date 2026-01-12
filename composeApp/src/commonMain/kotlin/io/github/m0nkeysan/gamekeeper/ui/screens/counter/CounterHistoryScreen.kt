@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
-import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

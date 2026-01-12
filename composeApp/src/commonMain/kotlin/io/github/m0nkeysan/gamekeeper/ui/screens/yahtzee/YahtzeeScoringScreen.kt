@@ -84,7 +84,7 @@ fun YahtzeeGameView(
 ) {
     val game = state.game!!
     val players = viewModel.getPlayers()
-    var selectedPlayerIndex by remember { mutableStateOf(game.currentPlayerIndex) }
+    var selectedPlayerIndex by remember { mutableIntStateOf(game.currentPlayerIndex) }
     var showPlayerDropdown by remember { mutableStateOf(false) }
     
     LaunchedEffect(game.currentPlayerIndex) {

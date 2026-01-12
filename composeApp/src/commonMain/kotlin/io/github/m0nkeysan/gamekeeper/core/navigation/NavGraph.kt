@@ -21,7 +21,7 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeGameCreationScre
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeGameSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeScoringScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeSummaryScreen
-import io.github.m0nkeysan.gamekeeper.ui.viewmodel.CounterViewModel
+import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterViewModel
 
 @Composable
 fun GameNavGraph() {
