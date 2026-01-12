@@ -35,3 +35,12 @@ data class Counter(
         }
     }
 }
+
+/**
+ * Sanitizes a counter name by:
+ * - Trimming leading/trailing whitespace
+ * - Returning null if name becomes empty after sanitization
+ */
+fun sanitizeCounterName(name: String): String? {
+    return name.trim().takeIf { it.isNotEmpty() }
+}

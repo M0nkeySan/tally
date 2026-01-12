@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.gamekeeper.GameIcons
+import io.github.m0nkeysan.gamekeeper.core.model.sanitizeCounterName
 import io.github.m0nkeysan.gamekeeper.ui.components.ColorSelectorRow
 import io.github.m0nkeysan.gamekeeper.ui.components.FieldLabel
 import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
@@ -104,15 +105,16 @@ fun EditCounterScreen(
                  color = MaterialTheme.colorScheme.surface
              ) {
                 Button(
-                    onClick = {
-                        val count = countText.toIntOrNull() ?: 0
-                        val colorArgb = (selectedColor.alpha * 255).toLong().shl(24) or
-                                (selectedColor.red * 255).toLong().shl(16) or
-                                (selectedColor.green * 255).toLong().shl(8) or
-                                (selectedColor.blue * 255).toLong()
-                        
-                        onSave(id, name, count, colorArgb)
-                    },
+                     onClick = {
+                         val sanitizedName = sanitizeCounterName(name) ?: return@Button
+                         val count = countText.toIntOrNull() ?: 0
+                         val colorArgb = (selectedColor.alpha * 255).toLong().shl(24) or
+                                 (selectedColor.red * 255).toLong().shl(16) or
+                                 (selectedColor.green * 255).toLong().shl(8) or
+                                 (selectedColor.blue * 255).toLong()
+                         
+                         onSave(id, sanitizedName, count, colorArgb)
+                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .navigationBarsPadding()
