@@ -247,6 +247,12 @@ class CounterViewModel : ViewModel() {
         }
     }
 
+    fun clearCounterHistory() {
+        viewModelScope.launch {
+            counterRepository.clearCounterHistory()
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         playerTimestamps.clear()
