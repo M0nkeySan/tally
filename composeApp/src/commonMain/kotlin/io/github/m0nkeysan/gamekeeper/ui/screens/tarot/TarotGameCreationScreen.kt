@@ -34,8 +34,7 @@ fun TarotGameCreationScreen(
         title = "New Tarot Game",
         onBack = onBack,
         onCreate = {
-            @Suppress("UNCHECKED_CAST")
-            val finalPlayers = selectedPlayers.filterNotNull()
+            val finalPlayers: List<Player> = selectedPlayers.filterNotNull()
             if (finalPlayers.size in GameConfig.tarotMinPlayers..GameConfig.tarotMaxPlayers) {
                 viewModel.createGame(
                     name = gameName.ifBlank { "Tarot Game" },
