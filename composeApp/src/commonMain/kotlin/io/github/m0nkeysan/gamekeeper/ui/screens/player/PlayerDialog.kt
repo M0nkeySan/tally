@@ -6,6 +6,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
@@ -31,9 +33,17 @@ fun PlayerDialog(
     var name by remember { mutableStateOf(initialPlayer?.name ?: "") }
     // Default color if adding, or player's color if editing
     var selectedColor by remember { mutableStateOf(initialPlayer?.avatarColor ?: DIALOG_COLOR_PRESETS.random()) }
+    val focusRequester = remember { FocusRequester() }
 
     val composeColor = remember(selectedColor) { parseColor(selectedColor) }
     val contentColor = if (composeColor.luminance() > 0.5f) Color.Black else Color.White
+    
+    // Request focus on name input when adding new player
+    LaunchedEffect(initialPlayer) {
+        if (initialPlayer == null) {
+            focusRequester.requestFocus()
+        }
+    }
 
     val isNameTaken = remember(name, existingPlayers, initialPlayer) {
         val sanitized = sanitizePlayerName(name)
@@ -79,12 +89,13 @@ fun PlayerDialog(
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
                     FlatTextField(
-                        value = name,
-                        onValueChange = { name = it },
-                        label = "NAME",
-                        placeholder = "Player Name",
-                        accentColor = composeColor
-                    )
+                         value = name,
+                         onValueChange = { name = it },
+                         label = "NAME",
+                         placeholder = "Player Name",
+                         accentColor = composeColor,
+                         modifier = Modifier.focusRequester(focusRequester)
+                     )
                     
                     if (isNameTaken) {
                         Text(
