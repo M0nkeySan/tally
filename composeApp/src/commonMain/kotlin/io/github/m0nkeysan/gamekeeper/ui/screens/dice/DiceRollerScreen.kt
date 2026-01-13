@@ -125,11 +125,6 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold
                             )
-                            Text(
-                                text = "${configuration.numberOfDice}d${configuration.diceType.sides}",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
                         }
                     }
                 },
