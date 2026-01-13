@@ -31,6 +31,7 @@ composeApp/
 - **Finger Selector**: Random player selection with multi-touch
 - **Yahtzee**: Complete scorecard with automatic bonuses
 - **Tarot**: Score Tarot games for 3-5 players
+- **Dice Roller**: Roll up to 5 dices
 
 ## Code Style
 - Kotlin with Compose Multiplatform
