@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import kotlin.math.*
 import io.github.m0nkeysan.gamekeeper.ui.utils.colorToHSV
 import io.github.m0nkeysan.gamekeeper.ui.utils.hsvToColor
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
 val DEFAULT_COLOR_PRESETS = listOf(
     "#F44336", // Red
@@ -89,7 +90,7 @@ fun ColorSelectorRow(
         Spacer(modifier = Modifier.width(12.dp)) // Slightly reduced spacer to fit more
 
         val isCustomSelected = presets.none { it.equals(selectedColorHex, ignoreCase = true) }
-        val customColor = if (isCustomSelected) parseColor(selectedColorHex) else Color(0xFF4CAF50)
+        val customColor = if (isCustomSelected) parseColor(selectedColorHex) else GameColors.Success
 
         CustomPickerSwatch(
             color = customColor,

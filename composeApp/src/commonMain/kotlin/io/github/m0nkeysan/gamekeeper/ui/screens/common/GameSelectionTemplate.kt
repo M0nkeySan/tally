@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.ui.components.*
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 /**
  * Reusable template for game selection screens.
@@ -78,8 +79,8 @@ fun GameSelectionTemplate(
     if (showDeleteAllDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteAllDialog = false },
-            title = { Text("Delete All Games") },
-            text = { Text("Are you sure you want to delete all games? This cannot be undone.") },
+             title = { Text(AppStrings.GAME_DELETE_ALL_TITLE) },
+             text = { Text(AppStrings.GAME_DELETE_ALL_CONFIRM) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -126,7 +127,7 @@ fun GameSelectionTemplate(
                             onDismissRequest = { showMenu = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text("Create Game") },
+                                text = { Text(AppStrings.GAME_CREATE) },
                                 onClick = {
                                     showMenu = false
                                     onCreateNew()
@@ -135,7 +136,7 @@ fun GameSelectionTemplate(
                             )
                             if (onDeleteAllGames != null && games.isNotEmpty()) {
                                 DropdownMenuItem(
-                                    text = { Text("Delete All Games") },
+                                    text = { Text(AppStrings.GAME_DELETE_ALL_TITLE) },
                                     onClick = {
                                         showMenu = false
                                         showDeleteAllDialog = true

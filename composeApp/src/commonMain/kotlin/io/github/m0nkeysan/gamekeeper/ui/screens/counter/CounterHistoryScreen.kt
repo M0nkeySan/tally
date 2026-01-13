@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -165,7 +166,7 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                 modifier = Modifier
                     .size(40.dp)
                     .background(
-                        color = Color(0xFFCCCCCC),
+                        color = GameColors.Divider,
                         shape = RoundedCornerShape(8.dp)
                     ),
                 contentAlignment = Alignment.Center
@@ -221,7 +222,7 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     ),
-                    color = Color(0xFFCCCCCC)
+                    color = GameColors.Divider
                 )
             } else {
                  Text(
@@ -231,9 +232,9 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                          fontSize = 18.sp
                      ),
                      color = if (mergedChange.totalDelta > 0) {
-                         Color(0xFF4CAF50)  // Green
+                         GameColors.Success
                      } else if (mergedChange.totalDelta < 0) {
-                         Color(0xFFF44336)  // Red
+                         GameColors.Error
                      } else {
                          MaterialTheme.colorScheme.onSurfaceVariant
                      }

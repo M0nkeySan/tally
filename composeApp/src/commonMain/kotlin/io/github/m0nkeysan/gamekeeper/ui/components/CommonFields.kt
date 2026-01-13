@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
 @Composable
 fun FieldLabel(text: String) {
@@ -52,8 +53,8 @@ fun FlatTextField(
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color(0xFFFBFBFB),
-                unfocusedContainerColor = Color(0xFFF5F5F5),
+                focusedContainerColor = GameColors.Surface0,
+                unfocusedContainerColor = GameColors.Surface1,
                 focusedIndicatorColor = accentColor,
                 unfocusedIndicatorColor = Color.Transparent,
                 cursorColor = accentColor,

@@ -286,7 +286,7 @@ fun SectionHeader(title: String) {
         text = title.uppercase(),
         style = MaterialTheme.typography.labelLarge,
         fontWeight = FontWeight.Black,
-        color = Color.Gray,
+        color = GameColors.TextSecondary,
         letterSpacing = 1.2.sp,
         modifier = Modifier.padding(vertical = 8.dp)
     )

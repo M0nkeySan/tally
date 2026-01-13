@@ -41,6 +41,8 @@ import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -95,7 +97,7 @@ fun CounterScreen(
                             val emoji = if (state.displayMode == CounterDisplayMode.MOST_POINTS) "📈" else "📉"
                             Text("$emoji ${leader.name}", fontWeight = FontWeight.ExtraBold)
                         } else {
-                            Text("Counter")
+                            Text(AppStrings.COUNTER_TITLE)
                         }
                     }
                 },
@@ -123,7 +125,7 @@ fun CounterScreen(
                             onDismissRequest = { showMenu = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text("Settings") },
+                                text = { Text(AppStrings.COUNTER_SETTINGS) },
                                 onClick = {
                                     showMenu = false
                                     showSettingsDialog = true
@@ -131,7 +133,7 @@ fun CounterScreen(
                                 leadingIcon = { Icon(GameIcons.Settings, contentDescription = "Settings menu") }
                             )
                             DropdownMenuItem(
-                                text = { Text("Reinitialise all") },
+                                text = { Text(AppStrings.COUNTER_REINITIALIZE_ALL) },
                                 onClick = {
                                     showMenu = false
                                     showResetConfirmation = true
@@ -139,7 +141,7 @@ fun CounterScreen(
                                 leadingIcon = { Icon(GameIcons.Refresh, contentDescription = "Reset all counters") }
                             )
                             DropdownMenuItem(
-                                text = { Text("Delete everything") },
+                                text = { Text(AppStrings.COUNTER_DELETE_EVERYTHING) },
                                 onClick = {
                                     showMenu = false
                                     showDeleteAllConfirmation = true
@@ -168,7 +170,7 @@ fun CounterScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "Tap + to add a counter",
+                        text = AppStrings.COUNTER_EMPTY_STATE,
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -660,7 +662,7 @@ fun SettingsOption(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = MaterialTheme.shapes.large,
-        color = if (isSelected) Color(0xFFFBFBFB) else Color(0xFFF5F5F5),
+        color = if (isSelected) GameColors.Surface0 else GameColors.Surface1,
         border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null
     ) {
         Row(

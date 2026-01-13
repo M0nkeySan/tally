@@ -52,9 +52,23 @@ object AppStrings {
     const val GAME_FINGER_SELECTOR = "Finger Selector"
     const val GAME_COUNTER = "Counter"
     
-    // Descriptions
-    const val DESC_TAROT = "Score Tarot games for 3, 4, or 5 players"
-    const val DESC_YAHTZEE = "Complete Yahtzee scorecard with automatic bonuses"
-    const val DESC_FINGER_SELECTOR = "Randomly select a starting player with multi-touch"
-    const val DESC_COUNTER = "Simple counter for any board game"
+     // Descriptions
+     const val DESC_TAROT = "Score Tarot games for 3, 4, or 5 players"
+     const val DESC_YAHTZEE = "Complete Yahtzee scorecard with automatic bonuses"
+     const val DESC_FINGER_SELECTOR = "Randomly select a starting player with multi-touch"
+     const val DESC_COUNTER = "Simple counter for any board game"
+     
+     // Game Operations
+     const val GAME_DELETE_ALL_TITLE = "Delete All Games"
+     const val GAME_DELETE_ALL_CONFIRM = "Are you sure you want to delete all games? This cannot be undone."
+     const val GAME_CREATE = "Create Game"
+     const val GAME_NAME_LABEL = "Game Name"
+     const val GAME_LOADING = "Loading games..."
+     const val GAME_EMPTY_STATE = "No games yet. Create one!"
+     
+     // Counter Screen
+     const val COUNTER_HISTORY_NOTICE = "History is cleared when you close the app"
+     
+     // Common
+     const val ACTION_CONFIRM = "Confirm"
 }
