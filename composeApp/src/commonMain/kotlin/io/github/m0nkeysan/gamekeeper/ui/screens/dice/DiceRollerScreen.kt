@@ -42,6 +42,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -371,42 +372,52 @@ private fun DiceSettingsBottomSheetContent(
             }
         }
 
-        // Dice Type Selection
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Dice Type", style = MaterialTheme.typography.labelMedium)
-            DiceTypeSelector(
-                selectedType = diceType,
-                onTypeSelected = { diceType = it }
-            )
-
-            // Custom Input
-            Text("Custom Dice", style = MaterialTheme.typography.labelMedium)
-            var customInput by remember { mutableStateOf(if (diceType is DiceType.Custom) diceType.sides.toString() else "") }
-            TextField(
-                value = customInput,
-                onValueChange = {
-                    customInput = it
-                    if (it.isNotBlank() && it.toIntOrNull() != null) {
-                        val sides = it.toInt()
-                        if (sides in 2..99) {
-                            diceType = DiceType.Custom(sides)
-                        }
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("2-99", color = MaterialTheme.colorScheme.onSurfaceVariant) },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.primary
-                ),
-                shape = MaterialTheme.shapes.medium
-            )
-        }
+         // Dice Type Selection
+         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+             Text("Dice Type", style = MaterialTheme.typography.labelMedium)
+             DiceTypeSelector(
+                 selectedType = diceType,
+                 onTypeSelected = { diceType = it }
+             )
+             
+             // Custom Input
+             Text("Custom Dice", style = MaterialTheme.typography.labelMedium)
+             var customInput by remember { mutableStateOf(if (diceType is DiceType.Custom) diceType.sides.toString() else "") }
+             
+             // Update customInput when diceType changes
+             LaunchedEffect(diceType) {
+                 if (diceType is DiceType.Custom) {
+                     customInput = diceType.sides.toString()
+                 } else {
+                     customInput = ""
+                 }
+             }
+             
+             TextField(
+                 value = customInput,
+                 onValueChange = { 
+                     customInput = it
+                     if (it.isNotBlank() && it.toIntOrNull() != null) {
+                         val sides = it.toInt()
+                         if (sides in 2..99) {
+                             diceType = DiceType.Custom(sides)
+                         }
+                     }
+                 },
+                 modifier = Modifier.fillMaxWidth(),
+                 placeholder = { Text("2-99", color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                 singleLine = true,
+                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                 colors = TextFieldDefaults.colors(
+                     focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                     unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                     focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                     unfocusedIndicatorColor = Color.Transparent,
+                     cursorColor = MaterialTheme.colorScheme.primary
+                 ),
+                 shape = MaterialTheme.shapes.medium
+             )
+         }
 
         // Toggles
         Row(
