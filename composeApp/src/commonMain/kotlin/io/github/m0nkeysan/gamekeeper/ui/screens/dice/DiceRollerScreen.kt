@@ -72,18 +72,15 @@ import io.github.m0nkeysan.gamekeeper.platform.rememberShakeDetector
 fun DiceRollerScreen(onBack: () -> Unit) {
     val viewModel: DiceRollerViewModel = viewModel()
 
-    // Collect specific states
     val configuration by viewModel.configuration.collectAsState()
     val isRolling by viewModel.isRolling.collectAsState()
-    // We pass the StateFlow object (or lambda) to children to avoid full recomposition
     val currentRollState = viewModel.currentRoll.collectAsState()
 
     var showSettingsDialog by remember { mutableStateOf(false) }
-    val settingsSheetState = rememberModalBottomSheetState()
+    val settingsSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val hapticFeedback = rememberHapticFeedbackController()
 
-    // Shake detection
     rememberShakeDetector(
         onShake = {
             if (configuration.shakeEnabled && !isRolling) {
@@ -145,7 +142,6 @@ fun DiceRollerScreen(onBack: () -> Unit) {
             verticalArrangement = Arrangement.SpaceBetween
         ) {
 
-            // --- TOP CONFIG BADGE ---
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(top = 32.dp)
@@ -172,7 +168,6 @@ fun DiceRollerScreen(onBack: () -> Unit) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // --- CENTER RESULT BOX (ISOLATED COMPONENT) ---
             DiceResultBox(
                 currentRoll = currentRollState.value,
                 isRolling = isRolling,
@@ -188,7 +183,6 @@ fun DiceRollerScreen(onBack: () -> Unit) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // --- BOTTOM RESULTS ---
             val roll = currentRollState.value
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -235,7 +229,6 @@ fun DiceRollerScreen(onBack: () -> Unit) {
         }
     }
 
-    // --- DIALOGS ---
     if (showSettingsDialog) {
         ModalBottomSheet(
             onDismissRequest = { showSettingsDialog = false },
@@ -256,10 +249,6 @@ fun DiceRollerScreen(onBack: () -> Unit) {
     }
 }
 
-/**
- * Isolated Component for the Animated Box.
- * Prevents full-screen recomposition during rapid random number generation.
- */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DiceResultBox(
@@ -268,9 +257,6 @@ private fun DiceResultBox(
     onTap: () -> Unit,
     onLongPress: () -> Unit
 ) {
-    // Animation Logic:
-    // Shrink FAST (Tween) when rolling starts.
-    // Bounce BACK (Spring) when rolling ends.
     val boxScale by animateFloatAsState(
         targetValue = if (isRolling) 0.85f else 1f,
         animationSpec = if (isRolling) {
@@ -335,7 +321,6 @@ private fun DiceSettingsBottomSheetContent(
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        // Header
         Text(
             text = "Dice Settings",
             style = MaterialTheme.typography.headlineSmall,
@@ -343,7 +328,6 @@ private fun DiceSettingsBottomSheetContent(
             color = MaterialTheme.colorScheme.primary
         )
 
-        // Number of Dice Slider
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("Number of Dice", style = MaterialTheme.typography.labelMedium)
             Row(
@@ -372,19 +356,16 @@ private fun DiceSettingsBottomSheetContent(
             }
         }
 
-         // Dice Type Selection
          Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
              Text("Dice Type", style = MaterialTheme.typography.labelMedium)
              DiceTypeSelector(
                  selectedType = diceType,
                  onTypeSelected = { diceType = it }
              )
-             
-             // Custom Input
+
              Text("Custom Dice", style = MaterialTheme.typography.labelMedium)
              var customInput by remember { mutableStateOf(if (diceType is DiceType.Custom) diceType.sides.toString() else "") }
-             
-             // Update customInput when diceType changes
+
              LaunchedEffect(diceType) {
                  if (diceType is DiceType.Custom) {
                      customInput = diceType.sides.toString()
@@ -419,7 +400,6 @@ private fun DiceSettingsBottomSheetContent(
              )
          }
 
-        // Toggles
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -444,7 +424,6 @@ private fun DiceSettingsBottomSheetContent(
             Switch(checked = shakeEnabled, onCheckedChange = { shakeEnabled = it })
         }
 
-        // Buttons
         Row(
             modifier = Modifier
                 .fillMaxWidth()
