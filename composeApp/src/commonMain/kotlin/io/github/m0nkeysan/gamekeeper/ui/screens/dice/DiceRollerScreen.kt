@@ -126,28 +126,29 @@ fun DiceRollerScreen(onBack: () -> Unit) {
             // Top: Configuration Badge
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.padding(top = 32.dp)
             ) {
                 Surface(
                     color = GameColors.PrimaryLight,
                     shape = RoundedCornerShape(50),
-                    modifier = Modifier.height(40.dp)
+                    modifier = Modifier.height(48.dp)
                 ) {
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = Modifier.padding(horizontal = 24.dp)
+                        modifier = Modifier.padding(horizontal = 32.dp)
                     ) {
                         Text(
                             text = "${configuration.numberOfDice} × d${configuration.diceType.sides}",
                             color = GameColors.Primary,
                             fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.titleSmall,
+                            fontSize = 16.sp
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             // Center: Big box with total value
             Box(
