@@ -365,12 +365,25 @@ private fun DiceSettingsBottomSheetContent(
 
              Text("Custom Dice", style = MaterialTheme.typography.labelMedium)
              var customInput by remember { mutableStateOf(if (diceType is DiceType.Custom) diceType.sides.toString() else "") }
-
+             var customInputError by remember { mutableStateOf<String?>(null) }
+             
              LaunchedEffect(diceType) {
                  if (diceType is DiceType.Custom) {
                      customInput = diceType.sides.toString()
+                     customInputError = null
                  } else {
                      customInput = ""
+                     customInputError = null
+                 }
+             }
+             
+             LaunchedEffect(customInput) {
+                 customInputError = when {
+                     customInput.isBlank() -> null
+                     customInput.toIntOrNull() == null -> "Must be a valid number"
+                     customInput.toInt() < 2 -> "Minimum is 2 sides"
+                     customInput.toInt() > 99 -> "Maximum is 99 sides"
+                     else -> null
                  }
              }
              
@@ -392,12 +405,22 @@ private fun DiceSettingsBottomSheetContent(
                  colors = TextFieldDefaults.colors(
                      focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                      unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                     focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                     unfocusedIndicatorColor = Color.Transparent,
+                     focusedIndicatorColor = if (customInputError != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                     unfocusedIndicatorColor = if (customInputError != null) MaterialTheme.colorScheme.error else Color.Transparent,
                      cursorColor = MaterialTheme.colorScheme.primary
                  ),
-                 shape = MaterialTheme.shapes.medium
+                 shape = MaterialTheme.shapes.medium,
+                 isError = customInputError != null
              )
+             
+             if (customInputError != null) {
+                 Text(
+                     text = customInputError!!,
+                     color = MaterialTheme.colorScheme.error,
+                     style = MaterialTheme.typography.labelSmall,
+                     modifier = Modifier.padding(start = 4.dp, top = 4.dp)
+                 )
+             }
          }
 
         Row(
