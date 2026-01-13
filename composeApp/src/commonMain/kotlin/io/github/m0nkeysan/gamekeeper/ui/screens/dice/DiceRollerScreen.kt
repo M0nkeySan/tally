@@ -4,10 +4,14 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.South
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
@@ -15,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -31,18 +36,23 @@ import io.github.m0nkeysan.gamekeeper.platform.rememberShakeDetector
 import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
+// Dark theme colors
+private val DarkBackground = Color(0xFF1C1C1E)
+private val SurfaceDark = Color(0xFF2C2C2E)
+private val AccentRed = Color(0xFFE57373)
+private val TextWhite = Color(0xFFF2F2F7)
+private val DarkChipBg = Color(0xFF252022)
+
 /**
- * Simplified Dice Roller Screen
+ * Dice Roller Screen with Dark Theme
  *
  * Layout:
- * - TopAppBar with centered "Dice" title
- * - Badge showing configuration (e.g., "5 x d20")
- * - Large centered square displaying total value
- * - Summary of individual results
- * - Instruction text
- * - Long-press to open settings
+ * - Top: "Dé" title and configuration chip (5 × d20)
+ * - Center: Large bordered box with total value
+ * - Bottom: Individual rolls, arrow, total, instruction text
+ * - Clickable anywhere to roll
+ * - ModalBottomSheet for settings
  * - Shake detection integration
- * - Haptic feedback on tap
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,28 +83,26 @@ fun DiceRollerScreen(onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { 
-                    Text("Dice", fontWeight = FontWeight.Bold)
-                },
+                title = { },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                        Icon(GameIcons.ArrowBack, contentDescription = "Back", tint = TextWhite)
                     }
                 },
-                modifier = Modifier.fillMaxWidth(),
-                actions = {
-                    // Empty space to center title
-                    Spacer(modifier = Modifier.width(48.dp))
-                }
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = DarkBackground
+                ),
+                modifier = Modifier.fillMaxWidth()
             )
         },
+        containerColor = DarkBackground,
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(GameColors.Surface0)
+                .background(DarkBackground)
                 .clickable(
                     enabled = !isRolling,
                     indication = null,
@@ -105,42 +113,118 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                     }
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Badge with configuration
-            Badge(configuration = configuration)
-            
-            Spacer(modifier = Modifier.height(32.dp))
-            
-            // Big square with total value
-            TotalDisplayBox(
-                total = currentRoll?.total ?: 0,
-                isRolling = isRolling
-            )
-            
-            Spacer(modifier = Modifier.height(32.dp))
-            
-            // Summary of results
-            if (currentRoll != null) {
-                ResultsSummary(roll = currentRoll!!)
-            } else {
+            // --- TOP SECTION: Title and Chip ---
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(top = 20.dp)
+            ) {
                 Text(
-                    text = "Roll the dice to start",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = GameColors.TextSecondary
+                    text = "Dé",
+                    color = TextWhite,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                
+                Spacer(modifier = Modifier.height(20.dp))
+                
+                // Configuration Chip
+                Surface(
+                    color = DarkChipBg,
+                    shape = RoundedCornerShape(50),
+                    modifier = Modifier.height(40.dp)
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.padding(horizontal = 24.dp)
+                    ) {
+                        Text(
+                            text = "${configuration.numberOfDice} × d${configuration.diceType.sides}",
+                            color = AccentRed,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+
+            // --- CENTER SECTION: The Big Box ---
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(300.dp)
+                    .border(
+                        width = 2.dp,
+                        color = AccentRed,
+                        shape = RoundedCornerShape(32.dp)
+                    )
+                    .clickable(
+                        enabled = !isRolling,
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = {
+                            hapticFeedback.performHapticFeedback(HapticType.LIGHT)
+                            viewModel.rollDice()
+                        }
+                    )
+            ) {
+                Text(
+                    text = (currentRoll?.total ?: 0).toString(),
+                    fontSize = 120.sp,
+                    color = TextWhite,
+                    fontWeight = FontWeight.Normal
                 )
             }
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            // Instruction text
-            Text(
-                text = "Touch anywhere on the screen to launch the dice",
-                style = MaterialTheme.typography.labelSmall,
-                color = GameColors.TextSecondary,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
+
+            // --- BOTTOM SECTION: Details ---
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(bottom = 40.dp, start = 16.dp, end = 16.dp)
+            ) {
+                // Individual Rolls - [7] [3] [9]
+                if (currentRoll != null && currentRoll!!.individualResults.isNotEmpty()) {
+                    val rollsString = currentRoll!!.individualResults.joinToString(" ") { "[$it]" }
+                    
+                    Text(
+                        text = "Lancer(s) : $rollsString",
+                        color = TextWhite,
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily.Monospace
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Down Arrow
+                    Icon(
+                        imageVector = Icons.Default.South,
+                        contentDescription = null,
+                        tint = TextWhite,
+                        modifier = Modifier.size(20.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                } else {
+                    Spacer(modifier = Modifier.height(60.dp))
+                }
+
+                // Total Text
+                Text(
+                    text = "Total : ${currentRoll?.total ?: 0}",
+                    color = TextWhite,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily.Monospace
+                )
+                
+                Spacer(modifier = Modifier.height(40.dp))
+
+                // Helper Text
+                Text(
+                    text = "Pour lancer les dés, touchez n'importe où sur l'écran.",
+                    color = Color.Gray,
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
     
@@ -149,8 +233,8 @@ fun DiceRollerScreen(onBack: () -> Unit) {
         ModalBottomSheet(
             onDismissRequest = { showSettingsDialog = false },
             sheetState = settingsSheetState,
-            containerColor = GameColors.Surface0,
-            scrimColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.32f)
+            containerColor = SurfaceDark,
+            scrimColor = Color.Black.copy(alpha = 0.32f)
         ) {
             DiceSettingsBottomSheetContent(
                 configuration = configuration,
@@ -172,8 +256,8 @@ fun DiceRollerScreen(onBack: () -> Unit) {
         ModalBottomSheet(
             onDismissRequest = { showCustomDialog = false },
             sheetState = customSheetState,
-            containerColor = GameColors.Surface0,
-            scrimColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.32f)
+            containerColor = SurfaceDark,
+            scrimColor = Color.Black.copy(alpha = 0.32f)
         ) {
             CustomDiceBottomSheetContent(
                 onConfirm = { customType ->
@@ -193,90 +277,7 @@ fun DiceRollerScreen(onBack: () -> Unit) {
     }
 }
 
-/**
- * Badge showing configuration (e.g., "5 x d20")
- */
-@Composable
-private fun Badge(configuration: DiceConfiguration) {
-    Surface(
-        color = GameColors.Primary,
-        contentColor = GameColors.Surface0,
-        shape = MaterialTheme.shapes.medium,
-        modifier = Modifier.padding(horizontal = 16.dp)
-    ) {
-        Text(
-            text = "${configuration.numberOfDice} × ${configuration.diceType.displayName.uppercase()}",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
-    }
-}
 
-/**
- * Large square displaying total value
- */
-@Composable
-private fun TotalDisplayBox(
-    total: Int,
-    isRolling: Boolean
-) {
-    val rotation = remember { Animatable(0f) }
-    
-    // Trigger animation when isRolling changes
-    LaunchedEffect(isRolling) {
-        if (isRolling) {
-            rotation.animateTo(
-                targetValue = 360f,
-                animationSpec = tween(
-                    durationMillis = 800,
-                    easing = FastOutSlowInEasing
-                )
-            )
-            rotation.snapTo(0f)
-        }
-    }
-    
-    Box(
-        modifier = Modifier
-            .size(200.dp)
-            .background(
-                color = GameColors.Primary,
-                shape = MaterialTheme.shapes.medium
-            )
-            .graphicsLayer {
-                rotationZ = rotation.value
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = total.toString(),
-            fontSize = 96.sp,
-            fontWeight = FontWeight.Black,
-            color = GameColors.Surface0,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-/**
- * Summary of individual results
- */
-@Composable
-private fun ResultsSummary(roll: DiceRoll) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        if (roll.individualResults.size > 1) {
-            Text(
-                text = roll.individualResults.joinToString(" + "),
-                style = MaterialTheme.typography.bodyMedium,
-                color = GameColors.TextSecondary
-            )
-        }
-    }
-}
 
 /**
  * Bottom sheet content for dice settings
