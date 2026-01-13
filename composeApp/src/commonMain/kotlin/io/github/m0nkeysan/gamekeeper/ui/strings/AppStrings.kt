@@ -69,6 +69,23 @@ object AppStrings {
      // Counter Screen
      const val COUNTER_HISTORY_NOTICE = "History is cleared when you close the app"
      
+     // Dice Roller
+     const val GAME_DICE = "Dice Roller"
+     const val DESC_DICE = "Roll customizable dice for any board game"
+     const val DICE_SETTINGS_TITLE = "Dice Settings"
+     const val DICE_NUMBER_OF_DICE = "Number of Dice"
+     const val DICE_TYPE = "Dice Type"
+     const val DICE_ENABLE_ANIMATION = "Enable Animation"
+     const val DICE_SHAKE_TO_ROLL = "Shake to Roll"
+     const val DICE_CUSTOM_SIDES = "Custom Sides"
+     const val DICE_CUSTOM_SIDES_HINT = "Enter number of sides (2-99)"
+     const val DICE_TOTAL = "Total"
+     const val DICE_TAP_TO_ROLL = "Tap to roll"
+     const val DICE_TAP_OR_SHAKE = "Tap or shake to roll"
+     const val DICE_ERROR_INVALID = "Please enter a valid number"
+     const val DICE_ERROR_MIN = "Minimum is 2 sides"
+     const val DICE_ERROR_MAX = "Maximum is 99 sides"
+     
      // Common
      const val ACTION_CONFIRM = "Confirm"
 }
