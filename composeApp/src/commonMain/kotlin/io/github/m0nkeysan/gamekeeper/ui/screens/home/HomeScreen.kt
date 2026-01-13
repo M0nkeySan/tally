@@ -202,28 +202,28 @@ data class GameFeature(
 private val gameFeatureMap = mapOf(
     "finger_selector" to GameFeature(
         id = "finger_selector",
-        icon = { Icon(GameIcons.TouchApp, contentDescription = null) },
+        icon = { Icon(GameIcons.TouchApp, contentDescription = "Finger Selector game") },
         title = "Finger Selector",
         description = "Randomly select a starting player with multi-touch",
         route = Screen.FingerSelector.route
     ),
     "tarot" to GameFeature(
         id = "tarot",
-        icon = { Icon(GameIcons.Tarot, contentDescription = null) },
+        icon = { Icon(GameIcons.Tarot, contentDescription = "Tarot game") },
         title = AppStrings.GAME_TAROT,
         description = AppStrings.DESC_TAROT,
         route = Screen.Tarot.route
     ),
     "yahtzee" to GameFeature(
         id = "yahtzee",
-        icon = { Icon(GameIcons.Casino, contentDescription = null ) },
+        icon = { Icon(GameIcons.Casino, contentDescription = "Yahtzee game") },
         title = AppStrings.GAME_YAHTZEE,
         description = AppStrings.DESC_YAHTZEE,
         route = Screen.Yahtzee.route
     ),
     "counter" to GameFeature(
         id = "counter",
-        icon = { Icon(GameIcons.Add, contentDescription = null) },
+        icon = { Icon(GameIcons.Add, contentDescription = "Counter game") },
         title = AppStrings.GAME_COUNTER,
         description = AppStrings.DESC_COUNTER,
         route = Screen.Counter.route

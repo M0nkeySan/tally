@@ -115,7 +115,7 @@ fun PlayerSelectorField(
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.Person, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Icon(Icons.Default.Person, contentDescription = "Player avatar", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Text(
                     text = "Select $label", 

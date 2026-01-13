@@ -144,7 +144,7 @@ fun SelectionSettingsSheet(
                      selected = config.mode == SelectionMode.FINGERS,
                      onClick = { onConfigChange(config.copy(mode = SelectionMode.FINGERS, count = 1)) },
                      label = { Text("Fingers") },
-                     leadingIcon = { Icon(GameIcons.TouchApp, null) }
+                     leadingIcon = { Icon(GameIcons.TouchApp, "Fingers filter") }
                  )
                 FilterChip(
                     selected = config.mode == SelectionMode.GROUPS,
@@ -442,7 +442,7 @@ fun FingerSelectorGame(
                 ) {
                     Icon(
                         imageVector = GameIcons.TouchApp,
-                        contentDescription = null,
+                        contentDescription = "Touch here to place finger",
                         tint = Color.White.copy(alpha = 0.6f),
                         modifier = Modifier.size(64.dp)
                     )

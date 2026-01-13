@@ -131,7 +131,7 @@ fun GameSelectionTemplate(
                                     showMenu = false
                                     onCreateNew()
                                 },
-                                leadingIcon = { Icon(Icons.Default.Add, contentDescription = null) }
+                                leadingIcon = { Icon(Icons.Default.Add, contentDescription = "Create new game") }
                             )
                             if (onDeleteAllGames != null && games.isNotEmpty()) {
                                 DropdownMenuItem(
@@ -140,7 +140,7 @@ fun GameSelectionTemplate(
                                         showMenu = false
                                         showDeleteAllDialog = true
                                     },
-                                    leadingIcon = { Icon(GameIcons.Delete, contentDescription = null) }
+                                    leadingIcon = { Icon(GameIcons.Delete, contentDescription = "Delete all games") }
                                 )
                             }
                         }

@@ -78,7 +78,7 @@ fun GameCard(
 @Composable
 private fun GameCardPreview() {
     GameCard(
-        icon = { Icon(Icons.Default.Casino, contentDescription = null) },
+        icon = { Icon(Icons.Default.Casino, contentDescription = "Game icon") },
         title = "Tarot",
         description = "Score Tarot games for 3-5 players",
         onClick = {}

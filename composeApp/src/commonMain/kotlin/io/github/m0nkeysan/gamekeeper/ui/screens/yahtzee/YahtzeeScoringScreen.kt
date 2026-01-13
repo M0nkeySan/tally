@@ -152,7 +152,7 @@ fun YahtzeeGameView(
                             
                             Icon(
                                 imageVector = androidx.compose.material.icons.Icons.Default.ArrowDropDown,
-                                contentDescription = null
+                                contentDescription = "Select player dropdown"
                             )
                         }
                         

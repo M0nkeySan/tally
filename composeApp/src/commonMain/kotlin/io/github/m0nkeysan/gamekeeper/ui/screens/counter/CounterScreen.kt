@@ -128,7 +128,7 @@ fun CounterScreen(
                                     showMenu = false
                                     showSettingsDialog = true
                                 },
-                                leadingIcon = { Icon(GameIcons.Settings, contentDescription = null) }
+                                leadingIcon = { Icon(GameIcons.Settings, contentDescription = "Settings menu") }
                             )
                             DropdownMenuItem(
                                 text = { Text("Reinitialise all") },
@@ -136,7 +136,7 @@ fun CounterScreen(
                                     showMenu = false
                                     showResetConfirmation = true
                                 },
-                                leadingIcon = { Icon(GameIcons.Refresh, contentDescription = null) }
+                                leadingIcon = { Icon(GameIcons.Refresh, contentDescription = "Reset all counters") }
                             )
                             DropdownMenuItem(
                                 text = { Text("Delete everything") },
@@ -144,7 +144,7 @@ fun CounterScreen(
                                     showMenu = false
                                     showDeleteAllConfirmation = true
                                 },
-                                leadingIcon = { Icon(GameIcons.Delete, contentDescription = null) }
+                                leadingIcon = { Icon(GameIcons.Delete, contentDescription = "Delete all counters") }
                             )
                         }
                     }
