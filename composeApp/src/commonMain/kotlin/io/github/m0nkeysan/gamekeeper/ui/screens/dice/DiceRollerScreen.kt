@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -103,13 +104,17 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                 .fillMaxSize()
                 .padding(paddingValues)
                 .background(DarkBackground)
-                .clickable(
+                .combinedClickable(
                     enabled = !isRolling,
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() },
                     onClick = {
                         hapticFeedback.performHapticFeedback(HapticType.LIGHT)
                         viewModel.rollDice()
+                    },
+                    onLongClick = {
+                        hapticFeedback.performHapticFeedback(HapticType.MEDIUM)
+                        showSettingsDialog = true
                     }
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -289,7 +294,7 @@ private fun DiceSettingsBottomSheetContent(
     onShowCustomDialog: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    var numberOfDice by remember { mutableStateOf(configuration.numberOfDice.toFloat()) }
+    var numberOfDice by remember { mutableFloatStateOf(configuration.numberOfDice.toFloat()) }
     var diceType by remember { mutableStateOf(configuration.diceType) }
     var animationEnabled by remember { mutableStateOf(configuration.animationEnabled) }
     var shakeEnabled by remember { mutableStateOf(configuration.shakeEnabled) }
