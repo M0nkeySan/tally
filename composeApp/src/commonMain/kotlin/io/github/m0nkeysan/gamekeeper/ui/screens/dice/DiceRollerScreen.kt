@@ -171,6 +171,7 @@ fun DiceRollerScreen(onBack: () -> Unit) {
             DiceResultBox(
                 currentRoll = currentRollState.value,
                 isRolling = isRolling,
+                animationEnabled = configuration.animationEnabled,
                 onTap = {
                     hapticFeedback.performHapticFeedback(HapticType.LIGHT)
                     viewModel.rollDice()
@@ -254,13 +255,14 @@ fun DiceRollerScreen(onBack: () -> Unit) {
 private fun DiceResultBox(
     currentRoll: DiceRoll?,
     isRolling: Boolean,
+    animationEnabled: Boolean,
     onTap: () -> Unit,
     onLongPress: () -> Unit
 ) {
     val boxScale by animateFloatAsState(
-        targetValue = if (isRolling) 0.85f else 1f,
-        animationSpec = if (isRolling) {
-            tween(durationMillis = 150, easing = FastOutSlowInEasing)
+        targetValue = if (isRolling) DiceConstants.BOX_SCALE_RATIO else 1f,
+        animationSpec = if (isRolling && animationEnabled) {
+            tween(durationMillis = DiceConstants.BOX_SCALE_ANIMATION_DURATION_MS, easing = FastOutSlowInEasing)
         } else {
             spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow)
         },
@@ -268,14 +270,14 @@ private fun DiceResultBox(
     )
 
     val textAlpha by animateFloatAsState(
-        targetValue = if (isRolling) 0.5f else 1f,
+        targetValue = if (isRolling && animationEnabled) 0.5f else 1f,
         label = "textAlpha"
     )
 
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .size(240.dp)
+            .size(DiceConstants.DICE_BOX_SIZE)
             .graphicsLayer {
                 scaleX = boxScale
                 scaleY = boxScale
@@ -338,8 +340,8 @@ private fun DiceSettingsBottomSheetContent(
                 Slider(
                     value = numberOfDice,
                     onValueChange = { numberOfDice = it },
-                    valueRange = 1f..5f,
-                    steps = 3,
+                    valueRange = DiceConstants.MIN_NUMBER_OF_DICE.toFloat()..DiceConstants.MAX_NUMBER_OF_DICE.toFloat(),
+                    steps = DiceConstants.DICE_SLIDER_STEPS,
                     modifier = Modifier.weight(1f)
                 )
                 Text(
@@ -381,8 +383,8 @@ private fun DiceSettingsBottomSheetContent(
                  customInputError = when {
                      customInput.isBlank() -> null
                      customInput.toIntOrNull() == null -> "Must be a valid number"
-                     customInput.toInt() < 2 -> "Minimum is 2 sides"
-                     customInput.toInt() > 99 -> "Maximum is 99 sides"
+                     customInput.toInt() < DiceConstants.MIN_CUSTOM_SIDES -> "Minimum is ${DiceConstants.MIN_CUSTOM_SIDES} sides"
+                     customInput.toInt() > DiceConstants.MAX_CUSTOM_SIDES -> "Maximum is ${DiceConstants.MAX_CUSTOM_SIDES} sides"
                      else -> null
                  }
              }
@@ -393,7 +395,7 @@ private fun DiceSettingsBottomSheetContent(
                      customInput = it
                      if (it.isNotBlank() && it.toIntOrNull() != null) {
                          val sides = it.toInt()
-                         if (sides in 2..99) {
+                         if (sides in DiceConstants.MIN_CUSTOM_SIDES..DiceConstants.MAX_CUSTOM_SIDES) {
                              diceType = DiceType.Custom(sides)
                          }
                      }
