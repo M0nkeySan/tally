@@ -1,0 +1,50 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+
+    <!-- DIE 1: Top Left -->
+    <group
+        android:rotation="-25"
+        android:pivotX="10"
+        android:pivotY="10">
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="
+                M6,4 h8 a2,2 0 0 1 2,2 v8 a2,2 0 0 1 -2,2 h-8 a2,2 0 0 1 -2,-2 v-8 a2,2 0 0 1 2,-2 z
+                M7,7 m-1.2,0 a1.2,1.2 0 1,0 2.4,0 a1.2,1.2 0 1,0 -2.4,0
+                M13,13 m-1.2,0 a1.2,1.2 0 1,0 2.4,0 a1.2,1.2 0 1,0 -2.4,0"/>
+    </group>
+
+    <!-- DIE 2: Bottom Left -->
+    <group
+        android:rotation="45"
+        android:pivotX="8"
+        android:pivotY="22">
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="
+                M6.5,19 h5 a1.5,1.5 0 0 1 1.5,1.5 v5 a1.5,1.5 0 0 1 -1.5,1.5 h-5 a1.5,1.5 0 0 1 -1.5,-1.5 v-5 a1.5,1.5 0 0 1 1.5,-1.5 z
+                M9,23 m-1.2,0 a1.2,1.2 0 1,0 2.4,0 a1.2,1.2 0 1,0 -2.4,0"/>
+    </group>
+
+    <!-- DIE 3: Main Right -->
+    <group
+        android:rotation="15"
+        android:pivotX="22"
+        android:pivotY="18">
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="
+                M18,11 h8 a3,3 0 0 1 3,3 v8 a3,3 0 0 1 -3,3 h-8 a3,3 0 0 1 -3,-3 v-8 a3,3 0 0 1 3,-3 z
+                M18.5,14.5 m-1.3,0 a1.3,1.3 0 1,0 2.6,0 a1.3,1.3 0 1,0 -2.6,0
+                M25.5,14.5 m-1.3,0 a1.3,1.3 0 1,0 2.6,0 a1.3,1.3 0 1,0 -2.6,0
+                M22,18 m-1.3,0 a1.3,1.3 0 1,0 2.6,0 a1.3,1.3 0 1,0 -2.6,0
+                M18.5,21.5 m-1.3,0 a1.3,1.3 0 1,0 2.6,0 a1.3,1.3 0 1,0 -2.6,0
+                M25.5,21.5 m-1.3,0 a1.3,1.3 0 1,0 2.6,0 a1.3,1.3 0 1,0 -2.6,0"/>
+    </group>
+</vector>
