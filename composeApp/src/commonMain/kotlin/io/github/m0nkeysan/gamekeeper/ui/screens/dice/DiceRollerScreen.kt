@@ -106,7 +106,7 @@ fun DiceRollerScreen(onBack: () -> Unit) {
         containerColor = GameColors.Surface0,
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
-        Column(
+         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
@@ -123,6 +123,30 @@ fun DiceRollerScreen(onBack: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
+            // Top: Configuration Badge
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Surface(
+                    color = GameColors.PrimaryLight,
+                    shape = RoundedCornerShape(50),
+                    modifier = Modifier.height(40.dp)
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.padding(horizontal = 24.dp)
+                    ) {
+                        Text(
+                            text = "${configuration.numberOfDice} × d${configuration.diceType.sides}",
+                            color = GameColors.Primary,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
+
             Spacer(modifier = Modifier.height(24.dp))
 
             // Center: Big box with total value
@@ -168,8 +192,10 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                     
                     Text(
                         text = "Rolls: $rollsString",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = GameColors.TextPrimary
+                        style = MaterialTheme.typography.titleSmall,
+                        color = GameColors.TextPrimary,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -190,9 +216,10 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                 // Total Text
                 Text(
                     text = "Total: ${currentRoll?.total ?: 0}",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = GameColors.Primary,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 28.sp
                 )
                 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -315,12 +342,39 @@ private fun DiceSettingsBottomSheetContent(
         }
         
         // Dice Type Selection
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("Dice Type", style = MaterialTheme.typography.labelMedium)
             DiceTypeSelector(
                 selectedType = diceType,
-                onTypeSelected = { diceType = it },
-                onCustomSelected = onShowCustomDialog
+                onTypeSelected = { diceType = it }
+            )
+            
+            // Custom Input
+            Text("Custom Dice", style = MaterialTheme.typography.labelMedium)
+            var customInput by remember { mutableStateOf(if (diceType is DiceType.Custom) diceType.sides.toString() else "") }
+            TextField(
+                value = customInput,
+                onValueChange = { 
+                    customInput = it
+                    if (it.isNotBlank() && it.toIntOrNull() != null) {
+                        val sides = it.toInt()
+                        if (sides in 2..99) {
+                            diceType = DiceType.Custom(sides)
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = { Text("2-99", color = GameColors.TextSecondary) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = GameColors.Surface1,
+                    unfocusedContainerColor = GameColors.Surface1,
+                    focusedIndicatorColor = GameColors.Primary,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    cursorColor = GameColors.Primary
+                ),
+                shape = MaterialTheme.shapes.medium
             )
         }
         
@@ -540,8 +594,7 @@ private fun CustomDiceBottomSheetContent(
 @Composable
 private fun DiceTypeSelector(
     selectedType: DiceType,
-    onTypeSelected: (DiceType) -> Unit,
-    onCustomSelected: () -> Unit
+    onTypeSelected: (DiceType) -> Unit
 ) {
     val standardDiceTypes = listOf(
         DiceType.D4,
@@ -552,47 +605,22 @@ private fun DiceTypeSelector(
         DiceType.D20
     )
     
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        // Standard dice chips
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            standardDiceTypes.chunked(3).forEach { row ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    row.forEach { type ->
-                        DiceTypeChip(
-                            text = type.displayName.uppercase(),
-                            selected = selectedType == type,
-                            onClick = { onTypeSelected(type) },
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                    repeat(3 - row.size) {
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
-            }
-        }
-        
-        // Custom dice button
-        OutlinedButton(
-            onClick = onCustomSelected,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(40.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = if (selectedType is DiceType.Custom) GameColors.Primary else GameColors.TextSecondary
-            )
+    standardDiceTypes.chunked(3).forEach { row ->
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                text = if (selectedType is DiceType.Custom) 
-                    "Custom (${selectedType.sides})" 
-                else 
-                    "Custom",
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Bold
-            )
+            row.forEach { type ->
+                DiceTypeChip(
+                    text = type.displayName.uppercase(),
+                    selected = selectedType == type,
+                    onClick = { onTypeSelected(type) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            repeat(3 - row.size) {
+                Spacer(modifier = Modifier.weight(1f))
+            }
         }
     }
 }
