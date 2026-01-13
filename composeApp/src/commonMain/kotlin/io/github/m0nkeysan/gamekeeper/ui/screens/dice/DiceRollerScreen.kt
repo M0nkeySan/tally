@@ -67,6 +67,26 @@ import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.gamekeeper.platform.rememberShakeDetector
 
+/**
+ * Main Dice Roller Screen
+ *
+ * Features:
+ * - Roll dice with configurable number and type (d4-d20 or custom 2-99)
+ * - Real-time configuration display in TopAppBar
+ * - Visual animation during rolls (optional)
+ * - Shake-to-roll detection (optional)
+ * - Settings dialog for configuration
+ * - Custom input validation with error messages
+ * - Full dark mode support
+ *
+ * Interactions:
+ * - Tap anywhere: Roll dice
+ * - Long-press dice box: Open settings
+ * - Tap settings icon: Open settings
+ * - Shake device: Roll dice (if enabled)
+ *
+ * @param onBack Callback to navigate back from this screen
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiceRollerScreen(onBack: () -> Unit) {
@@ -255,6 +275,24 @@ fun DiceRollerScreen(onBack: () -> Unit) {
     }
 }
 
+/**
+ * Display box showing the current dice roll total.
+ *
+ * Provides visual feedback during rolling:
+ * - Scale animation during roll (if animationEnabled)
+ * - Text alpha fade during roll (if animationEnabled)
+ * - Spring bounce animation when roll completes
+ *
+ * Interactions:
+ * - Single tap: Roll dice
+ * - Long press: Open settings
+ *
+ * @param currentRoll The current dice roll result, or null if no roll yet
+ * @param isRolling Whether the dice are currently being rolled
+ * @param animationEnabled Whether to show visual animations
+ * @param onTap Callback when dice box is tapped
+ * @param onLongPress Callback when dice box is long-pressed
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DiceResultBox(
@@ -309,7 +347,23 @@ private fun DiceResultBox(
 }
 
 /**
- * Bottom sheet content for dice settings
+ * Bottom sheet content for dice settings configuration.
+ *
+ * Allows users to:
+ * - Adjust number of dice (1-5) with slider
+ * - Select dice type (d4, d6, d8, d10, d12, d20)
+ * - Enter custom dice sides (2-99) with validation
+ * - Toggle animation on/off
+ * - Toggle shake-to-roll on/off
+ *
+ * Features:
+ * - Real-time validation with error messages
+ * - Live configuration preview in state variables
+ * - Cancel/Save buttons for confirmation
+ *
+ * @param configuration Current dice configuration
+ * @param onConfirm Callback when Save is clicked with new configuration
+ * @param onDismiss Callback when Cancel is clicked or sheet is dismissed
  */
 @Composable
 private fun DiceSettingsBottomSheetContent(
@@ -496,6 +550,17 @@ private fun DiceSettingsBottomSheetContent(
     }
 }
 
+/**
+ * Selector for standard dice types.
+ *
+ * Displays 6 buttons for common RPG dice:
+ * - d4, d6, d8, d10, d12, d20
+ *
+ * Arranged in 2 rows of 3 buttons each.
+ *
+ * @param selectedType Currently selected dice type
+ * @param onTypeSelected Callback when a dice type is selected
+ */
 @Composable
 private fun DiceTypeSelector(
     selectedType: DiceType,
@@ -530,6 +595,18 @@ private fun DiceTypeSelector(
     }
 }
 
+/**
+ * Individual button chip for selecting a dice type.
+ *
+ * Visual feedback:
+ * - Selected state: Primary color background
+ * - Unselected state: Surface variant background
+ *
+ * @param text Display text for the chip (e.g., "D6")
+ * @param selected Whether this chip is currently selected
+ * @param onClick Callback when chip is clicked
+ * @param modifier Optional modifier for customization
+ */
 @Composable
 private fun DiceTypeChip(
     text: String,
