@@ -37,22 +37,14 @@ import io.github.m0nkeysan.gamekeeper.platform.rememberShakeDetector
 import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
-// Dark theme colors
-private val DarkBackground = Color(0xFF1C1C1E)
-private val SurfaceDark = Color(0xFF2C2C2E)
-private val AccentRed = Color(0xFFE57373)
-private val TextWhite = Color(0xFFF2F2F7)
-private val DarkChipBg = Color(0xFF252022)
-
 /**
- * Dice Roller Screen with Dark Theme
+ * Dice Roller Screen matching GameKeeper design
  *
  * Layout:
- * - Top: "Dé" title and configuration chip (5 × d20)
+ * - Top: Centered title with back button
  * - Center: Large bordered box with total value
- * - Bottom: Individual rolls, arrow, total, instruction text
- * - Clickable anywhere to roll
- * - ModalBottomSheet for settings
+ * - Bottom: Individual rolls, total, instruction text
+ * - Tap to roll or long-press big square for settings
  * - Shake detection integration
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,117 +76,100 @@ fun DiceRollerScreen(onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back", tint = TextWhite)
+                title = { 
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                "Dice",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "${configuration.numberOfDice}d${configuration.diceType.sides}",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = DarkBackground
-                ),
-                modifier = Modifier.fillMaxWidth()
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                    }
+                }
             )
         },
-        containerColor = DarkBackground,
+        containerColor = GameColors.Surface0,
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(DarkBackground)
-                .combinedClickable(
+                .background(GameColors.Surface0)
+                .clickable(
                     enabled = !isRolling,
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() },
                     onClick = {
                         hapticFeedback.performHapticFeedback(HapticType.LIGHT)
                         viewModel.rollDice()
-                    },
-                    onLongClick = {
-                        hapticFeedback.performHapticFeedback(HapticType.MEDIUM)
-                        showSettingsDialog = true
                     }
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // --- TOP SECTION: Title and Chip ---
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 20.dp)
-            ) {
-                Text(
-                    text = "Dé",
-                    color = TextWhite,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                
-                Spacer(modifier = Modifier.height(20.dp))
-                
-                // Configuration Chip
-                Surface(
-                    color = DarkChipBg,
-                    shape = RoundedCornerShape(50),
-                    modifier = Modifier.height(40.dp)
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.padding(horizontal = 24.dp)
-                    ) {
-                        Text(
-                            text = "${configuration.numberOfDice} × d${configuration.diceType.sides}",
-                            color = AccentRed,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }
+            Spacer(modifier = Modifier.height(24.dp))
 
-            // --- CENTER SECTION: The Big Box ---
+            // Center: Big box with total value
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .size(300.dp)
-                    .border(
-                        width = 2.dp,
-                        color = AccentRed,
-                        shape = RoundedCornerShape(32.dp)
+                    .size(240.dp)
+                    .background(
+                        color = GameColors.Primary,
+                        shape = MaterialTheme.shapes.large
                     )
-                    .clickable(
+                    .combinedClickable(
                         enabled = !isRolling,
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() },
                         onClick = {
                             hapticFeedback.performHapticFeedback(HapticType.LIGHT)
                             viewModel.rollDice()
+                        },
+                        onLongClick = {
+                            hapticFeedback.performHapticFeedback(HapticType.MEDIUM)
+                            showSettingsDialog = true
                         }
                     )
             ) {
                 Text(
                     text = (currentRoll?.total ?: 0).toString(),
-                    fontSize = 120.sp,
-                    color = TextWhite,
-                    fontWeight = FontWeight.Normal
+                    fontSize = 96.sp,
+                    color = GameColors.Surface0,
+                    fontWeight = FontWeight.Bold
                 )
             }
 
-            // --- BOTTOM SECTION: Details ---
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Bottom: Results summary
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(bottom = 40.dp, start = 16.dp, end = 16.dp)
             ) {
-                // Individual Rolls - [7] [3] [9]
                 if (currentRoll != null && currentRoll!!.individualResults.isNotEmpty()) {
-                    val rollsString = currentRoll!!.individualResults.joinToString(" ") { "[$it]" }
+                    val rollsString = currentRoll!!.individualResults.joinToString(", ")
                     
                     Text(
-                        text = "Lancer(s) : $rollsString",
-                        color = TextWhite,
-                        fontSize = 18.sp,
-                        fontFamily = FontFamily.Monospace
+                        text = "Rolls: $rollsString",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = GameColors.TextPrimary
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -203,7 +178,7 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                     Icon(
                         imageVector = Icons.Default.South,
                         contentDescription = null,
-                        tint = TextWhite,
+                        tint = GameColors.TextSecondary,
                         modifier = Modifier.size(20.dp)
                     )
 
@@ -214,19 +189,19 @@ fun DiceRollerScreen(onBack: () -> Unit) {
 
                 // Total Text
                 Text(
-                    text = "Total : ${currentRoll?.total ?: 0}",
-                    color = TextWhite,
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily.Monospace
+                    text = "Total: ${currentRoll?.total ?: 0}",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = GameColors.Primary,
+                    fontWeight = FontWeight.Bold
                 )
                 
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
                 // Helper Text
                 Text(
-                    text = "Pour lancer les dés, touchez n'importe où sur l'écran.",
-                    color = Color.Gray,
-                    fontSize = 14.sp,
+                    text = "Tap anywhere to roll. Long-press the box for settings.",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = GameColors.TextSecondary,
                     textAlign = TextAlign.Center
                 )
             }
@@ -238,7 +213,7 @@ fun DiceRollerScreen(onBack: () -> Unit) {
         ModalBottomSheet(
             onDismissRequest = { showSettingsDialog = false },
             sheetState = settingsSheetState,
-            containerColor = SurfaceDark,
+            containerColor = GameColors.Surface0,
             scrimColor = Color.Black.copy(alpha = 0.32f)
         ) {
             DiceSettingsBottomSheetContent(
@@ -261,7 +236,7 @@ fun DiceRollerScreen(onBack: () -> Unit) {
         ModalBottomSheet(
             onDismissRequest = { showCustomDialog = false },
             sheetState = customSheetState,
-            containerColor = SurfaceDark,
+            containerColor = GameColors.Surface0,
             scrimColor = Color.Black.copy(alpha = 0.32f)
         ) {
             CustomDiceBottomSheetContent(
