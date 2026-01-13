@@ -11,6 +11,7 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.common.HomeNavigationTemplate
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterHistoryScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.EditCounterScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.dice.DiceRollerScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.fingerselector.FingerSelectorScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameCreationScreen
@@ -235,6 +236,12 @@ fun GameNavGraph() {
                 onBack = {
                     navController.popBackStack()
                 }
+            )
+        }
+
+        composable(route = Screen.DiceRoller.route) {
+            DiceRollerScreen(
+                onBack = { navController.popBackStack() }
             )
         }
     }

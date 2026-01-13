@@ -49,7 +49,8 @@ class HomeViewModel : ViewModel() {
             "finger_selector",
             "tarot",
             "yahtzee",
-            "counter"
+            "counter",
+            "dice_roller"
         )
     }
 }

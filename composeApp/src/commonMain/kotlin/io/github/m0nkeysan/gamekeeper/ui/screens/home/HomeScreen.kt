@@ -227,5 +227,12 @@ private val gameFeatureMap = mapOf(
         title = AppStrings.GAME_COUNTER,
         description = AppStrings.DESC_COUNTER,
         route = Screen.Counter.route
+    ),
+    "dice_roller" to GameFeature(
+        id = "dice_roller",
+        icon = { Icon(GameIcons.Casino, contentDescription = "Dice Roller game") },
+        title = AppStrings.GAME_DICE,
+        description = AppStrings.DESC_DICE,
+        route = Screen.DiceRoller.route
     )
 )
