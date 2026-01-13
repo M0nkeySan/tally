@@ -12,91 +12,73 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-/**
- * ViewModel for Dice Roller screen
- * 
- * Manages:
- * - Dice configuration (number, type, animation, shake)
- * - Roll logic and animation timing
- * - Persistence of user preferences
- */
 class DiceRollerViewModel : ViewModel() {
     private val userPreferencesRepository = PlatformRepositories.getUserPreferencesRepository()
-    
-    // Configuration state - loaded from preferences
+
+    // Configuration state
     private val _configuration = MutableStateFlow(DiceConfiguration())
     val configuration: StateFlow<DiceConfiguration> = _configuration.asStateFlow()
-    
+
     // Current roll result
     private val _currentRoll = MutableStateFlow<DiceRoll?>(null)
     val currentRoll: StateFlow<DiceRoll?> = _currentRoll.asStateFlow()
-    
+
     // Rolling animation state
     private val _isRolling = MutableStateFlow(false)
     val isRolling: StateFlow<Boolean> = _isRolling.asStateFlow()
-    
+
     init {
-        // Load saved configuration from preferences
+        // Load saved configuration
         viewModelScope.launch {
             userPreferencesRepository.getDiceConfiguration()
                 .collect { config ->
                     _configuration.value = config
+                    // Generate an initial static result so the box isn't empty on start
+                    if (_currentRoll.value == null) {
+                        generateRoll(config, isTemp = false)
+                    }
                 }
         }
     }
-    
-    /**
-     * Execute a dice roll with animation
-     * 
-     * Animation flow:
-     * 1. Set isRolling = true (triggers 2D rotation animation)
-     * 2. Wait for animation duration (800ms if enabled)
-     * 3. Generate random results
-     * 4. Create DiceRoll object
-     * 5. Set currentRoll (displays results)
-     * 6. Set isRolling = false
-     */
+
     fun rollDice() {
-        // Prevent concurrent rolls
         if (_isRolling.value) return
-        
+
         viewModelScope.launch {
             _isRolling.value = true
-            
-            // Simulate animation delay if enabled
-            // Gives visual feedback that something is happening
-            if (_configuration.value.animationEnabled) {
-                delay(800) // 2D rotation animation duration
+            val config = _configuration.value
+
+            if (config.animationEnabled) {
+                // Digital Scramble Effect:
+                // Rapidly cycle numbers to simulate calculation/chaos
+                repeat(12) {
+                    generateRoll(config, isTemp = true)
+                    delay(60) // Short delay between number changes
+                }
             }
-            
-            // Generate random results for each die
-            val results = List(_configuration.value.numberOfDice) {
-                Random.nextInt(1, _configuration.value.diceType.sides + 1)
-            }
-            
-            // Create roll object
-            val roll = DiceRoll(
-                individualResults = results,
-                total = results.sum()
-            )
-            
-            // Update state with results
-            _currentRoll.value = roll
-            
-            // Animation complete
+
+            // Final Result (The one that counts)
+            generateRoll(config, isTemp = false)
             _isRolling.value = false
         }
     }
-    
-    /**
-     * Update dice configuration and save to preferences
-     * 
-     * @param config New configuration to save
-     */
+
+    private fun generateRoll(config: DiceConfiguration, isTemp: Boolean) {
+        val results = List(config.numberOfDice) {
+            Random.nextInt(1, config.diceType.sides + 1)
+        }
+        _currentRoll.value = DiceRoll(
+            individualResults = results,
+            total = results.sum()
+        )
+    }
+
     fun updateConfiguration(config: DiceConfiguration) {
         viewModelScope.launch {
             _configuration.value = config
             userPreferencesRepository.saveDiceConfiguration(config)
+            // Reset roll when config changes to avoid confusion
+            generateRoll(config, isTemp = false)
         }
     }
 }
