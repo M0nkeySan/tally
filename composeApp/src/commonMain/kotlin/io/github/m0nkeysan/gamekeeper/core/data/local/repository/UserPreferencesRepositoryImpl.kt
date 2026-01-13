@@ -72,13 +72,17 @@ class UserPreferencesRepositoryImpl(
         return "{numberOfDice:${config.numberOfDice},diceType:$diceTypeStr,animation:${config.animationEnabled},shake:${config.shakeEnabled}}"
     }
     
-    private fun parseDiceConfiguration(json: String): DiceConfiguration {
-        return try {
-            val cleaned = json.removeSurrounding("{", "}")
-            val parts = cleaned.split(",").associate { part ->
-                val (key, value) = part.split(":").let { Pair(it[0], it.getOrNull(1) ?: "") }
-                key to value
-            }
+     private fun parseDiceConfiguration(json: String): DiceConfiguration {
+         return try {
+             val cleaned = json.removeSurrounding("{", "}")
+             val parts = cleaned.split(",").associate { part ->
+                 val colonIndex = part.indexOf(":")
+                 if (colonIndex == -1) {
+                     Pair(part, "")
+                 } else {
+                     Pair(part.substring(0, colonIndex), part.substring(colonIndex + 1))
+                 }
+             }
             
             val numberOfDice = parts["numberOfDice"]?.toIntOrNull() ?: 1
             val diceType = when {
