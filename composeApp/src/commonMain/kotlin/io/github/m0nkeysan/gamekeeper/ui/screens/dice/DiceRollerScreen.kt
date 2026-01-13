@@ -73,221 +73,221 @@ fun DiceRollerScreen(onBack: () -> Unit) {
         enabled = configuration.shakeEnabled
     )
     
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { 
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                "Dice",
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = "${configuration.numberOfDice}d${configuration.diceType.sides}",
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                        }
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { showSettingsDialog = true }) {
-                        Icon(GameIcons.Settings, contentDescription = "Settings")
-                    }
-                }
-            )
-        },
-        containerColor = GameColors.Surface0,
-        modifier = Modifier.fillMaxSize()
-    ) { paddingValues ->
-         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .background(GameColors.Surface0)
-                .clickable(
-                    enabled = !isRolling,
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() },
-                    onClick = {
-                        hapticFeedback.performHapticFeedback(HapticType.LIGHT)
-                        viewModel.rollDice()
-                    }
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            // Top: Configuration Badge
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 32.dp)
-            ) {
-                Surface(
-                    color = GameColors.PrimaryLight,
-                    shape = RoundedCornerShape(50),
-                    modifier = Modifier.height(48.dp)
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.padding(horizontal = 32.dp)
-                    ) {
-                        Text(
-                            text = "${configuration.numberOfDice} × d${configuration.diceType.sides}",
-                            color = GameColors.Primary,
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.titleSmall,
-                            fontSize = 16.sp
-                        )
-                    }
-                }
-            }
+     Scaffold(
+         topBar = {
+             TopAppBar(
+                 title = { 
+                     Box(
+                         modifier = Modifier.fillMaxWidth(),
+                         contentAlignment = Alignment.Center
+                     ) {
+                         Column(
+                             horizontalAlignment = Alignment.CenterHorizontally
+                         ) {
+                             Text(
+                                 "Dice",
+                                 style = MaterialTheme.typography.titleLarge,
+                                 fontWeight = FontWeight.Bold
+                             )
+                             Text(
+                                 text = "${configuration.numberOfDice}d${configuration.diceType.sides}",
+                                 style = MaterialTheme.typography.bodySmall
+                             )
+                         }
+                     }
+                 },
+                 navigationIcon = {
+                     IconButton(onClick = onBack) {
+                         Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                     }
+                 },
+                 actions = {
+                     IconButton(onClick = { showSettingsDialog = true }) {
+                         Icon(GameIcons.Settings, contentDescription = "Settings")
+                     }
+                 }
+             )
+         },
+         containerColor = MaterialTheme.colorScheme.background,
+         modifier = Modifier.fillMaxSize()
+     ) { paddingValues ->
+          Column(
+             modifier = Modifier
+                 .fillMaxSize()
+                 .padding(paddingValues)
+                 .background(MaterialTheme.colorScheme.background)
+                 .clickable(
+                     enabled = !isRolling,
+                     indication = null,
+                     interactionSource = remember { MutableInteractionSource() },
+                     onClick = {
+                         hapticFeedback.performHapticFeedback(HapticType.LIGHT)
+                         viewModel.rollDice()
+                     }
+                 ),
+             horizontalAlignment = Alignment.CenterHorizontally,
+             verticalArrangement = Arrangement.SpaceBetween
+         ) {
+             // Top: Configuration Badge
+             Column(
+                 horizontalAlignment = Alignment.CenterHorizontally,
+                 modifier = Modifier.padding(top = 32.dp)
+             ) {
+                 Surface(
+                     color = MaterialTheme.colorScheme.primaryContainer,
+                     shape = RoundedCornerShape(50),
+                     modifier = Modifier.height(48.dp)
+                 ) {
+                     Box(
+                         contentAlignment = Alignment.Center,
+                         modifier = Modifier.padding(horizontal = 32.dp)
+                     ) {
+                         Text(
+                             text = "${configuration.numberOfDice} × d${configuration.diceType.sides}",
+                             color = MaterialTheme.colorScheme.primary,
+                             fontWeight = FontWeight.Bold,
+                             style = MaterialTheme.typography.titleSmall,
+                             fontSize = 16.sp
+                         )
+                     }
+                 }
+             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+             Spacer(modifier = Modifier.height(32.dp))
 
-            // Center: Big box with total value
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(240.dp)
-                    .background(
-                        color = GameColors.Primary,
-                        shape = MaterialTheme.shapes.large
-                    )
-                    .combinedClickable(
-                        enabled = !isRolling,
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = {
-                            hapticFeedback.performHapticFeedback(HapticType.LIGHT)
-                            viewModel.rollDice()
-                        },
-                        onLongClick = {
-                            hapticFeedback.performHapticFeedback(HapticType.MEDIUM)
-                            showSettingsDialog = true
-                        }
-                    )
-            ) {
-                Text(
-                    text = (currentRoll?.total ?: 0).toString(),
-                    fontSize = 96.sp,
-                    color = GameColors.Surface0,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+             // Center: Big box with total value
+             Box(
+                 contentAlignment = Alignment.Center,
+                 modifier = Modifier
+                     .size(240.dp)
+                     .background(
+                         color = MaterialTheme.colorScheme.primary,
+                         shape = MaterialTheme.shapes.large
+                     )
+                     .combinedClickable(
+                         enabled = !isRolling,
+                         indication = null,
+                         interactionSource = remember { MutableInteractionSource() },
+                         onClick = {
+                             hapticFeedback.performHapticFeedback(HapticType.LIGHT)
+                             viewModel.rollDice()
+                         },
+                         onLongClick = {
+                             hapticFeedback.performHapticFeedback(HapticType.MEDIUM)
+                             showSettingsDialog = true
+                         }
+                     )
+             ) {
+                 Text(
+                     text = (currentRoll?.total ?: 0).toString(),
+                     fontSize = 96.sp,
+                     color = MaterialTheme.colorScheme.onPrimary,
+                     fontWeight = FontWeight.Bold
+                 )
+             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+             Spacer(modifier = Modifier.height(24.dp))
 
-            // Bottom: Results summary
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(bottom = 40.dp, start = 16.dp, end = 16.dp)
-            ) {
-                if (currentRoll != null && currentRoll!!.individualResults.isNotEmpty()) {
-                    val rollsString = currentRoll!!.individualResults.joinToString(" ") { "[$it]" }
-                    
-                    Text(
-                        text = "Rolls: $rollsString",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = GameColors.TextPrimary,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+             // Bottom: Results summary
+             Column(
+                 horizontalAlignment = Alignment.CenterHorizontally,
+                 modifier = Modifier.padding(bottom = 40.dp, start = 16.dp, end = 16.dp)
+             ) {
+                 if (currentRoll != null && currentRoll!!.individualResults.isNotEmpty()) {
+                     val rollsString = currentRoll!!.individualResults.joinToString(" ") { "[$it]" }
+                     
+                     Text(
+                         text = "Rolls: $rollsString",
+                         style = MaterialTheme.typography.titleSmall,
+                         color = MaterialTheme.colorScheme.onBackground,
+                         fontSize = 18.sp,
+                         fontWeight = FontWeight.Bold
+                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Down Arrow
-                    Icon(
-                        imageVector = Icons.Default.South,
-                        contentDescription = null,
-                        tint = GameColors.TextSecondary,
-                        modifier = Modifier.size(20.dp)
-                    )
+                     // Down Arrow
+                     Icon(
+                         imageVector = Icons.Default.South,
+                         contentDescription = null,
+                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                         modifier = Modifier.size(20.dp)
+                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
-                } else {
-                    Spacer(modifier = Modifier.height(60.dp))
-                }
+                     Spacer(modifier = Modifier.height(8.dp))
+                 } else {
+                     Spacer(modifier = Modifier.height(60.dp))
+                 }
 
-                // Total Text
-                Text(
-                    text = "Total: ${currentRoll?.total ?: 0}",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = GameColors.Primary,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp
-                )
-                
-                Spacer(modifier = Modifier.height(32.dp))
+                 // Total Text
+                 Text(
+                     text = "Total: ${currentRoll?.total ?: 0}",
+                     style = MaterialTheme.typography.headlineSmall,
+                     color = MaterialTheme.colorScheme.primary,
+                     fontWeight = FontWeight.Bold,
+                     fontSize = 28.sp
+                 )
+                 
+                 Spacer(modifier = Modifier.height(32.dp))
 
-                // Helper Text
-                Text(
-                    text = "Tap anywhere to roll. Long-press the box for settings.",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = GameColors.TextSecondary,
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
-    }
+                 // Helper Text
+                 Text(
+                     text = "Tap anywhere to roll. Long-press the box for settings.",
+                     style = MaterialTheme.typography.labelMedium,
+                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                     textAlign = TextAlign.Center
+                 )
+             }
+         }
+     }
     
-    // Settings Bottom Sheet
-    if (showSettingsDialog) {
-        ModalBottomSheet(
-            onDismissRequest = { showSettingsDialog = false },
-            sheetState = settingsSheetState,
-            containerColor = GameColors.Surface0,
-            scrimColor = Color.Black.copy(alpha = 0.32f)
-        ) {
-            DiceSettingsBottomSheetContent(
-                configuration = configuration,
-                onConfirm = { newConfig ->
-                    viewModel.updateConfiguration(newConfig)
-                    showSettingsDialog = false
-                    hapticFeedback.performHapticFeedback(HapticType.SUCCESS)
-                },
-                onShowCustomDialog = {
-                    showCustomDialog = true
-                },
-                onDismiss = { showSettingsDialog = false }
-            )
-        }
-    }
-    
-    // Custom Dice Bottom Sheet
-    if (showCustomDialog) {
-        ModalBottomSheet(
-            onDismissRequest = { showCustomDialog = false },
-            sheetState = customSheetState,
-            containerColor = GameColors.Surface0,
-            scrimColor = Color.Black.copy(alpha = 0.32f)
-        ) {
-            CustomDiceBottomSheetContent(
-                onConfirm = { customType ->
-                    val newConfig = configuration.copy(diceType = customType)
-                    viewModel.updateConfiguration(newConfig)
-                    showCustomDialog = false
-                    showSettingsDialog = false
-                    hapticFeedback.performHapticFeedback(HapticType.SUCCESS)
-                },
-                onDismiss = { showCustomDialog = false },
-                initialSides = if (configuration.diceType is DiceType.Custom) 
-                    configuration.diceType.sides 
-                else 
-                    20
-            )
-        }
-    }
+     // Settings Bottom Sheet
+     if (showSettingsDialog) {
+         ModalBottomSheet(
+             onDismissRequest = { showSettingsDialog = false },
+             sheetState = settingsSheetState,
+             containerColor = MaterialTheme.colorScheme.surface,
+             scrimColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.32f)
+         ) {
+             DiceSettingsBottomSheetContent(
+                 configuration = configuration,
+                 onConfirm = { newConfig ->
+                     viewModel.updateConfiguration(newConfig)
+                     showSettingsDialog = false
+                     hapticFeedback.performHapticFeedback(HapticType.SUCCESS)
+                 },
+                 onShowCustomDialog = {
+                     showCustomDialog = true
+                 },
+                 onDismiss = { showSettingsDialog = false }
+             )
+         }
+     }
+     
+     // Custom Dice Bottom Sheet
+     if (showCustomDialog) {
+         ModalBottomSheet(
+             onDismissRequest = { showCustomDialog = false },
+             sheetState = customSheetState,
+             containerColor = MaterialTheme.colorScheme.surface,
+             scrimColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.32f)
+         ) {
+             CustomDiceBottomSheetContent(
+                 onConfirm = { customType ->
+                     val newConfig = configuration.copy(diceType = customType)
+                     viewModel.updateConfiguration(newConfig)
+                     showCustomDialog = false
+                     showSettingsDialog = false
+                     hapticFeedback.performHapticFeedback(HapticType.SUCCESS)
+                 },
+                 onDismiss = { showCustomDialog = false },
+                 initialSides = if (configuration.diceType is DiceType.Custom) 
+                     configuration.diceType.sides 
+                 else 
+                     20
+             )
+         }
+     }
 }
 
 
@@ -307,149 +307,149 @@ private fun DiceSettingsBottomSheetContent(
     var animationEnabled by remember { mutableStateOf(configuration.animationEnabled) }
     var shakeEnabled by remember { mutableStateOf(configuration.shakeEnabled) }
     
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
-        // Header
-        Text(
-            text = "Dice Settings",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            color = GameColors.Primary
-        )
-        
-        // Number of Dice Slider
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Number of Dice", style = MaterialTheme.typography.labelMedium)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Slider(
-                    value = numberOfDice,
-                    onValueChange = { numberOfDice = it },
-                    valueRange = 1f..5f,
-                    steps = 3,
-                    modifier = Modifier.weight(1f)
-                )
-                Text(
-                    text = numberOfDice.toInt().toString(),
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier
-                        .background(GameColors.PrimaryLight, MaterialTheme.shapes.small)
-                        .padding(horizontal = 12.dp, vertical = 6.dp)
-                )
-            }
-        }
-        
-        // Dice Type Selection
+     Column(
+         modifier = Modifier
+             .fillMaxWidth()
+             .padding(24.dp),
+         verticalArrangement = Arrangement.spacedBy(24.dp)
+     ) {
+         // Header
+         Text(
+             text = "Dice Settings",
+             style = MaterialTheme.typography.headlineSmall,
+             fontWeight = FontWeight.Bold,
+             color = MaterialTheme.colorScheme.primary
+         )
+         
+         // Number of Dice Slider
          Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Dice Type", style = MaterialTheme.typography.labelMedium)
-            DiceTypeSelector(
-                selectedType = diceType,
-                onTypeSelected = { diceType = it }
-            )
-            
-            // Custom Input
-            Text("Custom Dice", style = MaterialTheme.typography.labelMedium)
-            var customInput by remember { mutableStateOf(if (diceType is DiceType.Custom) diceType.sides.toString() else "") }
-            TextField(
-                value = customInput,
-                onValueChange = { 
-                    customInput = it
-                    if (it.isNotBlank() && it.toIntOrNull() != null) {
-                        val sides = it.toInt()
-                        if (sides in 2..99) {
-                            diceType = DiceType.Custom(sides)
-                        }
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("2-99", color = GameColors.TextSecondary) },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = GameColors.Surface1,
-                    unfocusedContainerColor = GameColors.Surface1,
-                    focusedIndicatorColor = GameColors.Primary,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = GameColors.Primary
-                ),
-                shape = MaterialTheme.shapes.medium
-            )
-        }
-        
-        // Toggles
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(GameColors.Surface1, MaterialTheme.shapes.medium)
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("Animation", style = MaterialTheme.typography.bodyMedium)
-            Switch(checked = animationEnabled, onCheckedChange = { animationEnabled = it })
-        }
-        
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(GameColors.Surface1, MaterialTheme.shapes.medium)
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("Shake to Roll", style = MaterialTheme.typography.bodyMedium)
-            Switch(checked = shakeEnabled, onCheckedChange = { shakeEnabled = it })
-        }
-        
-        // Buttons
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            OutlinedButton(
-                onClick = onDismiss,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(48.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = GameColors.Primary)
-            ) {
-                Text("Cancel")
-            }
-            Button(
-                onClick = {
-                    onConfirm(
-                        DiceConfiguration(
-                            numberOfDice = numberOfDice.toInt(),
-                            diceType = diceType,
-                            animationEnabled = animationEnabled,
-                            shakeEnabled = shakeEnabled
-                        )
-                    )
-                },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(48.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = GameColors.Primary,
-                    contentColor = GameColors.Surface0
-                )
-            ) {
-                Text("Save")
-            }
-        }
-        
-        Spacer(modifier = Modifier.height(16.dp))
-    }
+             Text("Number of Dice", style = MaterialTheme.typography.labelMedium)
+             Row(
+                 modifier = Modifier.fillMaxWidth(),
+                 horizontalArrangement = Arrangement.spacedBy(16.dp),
+                 verticalAlignment = Alignment.CenterVertically
+             ) {
+                 Slider(
+                     value = numberOfDice,
+                     onValueChange = { numberOfDice = it },
+                     valueRange = 1f..5f,
+                     steps = 3,
+                     modifier = Modifier.weight(1f)
+                 )
+                 Text(
+                     text = numberOfDice.toInt().toString(),
+                     fontWeight = FontWeight.Bold,
+                     style = MaterialTheme.typography.bodyLarge,
+                     modifier = Modifier
+                         .background(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.shapes.small)
+                         .padding(horizontal = 12.dp, vertical = 6.dp)
+                 )
+             }
+         }
+         
+         // Dice Type Selection
+          Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+             Text("Dice Type", style = MaterialTheme.typography.labelMedium)
+             DiceTypeSelector(
+                 selectedType = diceType,
+                 onTypeSelected = { diceType = it }
+             )
+             
+             // Custom Input
+             Text("Custom Dice", style = MaterialTheme.typography.labelMedium)
+             var customInput by remember { mutableStateOf(if (diceType is DiceType.Custom) diceType.sides.toString() else "") }
+             TextField(
+                 value = customInput,
+                 onValueChange = { 
+                     customInput = it
+                     if (it.isNotBlank() && it.toIntOrNull() != null) {
+                         val sides = it.toInt()
+                         if (sides in 2..99) {
+                             diceType = DiceType.Custom(sides)
+                         }
+                     }
+                 },
+                 modifier = Modifier.fillMaxWidth(),
+                 placeholder = { Text("2-99", color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                 singleLine = true,
+                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                 colors = TextFieldDefaults.colors(
+                     focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                     unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                     focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                     unfocusedIndicatorColor = Color.Transparent,
+                     cursorColor = MaterialTheme.colorScheme.primary
+                 ),
+                 shape = MaterialTheme.shapes.medium
+             )
+         }
+         
+         // Toggles
+         Row(
+             modifier = Modifier
+                 .fillMaxWidth()
+                 .background(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.shapes.medium)
+                 .padding(12.dp),
+             horizontalArrangement = Arrangement.SpaceBetween,
+             verticalAlignment = Alignment.CenterVertically
+         ) {
+             Text("Animation", style = MaterialTheme.typography.bodyMedium)
+             Switch(checked = animationEnabled, onCheckedChange = { animationEnabled = it })
+         }
+         
+         Row(
+             modifier = Modifier
+                 .fillMaxWidth()
+                 .background(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.shapes.medium)
+                 .padding(12.dp),
+             horizontalArrangement = Arrangement.SpaceBetween,
+             verticalAlignment = Alignment.CenterVertically
+         ) {
+             Text("Shake to Roll", style = MaterialTheme.typography.bodyMedium)
+             Switch(checked = shakeEnabled, onCheckedChange = { shakeEnabled = it })
+         }
+         
+         // Buttons
+         Row(
+             modifier = Modifier
+                 .fillMaxWidth()
+                 .padding(top = 8.dp),
+             horizontalArrangement = Arrangement.spacedBy(12.dp)
+         ) {
+             OutlinedButton(
+                 onClick = onDismiss,
+                 modifier = Modifier
+                     .weight(1f)
+                     .height(48.dp),
+                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+             ) {
+                 Text("Cancel")
+             }
+             Button(
+                 onClick = {
+                     onConfirm(
+                         DiceConfiguration(
+                             numberOfDice = numberOfDice.toInt(),
+                             diceType = diceType,
+                             animationEnabled = animationEnabled,
+                             shakeEnabled = shakeEnabled
+                         )
+                     )
+                 },
+                 modifier = Modifier
+                     .weight(1f)
+                     .height(48.dp),
+                 colors = ButtonDefaults.buttonColors(
+                     containerColor = MaterialTheme.colorScheme.primary,
+                     contentColor = MaterialTheme.colorScheme.onPrimary
+                 )
+             ) {
+                 Text("Save")
+             }
+         }
+         
+         Spacer(modifier = Modifier.height(16.dp))
+     }
 }
 
 /**
@@ -476,122 +476,122 @@ private fun CustomDiceBottomSheetContent(
     
     val isValid = error == null && inputValue.isNotBlank()
     
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        // Header
-        Text(
-            text = "Custom Dice",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            color = GameColors.Primary
-        )
-        
-        Text(
-            text = "Enter the number of sides (2-99)",
-            style = MaterialTheme.typography.bodyMedium,
-            color = GameColors.TextSecondary
-        )
-        
-        // Input Field
-        TextField(
-            value = inputValue,
-            onValueChange = { inputValue = it },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Enter 2-99") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = GameColors.Surface0,
-                unfocusedContainerColor = GameColors.Surface1,
-                focusedIndicatorColor = if (error != null) GameColors.Error else GameColors.Primary,
-                unfocusedIndicatorColor = if (error != null) GameColors.Error else Color.Transparent,
-                cursorColor = GameColors.Primary
-            ),
-            shape = MaterialTheme.shapes.large,
-            isError = error != null
-        )
-        
-        if (error != null) {
-            Text(
-                text = error!!,
-                color = GameColors.Error,
-                style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.padding(start = 4.dp)
-            )
-        }
-        
-        // Quick Select Buttons
-        Text(
-            text = "Quick Select",
-            style = MaterialTheme.typography.labelMedium,
-            color = GameColors.TextSecondary
-        )
-        
-        val quickValues = listOf(4, 6, 8, 10, 12, 20, 30, 50, 99)
-        quickValues.chunked(3).forEach { row ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                row.forEach { value ->
-                    OutlinedButton(
-                        onClick = { inputValue = value.toString() },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(40.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = if (inputValue == value.toString()) GameColors.Primary else GameColors.TextSecondary,
-                            containerColor = if (inputValue == value.toString()) GameColors.PrimaryLight else Color.Transparent
-                        )
-                    ) {
-                        Text("d$value", style = MaterialTheme.typography.labelSmall)
-                    }
-                }
-                repeat(3 - row.size) {
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-            }
-        }
-        
-        // Buttons
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            OutlinedButton(
-                onClick = onDismiss,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(48.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = GameColors.Primary)
-            ) {
-                Text("Cancel")
-            }
-            Button(
-                onClick = { if (isValid) onConfirm(DiceType.Custom(inputValue.toInt())) },
-                enabled = isValid,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(48.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = GameColors.Primary,
-                    contentColor = GameColors.Surface0,
-                    disabledContainerColor = GameColors.Surface2,
-                    disabledContentColor = GameColors.TextSecondary
-                )
-            ) {
-                Text("Confirm")
-            }
-        }
-        
-        Spacer(modifier = Modifier.height(16.dp))
-    }
+     Column(
+         modifier = Modifier
+             .fillMaxWidth()
+             .padding(24.dp),
+         verticalArrangement = Arrangement.spacedBy(16.dp)
+     ) {
+         // Header
+         Text(
+             text = "Custom Dice",
+             style = MaterialTheme.typography.headlineSmall,
+             fontWeight = FontWeight.Bold,
+             color = MaterialTheme.colorScheme.primary
+         )
+         
+         Text(
+             text = "Enter the number of sides (2-99)",
+             style = MaterialTheme.typography.bodyMedium,
+             color = MaterialTheme.colorScheme.onSurfaceVariant
+         )
+         
+         // Input Field
+         TextField(
+             value = inputValue,
+             onValueChange = { inputValue = it },
+             modifier = Modifier.fillMaxWidth(),
+             placeholder = { Text("Enter 2-99") },
+             singleLine = true,
+             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+             colors = TextFieldDefaults.colors(
+                 focusedContainerColor = MaterialTheme.colorScheme.surface,
+                 unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                 focusedIndicatorColor = if (error != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                 unfocusedIndicatorColor = if (error != null) MaterialTheme.colorScheme.error else Color.Transparent,
+                 cursorColor = MaterialTheme.colorScheme.primary
+             ),
+             shape = MaterialTheme.shapes.large,
+             isError = error != null
+         )
+         
+         if (error != null) {
+             Text(
+                 text = error!!,
+                 color = MaterialTheme.colorScheme.error,
+                 style = MaterialTheme.typography.labelSmall,
+                 modifier = Modifier.padding(start = 4.dp)
+             )
+         }
+         
+         // Quick Select Buttons
+         Text(
+             text = "Quick Select",
+             style = MaterialTheme.typography.labelMedium,
+             color = MaterialTheme.colorScheme.onSurfaceVariant
+         )
+         
+         val quickValues = listOf(4, 6, 8, 10, 12, 20, 30, 50, 99)
+         quickValues.chunked(3).forEach { row ->
+             Row(
+                 modifier = Modifier.fillMaxWidth(),
+                 horizontalArrangement = Arrangement.spacedBy(8.dp)
+             ) {
+                 row.forEach { value ->
+                     OutlinedButton(
+                         onClick = { inputValue = value.toString() },
+                         modifier = Modifier
+                             .weight(1f)
+                             .height(40.dp),
+                         colors = ButtonDefaults.outlinedButtonColors(
+                             contentColor = if (inputValue == value.toString()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                             containerColor = if (inputValue == value.toString()) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
+                         )
+                     ) {
+                         Text("d$value", style = MaterialTheme.typography.labelSmall)
+                     }
+                 }
+                 repeat(3 - row.size) {
+                     Spacer(modifier = Modifier.weight(1f))
+                 }
+             }
+         }
+         
+         // Buttons
+         Row(
+             modifier = Modifier
+                 .fillMaxWidth()
+                 .padding(top = 8.dp),
+             horizontalArrangement = Arrangement.spacedBy(12.dp)
+         ) {
+             OutlinedButton(
+                 onClick = onDismiss,
+                 modifier = Modifier
+                     .weight(1f)
+                     .height(48.dp),
+                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+             ) {
+                 Text("Cancel")
+             }
+             Button(
+                 onClick = { if (isValid) onConfirm(DiceType.Custom(inputValue.toInt())) },
+                 enabled = isValid,
+                 modifier = Modifier
+                     .weight(1f)
+                     .height(48.dp),
+                 colors = ButtonDefaults.buttonColors(
+                     containerColor = MaterialTheme.colorScheme.primary,
+                     contentColor = MaterialTheme.colorScheme.onPrimary,
+                     disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                     disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                 )
+             ) {
+                 Text("Confirm")
+             }
+         }
+         
+         Spacer(modifier = Modifier.height(16.dp))
+     }
 }
 
 /**
@@ -641,19 +641,19 @@ private fun DiceTypeChip(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Button(
-        onClick = onClick,
-        modifier = modifier.height(40.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = if (selected) GameColors.Primary else GameColors.Surface1,
-            contentColor = if (selected) GameColors.Surface0 else GameColors.TextPrimary
-        ),
-        shape = MaterialTheme.shapes.medium
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold
-        )
-    }
+     Button(
+         onClick = onClick,
+         modifier = modifier.height(40.dp),
+         colors = ButtonDefaults.buttonColors(
+             containerColor = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+             contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+         ),
+         shape = MaterialTheme.shapes.medium
+     ) {
+         Text(
+             text = text,
+             style = MaterialTheme.typography.labelMedium,
+             fontWeight = FontWeight.Bold
+         )
+     }
 }
