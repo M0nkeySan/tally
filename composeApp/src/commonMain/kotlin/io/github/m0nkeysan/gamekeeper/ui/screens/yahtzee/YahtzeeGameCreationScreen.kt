@@ -23,14 +23,14 @@ fun YahtzeeGameCreationScreen(
     var selectedPlayers by remember { mutableStateOf<List<Player?>>(emptyList()) }
     val allPlayers by viewModel.allPlayers.collectAsState(emptyList())
 
-    val canCreate = gameName.isNotBlank() && selectedPlayers.size in GameConfig.yahtzeeMinPlayers..GameConfig.yahtzeeMaxPlayers && selectedPlayers.all { it != null }
+    val canCreate = gameName.isNotBlank() && selectedPlayers.size in GameConfig.YAHTZEE_MIN_PLAYERS..GameConfig.YAHTZEE_MAX_PLAYERS && selectedPlayers.all { it != null }
 
     GameCreationTemplate(
         title = "New Yahtzee Game",
         onBack = onBack,
         onCreate = {
             val finalPlayers = selectedPlayers.filterNotNull()
-            if (finalPlayers.size in GameConfig.yahtzeeMinPlayers..GameConfig.yahtzeeMaxPlayers) {
+            if (finalPlayers.size in GameConfig.YAHTZEE_MIN_PLAYERS..GameConfig.YAHTZEE_MAX_PLAYERS) {
                 viewModel.createGame(
                     name = gameName.ifBlank { "Yahtzee Game" },
                     playerCount = finalPlayers.size,
@@ -50,9 +50,9 @@ fun YahtzeeGameCreationScreen(
                 singleLine = true
             )
 
-             FlexiblePlayerSelector(
-                minPlayers = GameConfig.yahtzeeMinPlayers,
-                maxPlayers = GameConfig.yahtzeeMaxPlayers,
+              FlexiblePlayerSelector(
+                 minPlayers = GameConfig.YAHTZEE_MIN_PLAYERS,
+                 maxPlayers = GameConfig.YAHTZEE_MAX_PLAYERS,
                 allPlayers = allPlayers,
                 onPlayersChange = { players ->
                     selectedPlayers = players

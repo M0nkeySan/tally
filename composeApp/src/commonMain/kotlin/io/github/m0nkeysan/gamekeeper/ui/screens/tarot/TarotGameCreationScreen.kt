@@ -23,14 +23,14 @@ fun TarotGameCreationScreen(
     var selectedPlayers by remember { mutableStateOf<List<Player?>>(emptyList()) }
     val allPlayers by viewModel.allPlayers.collectAsState(emptyList())
 
-    val canCreate = gameName.isNotBlank() && selectedPlayers.size in GameConfig.tarotMinPlayers..GameConfig.tarotMaxPlayers && selectedPlayers.all { it != null }
+    val canCreate = gameName.isNotBlank() && selectedPlayers.size in GameConfig.TAROT_MIN_PLAYERS..GameConfig.TAROT_MAX_PLAYERS && selectedPlayers.all { it != null }
 
     GameCreationTemplate(
         title = "New Tarot Game",
         onBack = onBack,
         onCreate = {
             val finalPlayers: List<Player> = selectedPlayers.filterNotNull()
-            if (finalPlayers.size in GameConfig.tarotMinPlayers..GameConfig.tarotMaxPlayers) {
+            if (finalPlayers.size in GameConfig.TAROT_MIN_PLAYERS..GameConfig.TAROT_MAX_PLAYERS) {
                 viewModel.createGame(
                     name = gameName.ifBlank { "Tarot Game" },
                     playerCount = finalPlayers.size,
@@ -50,9 +50,9 @@ fun TarotGameCreationScreen(
                 singleLine = true
             )
 
-            FlexiblePlayerSelector(
-                minPlayers = GameConfig.tarotMinPlayers,
-                maxPlayers = GameConfig.tarotMaxPlayers,
+             FlexiblePlayerSelector(
+                 minPlayers = GameConfig.TAROT_MIN_PLAYERS,
+                 maxPlayers = GameConfig.TAROT_MAX_PLAYERS,
                 allPlayers = allPlayers,
                 onPlayersChange = { players ->
                     selectedPlayers = players
