@@ -100,6 +100,11 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                     IconButton(onClick = onBack) {
                         Icon(GameIcons.ArrowBack, contentDescription = "Back")
                     }
+                },
+                actions = {
+                    IconButton(onClick = { showSettingsDialog = true }) {
+                        Icon(GameIcons.Settings, contentDescription = "Settings")
+                    }
                 }
             )
         },
@@ -189,7 +194,7 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                 modifier = Modifier.padding(bottom = 40.dp, start = 16.dp, end = 16.dp)
             ) {
                 if (currentRoll != null && currentRoll!!.individualResults.isNotEmpty()) {
-                    val rollsString = currentRoll!!.individualResults.joinToString(", ")
+                    val rollsString = currentRoll!!.individualResults.joinToString(" ") { "[$it]" }
                     
                     Text(
                         text = "Rolls: $rollsString",
