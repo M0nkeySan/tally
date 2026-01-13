@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -35,7 +36,7 @@ interface PlayerDao {
     suspend fun updatePlayer(player: PlayerEntity)
     
     @Query("UPDATE players SET isActive = false, deactivatedAt = :timestamp WHERE id = :id")
-    suspend fun softDeletePlayer(id: String, timestamp: Long = System.currentTimeMillis())
+    suspend fun softDeletePlayer(id: String, timestamp: Long = getCurrentTimeMillis())
     
     @Query("UPDATE players SET isActive = true, deactivatedAt = null WHERE id = :id")
     suspend fun reactivatePlayer(id: String)

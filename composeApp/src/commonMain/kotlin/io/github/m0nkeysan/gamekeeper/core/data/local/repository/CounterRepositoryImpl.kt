@@ -6,6 +6,7 @@ import io.github.m0nkeysan.gamekeeper.core.domain.CounterHistoryStore
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.CounterRepository
 import io.github.m0nkeysan.gamekeeper.core.model.Counter
 import io.github.m0nkeysan.gamekeeper.core.model.CounterChange
+import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -64,8 +65,8 @@ class CounterRepositoryImpl(
             newValue = newValue,
             changeDelta = newValue - previousValue,
             isDeleted = false,
-            timestamp = System.currentTimeMillis(),
-            createdAt = System.currentTimeMillis()
+            timestamp = getCurrentTimeMillis(),
+            createdAt = getCurrentTimeMillis()
         )
         historyStore.addChange(change)
     }
@@ -84,8 +85,8 @@ class CounterRepositoryImpl(
             newValue = 0,
             changeDelta = 0,
             isDeleted = true,
-            timestamp = System.currentTimeMillis(),
-            createdAt = System.currentTimeMillis()
+            timestamp = getCurrentTimeMillis(),
+            createdAt = getCurrentTimeMillis()
         )
         historyStore.addChange(change)
     }

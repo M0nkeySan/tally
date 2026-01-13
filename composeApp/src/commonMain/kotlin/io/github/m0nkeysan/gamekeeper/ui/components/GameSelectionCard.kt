@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
 /**
@@ -103,8 +104,8 @@ private fun GameSelectionCardPreview_Active() {
             playerCount = 4,
             playerNames = "Alice, Bob, Charlie, Diana",
             isFinished = false,
-            createdAt = System.currentTimeMillis(),
-            updatedAt = System.currentTimeMillis()
+            createdAt = getCurrentTimeMillis(),
+            updatedAt = getCurrentTimeMillis()
         ),
         onClick = {}
     )
@@ -120,8 +121,8 @@ private fun GameSelectionCardPreview_Finished() {
             playerCount = 3,
             playerNames = "Eve, Frank, Grace",
             isFinished = true,
-            createdAt = System.currentTimeMillis(),
-            updatedAt = System.currentTimeMillis()
+            createdAt = getCurrentTimeMillis(),
+            updatedAt = getCurrentTimeMillis()
         ),
         onClick = {}
     )

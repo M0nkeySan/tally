@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.gamekeeper.GameIcons
+import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import kotlinx.coroutines.delay
@@ -233,7 +234,7 @@ fun FingerSelectorGame(
          
          if (fingers.size >= minFingers && selected.isEmpty() && !isSelecting) {
              if (fingers.size != lastFingerCount) {
-                 countdownStartTime = System.currentTimeMillis()
+                 countdownStartTime = getCurrentTimeMillis()
                  lastFingerCount = fingers.size
              }
          } else {

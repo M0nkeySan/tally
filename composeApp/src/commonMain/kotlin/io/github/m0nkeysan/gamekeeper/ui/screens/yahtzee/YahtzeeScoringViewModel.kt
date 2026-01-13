@@ -6,6 +6,7 @@ import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeGame
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeScore
 import io.github.m0nkeysan.gamekeeper.core.model.Player
+import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -85,7 +86,7 @@ class YahtzeeScoringViewModel : ViewModel() {
                     val nextPlayerIndex = (playerIndex + 1) % currentGame.playerCount
                     val updatedGame = currentGame.copy(
                         currentPlayerIndex = nextPlayerIndex,
-                        updatedAt = System.currentTimeMillis()
+                        updatedAt = getCurrentTimeMillis()
                     )
                     repository.saveGame(updatedGame)
                     _state.update { it.copy(game = updatedGame, scores = currentScores) }
@@ -108,7 +109,7 @@ class YahtzeeScoringViewModel : ViewModel() {
                 val updatedGame = currentGame.copy(
                     isFinished = true,
                     winnerName = winnerNames,
-                    updatedAt = System.currentTimeMillis()
+                    updatedAt = getCurrentTimeMillis()
                 )
                 repository.saveGame(updatedGame)
                 _state.update { it.copy(game = updatedGame) }

@@ -2,6 +2,7 @@ package io.github.m0nkeysan.gamekeeper.ui.utils
 
 import androidx.compose.ui.graphics.Color
 import kotlin.math.*
+import kotlin.random.Random
 
 /**
  * Platform-agnostic color conversion utilities for HSV color space manipulation.
@@ -66,6 +67,14 @@ fun hsvToColor(hsv: FloatArray): Color {
         else -> Triple(c, 0f, x)
     }
     
-    val m = value - c
-    return Color(r1 + m, g1 + m, b1 + m)
+     val m = value - c
+     return Color(r1 + m, g1 + m, b1 + m)
+}
+
+/**
+ * Generate a random hex color string (e.g., "#FF5733")
+ */
+fun generateRandomHexColor(): String {
+    val color = Random.nextInt(0xFFFFFF)
+    return "#${color.toString(16).padStart(6, '0')}"
 }

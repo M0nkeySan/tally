@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class PlayerSelectionViewModel : ViewModel() {
     private val playerRepository = PlatformRepositories.getPlayerRepository()
@@ -61,9 +60,7 @@ class PlayerSelectionViewModel : ViewModel() {
         }
     }
     
-    fun getGameCountForPlayer(playerId: String): Int {
-        return runBlocking {
-            gameQueryHelper.getGameCountForPlayer(playerId)
-        }
+    suspend fun getGameCountForPlayer(playerId: String): Int {
+        return gameQueryHelper.getGameCountForPlayer(playerId)
     }
 }

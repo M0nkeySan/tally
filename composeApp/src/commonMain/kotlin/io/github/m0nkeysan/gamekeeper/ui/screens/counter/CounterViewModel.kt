@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.gamekeeper.core.model.Counter
+import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -122,7 +123,7 @@ class CounterViewModel : ViewModel() {
     }
     
     fun updateCounter(id: String, name: String, count: Int, color: Long) {
-        val originalTimestamp = playerTimestamps[id] ?: System.currentTimeMillis()
+        val originalTimestamp = playerTimestamps[id] ?: getCurrentTimeMillis()
         val currentOrder = _state.value.counters.indexOfFirst { it.id == id }.takeIf { it != -1 } ?: 0
         
         viewModelScope.launch {

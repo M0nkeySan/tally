@@ -11,7 +11,7 @@ import io.github.m0nkeysan.gamekeeper.platform.getCurrentDateTimeString
 import io.github.m0nkeysan.gamekeeper.ui.components.FlexiblePlayerSelector
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameCreationTemplate
 import io.github.m0nkeysan.gamekeeper.core.domain.GameConfig
-import kotlin.random.Random
+import io.github.m0nkeysan.gamekeeper.ui.utils.generateRandomHexColor
 
 @Composable
 fun TarotGameCreationScreen(
@@ -22,11 +22,6 @@ fun TarotGameCreationScreen(
     var gameName by remember { mutableStateOf(getCurrentDateTimeString()) }
     var selectedPlayers by remember { mutableStateOf<List<Player?>>(emptyList()) }
     val allPlayers by viewModel.allPlayers.collectAsState(emptyList())
-
-    fun generateRandomColor(): String {
-        val color = Random.nextInt(0xFFFFFF)
-        return "#${color.toString(16).padStart(6, '0')}"
-    }
 
     val canCreate = gameName.isNotBlank() && selectedPlayers.size in GameConfig.tarotMinPlayers..GameConfig.tarotMaxPlayers && selectedPlayers.all { it != null }
 
@@ -63,7 +58,7 @@ fun TarotGameCreationScreen(
                     selectedPlayers = players
                 },
                 onCreatePlayer = { name ->
-                    val newPlayer = Player.create(name, generateRandomColor())
+                    val newPlayer = Player.create(name, generateRandomHexColor())
                     viewModel.savePlayer(newPlayer)
                 }
             )
