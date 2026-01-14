@@ -2,6 +2,7 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.tarot
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.m0nkeysan.gamekeeper.core.domain.engine.TarotScoringEngine
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotStatisticsRepository
@@ -27,6 +28,8 @@ class TarotStatisticsViewModel(
     private val statsRepository: TarotStatisticsRepository,
     private val playerRepository: PlayerRepository
 ) : ViewModel() {
+    
+    private val scoringEngine = TarotScoringEngine()
 
     private val _uiState = MutableStateFlow(TarotStatisticsState())
     val uiState: StateFlow<TarotStatisticsState> = _uiState.asStateFlow()
@@ -67,11 +70,15 @@ class TarotStatisticsViewModel(
 
                 val game = gameEntity.copy(players = players, rounds = rounds)
 
-                // 🆕 Calculate rankings directly from game data
+                // 🆕 Calculate rankings using proper scoring engine
+                val playerScores = scoringEngine.calculateTotalScores(
+                    game.players,
+                    game.rounds,
+                    game.playerCount
+                )
+                
                 val currentRankings = game.players.mapIndexed { playerIndex, player ->
-                    val totalScore = game.rounds
-                        .filter { it.takerPlayerId.toIntOrNull() == playerIndex }
-                        .sumOf { it.score }
+                    val totalScore = playerScores[player.id] ?: 0
                     
                     val takerRounds = game.rounds.count { it.takerPlayerId.toIntOrNull() == playerIndex }
                     val takerWins = game.rounds.count { 
