@@ -29,10 +29,8 @@ data class TarotGame(
         fun create(players: List<Player>, playerCount: Int? = null, name: String = "Tarot Game"): TarotGame {
             val now = getCurrentTimeMillis()
 
-            // On utilise le playerCount passé en paramètre, sinon la taille de la liste
             val finalPlayerCount = playerCount ?: players.size
 
-            // Petite validation de sécurité pour le Tarot
             require(finalPlayerCount in 3..5) {
                 "Le Tarot se joue à 3, 4 ou 5 joueurs uniquement."
             }
@@ -59,7 +57,7 @@ data class YahtzeeGame(
     override val updatedAt: Long = 0L,
     val scores: Map<String, List<YahtzeeScore>> = emptyMap(),
     val name: String = "Yahtzee Game",
-    val playerIds: String = "", // Comma-separated player IDs for backward compatibility
+    val playerIds: String = "",
     val firstPlayerIndex: Int = 0,
     val currentPlayerIndex: Int = 0,
     val isFinished: Boolean = false,
