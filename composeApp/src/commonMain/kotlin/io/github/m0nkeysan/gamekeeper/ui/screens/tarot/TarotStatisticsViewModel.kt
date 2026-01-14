@@ -2,6 +2,7 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.tarot
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotStatisticsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,8 @@ import kotlinx.coroutines.launch
 class TarotStatisticsViewModel(
     private val gameId: String,
     private val tarotRepository: TarotRepository,
-    private val statsRepository: TarotStatisticsRepository
+    private val statsRepository: TarotStatisticsRepository,
+    private val playerRepository: PlayerRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TarotStatisticsState())
@@ -39,21 +41,45 @@ class TarotStatisticsViewModel(
                 _uiState.update { it.copy(isLoading = true, error = null) }
 
                 // Load current game
-                val game = tarotRepository.getGameById(gameId)
+                val gameEntity = tarotRepository.getGameById(gameId)
                     ?: throw IllegalStateException("Game not found")
+
+                // 🆕 Load players from playerIds
+                val playerIdsList = gameEntity.playerIds.split(",").filter { it.isNotEmpty() }
+                val players = playerIdsList.mapNotNull { playerId ->
+                    playerRepository.getPlayerById(playerId.trim())
+                }
+                
+                if (players.isEmpty()) {
+                    throw IllegalStateException("No players found for game")
+                }
+                
+                println("🔍 [Statistics] Loaded ${players.size} players for game $gameId")
+                println("🔍 [Statistics] Player IDs: ${players.map { it.name }}")
+                
+                // 🆕 Create game with loaded players
+                val game = gameEntity.copy(players = players)
 
                 // Load current game statistics
                 val gameStats = statsRepository.getCurrentGameStatistics(gameId)
                 val roundBreakdown = statsRepository.getRoundBreakdown(gameId)
                 val currentRankings = statsRepository.getPlayerRankings(gameId)
 
+                println("🔍 [Statistics] Rounds: ${roundBreakdown.size}, Rankings: ${currentRankings.size}")
+
                 // Load cross-game statistics for each player
+                // Map game.players to original playerIds indices for correct statistics
                 val playerStats = game.players.mapIndexed { index, player ->
-                    statsRepository.getPlayerStatistics(player.id, index)
+                    val originalIndex = playerIdsList.indexOf(player.id)
+                    println("🔍 [Statistics] Loading stats for ${player.name} (originalIndex=$originalIndex, gameIndex=$index)")
+                    statsRepository.getPlayerStatistics(player.id, originalIndex)
                 }.filterNotNull()
 
+                println("🔍 [Statistics] Found ${playerStats.size} player statistics")
+
                 val bidStats = game.players.mapIndexed { index, player ->
-                    player.id to statsRepository.getBidStatistics(player.id, index)
+                    val originalIndex = playerIdsList.indexOf(player.id)
+                    player.id to statsRepository.getBidStatistics(player.id, originalIndex)
                 }.toMap()
 
                 val recentGames = game.players.associate { player ->
@@ -74,6 +100,8 @@ class TarotStatisticsViewModel(
                     )
                 }
             } catch (e: Exception) {
+                println("❌ [Statistics] Error: ${e.message}")
+                e.printStackTrace()
                 _uiState.update {
                     it.copy(
                         isLoading = false,

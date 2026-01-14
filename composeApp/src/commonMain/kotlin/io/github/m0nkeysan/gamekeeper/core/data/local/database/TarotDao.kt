@@ -45,7 +45,7 @@ interface TarotDao {
             SUM(r.score) as totalScore
         FROM tarot_rounds r
         INNER JOIN tarot_games g ON r.gameId = g.id
-        WHERE g.playerIds LIKE '%' || :playerId || '%'
+        WHERE (',' || g.playerIds || ',') LIKE ('%,' || :playerId || ',%')
     """)
     suspend fun getPlayerStatistics(playerId: String, playerIndex: Int): PlayerStatisticsRaw?
 
@@ -62,7 +62,7 @@ interface TarotDao {
         FROM tarot_rounds r
         INNER JOIN tarot_games g ON r.gameId = g.id
         WHERE r.takerPlayerIndex = :playerIndex 
-          AND g.playerIds LIKE '%' || :playerId || '%'
+          AND (',' || g.playerIds || ',') LIKE ('%,' || :playerId || ',%')
         GROUP BY r.bid
         ORDER BY r.bid ASC
     """)
@@ -73,7 +73,7 @@ interface TarotDao {
      */
     @Query("""
         SELECT * FROM tarot_games 
-        WHERE playerIds LIKE '%' || :playerId || '%'
+        WHERE (',' || playerIds || ',') LIKE ('%,' || :playerId || ',%')
         ORDER BY updatedAt DESC
         LIMIT :limit
     """)

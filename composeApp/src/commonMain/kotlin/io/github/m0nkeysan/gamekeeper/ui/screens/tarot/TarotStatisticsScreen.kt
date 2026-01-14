@@ -66,7 +66,8 @@ fun TarotStatisticsScreen(
         TarotStatisticsViewModel(
             gameId = gameId,
             tarotRepository = PlatformRepositories.getTarotRepository(),
-            statsRepository = PlatformRepositories.getTarotStatisticsRepository()
+            statsRepository = PlatformRepositories.getTarotStatisticsRepository(),
+            playerRepository = PlatformRepositories.getPlayerRepository()
         )
     }
     
