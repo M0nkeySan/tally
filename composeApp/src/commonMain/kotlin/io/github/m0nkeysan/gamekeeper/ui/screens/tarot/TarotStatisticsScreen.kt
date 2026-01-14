@@ -792,56 +792,56 @@ private fun CurrentGamePlayerStatsCard(
                         }
                     }
                 }
-                
-                // Called player statistics
-                if (calledRounds > 0) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(
-                            "Called Performance",
-                            style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier
-                                .background(
-                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                    MaterialTheme.shapes.small
-                                )
-                                .padding(8.dp)
-                                .fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
+            }
+            
+            // Called player statistics - outside playerAllRounds check so it shows for called-only players
+            if (calledRounds > 0) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        "Called Performance",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .background(
+                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                MaterialTheme.shapes.small
+                            )
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                    
+                    // Called win/loss statistics
+                    val calledGameRounds = allRounds.filter { it.calledPlayerId?.toIntOrNull() == playerIndex }
+                        .mapNotNull { tarotRound ->
+                        rounds.find { it.roundNumber == tarotRound.roundNumber }
+                    }
+                    
+                    if (calledGameRounds.isNotEmpty()) {
+                        val calledPointsWon = calledGameRounds.filter { it.contractWon }.sumOf { it.score }
+                        val calledRoundsWon = calledGameRounds.count { it.contractWon }
+                        val avgCalledPointsWon = if (calledRoundsWon > 0) calledPointsWon.toDouble() / calledRoundsWon else 0.0
                         
-                        // Called win/loss statistics
-                        val calledGameRounds = allRounds.filter { it.calledPlayerId?.toIntOrNull() == playerIndex }
-                            .mapNotNull { tarotRound ->
-                            rounds.find { it.roundNumber == tarotRound.roundNumber }
-                        }
+                        val calledPointsLost = calledGameRounds.filter { !it.contractWon }.sumOf { it.score }
+                        val calledRoundsLost = calledGameRounds.count { !it.contractWon }
+                        val avgCalledPointsLost = if (calledRoundsLost > 0) Math.abs(calledPointsLost.toDouble() / calledRoundsLost) else 0.0
                         
-                        if (calledGameRounds.isNotEmpty()) {
-                            val calledPointsWon = calledGameRounds.filter { it.contractWon }.sumOf { it.score }
-                            val calledRoundsWon = calledGameRounds.count { it.contractWon }
-                            val avgCalledPointsWon = if (calledRoundsWon > 0) calledPointsWon.toDouble() / calledRoundsWon else 0.0
-                            
-                            val calledPointsLost = calledGameRounds.filter { !it.contractWon }.sumOf { it.score }
-                            val calledRoundsLost = calledGameRounds.count { !it.contractWon }
-                            val avgCalledPointsLost = if (calledRoundsLost > 0) Math.abs(calledPointsLost.toDouble() / calledRoundsLost) else 0.0
-                            
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                StatItem(
-                                    label = "Avg Won",
-                                    value = String.format("%.0f", avgCalledPointsWon),
-                                    modifier = Modifier.weight(1f),
-                                    valueColor = MaterialTheme.colorScheme.secondary
-                                )
-                                StatItem(
-                                    label = "Avg Lost",
-                                    value = String.format("%.0f", avgCalledPointsLost),
-                                    modifier = Modifier.weight(1f),
-                                    valueColor = MaterialTheme.colorScheme.error
-                                )
-                            }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            StatItem(
+                                label = "Avg Won",
+                                value = String.format("%.0f", avgCalledPointsWon),
+                                modifier = Modifier.weight(1f),
+                                valueColor = MaterialTheme.colorScheme.secondary
+                            )
+                            StatItem(
+                                label = "Avg Lost",
+                                value = String.format("%.0f", avgCalledPointsLost),
+                                modifier = Modifier.weight(1f),
+                                valueColor = MaterialTheme.colorScheme.error
+                            )
                         }
                     }
                 }
