@@ -52,9 +52,6 @@ class TarotStatisticsViewModel(
                 val gameEntity = tarotRepository.getGameById(gameId)
                     ?: throw IllegalStateException("Game not found")
 
-                println("🔍 [Statistics] Loading game: ${gameEntity.id}")
-
-                // 🆕 Load players from playerIds
                 val playerIdsList = gameEntity.playerIds.split(",").filter { it.isNotEmpty() }
                 val players = playerIdsList.mapNotNull { playerId ->
                     playerRepository.getPlayerById(playerId.trim())
@@ -64,27 +61,22 @@ class TarotStatisticsViewModel(
                     throw IllegalStateException("No players found for game")
                 }
 
-                println("🔍 [Statistics] Loaded ${players.size} players: ${players.map { it.name }}")
-
-                // 🆕 Load rounds for the game
                 val rounds = tarotRepository.getRoundsForGame(gameId).first()
-                println("🔍 [Statistics] Loaded ${rounds.size} rounds")
 
                 val game = gameEntity.copy(players = players, rounds = rounds)
 
-                // 🆕 Calculate rankings using proper scoring engine
                 val playerScores = scoringEngine.calculateTotalScores(
                     game.players,
                     game.rounds,
                     game.playerCount
                 )
                 
-                val currentRankings = game.players.mapIndexed { playerIndex, player ->
+                val currentRankings = game.players.map { player ->
                     val totalScore = playerScores[player.id] ?: 0
-                    
-                    val takerRounds = game.rounds.count { it.takerPlayerId.toIntOrNull() == playerIndex }
+
+                    val takerRounds = game.rounds.count { it.takerPlayerId == player.id }
                     val takerWins = game.rounds.count { 
-                        it.takerPlayerId.toIntOrNull() == playerIndex && it.score > 0 
+                        it.takerPlayerId == player.id && it.score > 0 
                     }
                     
                     val winRate = if (takerRounds > 0) 
@@ -107,12 +99,23 @@ class TarotStatisticsViewModel(
                         )
                     }
 
-                // 🆕 Convert loaded rounds to RoundStatistic using game data
                 val roundBreakdown = game.rounds.mapNotNull { round ->
-                    val taker = game.players.getOrNull(round.takerPlayerId.toIntOrNull() ?: 0)
+                    val taker = game.players.find { it.id == round.takerPlayerId }
                         ?: game.players.firstOrNull()
                     
                     if (taker != null) {
+                        val displayScore = when (game.playerCount) {
+                            5 -> {
+                                val partnerId = round.calledPlayerId
+                                if (partnerId == null || partnerId == round.takerPlayerId) {
+                                    round.score * 4
+                                } else {
+                                    round.score * 2
+                                }
+                            }
+                            else -> round.score * (game.playerCount - 1)
+                        }
+
                         RoundStatistic(
                             roundNumber = round.roundNumber,
                             taker = taker,
@@ -120,7 +123,7 @@ class TarotStatisticsViewModel(
                             pointsScored = round.pointsScored,
                             bouts = round.bouts,
                             contractWon = round.score > 0,
-                            score = round.score,
+                            score = displayScore,
                             hasSpecialAnnounce = round.hasPetitAuBout || 
                                                round.hasPoignee || 
                                                round.chelem.toString() != "NONE"
@@ -138,14 +141,10 @@ class TarotStatisticsViewModel(
                     playerRankings = currentRankings
                 )
 
-                println("🔍 [Statistics] Game stats: ${roundBreakdown.size} rounds, ${currentRankings.size} rankings")
-
-                // 🆕 Calculate game progression statistics (only if 3+ rounds)
                 val hasMinimumRounds = game.rounds.size >= 3
                 var takerPerformanceMap = emptyMap<String, TakerPerformance>()
 
                 if (hasMinimumRounds) {
-                    println("🔍 [Statistics] Calculating progression stats (${game.rounds.size} rounds)")
                     val progressionAnalyzer = GameProgressionAnalyzer()
                     
                     takerPerformanceMap = progressionAnalyzer.calculateTakerPerformance(
@@ -153,21 +152,15 @@ class TarotStatisticsViewModel(
                         game.rounds,
                         game.playerCount
                     )
-                    println("🔍 [Statistics] Performance calculated for ${takerPerformanceMap.size} players")
                 }
 
-                val playerStats = game.players.mapIndexed { index, player ->
-                    val originalIndex = playerIdsList.indexOf(player.id)
-                    println("🔍 [Statistics] Loading stats for ${player.name} (index=$originalIndex)")
-                    statsRepository.getPlayerStatistics(player.id, originalIndex)
-                }.filterNotNull()
+                val playerStats = game.players.mapNotNull { player ->
+                    statsRepository.getPlayerStatistics(player.id)
+                }
 
-                println("🔍 [Statistics] Found ${playerStats.size} player statistics")
-
-                val bidStats = game.players.mapIndexed { index, player ->
-                    val originalIndex = playerIdsList.indexOf(player.id)
-                    player.id to statsRepository.getBidStatistics(player.id, originalIndex)
-                }.toMap()
+                val bidStats = game.players.associate { player ->
+                    player.id to statsRepository.getBidStatistics(player.id)
+                }
 
                 _uiState.update {
                     it.copy(
@@ -183,8 +176,6 @@ class TarotStatisticsViewModel(
                     )
                 }
             } catch (e: Exception) {
-                println("❌ [Statistics] Error: ${e.message}")
-                e.printStackTrace()
                 _uiState.update {
                     it.copy(
                         isLoading = false,

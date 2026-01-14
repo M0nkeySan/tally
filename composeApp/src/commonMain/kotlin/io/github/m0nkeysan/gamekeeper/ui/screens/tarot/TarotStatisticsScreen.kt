@@ -270,11 +270,10 @@ private fun PlayerStatsTab(state: TarotStatisticsState) {
         // Per-player statistics for current game
         state.game?.let { game ->
             state.roundBreakdown.let { rounds ->
-                game.players.forEachIndexed { playerIndex, player ->
+                game.players.forEach { player ->
                     item {
                         CurrentGamePlayerStatsCard(
                             player = player,
-                            playerIndex = playerIndex,
                             rounds = rounds,
                             allRounds = game.rounds
                         )
@@ -569,7 +568,6 @@ private fun TakerPerformanceRow(performance: TakerPerformance) {
 @Composable
 private fun CurrentGamePlayerStatsCard(
     player: Player,
-    playerIndex: Int,
     rounds: List<RoundStatistic>,
     allRounds: List<TarotRound>
 ) {
@@ -613,15 +611,15 @@ private fun CurrentGamePlayerStatsCard(
                 ) {
             
             // Current game stats
-            val takerRounds = allRounds.count { it.takerPlayerId.toIntOrNull() == playerIndex }
+            val takerRounds = allRounds.count { it.takerPlayerId == player.id }
             val takerWins = allRounds.count { 
-                it.takerPlayerId.toIntOrNull() == playerIndex && it.score > 0 
+                it.takerPlayerId == player.id && it.score > 0 
             }
-            
+
             // Called rounds (times player was called as partner)
-            val calledRounds = allRounds.count { it.calledPlayerId?.toIntOrNull() == playerIndex  }
+            val calledRounds = allRounds.count { it.calledPlayerId == player.id }
             val calledWins = allRounds.count { 
-                it.calledPlayerId?.toIntOrNull() == playerIndex && it.score > 0
+                it.calledPlayerId == player.id && it.score > 0
             }
             
             // Total rounds as taker or called
@@ -654,7 +652,7 @@ private fun CurrentGamePlayerStatsCard(
             
             // Bid breakdown for this game - using RoundStatistic which has proper data
             val playerGameRounds = rounds.filter { it.taker.id == player.id }
-            val playerAllRounds = allRounds.filter { it.takerPlayerId.toIntOrNull() == playerIndex }
+            val playerAllRounds = allRounds.filter { it.takerPlayerId == player.id }
             
             if (playerAllRounds.isNotEmpty()) {
                 val bidsInGame = playerAllRounds.groupingBy { it.bid }.eachCount()
@@ -732,8 +730,7 @@ private fun CurrentGamePlayerStatsCard(
                                     MaterialTheme.shapes.small
                                 )
                                 .padding(8.dp)
-                                .fillMaxWidth()
-                                .padding(top = 8.dp),
+                                .fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
                         bidsInGame.forEach { (bid, count) ->
@@ -836,7 +833,7 @@ private fun CurrentGamePlayerStatsCard(
                     )
                     
                     // Called win/loss statistics
-                    val calledGameRounds = allRounds.filter { it.calledPlayerId?.toIntOrNull() == playerIndex }
+                    val calledGameRounds = allRounds.filter { it.calledPlayerId == player.id }
                         .mapNotNull { tarotRound ->
                         rounds.find { it.roundNumber == tarotRound.roundNumber }
                     }

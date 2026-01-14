@@ -34,7 +34,7 @@ fun TarotRoundAdditionScreen(
 ) {
     val state by viewModel.state.collectAsState()
     
-    var takerIndex by remember { mutableStateOf<Int?>(null) }
+    var takerPlayerId by remember { mutableStateOf<String?>(null) }
     var bid by remember { mutableStateOf(TarotBid.PRISE) }
     var bouts by remember { mutableIntStateOf(0) }
     var pointsAtq by remember { mutableStateOf("46") }
@@ -42,7 +42,7 @@ fun TarotRoundAdditionScreen(
     var hasPoignee by remember { mutableStateOf(false) }
     var poigneeLevel by remember { mutableStateOf(PoigneeLevel.SIMPLE) }
     var chelem by remember { mutableStateOf(ChelemType.NONE) }
-    var calledPlayerIndex by remember { mutableStateOf<Int?>(null) }
+    var calledPlayerId by remember { mutableStateOf<String?>(null) }
 
     val isEditMode = roundId != null
     var isDataLoaded by remember { mutableStateOf(false) }
@@ -57,7 +57,7 @@ fun TarotRoundAdditionScreen(
         if (isEditMode && !isDataLoaded && state.rounds.isNotEmpty()) {
             val round = state.rounds.find { it.id == roundId }
             if (round != null) {
-                takerIndex = round.takerPlayerId.toIntOrNull()
+                takerPlayerId = round.takerPlayerId
                 bid = round.bid
                 bouts = round.bouts
                 pointsAtq = round.pointsScored.toString()
@@ -65,7 +65,7 @@ fun TarotRoundAdditionScreen(
                 hasPoignee = round.hasPoignee
                 poigneeLevel = round.poigneeLevel ?: PoigneeLevel.SIMPLE
                 chelem = round.chelem
-                calledPlayerIndex = round.calledPlayerId?.toIntOrNull()
+                calledPlayerId = round.calledPlayerId
                 isDataLoaded = true
             }
         }
@@ -91,10 +91,10 @@ fun TarotRoundAdditionScreen(
             Surface(shadowElevation = 8.dp) {
                 Button(
                     onClick = {
-                        takerIndex?.let { tIdx ->
+                        takerPlayerId?.let { tId ->
                             viewModel.addRoundManual(
                                 roundId = roundId,
-                                takerIndex = tIdx,
+                                takerPlayerId = tId,
                                 bid = bid,
                                 bouts = bouts,
                                 pointsScored = pointsAtq.toIntOrNull() ?: 0,
@@ -102,7 +102,7 @@ fun TarotRoundAdditionScreen(
                                 hasPoignee = hasPoignee,
                                 poigneeLevel = if (hasPoignee) poigneeLevel else null,
                                 chelem = chelem,
-                                calledPlayerIndex = if (state.game?.playerCount == 5) calledPlayerIndex else null
+                                calledPlayerId = if (state.game?.playerCount == 5) calledPlayerId else null
                             )
                             onRoundAdded()
                         }
@@ -112,8 +112,8 @@ fun TarotRoundAdditionScreen(
                         .padding(16.dp)
                         .height(56.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = statusColor),
-                    enabled = takerIndex != null && 
-                             (state.game?.playerCount != 5 || calledPlayerIndex != null) &&
+                    enabled = takerPlayerId != null && 
+                             (state.game?.playerCount != 5 || calledPlayerId != null) &&
                              pointsAtq.toFloatOrNull() != null
                 ) {
                     Text("SAVE ROUND", fontWeight = FontWeight.Bold, color = Color.White)
@@ -146,14 +146,14 @@ fun TarotRoundAdditionScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                state.players.forEachIndexed { index, player ->
-                                    val isSelected = takerIndex == index
+                                state.players.forEach { player ->
+                                    val isSelected = takerPlayerId == player.id
                                     val playerColor = remember(player.avatarColor) { parseColor(player.avatarColor) }
                                     val contentColor = if (playerColor.luminance() > 0.5f) Color.Black else Color.White
 
                                     FilterChip(
                                         selected = isSelected,
-                                        onClick = { takerIndex = index },
+                                        onClick = { takerPlayerId = player.id },
                                         label = { Text(player.name) },
                                         colors = FilterChipDefaults.filterChipColors(
                                             selectedContainerColor = playerColor,
@@ -172,14 +172,14 @@ fun TarotRoundAdditionScreen(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
-                                    state.players.forEachIndexed { index, player ->
-                                        val isSelected = calledPlayerIndex == index
+                                    state.players.forEach { player ->
+                                        val isSelected = calledPlayerId == player.id
                                         val playerColor = remember(player.avatarColor) { parseColor(player.avatarColor) }
                                         val contentColor = if (playerColor.luminance() > 0.5f) Color.Black else Color.White
 
                                         FilterChip(
                                             selected = isSelected,
-                                            onClick = { calledPlayerIndex = index },
+                                            onClick = { calledPlayerId = player.id },
                                             label = { Text(player.name) },
                                             colors = FilterChipDefaults.filterChipColors(
                                                 selectedContainerColor = playerColor,

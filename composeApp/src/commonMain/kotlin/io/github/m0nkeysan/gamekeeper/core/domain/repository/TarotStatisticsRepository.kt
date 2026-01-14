@@ -19,10 +19,9 @@ interface TarotStatisticsRepository {
      * Get aggregated player statistics across all Tarot games.
      *
      * @param playerId The player ID
-     * @param playerIndex The player's index in the game(s)
      * @return PlayerStatistics with cross-game metrics, or null if no games
      */
-    suspend fun getPlayerStatistics(playerId: String, playerIndex: Int): PlayerStatistics?
+    suspend fun getPlayerStatistics(playerId: String): PlayerStatistics?
 
     /**
      * Get bid-specific statistics for a player.
@@ -31,10 +30,9 @@ interface TarotStatisticsRepository {
      * (Prise, Garde, Garde Sans, Garde Contre).
      *
      * @param playerId The player ID
-     * @param playerIndex The player's index in the game(s)
      * @return List of BidStatistics, one per bid type played
      */
-    suspend fun getBidStatistics(playerId: String, playerIndex: Int): List<BidStatistic>
+    suspend fun getBidStatistics(playerId: String): List<BidStatistic>
 
     /**
      * Get recent games for a player.

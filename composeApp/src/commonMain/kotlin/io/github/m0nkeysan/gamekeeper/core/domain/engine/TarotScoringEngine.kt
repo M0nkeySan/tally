@@ -76,28 +76,27 @@ class TarotScoringEngine {
 
         rounds.forEach { round ->
             val s = round.score
-            val takerIndex = round.takerPlayerId.toIntOrNull() ?: return@forEach
-            val takerUuid = players.getOrNull(takerIndex)?.id ?: return@forEach
-            val calledIndex = round.calledPlayerId?.toIntOrNull()
+            val takerPlayerId = round.takerPlayerId
+            val calledPlayerId = round.calledPlayerId
 
             when (playerCount) {
                 5 -> {
                     // 5 player game - taker can call a partner
-                    if (calledIndex == null || calledIndex == takerIndex) {
+                    if (calledPlayerId == null || calledPlayerId == takerPlayerId) {
                         // Solo: taker gets 4x score, others lose 1x
-                        scores[takerUuid] = (scores[takerUuid] ?: 0) + (s * 4)
-                        players.forEachIndexed { index, p ->
-                            if (index != takerIndex) {
+                        scores[takerPlayerId] = (scores[takerPlayerId] ?: 0) + (s * 4)
+                        players.forEach { p ->
+                            if (p.id != takerPlayerId) {
                                 scores[p.id] = (scores[p.id] ?: 0) - s
                             }
                         }
                     } else {
                         // With partner: taker gets 2x, partner gets 1x, others lose 1x
-                        val partnerUuid = players.getOrNull(calledIndex)?.id ?: takerUuid
-                        scores[takerUuid] = (scores[takerUuid] ?: 0) + (s * 2)
+                        val partnerUuid = calledPlayerId ?: takerPlayerId
+                        scores[takerPlayerId] = (scores[takerPlayerId] ?: 0) + (s * 2)
                         scores[partnerUuid] = (scores[partnerUuid] ?: 0) + s
-                        players.forEachIndexed { index, p ->
-                            if (index != takerIndex && index != calledIndex) {
+                        players.forEach { p ->
+                            if (p.id != takerPlayerId && p.id != calledPlayerId) {
                                 scores[p.id] = (scores[p.id] ?: 0) - s
                             }
                         }
@@ -107,9 +106,9 @@ class TarotScoringEngine {
                 else -> {
                     // 3 or 4 player game: taker vs all
                     val multiplier = playerCount - 1
-                    scores[takerUuid] = (scores[takerUuid] ?: 0) + (s * multiplier)
-                    players.forEachIndexed { index, p ->
-                        if (index != takerIndex) {
+                    scores[takerPlayerId] = (scores[takerPlayerId] ?: 0) + (s * multiplier)
+                    players.forEach { p ->
+                        if (p.id != takerPlayerId) {
                             scores[p.id] = (scores[p.id] ?: 0) - s
                         }
                     }

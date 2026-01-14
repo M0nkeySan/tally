@@ -39,15 +39,15 @@ interface TarotDao {
         SELECT 
             COUNT(DISTINCT r.gameId) as totalGames,
             COUNT(*) as totalRounds,
-            SUM(CASE WHEN r.takerPlayerIndex = :playerIndex THEN 1 ELSE 0 END) as takerRounds,
-            SUM(CASE WHEN r.takerPlayerIndex = :playerIndex AND r.score > 0 THEN 1 ELSE 0 END) as takerWins,
-            AVG(CASE WHEN r.takerPlayerIndex = :playerIndex THEN r.score ELSE NULL END) as avgTakerScore,
+            SUM(CASE WHEN r.takerPlayerId = :playerId THEN 1 ELSE 0 END) as takerRounds,
+            SUM(CASE WHEN r.takerPlayerId = :playerId AND r.score > 0 THEN 1 ELSE 0 END) as takerWins,
+            AVG(CASE WHEN r.takerPlayerId = :playerId THEN r.score ELSE NULL END) as avgTakerScore,
             SUM(r.score) as totalScore
         FROM tarot_rounds r
         INNER JOIN tarot_games g ON r.gameId = g.id
         WHERE (',' || g.playerIds || ',') LIKE ('%,' || :playerId || ',%')
     """)
-    suspend fun getPlayerStatistics(playerId: String, playerIndex: Int): PlayerStatisticsRaw?
+    suspend fun getPlayerStatistics(playerId: String): PlayerStatisticsRaw?
 
     /**
      * Get bid statistics for a player across all games.
@@ -61,12 +61,12 @@ interface TarotDao {
             AVG(r.score) as avgScore
         FROM tarot_rounds r
         INNER JOIN tarot_games g ON r.gameId = g.id
-        WHERE r.takerPlayerIndex = :playerIndex 
+        WHERE r.takerPlayerId = :playerId 
           AND (',' || g.playerIds || ',') LIKE ('%,' || :playerId || ',%')
         GROUP BY r.bid
         ORDER BY r.bid ASC
     """)
-    suspend fun getBidStatistics(playerId: String, playerIndex: Int): List<BidStatisticsRaw>
+    suspend fun getBidStatistics(playerId: String): List<BidStatisticsRaw>
 
     /**
      * Get recent games for a player.

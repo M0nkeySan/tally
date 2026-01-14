@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +18,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -54,12 +57,18 @@ fun HomeScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { 
+                title = {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(AppStrings.HOME_TITLE)
+                        Text(
+                            AppStrings.HOME_TITLE,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
             )
@@ -113,8 +122,10 @@ fun HomeScreen(
                                         change.consume()
                                         dragOffset += dragAmount
 
-                                        val currentList = localCardOrder ?: return@detectDragGesturesAfterLongPress
-                                        val activeId = draggedItemId ?: return@detectDragGesturesAfterLongPress
+                                        val currentList = localCardOrder
+                                            ?: return@detectDragGesturesAfterLongPress
+                                        val activeId =
+                                            draggedItemId ?: return@detectDragGesturesAfterLongPress
 
                                         // 1. Find the current index of the item being dragged
                                         val currentIdx = currentList.indexOf(activeId)
@@ -122,8 +133,9 @@ fun HomeScreen(
 
                                         // 2. Get layout info for all visible items
                                         val visibleItems = gridState.layoutInfo.visibleItemsInfo
-                                        val currentItemInfo = visibleItems.find { it.index == currentIdx }
-                                            ?: return@detectDragGesturesAfterLongPress
+                                        val currentItemInfo =
+                                            visibleItems.find { it.index == currentIdx }
+                                                ?: return@detectDragGesturesAfterLongPress
 
                                         // 3. Calculate absolute center of the dragged item
                                         // (Item Offset + Drag Offset + Size/2)
@@ -153,8 +165,12 @@ fun HomeScreen(
 
                                             // 6. Compensate Offset
                                             // Calculate the physical distance between the two slots
-                                            val offsetDiff = targetItem.offset - currentItemInfo.offset
-                                            dragOffset -= Offset(offsetDiff.x.toFloat(), offsetDiff.y.toFloat())
+                                            val offsetDiff =
+                                                targetItem.offset - currentItemInfo.offset
+                                            dragOffset -= Offset(
+                                                offsetDiff.x.toFloat(),
+                                                offsetDiff.y.toFloat()
+                                            )
                                         }
                                     },
                                     onDragEnd = {
@@ -202,7 +218,15 @@ data class GameFeature(
 private val gameFeatureMap = mapOf(
     "finger_selector" to GameFeature(
         id = "finger_selector",
-        icon = { Icon(GameIcons.TouchApp, contentDescription = "Finger Selector game", Modifier.width(64.dp).height(64.dp)) },
+        icon = {
+            Icon(
+                GameIcons.TouchApp,
+                contentDescription = "Finger Selector game",
+                Modifier
+                    .width(64.dp)
+                    .height(64.dp)
+            )
+        },
         title = "Finger Selector",
         description = "Randomly select a starting player with multi-touch",
         route = Screen.FingerSelector.route
@@ -223,14 +247,30 @@ private val gameFeatureMap = mapOf(
     ),
     "counter" to GameFeature(
         id = "counter",
-        icon = { Icon(GameIcons.AddBox, contentDescription = "Counter game", Modifier.width(64.dp).height(64.dp)) },
+        icon = {
+            Icon(
+                GameIcons.AddBox,
+                contentDescription = "Counter game",
+                Modifier
+                    .width(64.dp)
+                    .height(64.dp)
+            )
+        },
         title = AppStrings.GAME_COUNTER,
         description = AppStrings.DESC_COUNTER,
         route = Screen.Counter.route
     ),
     "dice_roller" to GameFeature(
         id = "dice_roller",
-        icon = { Icon(GameIcons.Casino, contentDescription = "Dice Roller game", Modifier.width(64.dp).height(64.dp)) },
+        icon = {
+            Icon(
+                GameIcons.Casino,
+                contentDescription = "Dice Roller game",
+                Modifier
+                    .width(64.dp)
+                    .height(64.dp)
+            )
+        },
         title = AppStrings.GAME_DICE,
         description = AppStrings.DESC_DICE,
         route = Screen.DiceRoller.route

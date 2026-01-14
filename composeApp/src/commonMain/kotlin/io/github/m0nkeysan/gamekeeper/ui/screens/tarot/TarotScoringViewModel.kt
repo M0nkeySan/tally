@@ -59,7 +59,7 @@ class TarotScoringViewModel : ViewModel() {
     @OptIn(ExperimentalUuidApi::class)
     fun addRoundManual(
         roundId: String? = null,
-        takerIndex: Int,
+        takerPlayerId: String,
         bid: TarotBid,
         bouts: Int,
         pointsScored: Int,
@@ -67,7 +67,7 @@ class TarotScoringViewModel : ViewModel() {
         hasPoignee: Boolean,
         poigneeLevel: PoigneeLevel?,
         chelem: ChelemType,
-        calledPlayerIndex: Int?
+        calledPlayerId: String?
     ) {
         val gameId = _state.value.game?.id ?: return
 
@@ -91,7 +91,7 @@ class TarotScoringViewModel : ViewModel() {
                 val round = TarotRound(
                     id = roundId ?: Uuid.random().toString(),
                     roundNumber = roundNumber,
-                    takerPlayerId = takerIndex.toString(),
+                    takerPlayerId = takerPlayerId,
                     bid = bid,
                     bouts = bouts,
                     pointsScored = pointsScored,
@@ -99,7 +99,7 @@ class TarotScoringViewModel : ViewModel() {
                     hasPoignee = hasPoignee,
                     poigneeLevel = poigneeLevel,
                     chelem = chelem,
-                    calledPlayerId = calledPlayerIndex?.toString(),
+                    calledPlayerId = calledPlayerId,
                     score = result.totalScore
                 )
 

@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,7 +76,7 @@ fun CounterScreen(
     var showResetConfirmation by remember { mutableStateOf(false) }
     var showDeleteAllConfirmation by remember { mutableStateOf(false) }
 
-     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val leader = remember(state.counters, state.displayMode) {
         if (state.displayMode == CounterDisplayMode.MOST_POINTS) {
@@ -94,10 +95,17 @@ fun CounterScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         if (leader != null && state.counters.isNotEmpty()) {
-                            val emoji = if (state.displayMode == CounterDisplayMode.MOST_POINTS) "📈" else "📉"
+                            val emoji =
+                                if (state.displayMode == CounterDisplayMode.MOST_POINTS) "📈" else "📉"
                             Text("$emoji ${leader.name}", fontWeight = FontWeight.ExtraBold)
                         } else {
-                            Text(AppStrings.COUNTER_TITLE)
+                            Text(
+                                AppStrings.COUNTER_TITLE,
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center
+                            )
                         }
                     }
                 },
@@ -130,7 +138,12 @@ fun CounterScreen(
                                     showMenu = false
                                     showSettingsDialog = true
                                 },
-                                leadingIcon = { Icon(GameIcons.Settings, contentDescription = "Settings menu") }
+                                leadingIcon = {
+                                    Icon(
+                                        GameIcons.Settings,
+                                        contentDescription = "Settings menu"
+                                    )
+                                }
                             )
                             DropdownMenuItem(
                                 text = { Text(AppStrings.COUNTER_REINITIALIZE_ALL) },
@@ -138,7 +151,12 @@ fun CounterScreen(
                                     showMenu = false
                                     showResetConfirmation = true
                                 },
-                                leadingIcon = { Icon(GameIcons.Refresh, contentDescription = "Reset all counters") }
+                                leadingIcon = {
+                                    Icon(
+                                        GameIcons.Refresh,
+                                        contentDescription = "Reset all counters"
+                                    )
+                                }
                             )
                             DropdownMenuItem(
                                 text = { Text(AppStrings.COUNTER_DELETE_EVERYTHING) },
@@ -146,7 +164,12 @@ fun CounterScreen(
                                     showMenu = false
                                     showDeleteAllConfirmation = true
                                 },
-                                leadingIcon = { Icon(GameIcons.Delete, contentDescription = "Delete all counters") }
+                                leadingIcon = {
+                                    Icon(
+                                        GameIcons.Delete,
+                                        contentDescription = "Delete all counters"
+                                    )
+                                }
                             )
                         }
                     }
@@ -219,17 +242,23 @@ fun CounterScreen(
                                         change.consume()
                                         dragOffset += dragAmount
 
-                                        val currentList = previewOrder ?: return@detectDragGesturesAfterLongPress
-                                        val activeId = draggedItemId ?: return@detectDragGesturesAfterLongPress
+                                        val currentList =
+                                            previewOrder ?: return@detectDragGesturesAfterLongPress
+                                        val activeId =
+                                            draggedItemId ?: return@detectDragGesturesAfterLongPress
 
-                                        val currentIdx = currentList.indexOfFirst { it.id == activeId }
+                                        val currentIdx =
+                                            currentList.indexOfFirst { it.id == activeId }
                                         if (currentIdx == -1) return@detectDragGesturesAfterLongPress
 
                                         val visibleItems = listState.layoutInfo.visibleItemsInfo
-                                        val currentItemInfo = visibleItems.find { it.index == currentIdx } ?: return@detectDragGesturesAfterLongPress
+                                        val currentItemInfo =
+                                            visibleItems.find { it.index == currentIdx }
+                                                ?: return@detectDragGesturesAfterLongPress
 
                                         // Calculate center using layout info + drag offset
-                                        val currentItemCenterY = currentItemInfo.offset + dragOffset.y + (currentItemInfo.size / 2f)
+                                        val currentItemCenterY =
+                                            currentItemInfo.offset + dragOffset.y + (currentItemInfo.size / 2f)
 
                                         // Find swap target
                                         val targetItem = visibleItems.find {
@@ -249,7 +278,8 @@ fun CounterScreen(
                                             previewOrder = newOrder
 
                                             // Offset compensation
-                                            val distance = targetItem.offset - currentItemInfo.offset
+                                            val distance =
+                                                targetItem.offset - currentItemInfo.offset
                                             dragOffset -= Offset(0f, distance.toFloat())
 
                                             hapticController.performHapticFeedback(HapticType.SELECTION)
@@ -308,7 +338,12 @@ fun CounterScreen(
                             },
                             onClick = {
                                 if (draggedItemId == null) {
-                                    onEditCounter(counter.id, counter.name, counter.count, counter.color)
+                                    onEditCounter(
+                                        counter.id,
+                                        counter.name,
+                                        counter.count,
+                                        counter.color
+                                    )
                                 }
                             }
                         )
@@ -317,40 +352,40 @@ fun CounterScreen(
             }
         }
 
-         if (quickAdjustTarget != null) {
-             ModalBottomSheet(
-                 onDismissRequest = { quickAdjustTarget = null },
-                 sheetState = sheetState
-             ) {
-                 QuickAdjustContent(
-                     counter = quickAdjustTarget!!,
-                     initialIsAddition = initialIsAddition,
-                     autoFocus = autoFocusModal,
-                     onAdjust = { amount ->
-                         viewModel.adjustCount(quickAdjustTarget!!.id, amount)
-                         hapticController.performHapticFeedback(HapticType.SUCCESS)
-                         quickAdjustTarget = null
-                     }
-                 )
-             }
-         }
+        if (quickAdjustTarget != null) {
+            ModalBottomSheet(
+                onDismissRequest = { quickAdjustTarget = null },
+                sheetState = sheetState
+            ) {
+                QuickAdjustContent(
+                    counter = quickAdjustTarget!!,
+                    initialIsAddition = initialIsAddition,
+                    autoFocus = autoFocusModal,
+                    onAdjust = { amount ->
+                        viewModel.adjustCount(quickAdjustTarget!!.id, amount)
+                        hapticController.performHapticFeedback(HapticType.SUCCESS)
+                        quickAdjustTarget = null
+                    }
+                )
+            }
+        }
 
-         if (scoreSetTarget != null) {
-             ModalBottomSheet(
-                 onDismissRequest = { scoreSetTarget = null },
-                 sheetState = sheetState
-             ) {
-                 SetScoreContent(
-                     counter = scoreSetTarget!!,
-                     onSet = { newScore ->
-                         viewModel.setCount(scoreSetTarget!!.id, newScore)
-                         hapticController.performHapticFeedback(HapticType.SUCCESS)
-                         scoreSetTarget = null
-                     },
-                     onCancel = { scoreSetTarget = null }
-                 )
-             }
-         }
+        if (scoreSetTarget != null) {
+            ModalBottomSheet(
+                onDismissRequest = { scoreSetTarget = null },
+                sheetState = sheetState
+            ) {
+                SetScoreContent(
+                    counter = scoreSetTarget!!,
+                    onSet = { newScore ->
+                        viewModel.setCount(scoreSetTarget!!.id, newScore)
+                        hapticController.performHapticFeedback(HapticType.SUCCESS)
+                        scoreSetTarget = null
+                    },
+                    onCancel = { scoreSetTarget = null }
+                )
+            }
+        }
 
         // --- Settings Dialog ---
         if (showSettingsDialog) {
@@ -516,7 +551,13 @@ fun QuickAdjustContent(
                 FilterChip(
                     selected = !isAddition,
                     onClick = { isAddition = false },
-                    label = { Text("REMOVE (-)", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) },
+                    label = {
+                        Text(
+                            "REMOVE (-)",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    },
                     modifier = Modifier.weight(1f),
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = MaterialTheme.colorScheme.errorContainer,
@@ -526,7 +567,13 @@ fun QuickAdjustContent(
                 FilterChip(
                     selected = isAddition,
                     onClick = { isAddition = true },
-                    label = { Text("ADD (+)", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) },
+                    label = {
+                        Text(
+                            "ADD (+)",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    },
                     modifier = Modifier.weight(1f),
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = Color(counter.color),
@@ -535,27 +582,29 @@ fun QuickAdjustContent(
                 )
             }
 
-              FlatTextField(
-                  value = manualValue,
-                  onValueChange = { if (it.all { char -> char.isDigit() || char == '-' }) manualValue = it },
-                  label = "MANUAL ADJUST",
-                  placeholder = "0",
-                  accentColor = Color(counter.color),
-                  focusRequester = focusRequester,
-                  keyboardOptions = KeyboardOptions(
-                      keyboardType = KeyboardType.Number,
-                      imeAction = ImeAction.Done
-                  ),
-                  keyboardActions = KeyboardActions(
-                      onDone = {
-                          val value = manualValue.toIntOrNull() ?: 0
-                          onAdjust(if (isAddition) value else -value)
-                      }
-                  )
-              )
-          }
+            FlatTextField(
+                value = manualValue,
+                onValueChange = {
+                    if (it.all { char -> char.isDigit() || char == '-' }) manualValue = it
+                },
+                label = "MANUAL ADJUST",
+                placeholder = "0",
+                accentColor = Color(counter.color),
+                focusRequester = focusRequester,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        val value = manualValue.toIntOrNull() ?: 0
+                        onAdjust(if (isAddition) value else -value)
+                    }
+                )
+            )
+        }
 
-         Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
@@ -601,7 +650,10 @@ fun SetScoreContent(
         ) {
             FlatTextField(
                 value = scoreValue,
-                onValueChange = { if (it.isEmpty() || it == "-" || it.all { char -> char.isDigit() || char == '-' }) scoreValue = it },
+                onValueChange = {
+                    if (it.isEmpty() || it == "-" || it.all { char -> char.isDigit() || char == '-' }) scoreValue =
+                        it
+                },
                 placeholder = counter.count.toString(),
                 label = "SET NEW SCORE",
                 accentColor = Color(counter.color),

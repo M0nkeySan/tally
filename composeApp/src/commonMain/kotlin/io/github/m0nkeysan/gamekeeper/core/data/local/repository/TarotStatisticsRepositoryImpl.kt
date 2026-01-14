@@ -26,11 +26,8 @@ class TarotStatisticsRepositoryImpl(
     private val playerRepository: PlayerRepository
 ) : TarotStatisticsRepository {
 
-    override suspend fun getPlayerStatistics(
-        playerId: String,
-        playerIndex: Int
-    ): PlayerStatistics? = withContext(Dispatchers.IO) {
-        val raw = tarotDao.getPlayerStatistics(playerId, playerIndex) ?: return@withContext null
+    override suspend fun getPlayerStatistics(playerId: String): PlayerStatistics? = withContext(Dispatchers.IO) {
+        val raw = tarotDao.getPlayerStatistics(playerId) ?: return@withContext null
         val player = playerRepository.getPlayerById(playerId) ?: return@withContext null
         
         PlayerStatistics(
@@ -51,12 +48,9 @@ class TarotStatisticsRepositoryImpl(
         )
     }
 
-    override suspend fun getBidStatistics(
-        playerId: String,
-        playerIndex: Int
-    ): List<BidStatistic> = withContext(Dispatchers.IO) {
-        tarotDao.getBidStatistics(playerId, playerIndex).map { raw ->
-            val bid = TarotBid.values().find { it.name == raw.bid } ?: TarotBid.PRISE
+    override suspend fun getBidStatistics(playerId: String): List<BidStatistic> = withContext(Dispatchers.IO) {
+        tarotDao.getBidStatistics(playerId).map { raw ->
+            val bid = TarotBid.entries.find { it.name == raw.bid } ?: TarotBid.PRISE
             
             BidStatistic(
                 bid = bid,

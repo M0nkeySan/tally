@@ -5,6 +5,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
@@ -63,11 +65,11 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
     var showSettings by remember { mutableStateOf(false) }
     var config by remember { mutableStateOf(SelectionConfig()) }
     val sheetState = rememberModalBottomSheetState()
-    
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { 
+                title = {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
@@ -75,10 +77,16 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("Finger Selector")
                             Text(
-                                text = when(config.mode) {
-                                    SelectionMode.FINGERS -> "${config.count} Finger${if(config.count > 1) "s" else ""}"
+                                AppStrings.GAME_FINGER_SELECTOR,
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                text = when (config.mode) {
+                                    SelectionMode.FINGERS -> "${config.count} Finger${if (config.count > 1) "s" else ""}"
                                     SelectionMode.GROUPS -> "${config.count} Groups"
                                 },
                                 style = MaterialTheme.typography.bodySmall
@@ -88,7 +96,7 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
                     }
                 },
                 actions = {
@@ -105,7 +113,7 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
                 onBack = onBack
             )
         }
-        
+
         if (showSettings) {
             ModalBottomSheet(
                 onDismissRequest = { showSettings = false },
@@ -135,41 +143,56 @@ fun SelectionSettingsSheet(
             text = "Selector Settings",
             style = MaterialTheme.typography.headlineMedium
         )
-        
+
         // Mode Selection
-         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-             Text("Mode", style = MaterialTheme.typography.titleMedium)
-             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                 FilterChip(
-                     selected = config.mode == SelectionMode.FINGERS,
-                     onClick = { onConfigChange(config.copy(mode = SelectionMode.FINGERS, count = 1)) },
-                     label = { Text("Fingers") },
-                     leadingIcon = { Icon(GameIcons.TouchApp, "Fingers filter") }
-                 )
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Mode", style = MaterialTheme.typography.titleMedium)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilterChip(
+                    selected = config.mode == SelectionMode.FINGERS,
+                    onClick = {
+                        onConfigChange(
+                            config.copy(
+                                mode = SelectionMode.FINGERS,
+                                count = 1
+                            )
+                        )
+                    },
+                    label = { Text("Fingers") },
+                    leadingIcon = { Icon(GameIcons.TouchApp, "Fingers filter") }
+                )
                 FilterChip(
                     selected = config.mode == SelectionMode.GROUPS,
-                    onClick = { onConfigChange(config.copy(mode = SelectionMode.GROUPS, count = 2)) },
+                    onClick = {
+                        onConfigChange(
+                            config.copy(
+                                mode = SelectionMode.GROUPS,
+                                count = 2
+                            )
+                        )
+                    },
                     label = { Text("Groups") },
                     leadingIcon = { Icon(GameIcons.Group, null) }
                 )
             }
         }
-        
-         // Count Selection
-         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-             val title = if (config.mode == SelectionMode.FINGERS) "Number of Fingers" else "Number of Groups"
+
+        // Count Selection
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            val title =
+                if (config.mode == SelectionMode.FINGERS) "Number of Fingers" else "Number of Groups"
             val min = 1
             val max = 5
-            
+
             Text("$title: ${config.count}", style = MaterialTheme.typography.titleMedium)
-            
+
             Slider(
                 value = config.count.toFloat(),
                 onValueChange = { onConfigChange(config.copy(count = it.toInt())) },
                 valueRange = min.toFloat()..max.toFloat(),
                 steps = max - min - 1
             )
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -182,7 +205,7 @@ fun SelectionSettingsSheet(
                 }
             }
         }
-        
+
         Spacer(modifier = Modifier.height(32.dp))
     }
 }
@@ -199,18 +222,18 @@ fun FingerSelectorGame(
     var isSelecting by remember { mutableStateOf(false) }
     var lastFingerCount by remember { mutableIntStateOf(0) }
     var countdownStartTime by remember { mutableStateOf<Long?>(null) }
-    
+
     val hapticController = rememberHapticFeedbackController()
-    
+
     // Reset state when config changes
-     LaunchedEffect(config) {
-         fingers.clear()
-         selected = emptySet()
-         isSelecting = false
-         countdownSeconds = null
-         countdownStartTime = null
-     }
-    
+    LaunchedEffect(config) {
+        fingers.clear()
+        selected = emptySet()
+        isSelecting = false
+        countdownSeconds = null
+        countdownStartTime = null
+    }
+
     // Infinite rotation animation for orbiting circles
     val infiniteTransition = rememberInfiniteTransition()
     val orbitAngle by infiniteTransition.animateFloat(
@@ -221,95 +244,95 @@ fun FingerSelectorGame(
             repeatMode = RepeatMode.Restart
         )
     )
-    
-     // Expansion animation for the selected finger (only used for single selection)
-     val expansionRadius by animateFloatAsState(
-         targetValue = if (selected.isNotEmpty() && config.mode == SelectionMode.FINGERS && config.count == 1) 2000f else 0f,
-         animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
-     )
 
-     // Countdown logic
-     LaunchedEffect(fingers.size) {
-         val minFingers = if (config.mode == SelectionMode.GROUPS) config.count else config.count + 1
-         
-         if (fingers.size >= minFingers && selected.isEmpty() && !isSelecting) {
-             if (fingers.size != lastFingerCount) {
-                 countdownStartTime = getCurrentTimeMillis()
-                 lastFingerCount = fingers.size
-             }
-         } else {
-             countdownSeconds = null
-             countdownStartTime = null
-             lastFingerCount = fingers.size
-         }
-     }
-    
-     // Countdown timer
-     LaunchedEffect(countdownStartTime) {
-         val minFingers = if (config.mode == SelectionMode.GROUPS) config.count else config.count + 1
-         
-         if (countdownStartTime != null && fingers.size >= minFingers && selected.isEmpty() && !isSelecting) {
-             delay(500)
-             
-             for (i in 3 downTo 1) {
-                 if (fingers.size < minFingers || selected.isNotEmpty() || isSelecting) {
-                     countdownSeconds = null
-                     return@LaunchedEffect
-                 }
-                 countdownSeconds = i
-                 hapticController.performHapticFeedback(HapticType.LIGHT)
-                 delay(1000)
-             }
-             
-             if (fingers.size >= minFingers && selected.isEmpty()) {
-                 isSelecting = true
-                 countdownSeconds = null
-                 
-                 if (config.mode == SelectionMode.FINGERS) {
-                     // Select N random fingers
-                     val currentFingers = fingers.keys.toList()
-                     selected = currentFingers.shuffled().take(config.count).toSet()
-                 } else {
-                     // Assign groups
-                     val currentFingers = fingers.keys.toList().shuffled()
-                     val groupAssignments = mutableMapOf<Long, FingerData>()
-                     
-                     currentFingers.forEachIndexed { index, id ->
-                         val groupId = index % config.count
-                         fingers[id]?.let { data ->
-                             // Update color based on group
-                             val groupColor = fingerColors[groupId % fingerColors.size]
-                             fingers[id] = data.copy(
-                                 groupId = groupId,
-                                 color = groupColor
-                             )
-                         }
-                     }
-                     // Mark all as "selected" so they stay visible
-                     selected = fingers.keys.toSet()
-                 }
-                 
-                 hapticController.performHapticFeedback(HapticType.SUCCESS)
-                 
-                 delay(5000)
-                 
-                 // Reset
-                 selected = emptySet()
-                 isSelecting = false
-                 // Clean up fingers that might still be detected if user held down
-                 fingers.clear()
-             }
-         }
-     }
+    // Expansion animation for the selected finger (only used for single selection)
+    val expansionRadius by animateFloatAsState(
+        targetValue = if (selected.isNotEmpty() && config.mode == SelectionMode.FINGERS && config.count == 1) 2000f else 0f,
+        animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
+    )
+
+    // Countdown logic
+    LaunchedEffect(fingers.size) {
+        val minFingers = if (config.mode == SelectionMode.GROUPS) config.count else config.count + 1
+
+        if (fingers.size >= minFingers && selected.isEmpty() && !isSelecting) {
+            if (fingers.size != lastFingerCount) {
+                countdownStartTime = getCurrentTimeMillis()
+                lastFingerCount = fingers.size
+            }
+        } else {
+            countdownSeconds = null
+            countdownStartTime = null
+            lastFingerCount = fingers.size
+        }
+    }
+
+    // Countdown timer
+    LaunchedEffect(countdownStartTime) {
+        val minFingers = if (config.mode == SelectionMode.GROUPS) config.count else config.count + 1
+
+        if (countdownStartTime != null && fingers.size >= minFingers && selected.isEmpty() && !isSelecting) {
+            delay(500)
+
+            for (i in 3 downTo 1) {
+                if (fingers.size < minFingers || selected.isNotEmpty() || isSelecting) {
+                    countdownSeconds = null
+                    return@LaunchedEffect
+                }
+                countdownSeconds = i
+                hapticController.performHapticFeedback(HapticType.LIGHT)
+                delay(1000)
+            }
+
+            if (fingers.size >= minFingers && selected.isEmpty()) {
+                isSelecting = true
+                countdownSeconds = null
+
+                if (config.mode == SelectionMode.FINGERS) {
+                    // Select N random fingers
+                    val currentFingers = fingers.keys.toList()
+                    selected = currentFingers.shuffled().take(config.count).toSet()
+                } else {
+                    // Assign groups
+                    val currentFingers = fingers.keys.toList().shuffled()
+                    val groupAssignments = mutableMapOf<Long, FingerData>()
+
+                    currentFingers.forEachIndexed { index, id ->
+                        val groupId = index % config.count
+                        fingers[id]?.let { data ->
+                            // Update color based on group
+                            val groupColor = fingerColors[groupId % fingerColors.size]
+                            fingers[id] = data.copy(
+                                groupId = groupId,
+                                color = groupColor
+                            )
+                        }
+                    }
+                    // Mark all as "selected" so they stay visible
+                    selected = fingers.keys.toSet()
+                }
+
+                hapticController.performHapticFeedback(HapticType.SUCCESS)
+
+                delay(5000)
+
+                // Reset
+                selected = emptySet()
+                isSelecting = false
+                // Clean up fingers that might still be detected if user held down
+                fingers.clear()
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
-        .pointerInput(selected, isSelecting) {
-                 // Lock touch input if we have selected or are in selection process
-                 if (selected.isNotEmpty() || isSelecting) return@pointerInput
-                
+            .pointerInput(selected, isSelecting) {
+                // Lock touch input if we have selected or are in selection process
+                if (selected.isNotEmpty() || isSelecting) return@pointerInput
+
                 awaitPointerEventScope {
                     while (true) {
                         val event = awaitPointerEvent()
@@ -321,14 +344,15 @@ fun FingerSelectorGame(
                                         Color.White
                                     } else {
                                         val usedColors = fingers.values.map { it.color }.toSet()
-                                        val availableColors = fingerColors.filter { it !in usedColors }
+                                        val availableColors =
+                                            fingerColors.filter { it !in usedColors }
                                         if (availableColors.isNotEmpty()) {
                                             availableColors.random()
                                         } else {
                                             fingerColors.random()
                                         }
                                     }
-                                    
+
                                     fingers[change.id.value] = FingerData(
                                         position = change.position,
                                         color = color
@@ -336,7 +360,8 @@ fun FingerSelectorGame(
                                     hapticController.performHapticFeedback(HapticType.LIGHT)
                                 } else {
                                     fingers[change.id.value]?.let { existing ->
-                                        fingers[change.id.value] = existing.copy(position = change.position)
+                                        fingers[change.id.value] =
+                                            existing.copy(position = change.position)
                                     }
                                 }
                             } else {
@@ -349,62 +374,64 @@ fun FingerSelectorGame(
                 }
             }
     ) {
-         Canvas(modifier = Modifier.fillMaxSize()) {
-             fingers.forEach { (id, fingerData) ->
-                 val isSelected = id in selected
-                 
-                 // In Fingers mode: hide unselected
-                 if (config.mode == SelectionMode.FINGERS && selected.isNotEmpty() && !isSelected) return@forEach
-                 
-                 val baseRadius = 80f
-                 var radius = baseRadius
-                 
-                 if (selected.isNotEmpty()) {
-                     if (config.mode == SelectionMode.FINGERS && config.count == 1 && isSelected) {
-                         // Single Finger: Expand to fill screen
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            fingers.forEach { (id, fingerData) ->
+                val isSelected = id in selected
+
+                // In Fingers mode: hide unselected
+                if (config.mode == SelectionMode.FINGERS && selected.isNotEmpty() && !isSelected) return@forEach
+
+                val baseRadius = 80f
+                var radius = baseRadius
+
+                if (selected.isNotEmpty()) {
+                    if (config.mode == SelectionMode.FINGERS && config.count == 1 && isSelected) {
+                        // Single Finger: Expand to fill screen
                         drawCircle(
                             color = fingerData.color.copy(alpha = 0.8f),
                             center = fingerData.position,
                             radius = expansionRadius
                         )
-                         radius = baseRadius + 40f
-                     } else if (isSelected) {
-                         // Multiple Selected OR Groups: Slight expansion/pulse
-                         radius = baseRadius + 20f
-                     }
-                 }
-                
+                        radius = baseRadius + 40f
+                    } else if (isSelected) {
+                        // Multiple Selected OR Groups: Slight expansion/pulse
+                        radius = baseRadius + 20f
+                    }
+                }
+
                 // Main circle
                 drawCircle(
                     color = fingerData.color,
                     center = fingerData.position,
                     radius = radius
                 )
-                
+
                 // Inner glow / white center
                 drawCircle(
                     color = Color.White.copy(alpha = 0.5f),
                     center = fingerData.position,
                     radius = radius * 0.5f
                 )
-                
-                 // Details (orbit) - show if game is running or if we're in groups mode (to keep it lively)
-                 // Hide orbit only for single finger focus
-                 val hideOrbit = config.mode == SelectionMode.FINGERS && selected.isNotEmpty()
-                
+
+                // Details (orbit) - show if game is running or if we're in groups mode (to keep it lively)
+                // Hide orbit only for single finger focus
+                val hideOrbit = config.mode == SelectionMode.FINGERS && selected.isNotEmpty()
+
                 if (!hideOrbit) {
                     val orbitRadius = radius + 30f
                     val currentAngle = orbitAngle + fingerData.orbitPhase
-                    val orbitX = fingerData.position.x + orbitRadius * cos(Math.toRadians(currentAngle.toDouble())).toFloat()
-                    val orbitY = fingerData.position.y + orbitRadius * sin(Math.toRadians(currentAngle.toDouble())).toFloat()
-                    
+                    val orbitX =
+                        fingerData.position.x + orbitRadius * cos(Math.toRadians(currentAngle.toDouble())).toFloat()
+                    val orbitY =
+                        fingerData.position.y + orbitRadius * sin(Math.toRadians(currentAngle.toDouble())).toFloat()
+
                     drawCircle(
                         color = fingerData.color.copy(alpha = 0.3f),
                         center = fingerData.position,
                         radius = orbitRadius,
                         style = Stroke(width = 2f)
                     )
-                    
+
                     drawCircle(
                         color = Color.White,
                         center = Offset(orbitX, orbitY),
@@ -413,9 +440,9 @@ fun FingerSelectorGame(
                 }
             }
         }
-        
-         // Countdown
-         if (countdownSeconds != null && selected.isEmpty()) {
+
+        // Countdown
+        if (countdownSeconds != null && selected.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -429,7 +456,7 @@ fun FingerSelectorGame(
                 )
             }
         }
-        
+
         // Instructions
         if (fingers.isEmpty()) {
             Box(
@@ -453,21 +480,22 @@ fun FingerSelectorGame(
                         textAlign = TextAlign.Center
                     )
                     Text(
-                         text = if (config.mode == SelectionMode.GROUPS) 
-                             "Wait for group assignment" 
-                         else 
-                             "${config.count} finger${if(config.count > 1) "s" else ""} will be chosen",
-                         color = Color.White.copy(alpha = 0.5f),
-                         fontSize = 14.sp,
-                         textAlign = TextAlign.Center
-                     )
+                        text = if (config.mode == SelectionMode.GROUPS)
+                            "Wait for group assignment"
+                        else
+                            "${config.count} finger${if (config.count > 1) "s" else ""} will be chosen",
+                        color = Color.White.copy(alpha = 0.5f),
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
-         } else {
-             // Show "Need more fingers" if not enough
-             val minFingers = if (config.mode == SelectionMode.GROUPS) config.count else config.count + 1
-             if (fingers.size < minFingers && selected.isEmpty()) {
-                 Box(
+        } else {
+            // Show "Need more fingers" if not enough
+            val minFingers =
+                if (config.mode == SelectionMode.GROUPS) config.count else config.count + 1
+            if (fingers.size < minFingers && selected.isEmpty()) {
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(bottom = 100.dp),

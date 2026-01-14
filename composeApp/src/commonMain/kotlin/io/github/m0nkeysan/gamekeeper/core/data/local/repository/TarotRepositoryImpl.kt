@@ -78,7 +78,7 @@ private fun TarotGameEntity.toDomain() = TarotGame(
 private fun TarotRoundEntity.toDomain() = TarotRound(
     id = id,
     roundNumber = roundNumber,
-    takerPlayerId = takerPlayerIndex.toString(), // Index stored in entity
+    takerPlayerId = takerPlayerId,
     bid = TarotBid.valueOf(bid),
     bouts = bouts,
     pointsScored = pointsScored,
@@ -86,7 +86,7 @@ private fun TarotRoundEntity.toDomain() = TarotRound(
     hasPoignee = hasPoignee,
     poigneeLevel = poigneeLevel?.let { PoigneeLevel.valueOf(it) },
     chelem = ChelemType.valueOf(chelem),
-    calledPlayerId = calledPlayerIndex?.toString(),
+    calledPlayerId = calledPlayerId,
     score = score
 )
 
@@ -104,7 +104,7 @@ private fun TarotRound.toEntity(gameId: String) = TarotRoundEntity(
     id = id,
     gameId = gameId,
     roundNumber = roundNumber,
-    takerPlayerIndex = takerPlayerId.toIntOrNull() ?: 0,
+    takerPlayerId = takerPlayerId,
     bid = bid.name,
     bouts = bouts,
     pointsScored = pointsScored,
@@ -112,6 +112,6 @@ private fun TarotRound.toEntity(gameId: String) = TarotRoundEntity(
     hasPoignee = hasPoignee,
     poigneeLevel = poigneeLevel?.name,
     chelem = chelem.name,
-    calledPlayerIndex = calledPlayerId?.toIntOrNull(),
+    calledPlayerId = calledPlayerId,
     score = score
 )

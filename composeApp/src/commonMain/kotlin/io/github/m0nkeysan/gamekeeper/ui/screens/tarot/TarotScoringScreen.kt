@@ -248,7 +248,7 @@ fun RoundHistorySection(
                 contentPadding = PaddingValues(bottom = 80.dp)
             ) {
                 items(rounds.reversed()) { round ->
-                    val taker = players.getOrNull(round.takerPlayerId.toIntOrNull() ?: -1)?.name ?: "Unknown"
+                    val taker = players.find { it.id == round.takerPlayerId }?.name ?: "Unknown"
                     RoundHistoryItem(
                         round = round,
                         takerName = taker,

@@ -27,7 +27,7 @@ data class TarotRoundEntity @OptIn(ExperimentalUuidApi::class) constructor(
     val id: String = Uuid.random().toString(),
     val gameId: String,
     val roundNumber: Int,
-    val takerPlayerIndex: Int, // Index in the playerIds list
+    val takerPlayerId: String, // Player ID reference
     val bid: String,
     val bouts: Int,
     val pointsScored: Int,
@@ -35,6 +35,6 @@ data class TarotRoundEntity @OptIn(ExperimentalUuidApi::class) constructor(
     val hasPoignee: Boolean,
     val poigneeLevel: String?,
     val chelem: String,
-    val calledPlayerIndex: Int?,
+    val calledPlayerId: String?, // Player ID reference
     val score: Int
 )

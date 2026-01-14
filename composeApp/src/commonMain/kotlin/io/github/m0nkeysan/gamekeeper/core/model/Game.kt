@@ -81,27 +81,3 @@ data class YahtzeeGame(
         }
     }
 }
-
-@Serializable
-data class CounterGame(
-    override val id: String,
-    override val players: List<Player>,
-    override val createdAt: Long = 0L,
-    override val updatedAt: Long = 0L,
-    val counts: Map<String, Int> = emptyMap(),
-    val label: String = "Counter"
-) : Game() {
-    companion object {
-        @OptIn(ExperimentalUuidApi::class)
-        fun create(players: List<Player>, label: String = "Counter"): CounterGame {
-            val now = getCurrentTimeMillis()
-            return CounterGame(
-                id = Uuid.random().toString(),
-                players = players,
-                createdAt = now,
-                updatedAt = now,
-                label = label
-            )
-        }
-    }
-}

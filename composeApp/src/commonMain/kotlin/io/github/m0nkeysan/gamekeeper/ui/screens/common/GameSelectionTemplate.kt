@@ -6,9 +6,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.ui.components.*
@@ -67,20 +70,20 @@ fun GameSelectionTemplate(
     val snackbarHostState = remember { SnackbarHostState() }
     var showMenu by remember { mutableStateOf(false) }
     var showDeleteAllDialog by remember { mutableStateOf(false) }
-    
+
     // Show error in Snackbar
     LaunchedEffect(error) {
         if (error != null) {
             showErrorSnackbar(snackbarHostState, error)
         }
     }
-    
+
     // Delete all confirmation dialog
     if (showDeleteAllDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteAllDialog = false },
-             title = { Text(AppStrings.GAME_DELETE_ALL_TITLE) },
-             text = { Text(AppStrings.GAME_DELETE_ALL_CONFIRM) },
+            title = { Text(AppStrings.GAME_DELETE_ALL_TITLE) },
+            text = { Text(AppStrings.GAME_DELETE_ALL_CONFIRM) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -99,17 +102,23 @@ fun GameSelectionTemplate(
             }
         )
     }
-    
+
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { 
+                title = {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(title)
+                        Text(
+                            title,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
                     }
                 },
                 navigationIcon = {
@@ -132,7 +141,12 @@ fun GameSelectionTemplate(
                                     showMenu = false
                                     onCreateNew()
                                 },
-                                leadingIcon = { Icon(Icons.Default.Add, contentDescription = "Create new game") }
+                                leadingIcon = {
+                                    Icon(
+                                        Icons.Default.Add,
+                                        contentDescription = "Create new game"
+                                    )
+                                }
                             )
                             if (onDeleteAllGames != null && games.isNotEmpty()) {
                                 DropdownMenuItem(
@@ -141,7 +155,12 @@ fun GameSelectionTemplate(
                                         showMenu = false
                                         showDeleteAllDialog = true
                                     },
-                                    leadingIcon = { Icon(GameIcons.Delete, contentDescription = "Delete all games") }
+                                    leadingIcon = {
+                                        Icon(
+                                            GameIcons.Delete,
+                                            contentDescription = "Delete all games"
+                                        )
+                                    }
                                 )
                             }
                         }
@@ -168,6 +187,7 @@ fun GameSelectionTemplate(
                     modifier = Modifier.padding(paddingValues)
                 )
             }
+
             games.isEmpty() -> {
                 EmptyState(
                     message = "No games yet. Create one!",
@@ -176,6 +196,7 @@ fun GameSelectionTemplate(
                     modifier = Modifier.padding(paddingValues)
                 )
             }
+
             else -> {
                 LazyColumn(
                     modifier = Modifier
@@ -192,7 +213,7 @@ fun GameSelectionTemplate(
                                 dismissState.snapTo(SwipeToDismissBoxValue.Settled)
                             }
                         }
-                        
+
                         SwipeToDismissBox(
                             state = dismissState,
                             enableDismissFromStartToEnd = false,
