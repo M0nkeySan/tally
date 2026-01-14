@@ -61,7 +61,6 @@ data class GameStatistics(
     val gameId: String,
     val gameName: String,
     val totalRounds: Int,
-    val gameDuration: String,  // Formatted: "45 minutes" or "2 hours"
     val leadingPlayer: Player?,
     val playerRankings: List<PlayerRanking>
 )

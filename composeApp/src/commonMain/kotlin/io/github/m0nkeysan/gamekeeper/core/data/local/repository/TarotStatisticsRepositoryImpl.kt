@@ -84,19 +84,10 @@ class TarotStatisticsRepositoryImpl(
         val game = tarotRepository.getGameById(gameId) ?: return@withContext null
         val rankings = getPlayerRankings(gameId)
         
-        val durationMs = game.updatedAt - game.createdAt
-        val durationMinutes = durationMs / (1000 * 60)
-        val durationHours = durationMinutes / 60
-        val durationFormatted = when {
-            durationHours > 0 -> "$durationHours hour${if (durationHours > 1) "s" else ""}"
-            else -> "$durationMinutes minute${if (durationMinutes > 1) "s" else ""}"
-        }
-        
         GameStatistics(
             gameId = gameId,
             gameName = game.name,
             totalRounds = game.rounds.size,
-            gameDuration = durationFormatted,
             leadingPlayer = rankings.firstOrNull()?.player,
             playerRankings = rankings
         )

@@ -129,21 +129,11 @@ class TarotStatisticsViewModel(
                         null
                     }
                 }
-
-                // 🆕 Calculate game statistics directly
-                val durationMs = game.updatedAt - game.createdAt
-                val durationMinutes = durationMs / (1000 * 60)
-                val durationHours = durationMinutes / 60
-                val durationFormatted = when {
-                    durationHours > 0 -> "$durationHours hour${if (durationHours > 1) "s" else ""}"
-                    else -> "$durationMinutes minute${if (durationMinutes > 1) "s" else ""}"
-                }
                 
                 val gameStats = GameStatistics(
                     gameId = gameId,
                     gameName = game.name,
                     totalRounds = game.rounds.size,
-                    gameDuration = durationFormatted,
                     leadingPlayer = currentRankings.firstOrNull()?.player,
                     playerRankings = currentRankings
                 )

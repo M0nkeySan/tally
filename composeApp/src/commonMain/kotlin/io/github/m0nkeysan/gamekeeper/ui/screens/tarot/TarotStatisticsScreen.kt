@@ -170,13 +170,6 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Game Overview Card
-        state.gameStatistics?.let { gameStats ->
-            item {
-                GameOverviewCard(gameStats)
-            }
-        }
-        
         // Player Rankings Card
         if (state.currentGameRankings.isNotEmpty()) {
             item {
@@ -281,76 +274,6 @@ private fun PlayerStatsTab(state: TarotStatisticsState) {
         
         item {
             Spacer(modifier = Modifier.height(16.dp))
-        }
-    }
-}
-
-/**
- * Game overview card showing total rounds, duration, and leader
- */
-@Composable
-private fun GameOverviewCard(gameStats: GameStatistics) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                "Game Overview",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .background(
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                        MaterialTheme.shapes.small
-                    )
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-            
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                InfoItem(
-                    icon = GameIcons.Casino,
-                    label = "Total Rounds",
-                    value = gameStats.totalRounds.toString(),
-                    modifier = Modifier.weight(1f)
-                )
-            }
-            
-            gameStats.leadingPlayer?.let { leader ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            MaterialTheme.colorScheme.surfaceVariant,
-                            MaterialTheme.shapes.medium
-                        )
-                        .padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Icon(
-                        GameIcons.Trophy,
-                        "Leader",
-                        modifier = Modifier.size(20.dp),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        "Leading: ${leader.name}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
         }
     }
 }
@@ -757,9 +680,9 @@ private fun CurrentGamePlayerStatsCard(
             }
             
             // Called rounds (times player was called as partner)
-            val calledRounds = allRounds.count { it.calledPlayerId == player.id }
+            val calledRounds = allRounds.count { it.calledPlayerId?.toIntOrNull() == playerIndex  }
             val calledWins = allRounds.count { 
-                it.calledPlayerId == player.id && it.score > 0 
+                it.calledPlayerId?.toIntOrNull() == playerIndex && it.score > 0
             }
             
             // Total rounds as taker or called
@@ -1002,40 +925,6 @@ private fun BidStatisticRow(bid: BidStatistic) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-    }
-}
-
-/**
- * Info item for game overview
- */
-@Composable
-private fun InfoItem(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    label: String,
-    value: String,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Icon(
-            icon,
-            label,
-            modifier = Modifier.size(20.dp),
-            tint = MaterialTheme.colorScheme.primary
-        )
-        Text(
-            label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Text(
-            value,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold
-        )
     }
 }
 
