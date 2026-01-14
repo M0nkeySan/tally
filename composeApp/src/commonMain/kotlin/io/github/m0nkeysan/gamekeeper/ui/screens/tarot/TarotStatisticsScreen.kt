@@ -198,7 +198,14 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
                     "Round Breakdown",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    modifier = Modifier
+                        .background(
+                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                            MaterialTheme.shapes.small
+                        )
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center
                 )
             }
             
@@ -296,7 +303,15 @@ private fun GameOverviewCard(gameStats: GameStatistics) {
             Text(
                 "Game Overview",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                        MaterialTheme.shapes.small
+                    )
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
             )
             
             Row(
@@ -364,7 +379,15 @@ private fun PlayerRankingsCard(rankings: List<PlayerRanking>) {
             Text(
                 "Current Standings",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                        MaterialTheme.shapes.small
+                    )
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
             )
             
             rankings.forEach { ranking ->
@@ -686,7 +709,15 @@ private fun PersonalStatsCard(
                     Text(
                         "Bid Statistics",
                         style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .background(
+                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                MaterialTheme.shapes.small
+                            )
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center
                     )
                     bidStatistics.forEach { bid ->
                         BidStatisticRow(bid)
@@ -734,6 +765,9 @@ private fun CurrentGamePlayerStatsCard(
                 (takerWins.toDouble() / takerRounds) * 100 
             else 0.0
             
+            // Games chosen (number of games where this player was selected as taker)
+            val gamesChosen = takerRounds
+            
             // Find player's current score from rounds
             val playerCurrentScore = rounds.firstOrNull()?.let { firstRound ->
                 val ranking = rounds.find { it.taker.id == player.id }?.let { round ->
@@ -748,6 +782,11 @@ private fun CurrentGamePlayerStatsCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                StatItem(
+                    label = "Games Chosen",
+                    value = gamesChosen.toString(),
+                    modifier = Modifier.weight(1f)
+                )
                 StatItem(
                     label = "As Taker",
                     value = "$takerWins/$takerRounds",
@@ -834,7 +873,15 @@ private fun CurrentGamePlayerStatsCard(
                             "Bids in This Game",
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top = 8.dp)
+                            modifier = Modifier
+                                .background(
+                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                    MaterialTheme.shapes.small
+                                )
+                                .padding(8.dp)
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
+                            textAlign = TextAlign.Center
                         )
                         bidsInGame.forEach { (bid, count) ->
                             Row(
@@ -868,7 +915,15 @@ private fun CurrentGamePlayerStatsCard(
                         Text(
                             "Performance Details",
                             style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .background(
+                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                    MaterialTheme.shapes.small
+                                )
+                                .padding(8.dp)
+                                .fillMaxWidth(),
+                            textAlign = TextAlign.Center
                         )
                         
                         // Average bouts
@@ -896,12 +951,14 @@ private fun CurrentGamePlayerStatsCard(
                             StatItem(
                                 label = "Avg Won",
                                 value = String.format("%.0f", avgPointsWon),
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
+                                valueColor = MaterialTheme.colorScheme.secondary
                             )
                             StatItem(
                                 label = "Avg Lost",
                                 value = String.format("%.0f", avgPointsLost),
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
+                                valueColor = MaterialTheme.colorScheme.error
                             )
                         }
                     }
@@ -988,7 +1045,8 @@ private fun InfoItem(
 private fun StatItem(
     label: String,
     value: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    valueColor: androidx.compose.ui.graphics.Color? = null
 ) {
     Column(
         modifier = modifier
@@ -1008,7 +1066,8 @@ private fun StatItem(
         Text(
             value,
             style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = valueColor ?: MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

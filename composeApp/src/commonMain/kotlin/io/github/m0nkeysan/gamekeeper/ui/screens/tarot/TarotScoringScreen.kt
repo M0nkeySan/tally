@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.activity.compose.BackHandler
@@ -54,9 +55,17 @@ fun TarotScoringScreen(
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Game Scoring") },
+         topBar = {
+             TopAppBar(
+                 title = { 
+                     Text(
+                         "Game Scoring",
+                         style = MaterialTheme.typography.headlineSmall,
+                         fontWeight = FontWeight.Bold,
+                         modifier = Modifier.fillMaxWidth(),
+                         textAlign = TextAlign.Center
+                     ) 
+                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(GameIcons.ArrowBack, contentDescription = "Back")
