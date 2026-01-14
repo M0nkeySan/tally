@@ -17,14 +17,14 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.navigation.Screen
 import io.github.m0nkeysan.gamekeeper.ui.components.GameCard
+import io.github.m0nkeysan.gamekeeper.ui.components.TarotIcon
+import io.github.m0nkeysan.gamekeeper.ui.components.YahtzeeIcon
 import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -202,35 +202,35 @@ data class GameFeature(
 private val gameFeatureMap = mapOf(
     "finger_selector" to GameFeature(
         id = "finger_selector",
-        icon = { Icon(GameIcons.TouchApp, contentDescription = "Finger Selector game") },
+        icon = { Icon(GameIcons.TouchApp, contentDescription = "Finger Selector game", Modifier.width(64.dp).height(64.dp)) },
         title = "Finger Selector",
         description = "Randomly select a starting player with multi-touch",
         route = Screen.FingerSelector.route
     ),
     "tarot" to GameFeature(
         id = "tarot",
-        icon = { Icon(GameIcons.Tarot, contentDescription = "Tarot game") },
+        icon = { TarotIcon() },
         title = AppStrings.GAME_TAROT,
         description = AppStrings.DESC_TAROT,
         route = Screen.Tarot.route
     ),
     "yahtzee" to GameFeature(
         id = "yahtzee",
-        icon = { Icon(GameIcons.Casino, contentDescription = "Yahtzee game") },
+        icon = { YahtzeeIcon() },
         title = AppStrings.GAME_YAHTZEE,
         description = AppStrings.DESC_YAHTZEE,
         route = Screen.Yahtzee.route
     ),
     "counter" to GameFeature(
         id = "counter",
-        icon = { Icon(GameIcons.Add, contentDescription = "Counter game") },
+        icon = { Icon(GameIcons.AddBox, contentDescription = "Counter game", Modifier.width(64.dp).height(64.dp)) },
         title = AppStrings.GAME_COUNTER,
         description = AppStrings.DESC_COUNTER,
         route = Screen.Counter.route
     ),
     "dice_roller" to GameFeature(
         id = "dice_roller",
-        icon = { Icon(GameIcons.Casino, contentDescription = "Dice Roller game") },
+        icon = { Icon(GameIcons.Casino, contentDescription = "Dice Roller game", Modifier.width(64.dp).height(64.dp)) },
         title = AppStrings.GAME_DICE,
         description = AppStrings.DESC_DICE,
         route = Screen.DiceRoller.route

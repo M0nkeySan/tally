@@ -12,73 +12,88 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+/**
+ * ViewModel for Dice Roller Screen
+ *
+ * Manages:
+ * - Dice configuration (number, type, animation, shake settings)
+ * - Current roll results (individual rolls and total)
+ * - Roll animation state
+ * - Configuration persistence to user preferences
+ *
+ * Features:
+ * - Loads saved configuration on init
+ * - Supports animation with number scrambling effect
+ * - Generates rolls with configurable number and sides
+ * - Saves configuration changes to persistent storage
+ */
 class DiceRollerViewModel : ViewModel() {
-    private val userPreferencesRepository = PlatformRepositories.getUserPreferencesRepository()
+     private val userPreferencesRepository = PlatformRepositories.getUserPreferencesRepository()
 
-    // Configuration state
-    private val _configuration = MutableStateFlow(DiceConfiguration())
-    val configuration: StateFlow<DiceConfiguration> = _configuration.asStateFlow()
+     /** Current dice configuration (persisted) */
+     private val _configuration = MutableStateFlow(DiceConfiguration())
+     val configuration: StateFlow<DiceConfiguration> = _configuration.asStateFlow()
 
-    // Current roll result
-    private val _currentRoll = MutableStateFlow<DiceRoll?>(null)
-    val currentRoll: StateFlow<DiceRoll?> = _currentRoll.asStateFlow()
+     /** Result of the current/last dice roll */
+     private val _currentRoll = MutableStateFlow<DiceRoll?>(null)
+     val currentRoll: StateFlow<DiceRoll?> = _currentRoll.asStateFlow()
 
-    // Rolling animation state
-    private val _isRolling = MutableStateFlow(false)
-    val isRolling: StateFlow<Boolean> = _isRolling.asStateFlow()
+     /** Whether dice are currently rolling/animating */
+     private val _isRolling = MutableStateFlow(false)
+     val isRolling: StateFlow<Boolean> = _isRolling.asStateFlow()
 
     init {
-        // Load saved configuration
-        viewModelScope.launch {
-            userPreferencesRepository.getDiceConfiguration()
-                .collect { config ->
-                    _configuration.value = config
-                    // Generate an initial static result so the box isn't empty on start
-                    if (_currentRoll.value == null) {
-                        generateRoll(config, isTemp = false)
-                    }
-                }
-        }
-    }
+         // Load saved configuration
+         viewModelScope.launch {
+             userPreferencesRepository.getDiceConfiguration()
+                 .collect { config ->
+                     _configuration.value = config
+                     // Generate an initial static result so the box isn't empty on start
+                     if (_currentRoll.value == null) {
+                         generateRoll(config)
+                     }
+                 }
+         }
+     }
 
     fun rollDice() {
-        if (_isRolling.value) return
+         if (_isRolling.value) return
 
-        viewModelScope.launch {
-            _isRolling.value = true
-            val config = _configuration.value
+         viewModelScope.launch {
+             _isRolling.value = true
+             val config = _configuration.value
 
-            if (config.animationEnabled) {
-                // Digital Scramble Effect:
-                // Rapidly cycle numbers to simulate calculation/chaos
-                repeat(12) {
-                    generateRoll(config, isTemp = true)
-                    delay(60) // Short delay between number changes
-                }
-            }
+             if (config.animationEnabled) {
+                 // Digital Scramble Effect:
+                 // Rapidly cycle numbers to simulate calculation/chaos
+                 repeat(DiceConstants.SCRAMBLE_ITERATIONS) {
+                     generateRoll(config)
+                     delay(DiceConstants.SCRAMBLE_DELAY_MS)
+                 }
+             }
 
-            // Final Result (The one that counts)
-            generateRoll(config, isTemp = false)
-            _isRolling.value = false
-        }
-    }
+             // Final Result (The one that counts)
+             generateRoll(config)
+             _isRolling.value = false
+         }
+     }
 
-    private fun generateRoll(config: DiceConfiguration, isTemp: Boolean) {
-        val results = List(config.numberOfDice) {
-            Random.nextInt(1, config.diceType.sides + 1)
-        }
-        _currentRoll.value = DiceRoll(
-            individualResults = results,
-            total = results.sum()
-        )
-    }
+     private fun generateRoll(config: DiceConfiguration) {
+         val results = List(config.numberOfDice) {
+             Random.nextInt(1, config.diceType.sides + 1)
+         }
+         _currentRoll.value = DiceRoll(
+             individualResults = results,
+             total = results.sum()
+         )
+     }
 
-    fun updateConfiguration(config: DiceConfiguration) {
-        viewModelScope.launch {
-            _configuration.value = config
-            userPreferencesRepository.saveDiceConfiguration(config)
-            // Reset roll when config changes to avoid confusion
-            generateRoll(config, isTemp = false)
-        }
-    }
+     fun updateConfiguration(config: DiceConfiguration) {
+         viewModelScope.launch {
+             _configuration.value = config
+             userPreferencesRepository.saveDiceConfiguration(config)
+             // Reset roll when config changes to avoid confusion
+             generateRoll(config)
+         }
+     }
 }

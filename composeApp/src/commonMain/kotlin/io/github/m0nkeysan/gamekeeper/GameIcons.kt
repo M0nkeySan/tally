@@ -8,6 +8,7 @@ expect object GameIcons {
     val Casino: ImageVector
     val GridView: ImageVector
     val Add: ImageVector
+    val AddBox: ImageVector
     val Refresh: ImageVector
     val Remove: ImageVector
     val ArrowBack: ImageVector
@@ -15,7 +16,6 @@ expect object GameIcons {
     val Group: ImageVector
     val Delete: ImageVector
     val MoreVert: ImageVector
-    val Tarot: ImageVector
     val BarChart: ImageVector
     val Trophy: ImageVector
 }
