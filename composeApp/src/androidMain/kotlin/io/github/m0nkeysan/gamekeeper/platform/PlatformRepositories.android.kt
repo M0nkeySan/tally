@@ -7,12 +7,14 @@ import io.github.m0nkeysan.gamekeeper.core.data.local.repository.CounterReposito
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.GameQueryHelper
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.PlayerRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.TarotRepositoryImpl
+import io.github.m0nkeysan.gamekeeper.core.data.local.repository.TarotStatisticsRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.UserPreferencesRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.YahtzeeRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.domain.CounterHistoryStore
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.CounterRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotRepository
+import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotStatisticsRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.UserPreferencesRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeRepository
 
@@ -24,6 +26,7 @@ actual object PlatformRepositories {
     private var userPreferencesRepository: UserPreferencesRepository? = null
     private var counterRepository: CounterRepository? = null
     private var tarotRepository: TarotRepository? = null
+    private var tarotStatisticsRepository: TarotStatisticsRepository? = null
     private var yahtzeeRepository: YahtzeeRepository? = null
     private var gameQueryHelper: GameQueryHelper? = null
     private var historyStore: CounterHistoryStore? = null
@@ -77,6 +80,16 @@ actual object PlatformRepositories {
     actual fun getTarotRepository(): TarotRepository {
         return tarotRepository ?: TarotRepositoryImpl(getDatabase().tarotDao(), getDatabase()).also {
             tarotRepository = it
+        }
+    }
+
+    actual fun getTarotStatisticsRepository(): TarotStatisticsRepository {
+        return tarotStatisticsRepository ?: TarotStatisticsRepositoryImpl(
+            getDatabase().tarotDao(),
+            getTarotRepository(),
+            getPlayerRepository()
+        ).also {
+            tarotStatisticsRepository = it
         }
     }
 
