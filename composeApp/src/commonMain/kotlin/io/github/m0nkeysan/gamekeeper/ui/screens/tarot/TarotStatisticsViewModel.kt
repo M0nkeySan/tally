@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotStatisticsRepository
+import io.github.m0nkeysan.gamekeeper.core.model.GameStatistics
+import io.github.m0nkeysan.gamekeeper.core.model.PlayerRanking
+import io.github.m0nkeysan.gamekeeper.core.model.RoundStatistic
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -64,9 +67,77 @@ class TarotStatisticsViewModel(
 
                 val game = gameEntity.copy(players = players, rounds = rounds)
 
-                val gameStats = statsRepository.getCurrentGameStatistics(gameId)
-                val roundBreakdown = statsRepository.getRoundBreakdown(gameId)
-                val currentRankings = statsRepository.getPlayerRankings(gameId)
+                // 🆕 Calculate rankings directly from game data
+                val currentRankings = game.players.mapIndexed { playerIndex, player ->
+                    val totalScore = game.rounds
+                        .filter { it.takerPlayerId.toIntOrNull() == playerIndex }
+                        .sumOf { it.score }
+                    
+                    val takerRounds = game.rounds.count { it.takerPlayerId.toIntOrNull() == playerIndex }
+                    val takerWins = game.rounds.count { 
+                        it.takerPlayerId.toIntOrNull() == playerIndex && it.score > 0 
+                    }
+                    
+                    val winRate = if (takerRounds > 0) 
+                        (takerWins.toDouble() / takerRounds) * 100 
+                    else 0.0
+                    
+                    Triple(player, totalScore, Pair(takerWins, takerRounds)) to winRate
+                }
+                    .sortedByDescending { it.first.second }
+                    .mapIndexed { index, (playerData, winRate) ->
+                        val (player, totalScore, takerStats) = playerData
+                        
+                        PlayerRanking(
+                            rank = index + 1,
+                            player = player,
+                            totalScore = totalScore,
+                            roundsWonAsTaker = takerStats.first,
+                            roundsPlayedAsTaker = takerStats.second,
+                            winRate = winRate
+                        )
+                    }
+
+                // 🆕 Convert loaded rounds to RoundStatistic using game data
+                val roundBreakdown = game.rounds.mapNotNull { round ->
+                    val taker = game.players.getOrNull(round.takerPlayerId.toIntOrNull() ?: 0)
+                        ?: game.players.firstOrNull()
+                    
+                    if (taker != null) {
+                        RoundStatistic(
+                            roundNumber = round.roundNumber,
+                            taker = taker,
+                            bid = round.bid,
+                            pointsScored = round.pointsScored,
+                            bouts = round.bouts,
+                            contractWon = round.score > 0,
+                            score = round.score,
+                            hasSpecialAnnounce = round.hasPetitAuBout || 
+                                               round.hasPoignee || 
+                                               round.chelem.toString() != "NONE"
+                        )
+                    } else {
+                        null
+                    }
+                }
+
+                // 🆕 Calculate game statistics directly
+                val durationMs = game.updatedAt - game.createdAt
+                val durationMinutes = durationMs / (1000 * 60)
+                val durationHours = durationMinutes / 60
+                val durationFormatted = when {
+                    durationHours > 0 -> "$durationHours hour${if (durationHours > 1) "s" else ""}"
+                    else -> "$durationMinutes minute${if (durationMinutes > 1) "s" else ""}"
+                }
+                
+                val gameStats = GameStatistics(
+                    gameId = gameId,
+                    gameName = game.name,
+                    totalRounds = game.rounds.size,
+                    gameDuration = durationFormatted,
+                    leadingPlayer = currentRankings.firstOrNull()?.player,
+                    playerRankings = currentRankings
+                )
 
                 println("🔍 [Statistics] Game stats: ${roundBreakdown.size} rounds, ${currentRankings.size} rankings")
 
