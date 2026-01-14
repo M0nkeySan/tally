@@ -187,6 +187,17 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
         // Round Breakdown Section
         if (state.roundBreakdown.isNotEmpty()) {
             item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
                 Text(
                     "Round Breakdown",
                     style = MaterialTheme.typography.titleMedium,
@@ -200,11 +211,9 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
                         .fillMaxWidth(),
                     textAlign = TextAlign.Center
                 )
-            }
-            
-            items(state.roundBreakdown.reversed()) { round ->
-                RoundBreakdownItem(round)
-            }
+                        state.roundBreakdown.reversed().forEach { round ->
+                        RoundBreakdownItem(round)
+                    } } } }
         } else {
             item {
                 Card(
@@ -285,6 +294,7 @@ private fun PlayerStatsTab(state: TarotStatisticsState) {
 private fun PlayerRankingsCard(rankings: List<PlayerRanking>) {
     Card(
         modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
@@ -441,6 +451,7 @@ private fun RoundBreakdownItem(round: RoundStatistic) {
 private fun TakerPerformanceCard(performanceMap: Map<String, TakerPerformance>) {
     Card(
         modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
@@ -551,102 +562,6 @@ private fun TakerPerformanceRow(performance: TakerPerformance) {
 }
 
 /**
- * Overall rankings card for cross-game statistics
- */
-@Composable
-private fun OverallRankingsCard(rankings: List<PlayerRanking>) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                "Game Rankings",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            
-            rankings.forEach { ranking ->
-                RankingRow(ranking)
-            }
-        }
-    }
-}
-
-/**
- * Personal statistics card for a player
- */
-@Composable
-private fun PersonalStatsCard(
-    playerStats: PlayerStatistics,
-    bidStatistics: List<BidStatistic>
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            // Header with player name
-            Text(
-                playerStats.playerName,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            
-            // Stats summary
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                StatItem(
-                    label = "Win Rate",
-                    value = "%.0f%%".format(playerStats.takerWinRate),
-                    modifier = Modifier.weight(1f)
-                )
-                StatItem(
-                    label = "Avg Score",
-                    value = "%.1f".format(playerStats.averageTakerScore),
-                    modifier = Modifier.weight(1f)
-                )
-            }
-            
-            // Bid statistics
-            if (bidStatistics.isNotEmpty()) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        "Bid Statistics",
-                        style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .background(
-                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                MaterialTheme.shapes.small
-                            )
-                            .padding(8.dp)
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                    bidStatistics.forEach { bid ->
-                        BidStatisticRow(bid)
-                    }
-                }
-            }
-
-        }
-    }
-}
-
-/**
  * Per-player statistics for the current game only
  */
 @Composable
@@ -691,16 +606,6 @@ private fun CurrentGamePlayerStatsCard(
             val winRate = if (totalRounds > 0) 
                 (totalWins.toDouble() / totalRounds) * 100 
             else 0.0
-            
-            // Find player's current score from rounds
-            val playerCurrentScore = rounds.firstOrNull()?.let { firstRound ->
-                val ranking = rounds.find { it.taker.id == player.id }?.let { round ->
-                    // This is a simplification - in reality we'd need the full ranking calculation
-                    // but we can get it from the ranking data if available
-                    round.score
-                } ?: 0
-                ranking
-            } ?: 0
             
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -906,7 +811,8 @@ private fun CurrentGamePlayerStatsCard(
                         )
                         
                         // Called win/loss statistics
-                        val calledGameRounds = allRounds.filter { it.calledPlayerId == player.id }.mapNotNull { tarotRound ->
+                        val calledGameRounds = allRounds.filter { it.calledPlayerId == player.id }
+                            .mapNotNull { tarotRound ->
                             rounds.find { it.roundNumber == tarotRound.roundNumber }
                         }
                         
