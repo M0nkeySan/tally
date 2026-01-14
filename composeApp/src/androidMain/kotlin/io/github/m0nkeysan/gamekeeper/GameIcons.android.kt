@@ -8,6 +8,8 @@ import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.History
@@ -34,4 +36,6 @@ actual object GameIcons {
     actual val MoreVert: ImageVector = Icons.Default.MoreVert
     actual val BarChart: ImageVector = Icons.Default.BarChart
     actual val Trophy: ImageVector = Icons.Default.EmojiEvents
+    actual val ExpandMore: ImageVector = Icons.Default.ExpandMore
+    actual val ExpandLess: ImageVector = Icons.Default.ExpandLess
 }
