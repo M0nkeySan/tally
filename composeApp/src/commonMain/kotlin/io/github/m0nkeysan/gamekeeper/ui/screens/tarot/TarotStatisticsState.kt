@@ -25,7 +25,6 @@ data class TarotStatisticsState(
     // Cross-game player statistics
     val playerStatistics: List<PlayerStatistics> = emptyList(),
     val bidStatistics: Map<String, List<BidStatistic>> = emptyMap(),
-    val recentGames: Map<String, List<TarotGame>> = emptyMap(),
     
     // Loading and error states
     val isLoading: Boolean = false,

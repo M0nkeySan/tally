@@ -161,10 +161,6 @@ class TarotStatisticsViewModel(
                     player.id to statsRepository.getBidStatistics(player.id, originalIndex)
                 }.toMap()
 
-                val recentGames = game.players.associate { player ->
-                    player.id to statsRepository.getRecentGames(player.id, limit = 10)
-                }
-
                 _uiState.update {
                     it.copy(
                         game = game,
@@ -173,7 +169,6 @@ class TarotStatisticsViewModel(
                         currentGameRankings = currentRankings,
                         playerStatistics = playerStats,
                         bidStatistics = bidStats,
-                        recentGames = recentGames,
                         isLoading = false
                     )
                 }

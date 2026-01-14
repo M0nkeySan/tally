@@ -42,10 +42,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.BidStatistic
 import io.github.m0nkeysan.gamekeeper.core.model.GameStatistics
+import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.core.model.PlayerRanking
 import io.github.m0nkeysan.gamekeeper.core.model.PlayerStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.RoundStatistic
 import io.github.m0nkeysan.gamekeeper.core.model.TarotGame
+import io.github.m0nkeysan.gamekeeper.core.model.TarotRound
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 
 /**
@@ -246,26 +248,18 @@ private fun PlayerStatsTab(state: TarotStatisticsState) {
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Overall Rankings
-        if (state.playerStatistics.isNotEmpty()) {
-            item {
-                OverallRankingsCard(state.currentGameRankings)
-            }
-        }
-        
-        // Per-player statistics
-        state.game?.players?.forEachIndexed { index, player ->
-            item {
-                val playerStats = state.playerStatistics.getOrNull(index)
-                val bidStats = state.bidStatistics[player.id] ?: emptyList()
-                val recentGames = state.recentGames[player.id] ?: emptyList()
-                
-                if (playerStats != null) {
-                    PersonalStatsCard(
-                        playerStats = playerStats,
-                        bidStatistics = bidStats,
-                        recentGames = recentGames
-                    )
+        // Per-player statistics for current game
+        state.game?.let { game ->
+            state.roundBreakdown.let { rounds ->
+                game.players.forEachIndexed { playerIndex, player ->
+                    item {
+                        CurrentGamePlayerStatsCard(
+                            player = player,
+                            playerIndex = playerIndex,
+                            rounds = rounds,
+                            allRounds = game.rounds
+                        )
+                    }
                 }
             }
         }
@@ -526,8 +520,7 @@ private fun OverallRankingsCard(rankings: List<PlayerRanking>) {
 @Composable
 private fun PersonalStatsCard(
     playerStats: PlayerStatistics,
-    bidStatistics: List<BidStatistic>,
-    recentGames: List<TarotGame>
+    bidStatistics: List<BidStatistic>
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -551,11 +544,6 @@ private fun PersonalStatsCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                StatItem(
-                    label = "Games",
-                    value = playerStats.totalGames.toString(),
-                    modifier = Modifier.weight(1f)
-                )
                 StatItem(
                     label = "Win Rate",
                     value = "%.0f%%".format(playerStats.takerWinRate),
@@ -581,20 +569,108 @@ private fun PersonalStatsCard(
                     }
                 }
             }
+
+        }
+    }
+}
+
+/**
+ * Per-player statistics for the current game only
+ */
+@Composable
+private fun CurrentGamePlayerStatsCard(
+    player: Player,
+    playerIndex: Int,
+    rounds: List<RoundStatistic>,
+    allRounds: List<TarotRound>
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // Player name header
+            Text(
+                player.name,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
             
-            // Recent games
-            if (recentGames.isNotEmpty()) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        "Recent Games",
-                        style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    recentGames.take(3).forEach { game ->
+            // Current game stats
+            val takerRounds = allRounds.count { it.takerPlayerId.toIntOrNull() == playerIndex }
+            val takerWins = allRounds.count { 
+                it.takerPlayerId.toIntOrNull() == playerIndex && it.score > 0 
+            }
+            val winRate = if (takerRounds > 0) 
+                (takerWins.toDouble() / takerRounds) * 100 
+            else 0.0
+            
+            // Find player's current score from rounds
+            val playerCurrentScore = rounds.firstOrNull()?.let { firstRound ->
+                val ranking = rounds.find { it.taker.id == player.id }?.let { round ->
+                    // This is a simplification - in reality we'd need the full ranking calculation
+                    // but we can get it from the ranking data if available
+                    round.score
+                } ?: 0
+                ranking
+            } ?: 0
+            
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                StatItem(
+                    label = "As Taker",
+                    value = "$takerWins/$takerRounds",
+                    modifier = Modifier.weight(1f)
+                )
+                StatItem(
+                    label = "Win Rate",
+                    value = "%.0f%%".format(winRate),
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            
+            // Bid breakdown for this game
+            val playerRounds = allRounds.filter { it.takerPlayerId.toIntOrNull() == playerIndex }
+            if (playerRounds.isNotEmpty()) {
+                val bidsInGame = playerRounds.groupingBy { it.bid }.eachCount()
+                
+                if (bidsInGame.isNotEmpty()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
-                            "• ${game.name}",
-                            style = MaterialTheme.typography.bodySmall
+                            "Bids in This Game",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold
                         )
+                        bidsInGame.forEach { (bid, count) ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                        MaterialTheme.shapes.small
+                                    )
+                                    .padding(8.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    bid.displayName,
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                                Text(
+                                    "x$count",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
                     }
                 }
             }
