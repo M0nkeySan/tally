@@ -7,9 +7,7 @@ import io.github.m0nkeysan.gamekeeper.core.domain.engine.TarotScoringEngine
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotStatisticsRepository
-import io.github.m0nkeysan.gamekeeper.core.model.GameHighlights
 import io.github.m0nkeysan.gamekeeper.core.model.GameStatistics
-import io.github.m0nkeysan.gamekeeper.core.model.PlayerMomentum
 import io.github.m0nkeysan.gamekeeper.core.model.PlayerRanking
 import io.github.m0nkeysan.gamekeeper.core.model.RoundStatistic
 import io.github.m0nkeysan.gamekeeper.core.model.TakerPerformance
@@ -154,26 +152,11 @@ class TarotStatisticsViewModel(
 
                 // 🆕 Calculate game progression statistics (only if 3+ rounds)
                 val hasMinimumRounds = game.rounds.size >= 3
-                var gameHighlights: GameHighlights? = null
-                var playerMomentumMap = emptyMap<String, PlayerMomentum>()
                 var takerPerformanceMap = emptyMap<String, TakerPerformance>()
 
                 if (hasMinimumRounds) {
                     println("🔍 [Statistics] Calculating progression stats (${game.rounds.size} rounds)")
                     val progressionAnalyzer = GameProgressionAnalyzer(scoringEngine)
-                    
-                    gameHighlights = progressionAnalyzer.calculateGameHighlights(
-                        game.players,
-                        game.rounds,
-                        game.playerCount
-                    )
-                    println("🔍 [Statistics] Highlights: comeback=${gameHighlights?.biggestComeback?.player?.name}, lead=${gameHighlights?.largestLead?.roundNumber}")
-                    
-                    playerMomentumMap = progressionAnalyzer.calculatePlayerMomentum(
-                        game.players,
-                        game.rounds
-                    )
-                    println("🔍 [Statistics] Momentum calculated for ${playerMomentumMap.size} players")
                     
                     takerPerformanceMap = progressionAnalyzer.calculateTakerPerformance(
                         game.players,
@@ -202,8 +185,6 @@ class TarotStatisticsViewModel(
                         gameStatistics = gameStats,
                         roundBreakdown = roundBreakdown,
                         currentGameRankings = currentRankings,
-                        gameHighlights = gameHighlights,
-                        playerMomentum = playerMomentumMap,
                         takerPerformance = takerPerformanceMap,
                         hasMinimumRounds = hasMinimumRounds,
                         playerStatistics = playerStats,

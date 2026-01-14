@@ -41,10 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.BidStatistic
-import io.github.m0nkeysan.gamekeeper.core.model.GameHighlights
 import io.github.m0nkeysan.gamekeeper.core.model.GameStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.Player
-import io.github.m0nkeysan.gamekeeper.core.model.PlayerMomentum
 import io.github.m0nkeysan.gamekeeper.core.model.PlayerRanking
 import io.github.m0nkeysan.gamekeeper.core.model.PlayerStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.RoundStatistic
@@ -176,20 +174,6 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
         state.gameStatistics?.let { gameStats ->
             item {
                 GameOverviewCard(gameStats)
-            }
-        }
-        
-        // Game Highlights Card (only if 3+ rounds)
-        state.gameHighlights?.let { highlights ->
-            item {
-                GameHighlightsCard(highlights)
-            }
-        }
-        
-        // Momentum Card (only if 3+ rounds)
-        if (state.hasMinimumRounds && state.playerMomentum.isNotEmpty()) {
-            item {
-                MomentumCard(state.playerMomentum)
             }
         }
         
@@ -363,83 +347,6 @@ private fun GameOverviewCard(gameStats: GameStatistics) {
 }
 
 /**
- * Game highlights card showing comebacks, leads, and best rounds
- */
-@Composable
-private fun GameHighlightsCard(highlights: GameHighlights) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                "Game Highlights",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            
-            // Biggest Comeback
-            highlights.biggestComeback?.let { comeback ->
-                HighlightRow(
-                    emoji = "💪",
-                    title = "Biggest Comeback: ${comeback.player.name}"
-                )
-            }
-            
-            // Largest Lead
-            highlights.largestLead?.let { lead ->
-                HighlightRow(
-                    emoji = "📈",
-                    title = "Largest Lead: ${lead.player.name}"
-                )
-            }
-            
-            // Best Round
-            highlights.bestRound?.let { best ->
-                HighlightRow(
-                    emoji = "⭐",
-                    title = "Best Round: ${best.player.name}"
-                )
-            }
-        }
-    }
-}
-
-/**
- * Individual highlight row
- */
-@Composable
-private fun HighlightRow(
-    emoji: String,
-    title: String
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                MaterialTheme.shapes.small
-            )
-            .padding(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(emoji, style = MaterialTheme.typography.headlineSmall)
-        Text(
-            title,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.weight(1f)
-        )
-    }
-}
-
-/**
  * Player rankings card for current game
  */
 @Composable
@@ -464,82 +371,6 @@ private fun PlayerRankingsCard(rankings: List<PlayerRanking>) {
                 RankingRow(ranking)
             }
         }
-    }
-}
-
-/**
- * Momentum card showing player streaks and current form
- */
-@Composable
-private fun MomentumCard(playerMomentumMap: Map<String, PlayerMomentum>) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                "Player Momentum 🔥",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            
-            playerMomentumMap.values.forEach { momentum ->
-                MomentumRow(momentum)
-            }
-        }
-    }
-}
-
-/**
- * Individual momentum row showing player streak status
- */
-@Composable
-private fun MomentumRow(momentum: PlayerMomentum) {
-    val streakEmoji = when {
-        momentum.currentStreak.isHot -> "🔥"
-        momentum.currentStreak.isCold -> "❄️"
-        else -> "😐"
-    }
-    
-    val streakText = when {
-        momentum.currentStreak.isHot -> "On fire! ${momentum.currentStreak.count} wins in a row"
-        momentum.currentStreak.isCold -> "Cold streak: ${momentum.currentStreak.count} losses in a row"
-        momentum.currentStreak.count > 0 -> "Just started as taker"
-        else -> "Mixed results"
-    }
-    
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                MaterialTheme.shapes.small
-            )
-            .padding(12.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column {
-            Text(
-                momentum.player.name,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                streakText,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        Text(
-            streakEmoji,
-            style = MaterialTheme.typography.headlineSmall
-        )
     }
 }
 
