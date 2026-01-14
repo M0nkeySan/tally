@@ -41,11 +41,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.BidStatistic
+import io.github.m0nkeysan.gamekeeper.core.model.GameHighlights
 import io.github.m0nkeysan.gamekeeper.core.model.GameStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.Player
+import io.github.m0nkeysan.gamekeeper.core.model.PlayerMomentum
 import io.github.m0nkeysan.gamekeeper.core.model.PlayerRanking
 import io.github.m0nkeysan.gamekeeper.core.model.PlayerStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.RoundStatistic
+import io.github.m0nkeysan.gamekeeper.core.model.TakerPerformance
 import io.github.m0nkeysan.gamekeeper.core.model.TarotGame
 import io.github.m0nkeysan.gamekeeper.core.model.TarotRound
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
@@ -176,10 +179,31 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
             }
         }
         
+        // Game Highlights Card (only if 3+ rounds)
+        state.gameHighlights?.let { highlights ->
+            item {
+                GameHighlightsCard(highlights)
+            }
+        }
+        
+        // Momentum Card (only if 3+ rounds)
+        if (state.hasMinimumRounds && state.playerMomentum.isNotEmpty()) {
+            item {
+                MomentumCard(state.playerMomentum)
+            }
+        }
+        
         // Player Rankings Card
         if (state.currentGameRankings.isNotEmpty()) {
             item {
                 PlayerRankingsCard(state.currentGameRankings)
+            }
+        }
+        
+        // Taker Performance Card (only if 3+ rounds)
+        if (state.hasMinimumRounds && state.takerPerformance.isNotEmpty()) {
+            item {
+                TakerPerformanceCard(state.takerPerformance)
             }
         }
         
@@ -339,6 +363,117 @@ private fun GameOverviewCard(gameStats: GameStatistics) {
 }
 
 /**
+ * Game highlights card showing comebacks, leads, and best rounds
+ */
+@Composable
+private fun GameHighlightsCard(highlights: GameHighlights) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                "Game Highlights",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            
+            // Biggest Comeback
+            highlights.biggestComeback?.let { comeback ->
+                HighlightRow(
+                    emoji = "💪",
+                    title = "Biggest Comeback",
+                    description = "${comeback.player.name}",
+                    detail = "Recovered ${comeback.recovery} points (${comeback.lowestScore} → ${comeback.currentScore})",
+                    round = "From Round ${comeback.roundReached}"
+                )
+            }
+            
+            // Largest Lead
+            highlights.largestLead?.let { lead ->
+                HighlightRow(
+                    emoji = "📈",
+                    title = "Largest Lead",
+                    description = "${lead.player.name}",
+                    detail = "+${lead.leadAmount} points vs ${lead.secondPlacePlayer.name}",
+                    round = "Round ${lead.roundNumber}"
+                )
+            }
+            
+            // Best Round
+            highlights.bestRound?.let { best ->
+                HighlightRow(
+                    emoji = "⭐",
+                    title = "Best Round",
+                    description = "${best.player.name}",
+                    detail = "Gained ${best.pointsGained} points (${best.scoreBefore} → ${best.scoreAfter})",
+                    round = "Round ${best.round.roundNumber} - ${best.round.bid.displayName}"
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Individual highlight row
+ */
+@Composable
+private fun HighlightRow(
+    emoji: String,
+    title: String,
+    description: String,
+    detail: String,
+    round: String
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                MaterialTheme.shapes.small
+            )
+            .padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(emoji, style = MaterialTheme.typography.headlineSmall)
+            Column {
+                Text(
+                    title,
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    description,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+        Text(
+            detail,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(start = 32.dp)
+        )
+        Text(
+            round,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(start = 32.dp)
+        )
+    }
+}
+
+/**
  * Player rankings card for current game
  */
 @Composable
@@ -363,6 +498,82 @@ private fun PlayerRankingsCard(rankings: List<PlayerRanking>) {
                 RankingRow(ranking)
             }
         }
+    }
+}
+
+/**
+ * Momentum card showing player streaks and current form
+ */
+@Composable
+private fun MomentumCard(playerMomentumMap: Map<String, PlayerMomentum>) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                "Player Momentum 🔥",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            
+            playerMomentumMap.values.forEach { momentum ->
+                MomentumRow(momentum)
+            }
+        }
+    }
+}
+
+/**
+ * Individual momentum row showing player streak status
+ */
+@Composable
+private fun MomentumRow(momentum: PlayerMomentum) {
+    val streakEmoji = when {
+        momentum.currentStreak.isHot -> "🔥"
+        momentum.currentStreak.isCold -> "❄️"
+        else -> "😐"
+    }
+    
+    val streakText = when {
+        momentum.currentStreak.isHot -> "On fire! ${momentum.currentStreak.count} wins in a row"
+        momentum.currentStreak.isCold -> "Cold streak: ${momentum.currentStreak.count} losses in a row"
+        momentum.currentStreak.count > 0 -> "Just started as taker"
+        else -> "Mixed results"
+    }
+    
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                MaterialTheme.shapes.small
+            )
+            .padding(12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column {
+            Text(
+                momentum.player.name,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                streakText,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        Text(
+            streakEmoji,
+            style = MaterialTheme.typography.headlineSmall
+        )
     }
 }
 
@@ -481,6 +692,122 @@ private fun RoundBreakdownItem(round: RoundStatistic) {
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold
                 )
+            }
+        }
+    }
+}
+
+/**
+ * Taker performance card showing bid distribution and partner stats
+ */
+@Composable
+private fun TakerPerformanceCard(performanceMap: Map<String, TakerPerformance>) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                "Taker Performance 📊",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            
+            performanceMap.values.forEach { performance ->
+                TakerPerformanceRow(performance)
+            }
+        }
+    }
+}
+
+/**
+ * Individual taker performance row
+ */
+@Composable
+private fun TakerPerformanceRow(performance: TakerPerformance) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                MaterialTheme.shapes.small
+            )
+            .padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        // Player name and basic stats
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    performance.player.name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    "${performance.wins}/${performance.takerRounds} (${String.format("%.1f", performance.winRate)}%)",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+        
+        // Bid distribution
+        if (performance.bidDistribution.isNotEmpty()) {
+            Text(
+                "Bids Used:",
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                performance.bidDistribution.forEach { (bid, count) ->
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                MaterialTheme.colorScheme.primaryContainer,
+                                MaterialTheme.shapes.small
+                            )
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    ) {
+                        Text(
+                            "${bid.displayName}(${count})",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+        }
+        
+        // Partner stats (5-player only)
+        performance.partnerStats?.let { partners ->
+            if (partners.isNotEmpty()) {
+                Text(
+                    "With Partners:",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold
+                )
+                partners.forEach { (_, partner) ->
+                    Text(
+                        "• ${partner.partnerName}: ${partner.wins}/${partner.gamesPlayed} (${String.format("%.1f", partner.winRate)}%)",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
             }
         }
     }
