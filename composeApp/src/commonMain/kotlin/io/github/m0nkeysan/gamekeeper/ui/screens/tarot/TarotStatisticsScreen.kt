@@ -387,10 +387,7 @@ private fun GameHighlightsCard(highlights: GameHighlights) {
             highlights.biggestComeback?.let { comeback ->
                 HighlightRow(
                     emoji = "💪",
-                    title = "Biggest Comeback",
-                    description = "${comeback.player.name}",
-                    detail = "Recovered ${comeback.recovery} points (${comeback.lowestScore} → ${comeback.currentScore})",
-                    round = "From Round ${comeback.roundReached}"
+                    title = "Biggest Comeback: ${comeback.player.name}"
                 )
             }
             
@@ -398,10 +395,7 @@ private fun GameHighlightsCard(highlights: GameHighlights) {
             highlights.largestLead?.let { lead ->
                 HighlightRow(
                     emoji = "📈",
-                    title = "Largest Lead",
-                    description = "${lead.player.name}",
-                    detail = "+${lead.leadAmount} points vs ${lead.secondPlacePlayer.name}",
-                    round = "Round ${lead.roundNumber}"
+                    title = "Largest Lead: ${lead.player.name}"
                 )
             }
             
@@ -409,10 +403,7 @@ private fun GameHighlightsCard(highlights: GameHighlights) {
             highlights.bestRound?.let { best ->
                 HighlightRow(
                     emoji = "⭐",
-                    title = "Best Round",
-                    description = "${best.player.name}",
-                    detail = "Gained ${best.pointsGained} points (${best.scoreBefore} → ${best.scoreAfter})",
-                    round = "Round ${best.round.roundNumber} - ${best.round.bid.displayName}"
+                    title = "Best Round: ${best.player.name}"
                 )
             }
         }
@@ -425,12 +416,9 @@ private fun GameHighlightsCard(highlights: GameHighlights) {
 @Composable
 private fun HighlightRow(
     emoji: String,
-    title: String,
-    description: String,
-    detail: String,
-    round: String
+    title: String
 ) {
-    Column(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(
@@ -438,37 +426,15 @@ private fun HighlightRow(
                 MaterialTheme.shapes.small
             )
             .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(emoji, style = MaterialTheme.typography.headlineSmall)
-            Column {
-                Text(
-                    title,
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    description,
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
+        Text(emoji, style = MaterialTheme.typography.headlineSmall)
         Text(
-            detail,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(start = 32.dp)
-        )
-        Text(
-            round,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(start = 32.dp)
+            title,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.weight(1f)
         )
     }
 }
