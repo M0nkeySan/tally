@@ -811,7 +811,7 @@ private fun CurrentGamePlayerStatsCard(
                         )
                         
                         // Called win/loss statistics
-                        val calledGameRounds = allRounds.filter { it.calledPlayerId == player.id }
+                        val calledGameRounds = allRounds.filter { it.calledPlayerId?.toIntOrNull() == playerIndex }
                             .mapNotNull { tarotRound ->
                             rounds.find { it.roundNumber == tarotRound.roundNumber }
                         }
