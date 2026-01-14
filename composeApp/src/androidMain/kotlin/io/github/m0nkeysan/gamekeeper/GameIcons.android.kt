@@ -4,8 +4,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.History
@@ -34,6 +36,8 @@ actual object GameIcons {
     actual val Group: ImageVector = Icons.Default.Group
     actual val Delete: ImageVector = Icons.Default.Delete
     actual val MoreVert: ImageVector = Icons.Default.MoreVert
+    actual val BarChart: ImageVector = Icons.Default.BarChart
+    actual val Trophy: ImageVector = Icons.Default.EmojiEvents
     actual val Tarot: ImageVector = ImageVector.Builder(
         name = "Tarot",
         defaultWidth = 24.dp,
