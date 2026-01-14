@@ -33,31 +33,6 @@ data class RoundHighlight(
 )
 
 /**
- * Current momentum and streaks for a player
- */
-data class PlayerMomentum(
-    val player: Player,
-    val currentStreak: Streak,
-    val longestWinStreak: Int,
-    val longestLossStreak: Int
-)
-
-data class Streak(
-    val type: StreakType,
-    val count: Int
-) {
-    val isActive: Boolean get() = count >= 2
-    val isHot: Boolean get() = type == StreakType.WIN && count >= 2
-    val isCold: Boolean get() = type == StreakType.LOSS && count >= 2
-}
-
-enum class StreakType {
-    WIN,    // Consecutive taker wins
-    LOSS,   // Consecutive taker losses
-    NONE    // No streak or mixed results
-}
-
-/**
  * Enhanced taker performance metrics
  */
 data class TakerPerformance(

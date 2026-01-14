@@ -760,17 +760,81 @@ private fun CurrentGamePlayerStatsCard(
                 )
             }
             
-            // Bid breakdown for this game
-            val playerRounds = allRounds.filter { it.takerPlayerId.toIntOrNull() == playerIndex }
-            if (playerRounds.isNotEmpty()) {
-                val bidsInGame = playerRounds.groupingBy { it.bid }.eachCount()
+            // Bid breakdown for this game - using RoundStatistic which has proper data
+            val playerGameRounds = rounds.filter { it.taker.id == player.id }
+            val playerAllRounds = allRounds.filter { it.takerPlayerId.toIntOrNull() == playerIndex }
+            
+            if (playerAllRounds.isNotEmpty()) {
+                val bidsInGame = playerAllRounds.groupingBy { it.bid }.eachCount()
                 
                 if (bidsInGame.isNotEmpty()) {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        // Favorite bid (most played)
+                        val favoriteBid = bidsInGame.maxByOrNull { it.value }
+                        if (favoriteBid != null) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        MaterialTheme.colorScheme.secondaryContainer,
+                                        MaterialTheme.shapes.small
+                                    )
+                                    .padding(8.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    "Favorite Bid:",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    "${favoriteBid.key.displayName} (${favoriteBid.value}x)",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                        
+                        // Most successful bid (highest win rate) - use playerGameRounds with RoundStatistic
+                        val bidWinRates = bidsInGame.keys.associate { bid ->
+                            val bidRounds = playerGameRounds.filter { it.bid == bid }
+                            val wins = bidRounds.count { it.contractWon }
+                            bid to if (bidRounds.isNotEmpty()) wins.toDouble() / bidRounds.size * 100 else 0.0
+                        }
+                        val mostSuccessfulBid = bidWinRates.maxByOrNull { it.value }
+                        if (mostSuccessfulBid != null && mostSuccessfulBid.value > 0) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        MaterialTheme.colorScheme.tertiaryContainer,
+                                        MaterialTheme.shapes.small
+                                    )
+                                    .padding(8.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    "Most Successful:",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    "${mostSuccessfulBid.key.displayName} (${String.format("%.0f", mostSuccessfulBid.value)}%)",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                        
                         Text(
                             "Bids in This Game",
                             style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(top = 8.dp)
                         )
                         bidsInGame.forEach { (bid, count) ->
                             Row(
@@ -794,6 +858,51 @@ private fun CurrentGamePlayerStatsCard(
                                     fontWeight = FontWeight.Bold
                                 )
                             }
+                        }
+                    }
+                }
+                
+                // Detailed averages section - use playerGameRounds with RoundStatistic
+                if (playerGameRounds.isNotEmpty()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            "Performance Details",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        
+                        // Average bouts
+                        val totalBouts = playerGameRounds.sumOf { it.bouts }
+                        val avgBouts = totalBouts.toDouble() / playerGameRounds.size
+                        StatItem(
+                            label = "Avg Bouts/Round",
+                            value = String.format("%.1f", avgBouts),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        
+                        // Points won/lost
+                        val pointsWon = playerGameRounds.filter { it.contractWon }.sumOf { it.score }
+                        val roundsWon = playerGameRounds.count { it.contractWon }
+                        val avgPointsWon = if (roundsWon > 0) pointsWon.toDouble() / roundsWon else 0.0
+                        
+                        val pointsLost = playerGameRounds.filter { !it.contractWon }.sumOf { it.score }
+                        val roundsLost = playerGameRounds.count { !it.contractWon }
+                        val avgPointsLost = if (roundsLost > 0) Math.abs(pointsLost.toDouble() / roundsLost) else 0.0
+                        
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            StatItem(
+                                label = "Avg Won",
+                                value = String.format("%.0f", avgPointsWon),
+                                modifier = Modifier.weight(1f)
+                            )
+                            StatItem(
+                                label = "Avg Lost",
+                                value = String.format("%.0f", avgPointsLost),
+                                modifier = Modifier.weight(1f)
+                            )
                         }
                     }
                 }

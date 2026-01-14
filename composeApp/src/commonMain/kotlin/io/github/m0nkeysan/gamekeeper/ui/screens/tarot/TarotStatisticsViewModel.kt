@@ -156,7 +156,7 @@ class TarotStatisticsViewModel(
 
                 if (hasMinimumRounds) {
                     println("🔍 [Statistics] Calculating progression stats (${game.rounds.size} rounds)")
-                    val progressionAnalyzer = GameProgressionAnalyzer(scoringEngine)
+                    val progressionAnalyzer = GameProgressionAnalyzer()
                     
                     takerPerformanceMap = progressionAnalyzer.calculateTakerPerformance(
                         game.players,
