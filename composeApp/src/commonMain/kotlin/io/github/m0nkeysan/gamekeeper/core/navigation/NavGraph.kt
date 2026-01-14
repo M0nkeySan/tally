@@ -18,6 +18,7 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameCreationScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotRoundAdditionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotScoringScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotStatisticsScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeGameCreationScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeGameSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeScoringScreen
@@ -76,6 +77,9 @@ fun GameNavGraph() {
                 onBack = { navController.popBackStack() },
                 onAddNewRound = { roundId ->
                     navController.navigate(Screen.TarotRoundAddition.createRoute(gameId, roundId))
+                },
+                onNavigateToStatistics = { statsGameId ->
+                    navController.navigate(Screen.TarotStatistics.createRoute(statsGameId))
                 }
             )
         }
@@ -98,6 +102,17 @@ fun GameNavGraph() {
                 roundId = roundId,
                 onBack = { navController.popBackStack() },
                 onRoundAdded = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Screen.TarotStatistics.route,
+            arguments = listOf(navArgument("gameId") { type = NavType.StringType })
+        ) { entry ->
+            val gameId = entry.arguments?.getString("gameId") ?: ""
+            TarotStatisticsScreen(
+                gameId = gameId,
+                onBack = { navController.popBackStack() }
             )
         }
 

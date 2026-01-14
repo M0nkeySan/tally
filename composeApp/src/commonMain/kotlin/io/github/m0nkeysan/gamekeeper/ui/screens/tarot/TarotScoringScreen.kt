@@ -31,6 +31,7 @@ fun TarotScoringScreen(
     gameId: String,
     onBack: () -> Unit,
     onAddNewRound: (String?) -> Unit,
+    onNavigateToStatistics: (String) -> Unit = {},
     viewModel: TarotScoringViewModel = viewModel { TarotScoringViewModel() }
 ) {
     val state by viewModel.state.collectAsState()
@@ -53,6 +54,21 @@ fun TarotScoringScreen(
     }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Game Scoring") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { onNavigateToStatistics(gameId) }) {
+                        Icon(GameIcons.BarChart, contentDescription = "Statistics")
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { onAddNewRound(null) },
