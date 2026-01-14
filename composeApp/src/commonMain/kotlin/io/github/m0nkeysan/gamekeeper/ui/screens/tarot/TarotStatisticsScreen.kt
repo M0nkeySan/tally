@@ -324,12 +324,6 @@ private fun GameOverviewCard(gameStats: GameStatistics) {
                     value = gameStats.totalRounds.toString(),
                     modifier = Modifier.weight(1f)
                 )
-                InfoItem(
-                    icon = GameIcons.History,
-                    label = "Duration",
-                    value = gameStats.gameDuration,
-                    modifier = Modifier.weight(1f)
-                )
             }
             
             gameStats.leadingPlayer?.let { leader ->
@@ -761,12 +755,19 @@ private fun CurrentGamePlayerStatsCard(
             val takerWins = allRounds.count { 
                 it.takerPlayerId.toIntOrNull() == playerIndex && it.score > 0 
             }
-            val winRate = if (takerRounds > 0) 
-                (takerWins.toDouble() / takerRounds) * 100 
-            else 0.0
             
-            // Games chosen (number of games where this player was selected as taker)
-            val gamesChosen = takerRounds
+            // Called rounds (times player was called as partner)
+            val calledRounds = allRounds.count { it.calledPlayerId == player.id }
+            val calledWins = allRounds.count { 
+                it.calledPlayerId == player.id && it.score > 0 
+            }
+            
+            // Total rounds as taker or called
+            val totalRounds = takerRounds + calledRounds
+            val totalWins = takerWins + calledWins
+            val winRate = if (totalRounds > 0) 
+                (totalWins.toDouble() / totalRounds) * 100 
+            else 0.0
             
             // Find player's current score from rounds
             val playerCurrentScore = rounds.firstOrNull()?.let { firstRound ->
@@ -783,8 +784,8 @@ private fun CurrentGamePlayerStatsCard(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 StatItem(
-                    label = "Games Chosen",
-                    value = gamesChosen.toString(),
+                    label = "Called",
+                    value = calledRounds.toString(),
                     modifier = Modifier.weight(1f)
                 )
                 StatItem(
