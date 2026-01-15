@@ -85,11 +85,16 @@ fun YahtzeeGameView(
 ) {
     val game = state.game!!
     val players = viewModel.getPlayers()
-    var selectedPlayerId by remember { mutableStateOf(game.currentPlayerId) }
+    var selectedPlayerId by remember(game.currentPlayerId) { 
+        mutableStateOf(game.currentPlayerId) 
+    }
     var showPlayerDropdown by remember { mutableStateOf(false) }
     
-    LaunchedEffect(game.currentPlayerId) {
-        selectedPlayerId = game.currentPlayerId
+    // Auto-switch to current player when turn changes
+    LaunchedEffect(state.game) {
+        state.game?.let { updatedGame ->
+            selectedPlayerId = updatedGame.currentPlayerId
+        }
     }
 
     LaunchedEffect(state.scores) {
