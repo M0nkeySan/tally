@@ -52,15 +52,15 @@ class YahtzeeRepositoryImpl(
         dao.getScoresForGame(gameId).map { entities ->
             entities.map { 
                 PlayerYahtzeeScore(
-                    playerIndex = it.playerIndex,
+                    playerId = it.playerId,
                     score = it.toDomain()
                 )
             }
         }
 
-    override suspend fun saveScore(score: YahtzeeScore, gameId: String, playerIndex: Int) {
+    override suspend fun saveScore(score: YahtzeeScore, gameId: String, playerId: String) {
         try {
-            dao.insertScore(score.toEntity(gameId, playerIndex))
+            dao.insertScore(score.toEntity(gameId, playerId))
         } catch (e: Exception) {
             throw Exception("Failed to save Yahtzee score: ${e.message}", e)
         }
@@ -76,8 +76,8 @@ private fun YahtzeeGameEntity.toDomain() = YahtzeeGame(
     scores = emptyMap(), // Scores are loaded separately
     name = name,
     playerIds = playerIds,
-    firstPlayerIndex = firstPlayerIndex,
-    currentPlayerIndex = currentPlayerIndex,
+    firstPlayerId = firstPlayerId,
+    currentPlayerId = currentPlayerId,
     isFinished = isFinished,
     winnerName = winnerName
 )
@@ -94,17 +94,17 @@ private fun YahtzeeGame.toEntity() = YahtzeeGameEntity(
     name = name,
     playerCount = playerCount,
     playerIds = playerIds.ifEmpty { players.joinToString(",") { it.id } },
-    firstPlayerIndex = firstPlayerIndex,
-    currentPlayerIndex = currentPlayerIndex,
+    firstPlayerId = firstPlayerId,
+    currentPlayerId = currentPlayerId,
     isFinished = isFinished,
     winnerName = winnerName,
     createdAt = createdAt,
     updatedAt = updatedAt
 )
 
-private fun YahtzeeScore.toEntity(gameId: String, playerIndex: Int) = YahtzeeScoreEntity(
+private fun YahtzeeScore.toEntity(gameId: String, playerId: String) = YahtzeeScoreEntity(
     gameId = gameId,
-    playerIndex = playerIndex,
+    playerId = playerId,
     category = category.name,
     score = value
 )

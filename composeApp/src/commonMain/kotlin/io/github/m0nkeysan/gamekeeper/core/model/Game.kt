@@ -58,25 +58,41 @@ data class YahtzeeGame(
     val scores: Map<String, List<YahtzeeScore>> = emptyMap(),
     val name: String = "Yahtzee Game",
     val playerIds: String = "",
-    val firstPlayerIndex: Int = 0,
-    val currentPlayerIndex: Int = 0,
+    val firstPlayerId: String = "",
+    val currentPlayerId: String = "",
     val isFinished: Boolean = false,
     val winnerName: String? = null
 ) : Game() {
     
     val playerCount: Int get() = if (playerIds.isNotEmpty()) playerIds.split(",").size else players.size
     
+    fun getCurrentPlayer(): Player? = players.find { it.id == currentPlayerId }
+    
+    fun getPlayerById(playerId: String): Player? = players.find { it.id == playerId }
+    
+    fun getNextPlayerId(): String? {
+        if (players.isEmpty()) return null
+        val currentIndex = playerIds.split(",").indexOf(currentPlayerId)
+        if (currentIndex < 0) return null
+        val nextIndex = (currentIndex + 1) % playerIds.split(",").size
+        return playerIds.split(",").getOrNull(nextIndex)
+    }
+    
     companion object {
         @OptIn(ExperimentalUuidApi::class)
         fun create(players: List<Player>, name: String = "Yahtzee Game"): YahtzeeGame {
             val now = getCurrentTimeMillis()
+            val playerIds = players.joinToString(",") { it.id }
+            val firstPlayerId = players.firstOrNull()?.id ?: ""
             return YahtzeeGame(
                 id = Uuid.random().toString(),
                 players = players,
                 createdAt = now,
                 updatedAt = now,
                 name = name,
-                playerIds = players.joinToString(",") { it.id }
+                playerIds = playerIds,
+                firstPlayerId = firstPlayerId,
+                currentPlayerId = firstPlayerId
             )
         }
     }

@@ -14,8 +14,8 @@ data class YahtzeeGameEntity @OptIn(ExperimentalUuidApi::class) constructor(
     val name: String,
     val playerCount: Int,
     val playerIds: String, // Comma-separated player IDs
-    val firstPlayerIndex: Int,
-    val currentPlayerIndex: Int,
+    val firstPlayerId: String,
+    val currentPlayerId: String,
     val isFinished: Boolean = false,
     val winnerName: String? = null,
     val createdAt: Long,
@@ -30,7 +30,7 @@ data class YahtzeeScoreEntity @OptIn(ExperimentalUuidApi::class) constructor(
     @PrimaryKey
     val id: String = Uuid.random().toString(),
     val gameId: String,
-    val playerIndex: Int,
+    val playerId: String,
     val category: String, // YahtzeeCategory.name
     val score: Int
 )

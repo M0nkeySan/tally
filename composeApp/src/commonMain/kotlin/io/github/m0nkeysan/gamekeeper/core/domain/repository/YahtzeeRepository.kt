@@ -11,5 +11,5 @@ interface YahtzeeRepository {
     suspend fun saveGame(game: YahtzeeGame)
     suspend fun deleteGame(game: YahtzeeGame)
     fun getScoresForGame(gameId: String): Flow<List<PlayerYahtzeeScore>>
-    suspend fun saveScore(score: YahtzeeScore, gameId: String, playerIndex: Int)
+    suspend fun saveScore(score: YahtzeeScore, gameId: String, playerId: String)
 }

@@ -85,11 +85,11 @@ fun YahtzeeGameView(
 ) {
     val game = state.game!!
     val players = viewModel.getPlayers()
-    var selectedPlayerIndex by remember { mutableIntStateOf(game.currentPlayerIndex) }
+    var selectedPlayerId by remember { mutableStateOf(game.currentPlayerId) }
     var showPlayerDropdown by remember { mutableStateOf(false) }
     
-    LaunchedEffect(game.currentPlayerIndex) {
-        selectedPlayerIndex = game.currentPlayerIndex
+    LaunchedEffect(game.currentPlayerId) {
+        selectedPlayerId = game.currentPlayerId
     }
 
     LaunchedEffect(state.scores) {
@@ -114,7 +114,9 @@ fun YahtzeeGameView(
             ) {
                 IconButton(
                     onClick = { 
-                        selectedPlayerIndex = if (selectedPlayerIndex > 0) selectedPlayerIndex - 1 else players.size - 1 
+                        val currentIndex = players.indexOfFirst { it.id == selectedPlayerId }
+                        val nextIndex = if (currentIndex > 0) currentIndex - 1 else players.size - 1
+                        selectedPlayerId = players.getOrNull(nextIndex)?.id ?: selectedPlayerId
                     }
                 ) {
                     Icon(
@@ -136,7 +138,7 @@ fun YahtzeeGameView(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            val isTurn = selectedPlayerIndex == game.currentPlayerIndex
+                            val isTurn = selectedPlayerId == game.currentPlayerId
                             if (isTurn) {
                                 Text(
                                     text = "●",
@@ -146,7 +148,7 @@ fun YahtzeeGameView(
                             }
                             
                             Text(
-                                text = players.getOrNull(selectedPlayerIndex)?.name ?: "Unknown",
+                                text = players.find { it.id == selectedPlayerId }?.name ?: "Unknown",
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.ExtraBold
                             )
@@ -157,8 +159,8 @@ fun YahtzeeGameView(
                             )
                         }
                         
-                        val selectedPlayerTotal = remember(selectedPlayerIndex, state.scores) {
-                            "Total: ${viewModel.calculateTotalScore(selectedPlayerIndex)}"
+                        val selectedPlayerTotal = remember(selectedPlayerId, state.scores) {
+                            "Total: ${viewModel.calculateTotalScore(selectedPlayerId)}"
                         }
                         Text(
                             text = selectedPlayerTotal,
@@ -169,33 +171,33 @@ fun YahtzeeGameView(
                     }
 
                     val playerTotals = remember(state.scores) {
-                        players.indices.map { index -> viewModel.calculateTotalScore(index) }
+                        players.associateBy { it.id }.mapValues { (id, _) -> viewModel.calculateTotalScore(id) }
                     }
                     DropdownMenu(
                         expanded = showPlayerDropdown,
                         onDismissRequest = { showPlayerDropdown = false }
                     ) {
-                        players.forEachIndexed { index, player ->
+                        players.forEach { player ->
                             DropdownMenuItem(
                                 text = { 
                                     Row(verticalAlignment = Alignment.CenterVertically) {
-                                        if (index == game.currentPlayerIndex) {
+                                        if (player.id == game.currentPlayerId) {
                                             Text("● ", color = MaterialTheme.colorScheme.primary)
                                         }
                                         Text(
                                             text = player.name,
-                                            fontWeight = if (index == selectedPlayerIndex) FontWeight.Bold else FontWeight.Normal
+                                            fontWeight = if (player.id == selectedPlayerId) FontWeight.Bold else FontWeight.Normal
                                         )
                                         Spacer(Modifier.weight(1f))
                                         Text(
-                                            text = playerTotals[index].toString(),
+                                            text = (playerTotals[player.id] ?: 0).toString(),
                                             style = MaterialTheme.typography.labelMedium,
                                             color = Color.Gray
                                         )
                                     }
                                 },
                                 onClick = {
-                                    selectedPlayerIndex = index
+                                    selectedPlayerId = player.id
                                     showPlayerDropdown = false
                                 }
                             )
@@ -205,7 +207,9 @@ fun YahtzeeGameView(
 
                 IconButton(
                     onClick = { 
-                        selectedPlayerIndex = (selectedPlayerIndex + 1) % players.size 
+                        val currentIndex = players.indexOfFirst { it.id == selectedPlayerId }
+                        val nextIndex = (currentIndex + 1) % players.size
+                        selectedPlayerId = players.getOrNull(nextIndex)?.id ?: selectedPlayerId
                     }
                 ) {
                     Icon(
@@ -220,8 +224,8 @@ fun YahtzeeGameView(
             color = MaterialTheme.colorScheme.primaryContainer,
             modifier = Modifier.fillMaxWidth()
         ) {
-            val isViewingSelf = selectedPlayerIndex == game.currentPlayerIndex
-            val displayedName = players.getOrNull(selectedPlayerIndex)?.name ?: "Unknown"
+            val isViewingSelf = selectedPlayerId == game.currentPlayerId
+            val displayedName = players.find { it.id == selectedPlayerId }?.name ?: "Unknown"
             
             Text(
                 text = if (isViewingSelf) "Your Turn" else "Viewing $displayedName's card",
@@ -239,39 +243,39 @@ fun YahtzeeGameView(
         ) {
             item { SectionHeader(AppStrings.YAHTZEE_SECTION_UPPER) }
             items(YahtzeeCategory.entries.filter { it.isUpperSection() }) { category ->
-                val currentScore = state.scores[selectedPlayerIndex]?.get(category)
+                val currentScore = state.scores[selectedPlayerId]?.get(category)
                 ScoreRow(
                     category = category,
                     score = currentScore,
                     onScoreSet = { score -> 
-                        val isMoveTurn = selectedPlayerIndex == game.currentPlayerIndex && currentScore == null
-                        viewModel.submitScore(selectedPlayerIndex, category, score, isMoveTurn) 
+                        val isMoveTurn = selectedPlayerId == game.currentPlayerId && currentScore == null
+                        viewModel.submitScore(selectedPlayerId, category, score, isMoveTurn) 
                     }
                 )
             }
             item {
                 UpperBonusRow(
-                    score = viewModel.calculateUpperScore(selectedPlayerIndex)
+                    score = viewModel.calculateUpperScore(selectedPlayerId)
                 )
             }
             
             item { Spacer(modifier = Modifier.height(16.dp)) }
             item { SectionHeader(AppStrings.YAHTZEE_SECTION_LOWER) }
             items(YahtzeeCategory.entries.filter { it.isLowerSection() }) { category ->
-                val currentScore = state.scores[selectedPlayerIndex]?.get(category)
+                val currentScore = state.scores[selectedPlayerId]?.get(category)
                 ScoreRow(
                     category = category,
                     score = currentScore,
                     onScoreSet = { score -> 
-                        val isMoveTurn = selectedPlayerIndex == game.currentPlayerIndex && currentScore == null
-                        viewModel.submitScore(selectedPlayerIndex, category, score, isMoveTurn) 
+                        val isMoveTurn = selectedPlayerId == game.currentPlayerId && currentScore == null
+                        viewModel.submitScore(selectedPlayerId, category, score, isMoveTurn) 
                     }
                 )
             }
             
             item {
-                val selectedPlayerTotal = remember(selectedPlayerIndex, state.scores) {
-                    viewModel.calculateTotalScore(selectedPlayerIndex)
+                val selectedPlayerTotal = remember(selectedPlayerId, state.scores) {
+                    viewModel.calculateTotalScore(selectedPlayerId)
                 }
                 TotalScoreRow(
                     total = selectedPlayerTotal

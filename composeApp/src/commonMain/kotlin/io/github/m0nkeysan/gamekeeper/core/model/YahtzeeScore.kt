@@ -13,7 +13,7 @@ data class YahtzeeScore(
  * Yahtzee score associated with a specific player in a game
  */
 data class PlayerYahtzeeScore(
-    val playerIndex: Int,
+    val playerId: String,
     val score: YahtzeeScore
 )
 

@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 
 data class YahtzeeScoringState(
     val game: YahtzeeGame? = null,
-    val scores: Map<Int, Map<YahtzeeCategory, Int>> = emptyMap(),
+    val scores: Map<String, Map<YahtzeeCategory, Int>> = emptyMap(),
     val isLoading: Boolean = true,
     val error: String? = null
 )
@@ -44,9 +44,9 @@ class YahtzeeScoringViewModel : ViewModel() {
 
                 repository.getScoresForGame(gameId).collect { playerScores ->
                     // Map PlayerYahtzeeScore list to our state structure
-                    val scoresMap = mutableMapOf<Int, MutableMap<YahtzeeCategory, Int>>()
+                    val scoresMap = mutableMapOf<String, MutableMap<YahtzeeCategory, Int>>()
                     playerScores.forEach { playerScore ->
-                        val playerMap = scoresMap.getOrPut(playerScore.playerIndex) { mutableMapOf() }
+                        val playerMap = scoresMap.getOrPut(playerScore.playerId) { mutableMapOf() }
                         playerMap[playerScore.score.category] = playerScore.score.value
                     }
                     _state.update { it.copy(scores = scoresMap, isLoading = false) }
@@ -61,7 +61,7 @@ class YahtzeeScoringViewModel : ViewModel() {
 
     fun getPlayers(): List<Player> = resolvedPlayers
 
-    fun submitScore(playerIndex: Int, category: YahtzeeCategory, score: Int, moveTurn: Boolean) {
+    fun submitScore(playerId: String, category: YahtzeeCategory, score: Int, moveTurn: Boolean) {
         val currentGame = _state.value.game ?: return
 
         viewModelScope.launch {
@@ -73,19 +73,19 @@ class YahtzeeScoringViewModel : ViewModel() {
                         isScored = true
                     ),
                     currentGame.id,
-                    playerIndex
+                    playerId
                 )
 
                 // Update local state
                 val currentScores = _state.value.scores.toMutableMap()
-                val playerScores = currentScores.getOrPut(playerIndex) { mutableMapOf() }.toMutableMap()
+                val playerScores = currentScores.getOrPut(playerId) { mutableMapOf() }.toMutableMap()
                 playerScores[category] = score
-                currentScores[playerIndex] = playerScores
+                currentScores[playerId] = playerScores
                 
                 if (moveTurn) {
-                    val nextPlayerIndex = (playerIndex + 1) % currentGame.playerCount
+                    val nextPlayerId = currentGame.getNextPlayerId() ?: currentGame.firstPlayerId
                     val updatedGame = currentGame.copy(
-                        currentPlayerIndex = nextPlayerIndex,
+                        currentPlayerId = nextPlayerId,
                         updatedAt = getCurrentTimeMillis()
                     )
                     repository.saveGame(updatedGame)
@@ -123,20 +123,22 @@ class YahtzeeScoringViewModel : ViewModel() {
 
         val scores = _state.value.scores
         val totalCategories = YahtzeeCategory.entries.size
+        val playerIds = game.playerIds.split(",")
 
-        if (scores.size < game.playerCount && game.playerCount > 0) return false
+        if (scores.size < playerIds.size && playerIds.size > 0) return false
 
-        return (0 until game.playerCount).all { playerIndex ->
-            val playerScores = scores[playerIndex] ?: return@all false
+        return playerIds.all { playerId ->
+            val playerScores = scores[playerId] ?: return@all false
             playerScores.size == totalCategories
         }
     }
 
     fun getWinners(): List<Pair<String, Int>> {
         val game = _state.value.game ?: return emptyList()
+        val playerIds = game.playerIds.split(",")
 
-        val playerTotalScores = (0 until game.playerCount).map { index ->
-            getPlayerName(index) to calculateTotalScore(index)
+        val playerTotalScores = playerIds.map { playerId ->
+            (resolvedPlayers.find { it.id == playerId }?.name ?: "Unknown") to calculateTotalScore(playerId)
         }
 
         val maxScore = playerTotalScores.maxOfOrNull { it.second } ?: 0
@@ -145,14 +147,15 @@ class YahtzeeScoringViewModel : ViewModel() {
 
     fun getAllPlayerScores(): List<Pair<String, Int>> {
         val game = _state.value.game ?: return emptyList()
+        val playerIds = game.playerIds.split(",")
 
-        return (0 until game.playerCount).map { index ->
-            getPlayerName(index) to calculateTotalScore(index)
+        return playerIds.map { playerId ->
+            (resolvedPlayers.find { it.id == playerId }?.name ?: "Unknown") to calculateTotalScore(playerId)
         }
     }
 
-    fun calculateTotalScore(playerIndex: Int): Int {
-        val playerScores = _state.value.scores[playerIndex] ?: return 0
+    fun calculateTotalScore(playerId: String): Int {
+        val playerScores = _state.value.scores[playerId] ?: return 0
         var total = playerScores.values.sum()
 
         val upperScore = playerScores.filter { it.key.isUpperSection() }.values.sum()
@@ -163,8 +166,8 @@ class YahtzeeScoringViewModel : ViewModel() {
         return total
     }
 
-    fun calculateUpperScore(playerIndex: Int): Int {
-        val playerScores = _state.value.scores[playerIndex] ?: return 0
+    fun calculateUpperScore(playerId: String): Int {
+        val playerScores = _state.value.scores[playerId] ?: return 0
         return playerScores.filter { it.key.isUpperSection() }.values.sum()
     }
 }

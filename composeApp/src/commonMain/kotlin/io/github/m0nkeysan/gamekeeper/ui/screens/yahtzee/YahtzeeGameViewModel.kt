@@ -92,7 +92,8 @@ class YahtzeeGameViewModel : ViewModel() {
         onCreated: (String) -> Unit,
         onError: (String) -> Unit = {}
     ) {
-        val firstPlayerIndex = Random.nextInt(playerCount)
+        val randomIndex = Random.nextInt(playerCount)
+        val randomPlayerId = players.getOrNull(randomIndex)?.id ?: players.firstOrNull()?.id ?: ""
 
         viewModelScope.launch {
             try {
@@ -107,8 +108,8 @@ class YahtzeeGameViewModel : ViewModel() {
                         players = players,
                         name = name
                     ).copy(
-                        firstPlayerIndex = firstPlayerIndex,
-                        currentPlayerIndex = firstPlayerIndex
+                        firstPlayerId = randomPlayerId,
+                        currentPlayerId = randomPlayerId
                     )
                     repository.saveGame(game)
                     game.id
