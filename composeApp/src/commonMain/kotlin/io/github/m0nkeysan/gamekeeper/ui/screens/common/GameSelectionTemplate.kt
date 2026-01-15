@@ -65,7 +65,8 @@ fun GameSelectionTemplate(
     isLoading: Boolean,
     error: String?,
     modifier: Modifier = Modifier,
-    onDeleteAllGames: (() -> Unit)? = null
+    onDeleteAllGames: (() -> Unit)? = null,
+    onNavigateToStatistics: (() -> Unit)? = null
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     var showMenu by remember { mutableStateOf(false) }
@@ -148,6 +149,21 @@ fun GameSelectionTemplate(
                                     )
                                 }
                             )
+                            if (onNavigateToStatistics != null && games.isNotEmpty()) {
+                                DropdownMenuItem(
+                                    text = { Text("Statistics") },
+                                    onClick = {
+                                        showMenu = false
+                                        onNavigateToStatistics()
+                                    },
+                                    leadingIcon = {
+                                        Icon(
+                                            GameIcons.BarChart,
+                                            contentDescription = "Statistics"
+                                        )
+                                    }
+                                )
+                            }
                             if (onDeleteAllGames != null && games.isNotEmpty()) {
                                 DropdownMenuItem(
                                     text = { Text(AppStrings.GAME_DELETE_ALL_TITLE) },

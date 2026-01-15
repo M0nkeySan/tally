@@ -11,6 +11,7 @@ fun YahtzeeGameSelectionScreen(
     onBack: () -> Unit,
     onCreateNewGame: () -> Unit,
     onSelectGame: (String) -> Unit,
+    onNavigateToStatistics: () -> Unit,
     viewModel: YahtzeeGameViewModel = viewModel { YahtzeeGameViewModel() }
 ) {
     val state by viewModel.selectionState.collectAsState()
@@ -63,6 +64,7 @@ fun YahtzeeGameSelectionScreen(
         onBack = onBack,
         isLoading = state.isLoading,
         error = state.error,
-        onDeleteAllGames = { viewModel.deleteAllGames() }
+        onDeleteAllGames = { viewModel.deleteAllGames() },
+        onNavigateToStatistics = onNavigateToStatistics
     )
 }

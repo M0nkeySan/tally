@@ -7,6 +7,7 @@ import io.github.m0nkeysan.gamekeeper.core.domain.repository.CounterRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotStatisticsRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeRepository
+import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeStatisticsRepository
 
 expect object PlatformRepositories {
     fun getPlayerRepository(): PlayerRepository
@@ -15,5 +16,6 @@ expect object PlatformRepositories {
     fun getTarotRepository(): TarotRepository
     fun getTarotStatisticsRepository(): TarotStatisticsRepository
     fun getYahtzeeRepository(): YahtzeeRepository
+    fun getYahtzeeStatisticsRepository(): YahtzeeStatisticsRepository
     fun getGameQueryHelper(): GameQueryHelper
 }

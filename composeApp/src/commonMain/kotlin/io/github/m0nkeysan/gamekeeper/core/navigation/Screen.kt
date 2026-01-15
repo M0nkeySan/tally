@@ -23,6 +23,7 @@ sealed class Screen(val route: String) {
     data object YahtzeeSummary : Screen("yahtzee_summary/{gameId}") {
         fun createRoute(gameId: String) = "yahtzee_summary/$gameId"
     }
+    data object YahtzeeStatistics : Screen("yahtzee_statistics")
     data object Counter : Screen("counter")
     data object EditCounter : Screen("edit_counter/{id}?name={name}&count={count}&color={color}") {
         fun createRoute(id: String, name: String, count: Int, color: Long) = 

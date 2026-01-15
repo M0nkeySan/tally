@@ -10,6 +10,7 @@ import io.github.m0nkeysan.gamekeeper.core.data.local.repository.TarotRepository
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.TarotStatisticsRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.UserPreferencesRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.data.local.repository.YahtzeeRepositoryImpl
+import io.github.m0nkeysan.gamekeeper.core.data.local.repository.YahtzeeStatisticsRepositoryImpl
 import io.github.m0nkeysan.gamekeeper.core.domain.CounterHistoryStore
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.CounterRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
@@ -17,6 +18,7 @@ import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotStatisticsRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.UserPreferencesRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeRepository
+import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeStatisticsRepository
 
 actual object PlatformRepositories {
     private var database: GameDatabase? = null
@@ -28,6 +30,7 @@ actual object PlatformRepositories {
     private var tarotRepository: TarotRepository? = null
     private var tarotStatisticsRepository: TarotStatisticsRepository? = null
     private var yahtzeeRepository: YahtzeeRepository? = null
+    private var yahtzeeStatisticsRepository: YahtzeeStatisticsRepository? = null
     private var gameQueryHelper: GameQueryHelper? = null
     private var historyStore: CounterHistoryStore? = null
 
@@ -96,6 +99,15 @@ actual object PlatformRepositories {
     actual fun getYahtzeeRepository(): YahtzeeRepository {
         return yahtzeeRepository ?: YahtzeeRepositoryImpl(getDatabase().yahtzeeDao(), getDatabase()).also {
             yahtzeeRepository = it
+        }
+    }
+
+    actual fun getYahtzeeStatisticsRepository(): YahtzeeStatisticsRepository {
+        return yahtzeeStatisticsRepository ?: YahtzeeStatisticsRepositoryImpl(
+            getDatabase().yahtzeeDao(),
+            getPlayerRepository()
+        ).also {
+            yahtzeeStatisticsRepository = it
         }
     }
 

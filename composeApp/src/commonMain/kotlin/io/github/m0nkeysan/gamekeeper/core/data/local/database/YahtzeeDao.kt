@@ -28,4 +28,17 @@ interface YahtzeeDao {
     
     @Query("SELECT COUNT(*) FROM yahtzee_games WHERE playerIds LIKE '%' || :playerId || '%'")
     suspend fun countGamesWithPlayer(playerId: String): Int
+
+    // Statistics queries
+    @Query("SELECT * FROM yahtzee_games WHERE playerIds LIKE '%' || :playerId || '%' ORDER BY updatedAt DESC")
+    suspend fun getAllGamesForPlayer(playerId: String): List<YahtzeeGameEntity>
+
+    @Query("SELECT * FROM yahtzee_games WHERE playerIds LIKE '%' || :playerId || '%' AND isFinished = 1 ORDER BY updatedAt DESC")
+    suspend fun getFinishedGamesForPlayer(playerId: String): List<YahtzeeGameEntity>
+
+    @Query("SELECT * FROM yahtzee_scores WHERE playerId = :playerId")
+    suspend fun getAllScoresForPlayer(playerId: String): List<YahtzeeScoreEntity>
+
+    @Query("SELECT DISTINCT playerIds FROM yahtzee_games WHERE isFinished = 1")
+    suspend fun getDistinctPlayerIds(): List<String>
 }
