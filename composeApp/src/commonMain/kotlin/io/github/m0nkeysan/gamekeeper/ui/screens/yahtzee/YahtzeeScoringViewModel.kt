@@ -125,7 +125,7 @@ class YahtzeeScoringViewModel : ViewModel() {
         val totalCategories = YahtzeeCategory.entries.size
         val playerIds = game.playerIds.split(",")
 
-        if (scores.size < playerIds.size && playerIds.size > 0) return false
+        if (scores.size < playerIds.size) return false
 
         return playerIds.all { playerId ->
             val playerScores = scores[playerId] ?: return@all false

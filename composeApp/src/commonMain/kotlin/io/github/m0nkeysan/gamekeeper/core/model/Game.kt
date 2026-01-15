@@ -21,7 +21,7 @@ data class TarotGame(
     val rounds: List<TarotRound> = emptyList(),
     val playerCount: Int,
     val name: String = "Tarot Game",
-    val playerIds: String = "" // Comma-separated player IDs for backward compatibility
+    val playerIds: String = ""
 ) : Game() {
 
     companion object {

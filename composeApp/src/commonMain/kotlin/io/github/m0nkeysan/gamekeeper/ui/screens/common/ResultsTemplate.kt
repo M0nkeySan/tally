@@ -120,7 +120,7 @@ fun ResultsTemplate(
                 style = MaterialTheme.typography.displaySmall,
                 fontWeight = FontWeight.Black,
                 textAlign = TextAlign.Center,
-                color = GameColors.TextPrimary
+                color = MaterialTheme.colorScheme.onSurface
             )
             
             Spacer(modifier = Modifier.height(48.dp))
