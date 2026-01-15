@@ -136,11 +136,16 @@ object YahtzeeStatisticsEngine {
 
     /**
      * Count total Yahtzees scored
+     * Score progression: 50 (1st), 150 (2nd), 250 (3rd), 350 (4th), 450 (5th)
+     * Formula: (score - 50) / 100 + 1 for scores >= 50
      */
     private fun countYahtzees(playerScores: List<YahtzeeScoreEntity>): Int {
-        return playerScores.count { 
-            it.category == YahtzeeCategory.YAHTZEE.name && it.score >= 50
-        }
+        return playerScores
+            .filter { it.category == YahtzeeCategory.YAHTZEE.name && it.score >= 50 }
+            .sumOf { 
+                // Convert score to yahtzee count: 50→1, 150→2, 250→3, 350→4, 450→5
+                (it.score - 50) / 100 + 1
+            }
     }
 
     /**
