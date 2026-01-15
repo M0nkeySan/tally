@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
@@ -63,23 +65,11 @@ fun YahtzeeStatisticsScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            "Statistics",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
-                        if (state.statistics != null) {
-                            Text(
-                                state.statistics!!.playerName,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
+                    Text(
+                        "Statistics",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
@@ -93,7 +83,7 @@ fun YahtzeeStatisticsScreen(
                     Box {
                         IconButton(onClick = { showPlayerDropdown = !showPlayerDropdown }) {
                             Icon(
-                                imageVector = GameIcons.MoreVert,
+                                imageVector = GameIcons.BarChart,
                                 contentDescription = "Select Player"
                             )
                         }
@@ -117,51 +107,63 @@ fun YahtzeeStatisticsScreen(
             )
         }
     ) { paddingValues ->
-        when {
-            state.isLoading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-            state.error != null -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        Text(
-                            text = state.error!!,
-                            style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(16.dp)
-                        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            // Player selector bar below top bar
+            if (state.availablePlayers.isNotEmpty()) {
+                PlayerSelectorBar(
+                    players = state.availablePlayers,
+                    selectedPlayerId = state.selectedPlayerId,
+                    onPlayerSelect = { playerId ->
+                        viewModel.selectPlayer(playerId)
+                        showPlayerDropdown = false
                     }
-                }
-            }
-            state.statistics != null -> {
-                StatisticsContent(
-                    statistics = state.statistics!!,
-                    paddingValues = paddingValues
                 )
             }
-            else -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("No data available")
+            
+            // Content area
+            when {
+                state.isLoading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+                state.error != null -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            Text(
+                                text = state.error!!,
+                                style = MaterialTheme.typography.bodyLarge,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                        }
+                    }
+                }
+                state.statistics != null -> {
+                    StatisticsContent(
+                        statistics = state.statistics!!
+                    )
+                }
+                else -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("No data available")
+                    }
                 }
             }
         }
@@ -169,14 +171,49 @@ fun YahtzeeStatisticsScreen(
 }
 
 @Composable
+private fun PlayerSelectorBar(
+    players: List<io.github.m0nkeysan.gamekeeper.core.model.Player>,
+    selectedPlayerId: String?,
+    onPlayerSelect: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Player:",
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(end = 4.dp)
+        )
+        
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            players.forEach { player ->
+                androidx.compose.material3.FilterChip(
+                    selected = player.id == selectedPlayerId,
+                    onClick = { onPlayerSelect(player.id) },
+                    label = { Text(player.name) },
+                    modifier = Modifier.height(32.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun StatisticsContent(
-    statistics: YahtzeePlayerStatistics,
-    paddingValues: PaddingValues
+    statistics: YahtzeePlayerStatistics
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
+        modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
