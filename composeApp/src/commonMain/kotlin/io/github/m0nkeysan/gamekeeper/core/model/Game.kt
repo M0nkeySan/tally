@@ -71,11 +71,12 @@ data class YahtzeeGame(
     fun getPlayerById(playerId: String): Player? = players.find { it.id == playerId }
     
     fun getNextPlayerId(): String? {
-        if (players.isEmpty()) return null
-        val currentIndex = playerIds.split(",").indexOf(currentPlayerId)
+        val playerIdList = playerIds.split(",").filter { it.isNotEmpty() }
+        if (playerIdList.isEmpty()) return null
+        val currentIndex = playerIdList.indexOf(currentPlayerId)
         if (currentIndex < 0) return null
-        val nextIndex = (currentIndex + 1) % playerIds.split(",").size
-        return playerIds.split(",").getOrNull(nextIndex)
+        val nextIndex = (currentIndex + 1) % playerIdList.size
+        return playerIdList.getOrNull(nextIndex)
     }
     
     companion object {

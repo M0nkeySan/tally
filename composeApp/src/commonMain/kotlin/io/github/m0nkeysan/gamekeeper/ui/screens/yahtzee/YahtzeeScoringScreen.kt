@@ -91,10 +91,8 @@ fun YahtzeeGameView(
     var showPlayerDropdown by remember { mutableStateOf(false) }
     
     // Auto-switch to current player when turn changes
-    LaunchedEffect(state.game) {
-        state.game.let { updatedGame ->
-            selectedPlayerId = updatedGame.currentPlayerId
-        }
+    LaunchedEffect(game.currentPlayerId) {
+        selectedPlayerId = game.currentPlayerId
     }
 
     LaunchedEffect(state.scores) {

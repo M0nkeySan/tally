@@ -89,6 +89,7 @@ private fun YahtzeeScoreEntity.toDomain() = YahtzeeScore(
 )
 
 // Mapper functions - Domain to Entity
+
 private fun YahtzeeGame.toEntity() = YahtzeeGameEntity(
     id = id,
     name = name,
