@@ -92,7 +92,7 @@ fun YahtzeeGameView(
     
     // Auto-switch to current player when turn changes
     LaunchedEffect(state.game) {
-        state.game?.let { updatedGame ->
+        state.game.let { updatedGame ->
             selectedPlayerId = updatedGame.currentPlayerId
         }
     }
@@ -253,7 +253,8 @@ fun YahtzeeGameView(
                     category = category,
                     score = currentScore,
                     onScoreSet = { score -> 
-                        val isMoveTurn = selectedPlayerId == game.currentPlayerId && currentScore == null
+                        // Move turn if the CURRENT player (not just selected) is scoring for the first time
+                        val isMoveTurn = game.currentPlayerId == selectedPlayerId && currentScore == null
                         viewModel.submitScore(selectedPlayerId, category, score, isMoveTurn) 
                     }
                 )
@@ -272,7 +273,8 @@ fun YahtzeeGameView(
                     category = category,
                     score = currentScore,
                     onScoreSet = { score -> 
-                        val isMoveTurn = selectedPlayerId == game.currentPlayerId && currentScore == null
+                        // Move turn if the CURRENT player (not just selected) is scoring for the first time
+                        val isMoveTurn = game.currentPlayerId == selectedPlayerId && currentScore == null
                         viewModel.submitScore(selectedPlayerId, category, score, isMoveTurn) 
                     }
                 )
