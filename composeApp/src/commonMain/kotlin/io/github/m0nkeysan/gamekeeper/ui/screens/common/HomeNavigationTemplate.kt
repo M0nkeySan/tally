@@ -13,6 +13,7 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionViewModel
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import androidx.activity.compose.BackHandler
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 /**
  * Navigation template for the home screen with bottom bar for switching between Games and Players tabs.
@@ -69,7 +70,7 @@ fun HomeNavigationTemplate(
                     icon = {
                         Icon(
                             imageVector = GameIcons.GridView,
-                            contentDescription = "Games"
+                            contentDescription = AppStrings.HOME_CD_GAMES
                         )
                     },
                     alwaysShowLabel = false
@@ -82,7 +83,7 @@ fun HomeNavigationTemplate(
                     icon = {
                         Icon(
                             imageVector = GameIcons.Group,
-                            contentDescription = "Players"
+                            contentDescription = AppStrings.HOME_CD_PLAYERS
                         )
                     },
                     alwaysShowLabel = false
@@ -96,7 +97,7 @@ fun HomeNavigationTemplate(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 ) {
-                    Icon(androidx.compose.material.icons.Icons.Default.Add, contentDescription = "Add Player")
+                    Icon(androidx.compose.material.icons.Icons.Default.Add, contentDescription = AppStrings.HOME_CD_FAB_ADD)
                 }
             }
         }

@@ -221,7 +221,7 @@ private val gameFeatureMap = mapOf(
         icon = {
             Icon(
                 GameIcons.TouchApp,
-                contentDescription = "Finger Selector game",
+                contentDescription = AppStrings.HOME_CD_FINGER_SELECTOR,
                 Modifier
                     .width(64.dp)
                     .height(64.dp)
@@ -250,7 +250,7 @@ private val gameFeatureMap = mapOf(
         icon = {
             Icon(
                 GameIcons.AddBox,
-                contentDescription = "Counter game",
+                contentDescription = AppStrings.HOME_CD_COUNTER,
                 Modifier
                     .width(64.dp)
                     .height(64.dp)
@@ -265,7 +265,7 @@ private val gameFeatureMap = mapOf(
         icon = {
             Icon(
                 GameIcons.Casino,
-                contentDescription = "Dice Roller game",
+                contentDescription = AppStrings.HOME_CD_DICE,
                 Modifier
                     .width(64.dp)
                     .height(64.dp)

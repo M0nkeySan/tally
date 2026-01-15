@@ -22,6 +22,7 @@ import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.*
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -116,7 +117,7 @@ fun TarotRoundAdditionScreen(
                              (state.game?.playerCount != 5 || calledPlayerId != null) &&
                              pointsAtq.toFloatOrNull() != null
                 ) {
-                    Text("SAVE ROUND", fontWeight = FontWeight.Bold, color = Color.White)
+                    Text(AppStrings.TAROT_ROUND_ACTION_SAVE, fontWeight = FontWeight.Bold, color = Color.White)
                 }
             }
         }
@@ -137,11 +138,11 @@ fun TarotRoundAdditionScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // 1. Taker & Called Player
-                Section(title = "PLAYERS") {
+                Section(title = AppStrings.TAROT_ROUND_SECTION_PLAYERS) {
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         // Taker
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text("TAKER", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+                            Text(AppStrings.TAROT_ROUND_LABEL_TAKER, style = MaterialTheme.typography.labelSmall, color = Color.Gray)
                             FlowRow(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -167,7 +168,7 @@ fun TarotRoundAdditionScreen(
                         // Called Player (5 players only)
                         if (state.game?.playerCount == 5) {
                             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Text("CALLED PLAYER", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+                                Text(AppStrings.TAROT_ROUND_LABEL_CALLED_PLAYER, style = MaterialTheme.typography.labelSmall, color = Color.Gray)
                                 FlowRow(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -194,7 +195,7 @@ fun TarotRoundAdditionScreen(
                 }
 
                 // 2. Bid Selection
-                Section(title = "BID") {
+                Section(title = AppStrings.TAROT_ROUND_SECTION_BID) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -219,7 +220,7 @@ fun TarotRoundAdditionScreen(
                 }
 
                 // 3. Bouts
-                Section(title = "BOUTS") {
+                Section(title = AppStrings.TAROT_ROUND_SECTION_BOUTS) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -236,7 +237,7 @@ fun TarotRoundAdditionScreen(
                 }
 
                 // 4. Points
-                Section(title = "POINTS") {
+                Section(title = AppStrings.TAROT_ROUND_SECTION_POINTS) {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -246,7 +247,7 @@ fun TarotRoundAdditionScreen(
                             OutlinedTextField(
                                 value = pointsAtq,
                                 onValueChange = { if (it.isEmpty() || it.all { c -> c.isDigit() }) pointsAtq = it },
-                                label = { Text("Attacker") },
+                                label = { Text(AppStrings.TAROT_ROUND_FIELD_ATTACKER_SCORE) },
                                 modifier = Modifier.weight(1f),
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 singleLine = true,
@@ -260,7 +261,7 @@ fun TarotRoundAdditionScreen(
                             val pDef = (91 - pAtq).coerceAtLeast(0)
                             
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("DEFENSE", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+                                Text(AppStrings.TAROT_ROUND_LABEL_DEFENSE, style = MaterialTheme.typography.labelSmall, color = Color.Gray)
                                 Text(
                                     text = pDef.toString(),
                                     style = MaterialTheme.typography.titleLarge,
@@ -294,19 +295,19 @@ fun TarotRoundAdditionScreen(
                 }
 
                 // 5. Announces
-                Section(title = "ANNOUNCES") {
+                Section(title = AppStrings.TAROT_ROUND_SECTION_ANNOUNCES) {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         // Petit au bout
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Checkbox(checked = hasPetitAuBout, onCheckedChange = { hasPetitAuBout = it })
-                            Text("Petit au bout")
+                            Text(AppStrings.TAROT_ROUND_ANNOUNCE_PETIT_AU_BOUT)
                         }
                         
                         // Poignée
                         Column {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Checkbox(checked = hasPoignee, onCheckedChange = { hasPoignee = it })
-                                Text("Poignée")
+                                Text(AppStrings.TAROT_ROUND_ANNOUNCE_POIGNEE)
                             }
                             if (hasPoignee) {
                                 Row(
@@ -326,7 +327,7 @@ fun TarotRoundAdditionScreen(
                         
                         // Chelem
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text("Chelem", style = MaterialTheme.typography.bodyMedium)
+                            Text(AppStrings.TAROT_ROUND_LABEL_CHELEM, style = MaterialTheme.typography.bodyMedium)
                             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 ChelemType.entries.forEach { type ->
                                     FilterChip(

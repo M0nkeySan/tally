@@ -43,6 +43,7 @@ import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,7 +58,7 @@ fun CounterHistoryScreen(
     if (showDeleteAllDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteAllDialog = false },
-            title = { Text("Delete all histories") },
+            title = { Text(AppStrings.COUNTER_HISTORY_CD_DELETE) },
             text = { Text("Are you sure you want to delete all counter change histories? This cannot be undone.") },
             confirmButton = {
                 TextButton(
@@ -100,13 +101,13 @@ fun CounterHistoryScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackPressed) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.COUNTER_HISTORY_CD_BACK)
                     }
                 },
                 actions = {
                     if (mergedHistory.isNotEmpty()) {
                         IconButton(onClick = { showDeleteAllDialog = true }) {
-                            Icon(GameIcons.Delete, contentDescription = "Delete all histories")
+                            Icon(GameIcons.Delete, contentDescription = AppStrings.COUNTER_HISTORY_CD_DELETE)
                         }
                     }
                 }
@@ -125,7 +126,7 @@ fun CounterHistoryScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        "No counter changes yet",
+                        AppStrings.COUNTER_HISTORY_EMPTY,
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -211,13 +212,13 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
             )
         }
         
-        // Total delta display or "Deleted" text
+        // Total delta display or AppStrings.COUNTER_HISTORY_DELETED_TEXT text
         Column(
             horizontalAlignment = Alignment.End
         ) {
             if (mergedChange.isDeleted) {
                 Text(
-                    text = "Deleted",
+                    text = AppStrings.COUNTER_HISTORY_DELETED_TEXT,
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp

@@ -12,6 +12,7 @@ import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 /**
  * Reusable template for game creation screens.
@@ -81,7 +82,7 @@ fun GameCreationTemplate(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.GAME_CREATION_CD_BACK)
                     }
                 }
             )
@@ -104,7 +105,7 @@ fun GameCreationTemplate(
                         onClick = onBack,
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Cancel")
+                        Text(AppStrings.GAME_CREATION_ACTION_CANCEL)
                     }
                     
                     Button(
@@ -117,7 +118,7 @@ fun GameCreationTemplate(
                             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     ) {
-                        Text("Create Game")
+                        Text(AppStrings.GAME_CREATION_ACTION_CREATE)
                     }
                 }
             }

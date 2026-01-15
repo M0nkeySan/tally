@@ -27,6 +27,7 @@ import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,7 +119,7 @@ fun YahtzeeGameView(
                 ) {
                     Icon(
                         imageVector = androidx.compose.material.icons.Icons.AutoMirrored.Filled.KeyboardArrowLeft, 
-                        contentDescription = "Previous Player"
+                        contentDescription = AppStrings.YAHTZEE_SCORING_CD_PREVIOUS
                     )
                 }
 
@@ -209,7 +210,7 @@ fun YahtzeeGameView(
                 ) {
                     Icon(
                         imageVector = androidx.compose.material.icons.Icons.AutoMirrored.Filled.KeyboardArrowRight, 
-                        contentDescription = "Next Player"
+                        contentDescription = AppStrings.YAHTZEE_SCORING_CD_NEXT
                     )
                 }
             }
@@ -236,7 +237,7 @@ fun YahtzeeGameView(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            item { SectionHeader("Upper Section") }
+            item { SectionHeader(AppStrings.YAHTZEE_SECTION_UPPER) }
             items(YahtzeeCategory.entries.filter { it.isUpperSection() }) { category ->
                 val currentScore = state.scores[selectedPlayerIndex]?.get(category)
                 ScoreRow(
@@ -255,7 +256,7 @@ fun YahtzeeGameView(
             }
             
             item { Spacer(modifier = Modifier.height(16.dp)) }
-            item { SectionHeader("Lower Section") }
+            item { SectionHeader(AppStrings.YAHTZEE_SECTION_LOWER) }
             items(YahtzeeCategory.entries.filter { it.isLowerSection() }) { category ->
                 val currentScore = state.scores[selectedPlayerIndex]?.get(category)
                 ScoreRow(
@@ -346,7 +347,7 @@ fun ScoreRow(
                 confirmButton = {},
                 dismissButton = {
                     TextButton(onClick = { showDialog = false }) {
-                        Text("Cancel")
+                        Text(AppStrings.ACTION_CANCEL)
                     }
                 }
             )
@@ -366,7 +367,7 @@ fun ScoreRow(
                             keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
                             modifier = Modifier.fillMaxWidth(),
                             singleLine = true,
-                            placeholder = { Text("Sum of dice") },
+                            placeholder = { Text(AppStrings.YAHTZEE_PLACEHOLDER_DICE_SUM) },
                             isError = isInvalid,
                             supportingText = {
                                 if (isInvalid) {
@@ -387,12 +388,12 @@ fun ScoreRow(
                         },
                         enabled = !isInvalid
                     ) {
-                        Text("OK")
+                        Text(AppStrings.ACTION_OK)
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showDialog = false }) {
-                        Text("Cancel")
+                        Text(AppStrings.ACTION_CANCEL)
                     }
                 }
             )
@@ -472,7 +473,7 @@ fun TotalScoreRow(total: Int) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("TOTAL SCORE", fontWeight = FontWeight.Black)
+            Text(AppStrings.YAHTZEE_LABEL_TOTAL_SCORE, fontWeight = FontWeight.Black)
             Text(
                 text = total.toString(),
                 style = MaterialTheme.typography.headlineMedium,

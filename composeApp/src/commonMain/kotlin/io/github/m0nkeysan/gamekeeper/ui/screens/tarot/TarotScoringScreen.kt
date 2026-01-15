@@ -25,6 +25,7 @@ import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,12 +69,12 @@ fun TarotScoringScreen(
                  },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.TAROT_SCORING_CD_BACK)
                     }
                 },
                 actions = {
                     IconButton(onClick = { onNavigateToStatistics(gameId) }) {
-                        Icon(GameIcons.BarChart, contentDescription = "Statistics")
+                        Icon(GameIcons.BarChart, contentDescription = AppStrings.TAROT_SCORING_CD_STATISTICS)
                     }
                 }
             )
@@ -83,7 +84,7 @@ fun TarotScoringScreen(
                 onClick = { onAddNewRound(null) },
                 containerColor = GameColors.Primary
             ) {
-                Icon(GameIcons.Add, contentDescription = "Add Round")
+                Icon(GameIcons.Add, contentDescription = AppStrings.TAROT_SCORING_CD_ADD_ROUND)
             }
         },
         snackbarHost = {
@@ -145,7 +146,7 @@ fun PlayerSummarySection(
 ) {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Text(
-            text = "Scores",
+            text = AppStrings.TAROT_SCORING_SECTION_SCORES,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
@@ -226,7 +227,7 @@ fun RoundHistorySection(
             .padding(horizontal = 16.dp)
     ) {
         Text(
-            text = "History",
+            text = AppStrings.TAROT_SCORING_SECTION_HISTORY,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
@@ -236,7 +237,7 @@ fun RoundHistorySection(
         if (rounds.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(
-                    text = "No rounds yet",
+                    text = AppStrings.TAROT_SCORING_EMPTY_ROUNDS,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

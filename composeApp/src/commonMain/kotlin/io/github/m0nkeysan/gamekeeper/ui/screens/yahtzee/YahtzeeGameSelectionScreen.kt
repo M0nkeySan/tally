@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.ui.components.GameDisplay
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameSelectionTemplate
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @Composable
 fun YahtzeeGameSelectionScreen(
@@ -18,7 +19,7 @@ fun YahtzeeGameSelectionScreen(
     if (gameToDelete != null) {
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { gameToDelete = null },
-            title = { androidx.compose.material3.Text("Delete Game") },
+            title = { androidx.compose.material3.Text(AppStrings.GAME_DELETION_DIALOG_YAHTZEE_TITLE) },
             text = { androidx.compose.material3.Text("Are you sure you want to delete '${gameToDelete?.name}'? All scores will be lost.") },
             confirmButton = {
                 androidx.compose.material3.TextButton(
@@ -52,7 +53,7 @@ fun YahtzeeGameSelectionScreen(
     }
 
     GameSelectionTemplate(
-        title = "Yahtzee Games",
+        title = AppStrings.YAHTZEE_GAME_TITLE,
         games = games,
         onGameSelect = onSelectGame,
         onCreateNew = onCreateNewGame,

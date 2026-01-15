@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.gamekeeper.ui.components.ResultsCard
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 /**
  * Reusable template for game results/summary screens.
@@ -83,7 +84,7 @@ fun ResultsTemplate(
                     containerColor = GameColors.Primary
                 )
             ) {
-                Text("BACK TO HOME", fontWeight = FontWeight.Bold)
+                Text(AppStrings.RESULTS_ACTION_BACK, fontWeight = FontWeight.Bold)
             }
         }
     ) { paddingValues ->
@@ -126,7 +127,7 @@ fun ResultsTemplate(
             
             // Final scores header
             Text(
-                text = "FINAL SCORES",
+                text = AppStrings.RESULTS_SECTION_SCORES,
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
                 color = GameColors.TextSecondary,

@@ -20,6 +20,7 @@ import io.github.m0nkeysan.gamekeeper.ui.components.ColorSelectorRow
 import io.github.m0nkeysan.gamekeeper.ui.components.FieldLabel
 import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,7 +86,7 @@ fun EditCounterScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.COUNTER_EDIT_CD_BACK)
                     }
                     Text(
                         text = "Edit Counter",
@@ -93,7 +94,7 @@ fun EditCounterScreen(
                         fontWeight = FontWeight.ExtraBold
                     )
                     IconButton(onClick = { showDeleteDialog = true }) {
-                        Icon(GameIcons.Delete, contentDescription = "Delete")
+                        Icon(GameIcons.Delete, contentDescription = AppStrings.COUNTER_EDIT_CD_DELETE)
                     }
                 }
             }
@@ -128,7 +129,7 @@ fun EditCounterScreen(
                     elevation = null
                 ) {
                     Text(
-                        text = "SAVE CHANGES",
+                        text = AppStrings.COUNTER_EDIT_ACTION_SAVE,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Black,
                         letterSpacing = 1.sp
@@ -148,7 +149,7 @@ fun EditCounterScreen(
 
             // 1. Unified Color Selection
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                FieldLabel(text = "ACCENT COLOR")
+                FieldLabel(text = AppStrings.COUNTER_EDIT_LABEL_COLOR)
                 ColorSelectorRow(
                     selectedColorHex = selectedColorHex,
                     onColorSelected = { hex ->
@@ -162,7 +163,7 @@ fun EditCounterScreen(
             FlatTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = "NAME",
+                label = AppStrings.COUNTER_EDIT_FIELD_NAME,
                 placeholder = "Player Name",
                 accentColor = selectedColor
             )
@@ -171,7 +172,7 @@ fun EditCounterScreen(
             FlatTextField(
                 value = countText,
                 onValueChange = { if (it.isEmpty() || it == "-" || it.all { char -> char.isDigit() || char == '-' }) countText = it },
-                label = "VALUE",
+                label = AppStrings.COUNTER_EDIT_FIELD_VALUE,
                 placeholder = "0",
                 accentColor = selectedColor,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)

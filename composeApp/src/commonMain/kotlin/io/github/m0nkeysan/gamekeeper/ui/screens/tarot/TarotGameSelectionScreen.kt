@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.ui.components.GameDisplay
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameSelectionTemplate
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @Composable
 fun TarotGameSelectionScreen(
@@ -18,7 +19,7 @@ fun TarotGameSelectionScreen(
     if (gameToDelete != null) {
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { gameToDelete = null },
-            title = { androidx.compose.material3.Text("Delete Game") },
+            title = { androidx.compose.material3.Text(AppStrings.GAME_DELETION_DIALOG_TAROT_TITLE) },
             text = { androidx.compose.material3.Text("Are you sure you want to delete the game '${gameToDelete?.name}'? This will also delete all rounds in this game.") },
             confirmButton = {
                 androidx.compose.material3.TextButton(
@@ -33,7 +34,7 @@ fun TarotGameSelectionScreen(
             },
             dismissButton = {
                 androidx.compose.material3.TextButton(onClick = { gameToDelete = null }) {
-                    androidx.compose.material3.Text("Cancel")
+                    androidx.compose.material3.Text(AppStrings.ACTION_CANCEL)
                 }
             }
         )
@@ -52,7 +53,7 @@ fun TarotGameSelectionScreen(
     }
 
     GameSelectionTemplate(
-        title = "Tarot Games",
+        title = AppStrings.TAROT_SCORING_GAME_TITLE,
         games = games,
         onGameSelect = onSelectGame,
         onCreateNew = onCreateNewGame,

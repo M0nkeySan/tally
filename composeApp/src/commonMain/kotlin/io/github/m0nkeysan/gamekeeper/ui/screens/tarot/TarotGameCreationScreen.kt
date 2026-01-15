@@ -12,6 +12,7 @@ import io.github.m0nkeysan.gamekeeper.ui.components.FlexiblePlayerSelector
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameCreationTemplate
 import io.github.m0nkeysan.gamekeeper.core.domain.GameConfig
 import io.github.m0nkeysan.gamekeeper.ui.utils.generateRandomHexColor
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @Composable
 fun TarotGameCreationScreen(
@@ -26,13 +27,13 @@ fun TarotGameCreationScreen(
     val canCreate = gameName.isNotBlank() && selectedPlayers.size in GameConfig.TAROT_MIN_PLAYERS..GameConfig.TAROT_MAX_PLAYERS && selectedPlayers.all { it != null }
 
     GameCreationTemplate(
-        title = "New Tarot Game",
+        title = AppStrings.GAME_CREATION_NEW_TAROT_TITLE,
         onBack = onBack,
         onCreate = {
             val finalPlayers: List<Player> = selectedPlayers.filterNotNull()
             if (finalPlayers.size in GameConfig.TAROT_MIN_PLAYERS..GameConfig.TAROT_MAX_PLAYERS) {
                 viewModel.createGame(
-                    name = gameName.ifBlank { "Tarot Game" },
+                    name = gameName.ifBlank { AppStrings.GAME_CREATION_TAROT_NAME_DEFAULT },
                     playerCount = finalPlayers.size,
                     players = finalPlayers,
                     onCreated = onGameCreated
@@ -45,7 +46,7 @@ fun TarotGameCreationScreen(
             OutlinedTextField(
                 value = gameName,
                 onValueChange = { gameName = it },
-                label = { Text("Game Name") },
+                label = { Text(AppStrings.GAME_CREATION_FIELD_GAME_NAME) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )

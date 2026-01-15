@@ -111,7 +111,7 @@ fun CounterScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.COUNTER_CD_BACK)
                     }
                 },
                 actions = {
@@ -119,14 +119,14 @@ fun CounterScreen(
                         viewModel.addRandomCounter()
                         hapticController.performHapticFeedback(HapticType.LIGHT)
                     }) {
-                        Icon(GameIcons.Add, contentDescription = "Add Counter")
+                        Icon(GameIcons.Add, contentDescription = AppStrings.COUNTER_CD_ADD)
                     }
                     IconButton(onClick = { onNavigateToHistory() }) {
-                        Icon(GameIcons.History, contentDescription = "History")
+                        Icon(GameIcons.History, contentDescription = AppStrings.COUNTER_CD_HISTORY)
                     }
                     Box {
                         IconButton(onClick = { showMenu = true }) {
-                            Icon(GameIcons.MoreVert, contentDescription = "Menu")
+                            Icon(GameIcons.MoreVert, contentDescription = AppStrings.COUNTER_CD_MENU)
                         }
                         DropdownMenu(
                             expanded = showMenu,
@@ -141,7 +141,7 @@ fun CounterScreen(
                                 leadingIcon = {
                                     Icon(
                                         GameIcons.Settings,
-                                        contentDescription = "Settings menu"
+                                        contentDescription = AppStrings.COUNTER_CD_SETTINGS_MENU
                                     )
                                 }
                             )
@@ -154,7 +154,7 @@ fun CounterScreen(
                                 leadingIcon = {
                                     Icon(
                                         GameIcons.Refresh,
-                                        contentDescription = "Reset all counters"
+                                        contentDescription = AppStrings.COUNTER_CD_RESET_ALL
                                     )
                                 }
                             )
@@ -167,7 +167,7 @@ fun CounterScreen(
                                 leadingIcon = {
                                     Icon(
                                         GameIcons.Delete,
-                                        contentDescription = "Delete all counters"
+                                        contentDescription = AppStrings.COUNTER_CD_DELETE_ALL
                                     )
                                 }
                             )
@@ -391,11 +391,11 @@ fun CounterScreen(
         if (showSettingsDialog) {
             AlertDialog(
                 onDismissRequest = { showSettingsDialog = false },
-                title = { Text("Counter Settings") },
+                title = { Text(AppStrings.COUNTER_DIALOG_SETTINGS_TITLE) },
                 text = {
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         Text(
-                            "Highlight player with:",
+                            AppStrings.COUNTER_DIALOG_SETTINGS_LABEL,
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold
                         )
@@ -417,7 +417,7 @@ fun CounterScreen(
                 },
                 confirmButton = {
                     TextButton(onClick = { showSettingsDialog = false }) {
-                        Text("CLOSE")
+                        Text(AppStrings.COUNTER_ACTION_CLOSE)
                     }
                 }
             )
@@ -427,7 +427,7 @@ fun CounterScreen(
         if (showResetConfirmation) {
             AlertDialog(
                 onDismissRequest = { showResetConfirmation = false },
-                title = { Text("Reset All Counters") },
+                title = { Text(AppStrings.COUNTER_DIALOG_RESET_TITLE) },
                 text = { Text("Are you sure you want to reset all counter values to 0?") },
                 confirmButton = {
                     TextButton(
@@ -451,7 +451,7 @@ fun CounterScreen(
         if (showDeleteAllConfirmation) {
             AlertDialog(
                 onDismissRequest = { showDeleteAllConfirmation = false },
-                title = { Text("Delete Everything") },
+                title = { Text(AppStrings.COUNTER_DIALOG_DELETE_TITLE) },
                 text = { Text("Are you sure you want to delete all counters? This action cannot be undone.") },
                 confirmButton = {
                     TextButton(
@@ -461,7 +461,7 @@ fun CounterScreen(
                         },
                         colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
                     ) {
-                        Text("Delete Everything")
+                        Text(AppStrings.COUNTER_DIALOG_DELETE_TITLE)
                     }
                 },
                 dismissButton = {
@@ -794,7 +794,7 @@ fun CounterCard(
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(GameIcons.Remove, contentDescription = "Decrease", tint = contentColor)
+                    Icon(GameIcons.Remove, contentDescription = AppStrings.COUNTER_CD_DECREASE, tint = contentColor)
                 }
 
                 Text(
@@ -822,7 +822,7 @@ fun CounterCard(
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(GameIcons.Add, contentDescription = "Increase", tint = contentColor)
+                    Icon(GameIcons.Add, contentDescription = AppStrings.COUNTER_CD_INCREASE, tint = contentColor)
                 }
             }
         }

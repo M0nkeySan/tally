@@ -66,6 +66,7 @@ import io.github.m0nkeysan.gamekeeper.core.model.DiceType
 import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.gamekeeper.platform.rememberShakeDetector
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 /**
  * Main Dice Roller Screen
@@ -241,7 +242,7 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
-                    text = "Tap anywhere to roll. Long-press the box for settings.",
+                    text = AppStrings.DICE_INSTRUCTION_TAP,
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -378,14 +379,14 @@ private fun DiceSettingsBottomSheetContent(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(
-            text = "Dice Settings",
+            text = AppStrings.DICE_DIALOG_TITLE,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary
         )
 
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Number of Dice", style = MaterialTheme.typography.labelMedium)
+            Text(AppStrings.DICE_FIELD_NUMBER, style = MaterialTheme.typography.labelMedium)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -413,13 +414,13 @@ private fun DiceSettingsBottomSheetContent(
         }
 
          Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-             Text("Dice Type", style = MaterialTheme.typography.labelMedium)
+             Text(AppStrings.DICE_FIELD_TYPE, style = MaterialTheme.typography.labelMedium)
              DiceTypeSelector(
                  selectedType = diceType,
                  onTypeSelected = { diceType = it }
              )
 
-             Text("Custom Dice", style = MaterialTheme.typography.labelMedium)
+             Text(AppStrings.DICE_FIELD_CUSTOM, style = MaterialTheme.typography.labelMedium)
              var customInput by remember { mutableStateOf(if (diceType is DiceType.Custom) diceType.sides.toString() else "") }
              var customInputError by remember { mutableStateOf<String?>(null) }
              
@@ -436,7 +437,7 @@ private fun DiceSettingsBottomSheetContent(
              LaunchedEffect(customInput) {
                  customInputError = when {
                      customInput.isBlank() -> null
-                     customInput.toIntOrNull() == null -> "Must be a valid number"
+                     customInput.toIntOrNull() == null -> AppStrings.DICE_ERROR_NOT_VALID
                      customInput.toInt() < DiceConstants.MIN_CUSTOM_SIDES -> "Minimum is ${DiceConstants.MIN_CUSTOM_SIDES} sides"
                      customInput.toInt() > DiceConstants.MAX_CUSTOM_SIDES -> "Maximum is ${DiceConstants.MAX_CUSTOM_SIDES} sides"
                      else -> null
@@ -455,7 +456,7 @@ private fun DiceSettingsBottomSheetContent(
                      }
                  },
                  modifier = Modifier.fillMaxWidth(),
-                 placeholder = { Text("2-99", color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                 placeholder = { Text(AppStrings.DICE_PLACEHOLDER_CUSTOM, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                  singleLine = true,
                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                  colors = TextFieldDefaults.colors(
@@ -487,7 +488,7 @@ private fun DiceSettingsBottomSheetContent(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Animation", style = MaterialTheme.typography.bodyMedium)
+            Text(AppStrings.DICE_SETTING_ANIMATION, style = MaterialTheme.typography.bodyMedium)
             Switch(checked = animationEnabled, onCheckedChange = { animationEnabled = it })
         }
 
@@ -499,7 +500,7 @@ private fun DiceSettingsBottomSheetContent(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Shake to Roll", style = MaterialTheme.typography.bodyMedium)
+            Text(AppStrings.DICE_SETTING_SHAKE, style = MaterialTheme.typography.bodyMedium)
             Switch(checked = shakeEnabled, onCheckedChange = { shakeEnabled = it })
         }
 
@@ -516,7 +517,7 @@ private fun DiceSettingsBottomSheetContent(
                     .height(48.dp),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
             ) {
-                Text("Cancel")
+                Text(AppStrings.DICE_ACTION_CANCEL)
             }
             Button(
                 onClick = {
@@ -537,7 +538,7 @@ private fun DiceSettingsBottomSheetContent(
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
-                Text("Save")
+                Text(AppStrings.DICE_ACTION_SAVE)
             }
         }
 

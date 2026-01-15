@@ -101,7 +101,7 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
                 },
                 actions = {
                     IconButton(onClick = { showSettings = true }) {
-                        Icon(GameIcons.Settings, contentDescription = "Settings")
+                        Icon(GameIcons.Settings, contentDescription = AppStrings.FINGER_SELECTOR_CD_SETTINGS)
                     }
                 }
             )
@@ -140,13 +140,13 @@ fun SelectionSettingsSheet(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(
-            text = "Selector Settings",
+            text = AppStrings.FINGER_SELECTOR_DIALOG_TITLE,
             style = MaterialTheme.typography.headlineMedium
         )
 
         // Mode Selection
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Mode", style = MaterialTheme.typography.titleMedium)
+            Text(AppStrings.FINGER_SELECTOR_SECTION_MODE, style = MaterialTheme.typography.titleMedium)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(
                     selected = config.mode == SelectionMode.FINGERS,
@@ -158,7 +158,7 @@ fun SelectionSettingsSheet(
                             )
                         )
                     },
-                    label = { Text("Fingers") },
+                    label = { Text(AppStrings.FINGER_SELECTOR_MODE_FINGERS) },
                     leadingIcon = { Icon(GameIcons.TouchApp, "Fingers filter") }
                 )
                 FilterChip(
@@ -171,7 +171,7 @@ fun SelectionSettingsSheet(
                             )
                         )
                     },
-                    label = { Text("Groups") },
+                    label = { Text(AppStrings.FINGER_SELECTOR_MODE_GROUPS) },
                     leadingIcon = { Icon(GameIcons.Group, null) }
                 )
             }
@@ -469,19 +469,19 @@ fun FingerSelectorGame(
                 ) {
                     Icon(
                         imageVector = GameIcons.TouchApp,
-                        contentDescription = "Touch here to place finger",
+                        contentDescription = AppStrings.FINGER_SELECTOR_CD_TOUCH,
                         tint = Color.White.copy(alpha = 0.6f),
                         modifier = Modifier.size(64.dp)
                     )
                     Text(
-                        text = "Place your fingers",
+                        text = AppStrings.FINGER_SELECTOR_INSTRUCTION_PLACE,
                         color = Color.White.copy(alpha = 0.8f),
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center
                     )
                     Text(
                         text = if (config.mode == SelectionMode.GROUPS)
-                            "Wait for group assignment"
+                            AppStrings.FINGER_SELECTOR_INSTRUCTION_WAIT
                         else
                             "${config.count} finger${if (config.count > 1) "s" else ""} will be chosen",
                         color = Color.White.copy(alpha = 0.5f),

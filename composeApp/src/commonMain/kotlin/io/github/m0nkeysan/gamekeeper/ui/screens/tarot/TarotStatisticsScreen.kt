@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.BidStatistic
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import io.github.m0nkeysan.gamekeeper.core.model.GameStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.core.model.PlayerRanking
@@ -144,12 +145,12 @@ fun TarotStatisticsScreen(
                 Tab(
                     selected = selectedTab == 0,
                     onClick = { selectedTab = 0 },
-                    text = { Text("Current Game") }
+                    text = { Text(AppStrings.TAROT_STATS_TAB_CURRENT_GAME) }
                 )
                 Tab(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    text = { Text("Player Stats") }
+                    text = { Text(AppStrings.TAROT_STATS_TAB_PLAYER_STATS) }
                 )
             }
             
@@ -634,17 +635,17 @@ private fun CurrentGamePlayerStatsCard(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 StatItem(
-                    label = "Called",
+                    label = AppStrings.TAROT_STATS_LABEL_CALLED,
                     value = calledRounds.toString(),
                     modifier = Modifier.weight(1f)
                 )
                 StatItem(
-                    label = "As Taker",
+                    label = AppStrings.TAROT_STATS_LABEL_AS_TAKER,
                     value = "$takerWins/$takerRounds",
                     modifier = Modifier.weight(1f)
                 )
                 StatItem(
-                    label = "Win Rate",
+                    label = AppStrings.TAROT_STATS_LABEL_WIN_RATE,
                     value = "%.0f%%".format(winRate),
                     modifier = Modifier.weight(1f)
                 )
@@ -674,7 +675,7 @@ private fun CurrentGamePlayerStatsCard(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    "Favorite Bid:",
+                                    AppStrings.TAROT_STATS_LABEL_FAVORITE_BID,
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -707,7 +708,7 @@ private fun CurrentGamePlayerStatsCard(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    "Most Successful:",
+                                    AppStrings.TAROT_STATS_LABEL_MOST_SUCCESSFUL,
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -763,7 +764,7 @@ private fun CurrentGamePlayerStatsCard(
                 if (playerGameRounds.isNotEmpty()) {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
-                            "Performance Details",
+                            AppStrings.TAROT_STATS_SECTION_PERFORMANCE_DETAILS,
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier
@@ -780,7 +781,7 @@ private fun CurrentGamePlayerStatsCard(
                         val totalBouts = playerGameRounds.sumOf { it.bouts }
                         val avgBouts = totalBouts.toDouble() / playerGameRounds.size
                         StatItem(
-                            label = "Avg Bouts/Round",
+                            label = AppStrings.TAROT_STATS_LABEL_AVG_BOUTS,
                             value = String.format("%.1f", avgBouts),
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -799,13 +800,13 @@ private fun CurrentGamePlayerStatsCard(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             StatItem(
-                                label = "Avg Won",
+                                label = AppStrings.TAROT_STATS_LABEL_AVG_WON,
                                 value = String.format("%.0f", avgPointsWon),
                                 modifier = Modifier.weight(1f),
                                 valueColor = MaterialTheme.colorScheme.secondary
                             )
                             StatItem(
-                                label = "Avg Lost",
+                                label = AppStrings.TAROT_STATS_LABEL_AVG_LOST,
                                 value = String.format("%.0f", avgPointsLost),
                                 modifier = Modifier.weight(1f),
                                 valueColor = MaterialTheme.colorScheme.error
@@ -819,7 +820,7 @@ private fun CurrentGamePlayerStatsCard(
             if (calledRounds > 0) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        "Called Performance",
+                        AppStrings.TAROT_STATS_SECTION_CALLED_PERFORMANCE,
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
@@ -852,13 +853,13 @@ private fun CurrentGamePlayerStatsCard(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             StatItem(
-                                label = "Avg Won",
+                                label = AppStrings.TAROT_STATS_LABEL_AVG_WON,
                                 value = String.format("%.0f", avgCalledPointsWon),
                                 modifier = Modifier.weight(1f),
                                 valueColor = MaterialTheme.colorScheme.secondary
                             )
                             StatItem(
-                                label = "Avg Lost",
+                                label = AppStrings.TAROT_STATS_LABEL_AVG_LOST,
                                 value = String.format("%.0f", avgCalledPointsLost),
                                 modifier = Modifier.weight(1f),
                                 valueColor = MaterialTheme.colorScheme.error
@@ -990,7 +991,7 @@ private fun ErrorStateCard(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    "Oops! Something went wrong",
+                    AppStrings.TAROT_STATS_ERROR_TITLE,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -1003,7 +1004,7 @@ private fun ErrorStateCard(
                 androidx.compose.material3.Button(
                     onClick = onRetry
                 ) {
-                    Text("Retry")
+                    Text(AppStrings.ACTION_RETRY)
                 }
             }
         }

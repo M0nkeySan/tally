@@ -153,7 +153,7 @@ fun PlayerSelectionScreen(
                  }
              },
             dismissButton = {
-                TextButton(onClick = { playerToDelete = null }) { Text("Cancel") }
+                TextButton(onClick = { playerToDelete = null }) { Text(AppStrings.ACTION_CANCEL) }
             }
         )
     }
@@ -180,17 +180,17 @@ fun PlayerSelectionScreen(
                             modifier = Modifier.fillMaxWidth(),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text("Players")
+                            Text(AppStrings.PLAYER_SECTION_PLAYERS)
                         }
                     },
                     navigationIcon = {
                         IconButton(onClick = onBack) {
-                            Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                            Icon(GameIcons.ArrowBack, contentDescription = AppStrings.PLAYER_CD_BACK)
                         }
                     },
                     actions = {
                         IconButton(onClick = { showAddDialog = true }) {
-                            Icon(Icons.Default.Add, contentDescription = "Add Player")
+                            Icon(Icons.Default.Add, contentDescription = AppStrings.PLAYER_CD_ADD)
                         }
                     }
                 )
@@ -201,12 +201,12 @@ fun PlayerSelectionScreen(
                             modifier = Modifier.fillMaxWidth(),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text("Players")
+                            Text(AppStrings.PLAYER_SECTION_PLAYERS)
                         }
                     },
                     actions = {
                         IconButton(onClick = { showAddDialog = true }) {
-                            Icon(Icons.Default.Add, contentDescription = "Add Player")
+                            Icon(Icons.Default.Add, contentDescription = AppStrings.PLAYER_CD_ADD)
                         }
                     }
                 )
@@ -238,7 +238,7 @@ fun PlayerSelectionScreen(
                 // ACTIVE PLAYERS SECTION
                 if (activePlayers.isNotEmpty()) {
                     item {
-                        Text("Players", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                        Text(AppStrings.PLAYER_SECTION_PLAYERS, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     }
                     items(activePlayers, key = { it.id }) { player ->
                         val dismissState = rememberSwipeToDismissBoxState()
@@ -285,7 +285,7 @@ fun PlayerSelectionScreen(
                 if (deactivatedPlayers.isNotEmpty()) {
                     item {
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text("Deactivated", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                        Text(AppStrings.PLAYER_SECTION_DEACTIVATED, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     }
                      items(deactivatedPlayers, key = { it.id }) { player ->
 
@@ -367,7 +367,7 @@ fun PlayerCard(player: Player, isActive: Boolean = true, onClick: () -> Unit) {
             if (isActive) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit",
+                    contentDescription = AppStrings.PLAYER_CD_EDIT,
                     tint = contentColor
                 )
             }

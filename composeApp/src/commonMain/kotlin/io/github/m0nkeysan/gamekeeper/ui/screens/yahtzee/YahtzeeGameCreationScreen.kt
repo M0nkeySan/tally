@@ -12,6 +12,7 @@ import io.github.m0nkeysan.gamekeeper.ui.components.FlexiblePlayerSelector
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameCreationTemplate
 import io.github.m0nkeysan.gamekeeper.core.domain.GameConfig
 import io.github.m0nkeysan.gamekeeper.ui.utils.generateRandomHexColor
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @Composable
 fun YahtzeeGameCreationScreen(
@@ -26,13 +27,13 @@ fun YahtzeeGameCreationScreen(
     val canCreate = gameName.isNotBlank() && selectedPlayers.size in GameConfig.YAHTZEE_MIN_PLAYERS..GameConfig.YAHTZEE_MAX_PLAYERS && selectedPlayers.all { it != null }
 
     GameCreationTemplate(
-        title = "New Yahtzee Game",
+        title = AppStrings.YAHTZEE_NEW_GAME_TITLE,
         onBack = onBack,
         onCreate = {
             val finalPlayers = selectedPlayers.filterNotNull()
             if (finalPlayers.size in GameConfig.YAHTZEE_MIN_PLAYERS..GameConfig.YAHTZEE_MAX_PLAYERS) {
                 viewModel.createGame(
-                    name = gameName.ifBlank { "Yahtzee Game" },
+                    name = gameName.ifBlank { AppStrings.YAHTZEE_GAME_NAME_DEFAULT },
                     playerCount = finalPlayers.size,
                     players = finalPlayers,
                     onCreated = onGameCreated
@@ -45,7 +46,7 @@ fun YahtzeeGameCreationScreen(
             OutlinedTextField(
                 value = gameName,
                 onValueChange = { gameName = it },
-                label = { Text("Game Name") },
+                label = { Text(AppStrings.GAME_CREATION_FIELD_GAME_NAME) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )

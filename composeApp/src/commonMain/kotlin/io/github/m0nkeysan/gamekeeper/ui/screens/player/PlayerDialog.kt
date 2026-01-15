@@ -22,6 +22,7 @@ import io.github.m0nkeysan.gamekeeper.ui.components.DIALOG_COLOR_PRESETS
 import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
 import io.github.m0nkeysan.gamekeeper.ui.components.FieldLabel
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @Composable
 fun PlayerDialog(
@@ -91,7 +92,7 @@ fun PlayerDialog(
                     FlatTextField(
                          value = name,
                          onValueChange = { name = it },
-                         label = "NAME",
+                         label = AppStrings.PLAYER_FIELD_NAME,
                          placeholder = "Player Name",
                          accentColor = composeColor,
                          modifier = Modifier.focusRequester(focusRequester)
@@ -107,7 +108,7 @@ fun PlayerDialog(
                     }
 
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        FieldLabel(text = "AVATAR COLOR")
+                        FieldLabel(text = AppStrings.PLAYER_LABEL_COLOR)
 
                         ColorSelectorRow(
                             selectedColorHex = selectedColor,

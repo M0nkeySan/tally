@@ -123,13 +123,13 @@ fun GameSelectionTemplate(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = "Back")
+                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.GAME_SELECTION_CD_BACK)
                     }
                 },
                 actions = {
                     Box {
                         IconButton(onClick = { showMenu = true }) {
-                            Icon(GameIcons.MoreVert, contentDescription = "Menu")
+                            Icon(GameIcons.MoreVert, contentDescription = AppStrings.GAME_SELECTION_CD_MENU)
                         }
                         DropdownMenu(
                             expanded = showMenu,
@@ -144,7 +144,7 @@ fun GameSelectionTemplate(
                                 leadingIcon = {
                                     Icon(
                                         Icons.Default.Add,
-                                        contentDescription = "Create new game"
+                                        contentDescription = AppStrings.GAME_SELECTION_CD_CREATE
                                     )
                                 }
                             )
@@ -158,7 +158,7 @@ fun GameSelectionTemplate(
                                     leadingIcon = {
                                         Icon(
                                             GameIcons.Delete,
-                                            contentDescription = "Delete all games"
+                                            contentDescription = AppStrings.GAME_SELECTION_CD_DELETE_ALL
                                         )
                                     }
                                 )
@@ -173,7 +173,7 @@ fun GameSelectionTemplate(
                 onClick = onCreateNew,
                 containerColor = GameColors.Primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Create new game")
+                Icon(Icons.Default.Add, contentDescription = AppStrings.GAME_SELECTION_CD_CREATE)
             }
         },
         snackbarHost = {
@@ -183,14 +183,14 @@ fun GameSelectionTemplate(
         when {
             isLoading -> {
                 LoadingState(
-                    message = "Loading games...",
+                    message = AppStrings.GAME_SELECTION_LOADING,
                     modifier = Modifier.padding(paddingValues)
                 )
             }
 
             games.isEmpty() -> {
                 EmptyState(
-                    message = "No games yet. Create one!",
+                    message = AppStrings.GAME_SELECTION_EMPTY,
                     actionLabel = "Create Game",
                     onAction = onCreateNew,
                     modifier = Modifier.padding(paddingValues)
@@ -226,7 +226,7 @@ fun GameSelectionTemplate(
                                 ) {
                                     Icon(
                                         imageVector = GameIcons.Delete,
-                                        contentDescription = "Delete game",
+                                        contentDescription = AppStrings.GAME_SELECTION_CD_DELETE_GAME,
                                         tint = GameColors.Error,
                                         modifier = Modifier.size(32.dp)
                                     )
