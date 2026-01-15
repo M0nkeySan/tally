@@ -60,16 +60,21 @@ fun YahtzeeStatisticsScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
     var showPlayerDropdown by remember { mutableStateOf(false) }
-    
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        "Statistics",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            "Statistics",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
@@ -77,31 +82,6 @@ fun YahtzeeStatisticsScreen(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"
                         )
-                    }
-                },
-                actions = {
-                    Box {
-                        IconButton(onClick = { showPlayerDropdown = !showPlayerDropdown }) {
-                            Icon(
-                                imageVector = GameIcons.BarChart,
-                                contentDescription = "Select Player"
-                            )
-                        }
-                        
-                        DropdownMenu(
-                            expanded = showPlayerDropdown,
-                            onDismissRequest = { showPlayerDropdown = false }
-                        ) {
-                            state.availablePlayers.forEach { player ->
-                                DropdownMenuItem(
-                                    text = { Text(player.name) },
-                                    onClick = {
-                                        viewModel.selectPlayer(player.id)
-                                        showPlayerDropdown = false
-                                    }
-                                )
-                            }
-                        }
                     }
                 }
             )
@@ -123,7 +103,7 @@ fun YahtzeeStatisticsScreen(
                     }
                 )
             }
-            
+
             // Content area
             when {
                 state.isLoading -> {
@@ -134,6 +114,7 @@ fun YahtzeeStatisticsScreen(
                         CircularProgressIndicator()
                     }
                 }
+
                 state.error != null -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -152,11 +133,13 @@ fun YahtzeeStatisticsScreen(
                         }
                     }
                 }
+
                 state.statistics != null -> {
                     StatisticsContent(
                         statistics = state.statistics!!
                     )
                 }
+
                 else -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -189,7 +172,7 @@ private fun PlayerSelectorBar(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(end = 4.dp)
         )
-        
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -221,19 +204,19 @@ private fun StatisticsContent(
         item {
             OverallPerformanceCard(statistics = statistics)
         }
-        
+
         // Score Box Analysis Card
         item {
             ScoreBoxAnalysisCard(statistics = statistics)
         }
-        
+
         // Recent Games Card
         if (statistics.recentGames.isNotEmpty()) {
             item {
                 RecentGamesCard(games = statistics.recentGames)
             }
         }
-        
+
         // Bottom spacing
         item {
             Spacer(modifier = Modifier.height(16.dp))
@@ -262,41 +245,41 @@ private fun OverallPerformanceCard(statistics: YahtzeePlayerStatistics) {
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            
+
             StatisticRow(
                 label = "Total Games",
                 value = statistics.totalGames.toString()
             )
-            
+
             StatisticRow(
                 label = "Finished Games",
                 value = statistics.finishedGames.toString()
             )
-            
+
             StatisticRow(
                 label = "Wins",
                 value = "${statistics.wins} (${formatPercentage(statistics.winRate)})",
                 valueColor = GameColors.Success
             )
-            
+
             StatisticRow(
                 label = "Average Score",
                 value = formatAverage(statistics.averageScore),
                 valueColor = GameColors.Primary
             )
-            
+
             StatisticRow(
                 label = "Personal Best",
                 value = statistics.highScore.toString(),
                 valueColor = GameColors.Success
             )
-            
+
             StatisticRow(
                 label = "Total Yahtzees",
                 value = statistics.totalYahtzees.toString(),
                 valueColor = GameColors.TrophyGold
             )
-            
+
             StatisticRow(
                 label = "Yahtzee Rate",
                 value = formatAverage(statistics.yahtzeeRate) + " per game",
@@ -326,11 +309,11 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
-            
+
             CategoryHeatmap(categoryStats = statistics.categoryStats)
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             // Upper/Lower section stats
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -352,7 +335,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                         color = GameColors.Primary
                     )
                 }
-                
+
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -369,7 +352,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                         color = GameColors.Primary
                     )
                 }
-                
+
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -412,7 +395,7 @@ private fun RecentGamesCard(games: List<io.github.m0nkeysan.gamekeeper.core.mode
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            
+
             games.forEach { game ->
                 GameSummaryRow(game = game)
             }

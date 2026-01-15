@@ -124,13 +124,26 @@ fun GameSelectionTemplate(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.GAME_SELECTION_CD_BACK)
+                        Icon(
+                            GameIcons.ArrowBack,
+                            contentDescription = AppStrings.GAME_SELECTION_CD_BACK
+                        )
                     }
                 },
                 actions = {
+                    if (onNavigateToStatistics != null && games.isNotEmpty()) {
+                        IconButton(onClick = {
+                            onNavigateToStatistics()
+                        }) {
+                            Icon(GameIcons.BarChart, contentDescription = "Statistics")
+                        }
+                    }
                     Box {
                         IconButton(onClick = { showMenu = true }) {
-                            Icon(GameIcons.MoreVert, contentDescription = AppStrings.GAME_SELECTION_CD_MENU)
+                            Icon(
+                                GameIcons.MoreVert,
+                                contentDescription = AppStrings.GAME_SELECTION_CD_MENU
+                            )
                         }
                         DropdownMenu(
                             expanded = showMenu,
@@ -149,21 +162,6 @@ fun GameSelectionTemplate(
                                     )
                                 }
                             )
-                            if (onNavigateToStatistics != null && games.isNotEmpty()) {
-                                DropdownMenuItem(
-                                    text = { Text("Statistics") },
-                                    onClick = {
-                                        showMenu = false
-                                        onNavigateToStatistics()
-                                    },
-                                    leadingIcon = {
-                                        Icon(
-                                            GameIcons.BarChart,
-                                            contentDescription = "Statistics"
-                                        )
-                                    }
-                                )
-                            }
                             if (onDeleteAllGames != null && games.isNotEmpty()) {
                                 DropdownMenuItem(
                                     text = { Text(AppStrings.GAME_DELETE_ALL_TITLE) },
