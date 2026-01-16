@@ -213,15 +213,14 @@ object YahtzeeStatisticsEngine {
             .take(10)
             .map { game ->
                 val gameScores = allScores.filter { it.gameId == game.id }
-                val totalScoresMap = game.playerIds.split(",").associate { pid ->
-                    val trimmedPid = pid.trim()
-                    val playerGameScores = gameScores.filter { it.playerId == trimmedPid }
+                val totalScoresMap = game.playerIds.split(",").associateWith { pid ->
+                    val playerGameScores = gameScores.filter { it.playerId == pid }
                     val baseScore = playerGameScores.sumOf { it.score }
                     val upperScore = playerGameScores
                         .filter { YahtzeeCategory.valueOf(it.category).isUpperSection() }
                         .sumOf { it.score }
                     val bonus = if (upperScore >= 63) 35 else 0
-                    trimmedPid to (baseScore + bonus)
+                    (baseScore + bonus)
                 }
                 
                 val playerScore = totalScoresMap[playerId] ?: 0
