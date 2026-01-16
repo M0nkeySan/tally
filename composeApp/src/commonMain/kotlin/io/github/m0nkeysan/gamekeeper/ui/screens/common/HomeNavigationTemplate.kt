@@ -107,7 +107,7 @@ fun HomeNavigationTemplate(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 ) {
-                    Icon(Icons.Default.Add, contentDescription = AppStrings.HOME_CD_FAB_ADD)
+                    Icon(Icons.Default.Add, contentDescription = AppStrings.CD_ADD_PLAYER)
                 }
             }
         }

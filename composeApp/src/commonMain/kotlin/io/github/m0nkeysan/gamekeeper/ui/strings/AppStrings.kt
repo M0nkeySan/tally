@@ -64,13 +64,14 @@ object AppStrings {
        const val ACTION_RETRY = "Retry"
        const val ACTION_OK = "OK"
       
-        // Common Content Descriptions (Accessibility)
-        const val CD_BACK = "Back"
-        const val CD_SETTINGS = "Settings"
-        const val CD_ADD = "Add"
-        const val CD_ADD_PLAYER = "Add Player"
-        const val CD_TOGGLE_COLLAPSE = "Collapse"
-        const val CD_TOGGLE_EXPAND = "Expand"
+         // Common Content Descriptions (Accessibility)
+         const val CD_BACK = "Back"
+         const val CD_SETTINGS = "Settings"
+         const val CD_ADD = "Add"
+         const val CD_MENU = "Menu"
+         const val CD_ADD_PLAYER = "Add Player"
+         const val CD_TOGGLE_COLLAPSE = "Collapse"
+         const val CD_TOGGLE_EXPAND = "Expand"
         const val CD_PLAYER = "Player avatar"
         const val CD_GAME_ICON = "Game icon"
         const val CD_YAHTZEE_ICON = "Yahtzee"
@@ -134,11 +135,10 @@ object AppStrings {
       const val TAROT_ROUND_LABEL_CHELEM = "Chelem"
       
        // Counter - Main Screen
-       const val COUNTER_CD_BACK = "Back"
-       const val COUNTER_CD_ADD = "Add Counter"
-       const val COUNTER_CD_HISTORY = "History"
-       const val COUNTER_CD_MENU = "Menu"
-       const val COUNTER_CD_SETTINGS_MENU = "Settings menu"
+        const val COUNTER_CD_BACK = "Back"
+        const val COUNTER_CD_ADD = "Add Counter"
+        const val COUNTER_CD_HISTORY = "History"
+        const val COUNTER_CD_SETTINGS_MENU = "Settings menu"
        const val COUNTER_CD_RESET_ALL = "Reset all counters"
        const val COUNTER_CD_DELETE_ALL = "Delete all counters"
        const val COUNTER_DIALOG_SETTINGS_TITLE = "Counter Settings"
@@ -231,7 +231,6 @@ object AppStrings {
       
          // Game Selection & Creation
          const val GAME_SELECTION_CD_BACK = "Back"
-         const val GAME_SELECTION_CD_MENU = "Menu"
          const val GAME_SELECTION_CD_STATISTICS = "Statistics"
          const val GAME_SELECTION_CD_CREATE = "Create new game"
          const val GAME_SELECTION_CD_DELETE_ALL = "Delete all games"
@@ -248,22 +247,20 @@ object AppStrings {
        const val GAME_DELETION_DIALOG_TAROT_MESSAGE = "Are you sure you want to delete the game '%s'? This will also delete all rounds in this game."
        const val GAME_DELETION_DIALOG_YAHTZEE_TITLE = "Delete Game"
       
-       // Player Management
-       const val PLAYER_SECTION_PLAYERS = "Players"
-       const val PLAYER_SECTION_DEACTIVATED = "Deactivated"
-       const val PLAYER_CD_BACK = "Back"
-       const val PLAYER_CD_ADD = "Add Player"
-       const val PLAYER_FIELD_NAME = "NAME"
+        // Player Management
+        const val PLAYER_SECTION_PLAYERS = "Players"
+        const val PLAYER_SECTION_DEACTIVATED = "Deactivated"
+        const val PLAYER_CD_BACK = "Back"
+        const val PLAYER_FIELD_NAME = "NAME"
        const val PLAYER_PLACEHOLDER_NAME = "Player Name"
        const val PLAYER_ERROR_NAME_TAKEN = "This name is already taken"
        const val PLAYER_LABEL_COLOR = "AVATAR COLOR"
        const val PLAYER_CD_EDIT = "Edit"
       
-      // Home & Results
-      const val HOME_CD_GAMES = "Games"
-      const val HOME_CD_PLAYERS = "Players"
-      const val HOME_CD_FAB_ADD = "Add Player"
-      const val HOME_CD_FINGER_SELECTOR = "Finger Selector game"
+       // Home & Results
+       const val HOME_CD_GAMES = "Games"
+       const val HOME_CD_PLAYERS = "Players"
+       const val HOME_CD_FINGER_SELECTOR = "Finger Selector game"
       const val HOME_TITLE_FINGER_SELECTOR = "Finger Selector"
       const val HOME_DESC_FINGER_SELECTOR = "Randomly select a starting player with multi-touch"
       const val HOME_CD_COUNTER = "Counter game"

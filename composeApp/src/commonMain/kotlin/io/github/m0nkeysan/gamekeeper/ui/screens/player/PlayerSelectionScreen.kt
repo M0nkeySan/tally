@@ -190,7 +190,7 @@ fun PlayerSelectionScreen(
                     },
                     actions = {
                         IconButton(onClick = { showAddDialog = true }) {
-                            Icon(Icons.Default.Add, contentDescription = AppStrings.PLAYER_CD_ADD)
+                            Icon(Icons.Default.Add, contentDescription = AppStrings.CD_ADD_PLAYER)
                         }
                     }
                 )
@@ -206,7 +206,7 @@ fun PlayerSelectionScreen(
                     },
                     actions = {
                         IconButton(onClick = { showAddDialog = true }) {
-                            Icon(Icons.Default.Add, contentDescription = AppStrings.PLAYER_CD_ADD)
+                            Icon(Icons.Default.Add, contentDescription = AppStrings.CD_ADD_PLAYER)
                         }
                     }
                 )

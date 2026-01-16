@@ -142,7 +142,7 @@ fun GameSelectionTemplate(
                         IconButton(onClick = { showMenu = true }) {
                             Icon(
                                 GameIcons.MoreVert,
-                                contentDescription = AppStrings.GAME_SELECTION_CD_MENU
+                                contentDescription = AppStrings.CD_MENU
                             )
                         }
                         DropdownMenu(

@@ -128,7 +128,7 @@ fun CounterScreen(
                     }
                     Box {
                         IconButton(onClick = { showMenu = true }) {
-                            Icon(GameIcons.MoreVert, contentDescription = AppStrings.COUNTER_CD_MENU)
+                            Icon(GameIcons.MoreVert, contentDescription = AppStrings.CD_MENU)
                         }
                         DropdownMenu(
                             expanded = showMenu,
