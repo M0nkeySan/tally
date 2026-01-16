@@ -47,7 +47,7 @@ fun FlexiblePlayerSelector(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Players (${selectedPlayers.size}/$maxPlayers)",
+                text = AppStrings.PLAYERS_COUNT_FORMAT.format(selectedPlayers.size, maxPlayers),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -103,7 +103,7 @@ fun FlexiblePlayerSelector(
         // Validation error message
         if (showError) {
             Text(
-                text = "Player count must be between $minPlayers and $maxPlayers",
+                text = AppStrings.ERROR_PLAYER_COUNT_RANGE.format(minPlayers, maxPlayers),
                 style = MaterialTheme.typography.bodySmall,
                 color = GameColors.Error
             )

@@ -57,9 +57,6 @@ object AppStrings {
       // Dice Roller
       const val GAME_DICE = "Dice Roller"
       const val DESC_DICE = "Roll customizable dice for any board game"
-      const val DICE_TOTAL = "Total"
-      const val DICE_ERROR_MIN = "Minimum is 2 sides"
-      const val DICE_ERROR_MAX = "Maximum is 99 sides"
      
        // Common Actions (extended)
        const val ACTION_RETRY = "Retry"
@@ -364,6 +361,12 @@ object AppStrings {
        // Counter Screen - Player Count Format
        const val COUNTER_FORMAT_PLAYER_COUNT = "%dP"
        
-       // Error Handling
-       const val ERROR_UNKNOWN = "Unknown"
+        // Error Handling
+        const val ERROR_UNKNOWN = "Unknown"
+        
+        // Validation Messages
+        const val ERROR_MIN_FINGERS = "Need at least %d fingers"
+        const val ERROR_PLAYER_COUNT_RANGE = "Player count must be between %d and %d"
+        const val PLAYERS_COUNT_FORMAT = "Players (%d/%d)"
+        const val PLAYER_COUNT_DISPLAY = "%d player%s"
 }

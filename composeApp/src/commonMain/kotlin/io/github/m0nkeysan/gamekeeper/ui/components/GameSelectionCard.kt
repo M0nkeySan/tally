@@ -69,7 +69,7 @@ fun GameSelectionCard(
                 Spacer(modifier = Modifier.height(4.dp))
                 
                 Text(
-                    text = "${game.playerCount} player${if (game.playerCount > 1) "s" else ""}",
+                    text = AppStrings.PLAYER_COUNT_DISPLAY.format(game.playerCount, if (game.playerCount > 1) "s" else ""),
                     style = MaterialTheme.typography.bodyMedium,
                     color = GameColors.TextSecondary
                 )

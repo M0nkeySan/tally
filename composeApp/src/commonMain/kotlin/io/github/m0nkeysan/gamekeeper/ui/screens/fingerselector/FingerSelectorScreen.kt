@@ -499,7 +499,7 @@ fun FingerSelectorGame(
                     contentAlignment = Alignment.BottomCenter
                 ) {
                     Text(
-                        text = "Need at least $minFingers fingers",
+                        text = AppStrings.ERROR_MIN_FINGERS.format(minFingers),
                         color = Color.White.copy(alpha = 0.6f),
                         fontSize = 16.sp,
                         textAlign = TextAlign.Center
