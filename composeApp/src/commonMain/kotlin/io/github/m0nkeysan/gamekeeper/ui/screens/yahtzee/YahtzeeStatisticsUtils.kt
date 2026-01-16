@@ -11,7 +11,25 @@ import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 fun getCategoryColor(stat: CategoryStat): Color {
     val category = stat.category
     val avg = stat.average
-    
+    return getCategoryColorByAverage(category, avg)
+}
+
+/**
+ * Determine color for a category based on average score
+ */
+fun getCategoryColor(average: Double): Color {
+    // For global stats, use generic scoring thresholds
+    return when {
+        average >= 20 -> GameColors.Success
+        average >= 10 -> GameColors.Warning
+        else -> GameColors.Error
+    }
+}
+
+/**
+ * Internal helper to calculate category color
+ */
+private fun getCategoryColorByAverage(category: YahtzeeCategory, avg: Double): Color {
     return when {
         // Upper section categories (max 30 for sixes)
         category.isUpperSection() -> when {
