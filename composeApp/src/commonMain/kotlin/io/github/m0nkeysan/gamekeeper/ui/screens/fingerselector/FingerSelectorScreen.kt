@@ -183,7 +183,7 @@ fun SelectionSettingsSheet(
              val min = 1
              val max = 5
 
-             Text("$title: ${config.count}", style = MaterialTheme.typography.titleMedium)
+             Text(AppStrings.FINGER_SELECTOR_SLIDER_VALUE_FORMAT.format(title, config.count), style = MaterialTheme.typography.titleMedium)
 
             Slider(
                 value = config.count.toFloat(),

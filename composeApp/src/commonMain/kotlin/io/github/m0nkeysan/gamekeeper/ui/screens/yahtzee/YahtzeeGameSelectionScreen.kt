@@ -1,6 +1,13 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee
 
-import androidx.compose.runtime.*
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.ui.components.GameDisplay
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameSelectionTemplate
@@ -20,22 +27,22 @@ fun YahtzeeGameSelectionScreen(
     if (gameToDelete != null) {
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { gameToDelete = null },
-            title = { androidx.compose.material3.Text(AppStrings.GAME_DELETION_DIALOG_YAHTZEE_TITLE) },
-            text = { androidx.compose.material3.Text("Are you sure you want to delete '${gameToDelete?.name}'? All scores will be lost.") },
+            title = { Text(AppStrings.GAME_DELETION_DIALOG_YAHTZEE_TITLE) },
+             text = { Text(AppStrings.GAME_DELETION_DIALOG_YAHTZEE_MESSAGE.format(gameToDelete?.name)) },
             confirmButton = {
-                androidx.compose.material3.TextButton(
+                TextButton(
                     onClick = {
                         gameToDelete?.let { viewModel.deleteGame(it.game) }
                         gameToDelete = null
                     },
                     colors = androidx.compose.material3.ButtonDefaults.textButtonColors(contentColor = androidx.compose.material3.MaterialTheme.colorScheme.error)
                 ) {
-                    androidx.compose.material3.Text("Delete")
+                    Text(AppStrings.ACTION_DELETE)
                 }
             },
             dismissButton = {
-                androidx.compose.material3.TextButton(onClick = { gameToDelete = null }) {
-                    androidx.compose.material3.Text("Cancel")
+                TextButton(onClick = { gameToDelete = null }) {
+                    Text(AppStrings.ACTION_DELETE)
                 }
             }
         )

@@ -27,12 +27,13 @@ object AppStrings {
     const val PLAYERS_NO_PLAYERS = "No players found. Add one!"
 
     // Common Actions
-    const val ACTION_DELETE = "Delete"
-    const val ACTION_CANCEL = "Cancel"
-    const val ACTION_SAVE = "Save"
-    const val ACTION_BACK = "Back"
-    const val ACTION_CREATE = "Create"
-    const val ACTION_RESET = "Reset"
+     const val ACTION_DELETE = "Delete"
+     const val ACTION_DELETE_ALL = "Delete All"
+     const val ACTION_CANCEL = "Cancel"
+     const val ACTION_SAVE = "Save"
+     const val ACTION_BACK = "Back"
+     const val ACTION_CREATE = "Create"
+     const val ACTION_RESET = "Reset"
 
     // Loading and States
     const val STATE_LOADING = "Loading..."
@@ -152,10 +153,11 @@ object AppStrings {
     const val COUNTER_DIALOG_ADJUST_LABEL = "MANUAL ADJUST"
     const val COUNTER_DIALOG_ADJUST_PLACEHOLDER = "0"
     const val COUNTER_DIALOG_SET_SCORE_LABEL = "SET NEW SCORE"
-    const val COUNTER_CD_DECREASE = "Decrease"
-    const val COUNTER_CD_INCREASE = "Increase"
-
-    // Counter - History & Edit
+     const val COUNTER_CD_DECREASE = "Decrease"
+     const val COUNTER_CD_INCREASE = "Increase"
+     const val COUNTER_LEADER_DISPLAY_FORMAT = "%s %s"
+     
+     // Counter - History & Edit
     const val COUNTER_HISTORY_TITLE = "History"
     const val COUNTER_HISTORY_SUBTITLE = "⚠️ History is cleared when you close the app"
     const val COUNTER_HISTORY_CD_DELETE = "Delete all histories"
@@ -216,10 +218,11 @@ object AppStrings {
     const val FINGER_SELECTOR_MODE_FINGERS = "Fingers"
     const val FINGER_SELECTOR_MODE_GROUPS = "Groups"
     const val FINGER_SELECTOR_CD_TOUCH = "Touch here to place finger"
-    const val FINGER_SELECTOR_INSTRUCTION_PLACE = "Place your fingers"
-    const val FINGER_SELECTOR_INSTRUCTION_WAIT = "Wait for group assignment"
-
-    // Game Selection & Creation
+     const val FINGER_SELECTOR_INSTRUCTION_PLACE = "Place your fingers"
+     const val FINGER_SELECTOR_INSTRUCTION_WAIT = "Wait for group assignment"
+     const val FINGER_SELECTOR_SLIDER_VALUE_FORMAT = "%s: %d"
+     
+     // Game Selection & Creation
     const val GAME_SELECTION_CD_STATISTICS = "Statistics"
     const val GAME_SELECTION_CD_CREATE = "Create new game"
     const val GAME_SELECTION_CD_DELETE_ALL = "Delete all games"
@@ -234,9 +237,11 @@ object AppStrings {
     const val GAME_DELETION_DIALOG_TAROT_TITLE = "Delete Game"
     const val GAME_DELETION_DIALOG_TAROT_MESSAGE =
         "Are you sure you want to delete the game '%s'? This will also delete all rounds in this game."
-    const val GAME_DELETION_DIALOG_YAHTZEE_TITLE = "Delete Game"
-
-    // Player Management
+     const val GAME_DELETION_DIALOG_YAHTZEE_TITLE = "Delete Game"
+     const val GAME_DELETION_DIALOG_YAHTZEE_MESSAGE =
+         "Are you sure you want to delete '%s'? All scores will be lost."
+     
+     // Player Management
     const val PLAYER_SECTION_PLAYERS = "Players"
     const val PLAYER_SECTION_DEACTIVATED = "Deactivated"
     const val PLAYER_FIELD_NAME = "NAME"

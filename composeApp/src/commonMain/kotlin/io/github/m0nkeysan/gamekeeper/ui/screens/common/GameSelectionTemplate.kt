@@ -93,12 +93,12 @@ fun GameSelectionTemplate(
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
                 ) {
-                    Text("Delete All")
+                    Text(AppStrings.ACTION_DELETE_ALL)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteAllDialog = false }) {
-                    Text("Cancel")
+                    Text(AppStrings.ACTION_CANCEL)
                 }
             }
         )

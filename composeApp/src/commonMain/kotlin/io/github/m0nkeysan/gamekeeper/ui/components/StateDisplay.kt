@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.ACTION_RETRY
 import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.STATE_LOADING
 import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.STATE_LOADING_GAMES
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
@@ -179,7 +180,7 @@ fun ErrorState(
                         containerColor = GameColors.Error
                     )
                 ) {
-                    Text("Retry")
+                    Text(ACTION_RETRY)
                 }
             }
         }

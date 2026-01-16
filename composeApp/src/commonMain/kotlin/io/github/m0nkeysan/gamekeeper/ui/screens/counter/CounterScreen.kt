@@ -99,7 +99,7 @@ fun CounterScreen(
                         if (leader != null && state.counters.isNotEmpty()) {
                             val emoji =
                                 if (state.displayMode == CounterDisplayMode.MOST_POINTS) "📈" else "📉"
-                            Text("$emoji ${leader.name}", fontWeight = FontWeight.ExtraBold)
+                            Text(AppStrings.COUNTER_LEADER_DISPLAY_FORMAT.format(emoji, leader.name), fontWeight = FontWeight.ExtraBold)
                         } else {
                             Text(
                                 AppStrings.COUNTER_TITLE,
