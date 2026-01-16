@@ -117,18 +117,9 @@ object AppStrings {
        const val CD_REMOVE_PLAYER = "Remove player"
       
       // Common Dialogs
-      const val DIALOG_DELETE_TITLE = "Delete Game"
-      const val DIALOG_DELETE_CONFIRM = "Are you sure you want to delete the game?"
       const val DIALOG_DELETE_ALL_TITLE = "Delete All"
-      const val DIALOG_DELETE_ALL_CONFIRM = "Are you sure?"
-      const val DIALOG_RESET_TITLE = "Reset All Counters"
-      const val DIALOG_RESET_MESSAGE = "Are you sure you want to reset all counter values to 0?"
       const val DIALOG_DELETE_COUNTER_TITLE = "Delete Counter"
       const val DIALOG_DELETE_COUNTER_MESSAGE = "Are you sure you want to delete this counter? This action cannot be undone."
-      const val DIALOG_DELETE_EVERYTHING_TITLE = "Delete Everything"
-      const val DIALOG_DELETE_EVERYTHING_MESSAGE = "Are you sure you want to delete all counters? This action cannot be undone."
-      const val DIALOG_DELETE_COUNTER_HISTORY_TITLE = "Delete all histories"
-      const val DIALOG_DELETE_COUNTER_HISTORY_MESSAGE = "Are you sure you want to delete all counter change histories? This cannot be undone."
       const val DIALOG_DEACTIVATE_PLAYER = "Deactivate"
       const val DIALOG_DELETE_PLAYER = "Delete"
       

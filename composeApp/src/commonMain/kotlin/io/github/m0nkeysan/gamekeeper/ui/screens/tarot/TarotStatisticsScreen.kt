@@ -85,10 +85,10 @@ fun TarotStatisticsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            "Statistics",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
+                             AppStrings.TAROT_SCORING_CD_STATISTICS,
+                             style = MaterialTheme.typography.titleLarge,
+                             fontWeight = FontWeight.Bold
+                         )
                         state.game?.let {
                             Text(
                                 it.name,
@@ -99,10 +99,10 @@ fun TarotStatisticsScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, "Back")
-                    }
-                }
+                     IconButton(onClick = onBack) {
+                         Icon(GameIcons.ArrowBack, AppStrings.TAROT_SCORING_CD_BACK)
+                     }
+                 }
             )
         },
         containerColor = MaterialTheme.colorScheme.background
@@ -594,10 +594,10 @@ private fun CurrentGamePlayerStatsCard(
                     fontWeight = FontWeight.Bold
                 )
                 Icon(
-                    imageVector = if (isExpanded) GameIcons.ExpandLess else GameIcons.ExpandMore,
-                    contentDescription = if (isExpanded) "Collapse" else "Expand",
-                    modifier = Modifier.size(24.dp)
-                )
+                     imageVector = if (isExpanded) GameIcons.ExpandLess else GameIcons.ExpandMore,
+                     contentDescription = if (isExpanded) AppStrings.CD_TOGGLE_COLLAPSE else AppStrings.CD_TOGGLE_EXPAND,
+                     modifier = Modifier.size(24.dp)
+                 )
             }
             
             // Expanded content

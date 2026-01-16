@@ -16,29 +16,29 @@ fun TarotGameSelectionScreen(
     val state by viewModel.selectionState.collectAsState()
     var gameToDelete by remember { mutableStateOf<TarotGameDisplayModel?>(null) }
 
-    if (gameToDelete != null) {
-        androidx.compose.material3.AlertDialog(
-            onDismissRequest = { gameToDelete = null },
-            title = { androidx.compose.material3.Text(AppStrings.GAME_DELETION_DIALOG_TAROT_TITLE) },
-            text = { androidx.compose.material3.Text("Are you sure you want to delete the game '${gameToDelete?.name}'? This will also delete all rounds in this game.") },
-            confirmButton = {
-                androidx.compose.material3.TextButton(
-                    onClick = {
-                        gameToDelete?.let { viewModel.deleteGame(it.game) }
-                        gameToDelete = null
-                    },
-                    colors = androidx.compose.material3.ButtonDefaults.textButtonColors(contentColor = androidx.compose.material3.MaterialTheme.colorScheme.error)
-                ) {
-                    androidx.compose.material3.Text("Delete")
-                }
-            },
-            dismissButton = {
-                androidx.compose.material3.TextButton(onClick = { gameToDelete = null }) {
-                    androidx.compose.material3.Text(AppStrings.ACTION_CANCEL)
-                }
-            }
-        )
-    }
+     if (gameToDelete != null) {
+         androidx.compose.material3.AlertDialog(
+             onDismissRequest = { gameToDelete = null },
+             title = { androidx.compose.material3.Text(AppStrings.GAME_DELETION_DIALOG_TAROT_TITLE) },
+             text = { androidx.compose.material3.Text(AppStrings.GAME_DELETION_DIALOG_TAROT_MESSAGE.format(gameToDelete?.name ?: "")) },
+             confirmButton = {
+                 androidx.compose.material3.TextButton(
+                     onClick = {
+                         gameToDelete?.let { viewModel.deleteGame(it.game) }
+                         gameToDelete = null
+                     },
+                     colors = androidx.compose.material3.ButtonDefaults.textButtonColors(contentColor = androidx.compose.material3.MaterialTheme.colorScheme.error)
+                 ) {
+                     androidx.compose.material3.Text(AppStrings.ACTION_DELETE)
+                 }
+             },
+             dismissButton = {
+                 androidx.compose.material3.TextButton(onClick = { gameToDelete = null }) {
+                     androidx.compose.material3.Text(AppStrings.ACTION_CANCEL)
+                 }
+             }
+         )
+     }
 
     val games = state.games.map { game ->
         GameDisplay(
