@@ -71,7 +71,7 @@ fun YahtzeeStatisticsScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            AppStrings.YAHTZEE_STATS_TITLE,
+                            AppStrings.CD_SETTINGS,
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )

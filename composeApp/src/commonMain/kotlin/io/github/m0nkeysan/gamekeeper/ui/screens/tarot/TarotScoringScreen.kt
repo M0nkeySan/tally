@@ -100,7 +100,7 @@ fun TarotScoringScreen(
                 },
                 actions = {
                     IconButton(onClick = { onNavigateToStatistics(gameId) }) {
-                        Icon(GameIcons.BarChart, contentDescription = AppStrings.TAROT_SCORING_CD_STATISTICS)
+                        Icon(GameIcons.BarChart, contentDescription = AppStrings.CD_SETTINGS)
                     }
                 }
             )

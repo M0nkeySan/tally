@@ -85,7 +85,7 @@ fun TarotStatisticsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                             AppStrings.TAROT_SCORING_CD_STATISTICS,
+                             AppStrings.CD_SETTINGS,
                              style = MaterialTheme.typography.titleLarge,
                              fontWeight = FontWeight.Bold
                          )

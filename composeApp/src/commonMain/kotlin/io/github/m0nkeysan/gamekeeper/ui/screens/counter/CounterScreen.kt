@@ -143,7 +143,7 @@ fun CounterScreen(
                                 leadingIcon = {
                                     Icon(
                                         GameIcons.Settings,
-                                        contentDescription = AppStrings.COUNTER_CD_SETTINGS_MENU
+                                        contentDescription = AppStrings.CD_SETTINGS
                                     )
                                 }
                             )

@@ -101,7 +101,7 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
                 },
                 actions = {
                     IconButton(onClick = { showSettings = true }) {
-                        Icon(GameIcons.Settings, contentDescription = AppStrings.FINGER_SELECTOR_CD_SETTINGS)
+                        Icon(GameIcons.Settings, contentDescription = AppStrings.CD_SETTINGS)
                     }
                 }
             )

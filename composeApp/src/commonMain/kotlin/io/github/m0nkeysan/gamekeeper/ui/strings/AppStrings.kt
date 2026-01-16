@@ -101,10 +101,9 @@ object AppStrings {
       const val TAROT_STATS_SECTION_CALLED_PERFORMANCE = "Called Performance"
       const val TAROT_STATS_ERROR_TITLE = "Oops! Something went wrong"
       
-        // Tarot - Scoring
-        const val TAROT_SCORING_SCREEN_TITLE = "Game Scoring"
-        const val TAROT_SCORING_CD_STATISTICS = "Statistics"
-       const val TAROT_SCORING_CD_ADD_ROUND = "Add Round"
+         // Tarot - Scoring
+         const val TAROT_SCORING_SCREEN_TITLE = "Game Scoring"
+        const val TAROT_SCORING_CD_ADD_ROUND = "Add Round"
       const val TAROT_SCORING_SECTION_SCORES = "Scores"
       const val TAROT_SCORING_SECTION_HISTORY = "History"
       const val TAROT_SCORING_EMPTY_ROUNDS = "No rounds yet"
@@ -135,9 +134,8 @@ object AppStrings {
       
         // Counter - Main Screen
          const val COUNTER_CD_ADD = "Add Counter"
-        const val COUNTER_CD_HISTORY = "History"
-        const val COUNTER_CD_SETTINGS_MENU = "Settings menu"
-       const val COUNTER_CD_RESET_ALL = "Reset all counters"
+         const val COUNTER_CD_HISTORY = "History"
+        const val COUNTER_CD_RESET_ALL = "Reset all counters"
        const val COUNTER_CD_DELETE_ALL = "Delete all counters"
        const val COUNTER_DIALOG_SETTINGS_TITLE = "Counter Settings"
        const val COUNTER_DIALOG_SETTINGS_LABEL = "Highlight player with:"
@@ -215,9 +213,8 @@ object AppStrings {
       const val DICE_ACTION_CANCEL = "Cancel"
       const val DICE_ACTION_SAVE = "Save"
       
-       // Finger Selector
-       const val FINGER_SELECTOR_CD_SETTINGS = "Settings"
-       const val FINGER_SELECTOR_DIALOG_TITLE = "Selector Settings"
+        // Finger Selector
+        const val FINGER_SELECTOR_DIALOG_TITLE = "Selector Settings"
        const val FINGER_SELECTOR_SECTION_MODE = "Mode"
        const val FINGER_SELECTOR_MODE_FINGERS = "Fingers"
        const val FINGER_SELECTOR_MODE_GROUPS = "Groups"
@@ -263,9 +260,8 @@ object AppStrings {
        const val RESULTS_TITLE_WINNER = "WE HAVE A WINNER!"
        const val RESULTS_SECTION_SCORES = "FINAL SCORES"
        
-       // Yahtzee - Statistics Screen
-       const val YAHTZEE_STATS_TITLE = "Statistics"
-       const val YAHTZEE_STATS_GLOBAL = "⭐ Global Statistics"
+        // Yahtzee - Statistics Screen
+        const val YAHTZEE_STATS_GLOBAL = "⭐ Global Statistics"
        const val YAHTZEE_STATS_SELECT_PLAYER = "Select Player"
        const val YAHTZEE_STATS_NO_DATA = "No data available"
        
