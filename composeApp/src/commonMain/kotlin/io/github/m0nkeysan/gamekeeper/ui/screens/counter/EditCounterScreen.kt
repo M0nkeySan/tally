@@ -107,7 +107,7 @@ fun EditCounterScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.COUNTER_EDIT_CD_BACK)
+                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
                     }
                     Text(
                         text = AppStrings.COUNTER_EDIT_TITLE,

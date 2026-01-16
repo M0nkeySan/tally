@@ -105,7 +105,7 @@ fun CounterHistoryScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackPressed) {
-                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.COUNTER_HISTORY_CD_BACK)
+                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
                     }
                 },
                 actions = {

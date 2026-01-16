@@ -185,7 +185,7 @@ fun PlayerSelectionScreen(
                     },
                     navigationIcon = {
                         IconButton(onClick = onBack) {
-                            Icon(GameIcons.ArrowBack, contentDescription = AppStrings.PLAYER_CD_BACK)
+                            Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
                         }
                     },
                     actions = {

@@ -82,7 +82,7 @@ fun GameCreationTemplate(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.GAME_CREATION_CD_BACK)
+                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
                     }
                 }
             )

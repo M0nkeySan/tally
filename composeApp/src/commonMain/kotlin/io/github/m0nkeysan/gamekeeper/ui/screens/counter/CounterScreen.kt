@@ -113,7 +113,7 @@ fun CounterScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.COUNTER_CD_BACK)
+                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
                     }
                 },
                 actions = {

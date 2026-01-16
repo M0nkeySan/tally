@@ -101,10 +101,9 @@ object AppStrings {
       const val TAROT_STATS_SECTION_CALLED_PERFORMANCE = "Called Performance"
       const val TAROT_STATS_ERROR_TITLE = "Oops! Something went wrong"
       
-       // Tarot - Scoring
-       const val TAROT_SCORING_SCREEN_TITLE = "Game Scoring"
-       const val TAROT_SCORING_CD_BACK = "Back"
-       const val TAROT_SCORING_CD_STATISTICS = "Statistics"
+        // Tarot - Scoring
+        const val TAROT_SCORING_SCREEN_TITLE = "Game Scoring"
+        const val TAROT_SCORING_CD_STATISTICS = "Statistics"
        const val TAROT_SCORING_CD_ADD_ROUND = "Add Round"
       const val TAROT_SCORING_SECTION_SCORES = "Scores"
       const val TAROT_SCORING_SECTION_HISTORY = "History"
@@ -134,9 +133,8 @@ object AppStrings {
       const val TAROT_ROUND_ANNOUNCE_POIGNEE = "Poignée"
       const val TAROT_ROUND_LABEL_CHELEM = "Chelem"
       
-       // Counter - Main Screen
-        const val COUNTER_CD_BACK = "Back"
-        const val COUNTER_CD_ADD = "Add Counter"
+        // Counter - Main Screen
+         const val COUNTER_CD_ADD = "Add Counter"
         const val COUNTER_CD_HISTORY = "History"
         const val COUNTER_CD_SETTINGS_MENU = "Settings menu"
        const val COUNTER_CD_RESET_ALL = "Reset all counters"
@@ -160,17 +158,15 @@ object AppStrings {
         const val COUNTER_CD_DECREASE = "Decrease"
         const val COUNTER_CD_INCREASE = "Increase"
       
-       // Counter - History & Edit
-       const val COUNTER_HISTORY_TITLE = "History"
-       const val COUNTER_HISTORY_SUBTITLE = "⚠️ History is cleared when you close the app"
-       const val COUNTER_HISTORY_CD_BACK = "Back"
-       const val COUNTER_HISTORY_CD_DELETE = "Delete all histories"
+        // Counter - History & Edit
+        const val COUNTER_HISTORY_TITLE = "History"
+        const val COUNTER_HISTORY_SUBTITLE = "⚠️ History is cleared when you close the app"
+        const val COUNTER_HISTORY_CD_DELETE = "Delete all histories"
        const val COUNTER_HISTORY_EMPTY = "No counter changes yet"
        const val COUNTER_HISTORY_DELETED_EMOJI = "🗑️"
        const val COUNTER_HISTORY_DELETED_TEXT = "Deleted"
-       const val COUNTER_EDIT_TITLE = "Edit Counter"
-       const val COUNTER_EDIT_CD_BACK = "Back"
-       const val COUNTER_EDIT_CD_DELETE = "Delete"
+        const val COUNTER_EDIT_TITLE = "Edit Counter"
+        const val COUNTER_EDIT_CD_DELETE = "Delete"
        const val COUNTER_EDIT_ACTION_SAVE = "SAVE CHANGES"
        const val COUNTER_EDIT_LABEL_COLOR = "ACCENT COLOR"
        const val COUNTER_EDIT_FIELD_NAME = "NAME"
@@ -230,15 +226,13 @@ object AppStrings {
        const val FINGER_SELECTOR_INSTRUCTION_WAIT = "Wait for group assignment"
       
          // Game Selection & Creation
-         const val GAME_SELECTION_CD_BACK = "Back"
          const val GAME_SELECTION_CD_STATISTICS = "Statistics"
          const val GAME_SELECTION_CD_CREATE = "Create new game"
          const val GAME_SELECTION_CD_DELETE_ALL = "Delete all games"
        const val GAME_SELECTION_LOADING = "Loading games..."
        const val GAME_SELECTION_EMPTY = "No games yet. Create one!"
-       const val GAME_SELECTION_CD_DELETE_GAME = "Delete game"
-       const val GAME_CREATION_CD_BACK = "Back"
-       const val GAME_CREATION_ACTION_CANCEL = "Cancel"
+        const val GAME_SELECTION_CD_DELETE_GAME = "Delete game"
+        const val GAME_CREATION_ACTION_CANCEL = "Cancel"
        const val GAME_CREATION_ACTION_CREATE = "Create Game"
        const val GAME_CREATION_NEW_TAROT_TITLE = "New Tarot Game"
        const val GAME_CREATION_TAROT_NAME_DEFAULT = "Tarot Game"
@@ -250,8 +244,7 @@ object AppStrings {
         // Player Management
         const val PLAYER_SECTION_PLAYERS = "Players"
         const val PLAYER_SECTION_DEACTIVATED = "Deactivated"
-        const val PLAYER_CD_BACK = "Back"
-        const val PLAYER_FIELD_NAME = "NAME"
+         const val PLAYER_FIELD_NAME = "NAME"
        const val PLAYER_PLACEHOLDER_NAME = "Player Name"
        const val PLAYER_ERROR_NAME_TAKEN = "This name is already taken"
        const val PLAYER_LABEL_COLOR = "AVATAR COLOR"

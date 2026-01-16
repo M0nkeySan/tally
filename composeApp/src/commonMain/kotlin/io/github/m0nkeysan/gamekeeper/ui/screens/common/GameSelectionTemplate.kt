@@ -126,7 +126,7 @@ fun GameSelectionTemplate(
                     IconButton(onClick = onBack) {
                         Icon(
                             GameIcons.ArrowBack,
-                            contentDescription = AppStrings.GAME_SELECTION_CD_BACK
+                            contentDescription = AppStrings.ACTION_BACK
                         )
                     }
                 },

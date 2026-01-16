@@ -95,7 +95,7 @@ fun TarotScoringScreen(
                  },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.TAROT_SCORING_CD_BACK)
+                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
                     }
                 },
                 actions = {
