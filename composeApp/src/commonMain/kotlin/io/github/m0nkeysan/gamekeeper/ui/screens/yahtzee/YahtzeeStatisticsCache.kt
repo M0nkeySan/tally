@@ -1,0 +1,88 @@
+package io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee
+
+import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeGlobalStatistics
+import io.github.m0nkeysan.gamekeeper.core.model.YahtzeePlayerStatistics
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
+/**
+ * In-memory cache for Yahtzee statistics with 5-minute TTL (Time To Live).
+ * Reduces database load by caching computation-heavy statistics results.
+ * Thread-safe using Mutex for concurrent access.
+ */
+class YahtzeeStatisticsCache(
+    private val cacheDurationMs: Long = 5 * 60 * 1000 // 5 minutes
+) {
+    private data class CachedItem<T>(
+        val data: T,
+        val timestamp: Long
+    )
+    
+    private val mutex = Mutex()
+    private var globalStats: CachedItem<YahtzeeGlobalStatistics>? = null
+    private val playerStatsCache = mutableMapOf<String, CachedItem<YahtzeePlayerStatistics>>()
+    
+    /**
+     * Get global statistics from cache if valid, null if expired or not cached
+     */
+    suspend fun getGlobalStatistics(): YahtzeeGlobalStatistics? = mutex.withLock {
+        globalStats?.let { cached ->
+            if (isValid(cached.timestamp)) {
+                cached.data
+            } else {
+                globalStats = null
+                null
+            }
+        }
+    }
+    
+    /**
+     * Cache global statistics with current timestamp
+     */
+    suspend fun putGlobalStatistics(stats: YahtzeeGlobalStatistics) = mutex.withLock {
+        globalStats = CachedItem(stats, System.currentTimeMillis())
+    }
+    
+    /**
+     * Get player statistics from cache if valid, null if expired or not cached
+     */
+    suspend fun getPlayerStatistics(playerId: String): YahtzeePlayerStatistics? = mutex.withLock {
+        playerStatsCache[playerId]?.let { cached ->
+            if (isValid(cached.timestamp)) {
+                cached.data
+            } else {
+                playerStatsCache.remove(playerId)
+                null
+            }
+        }
+    }
+    
+    /**
+     * Cache player statistics with current timestamp
+     */
+    suspend fun putPlayerStatistics(playerId: String, stats: YahtzeePlayerStatistics) = mutex.withLock {
+        playerStatsCache[playerId] = CachedItem(stats, System.currentTimeMillis())
+    }
+    
+    /**
+     * Invalidate all cached data.
+     * Call when a game is finished or scores are updated.
+     */
+    suspend fun invalidateAll() = mutex.withLock {
+        globalStats = null
+        playerStatsCache.clear()
+    }
+    
+    /**
+     * Invalidate specific player's cached data.
+     * Also invalidates global stats since they depend on all player data.
+     */
+    suspend fun invalidatePlayer(playerId: String) = mutex.withLock {
+        playerStatsCache.remove(playerId)
+        globalStats = null
+    }
+    
+    private fun isValid(timestamp: Long): Boolean {
+        return (System.currentTimeMillis() - timestamp) < cacheDurationMs
+    }
+}

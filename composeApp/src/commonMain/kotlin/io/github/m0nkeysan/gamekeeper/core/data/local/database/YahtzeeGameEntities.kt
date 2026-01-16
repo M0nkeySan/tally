@@ -24,7 +24,11 @@ data class YahtzeeGameEntity @OptIn(ExperimentalUuidApi::class) constructor(
 
 @Entity(
     tableName = "yahtzee_scores",
-    indices = [Index(value = ["gameId"])]
+    indices = [
+        Index(value = ["gameId"]),
+        Index(value = ["playerId"]),
+        Index(value = ["gameId", "playerId"])
+    ]
 )
 data class YahtzeeScoreEntity @OptIn(ExperimentalUuidApi::class) constructor(
     @PrimaryKey

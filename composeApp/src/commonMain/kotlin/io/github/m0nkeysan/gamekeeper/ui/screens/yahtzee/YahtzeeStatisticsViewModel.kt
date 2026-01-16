@@ -31,6 +31,7 @@ class YahtzeeStatisticsViewModel(
         const val GLOBAL_ID = "GLOBAL"
     }
     
+    private val cache = YahtzeeStatisticsCache()
     private val _uiState = MutableStateFlow(YahtzeeStatisticsUiState())
     val uiState: StateFlow<YahtzeeStatisticsUiState> = _uiState.asStateFlow()
     
@@ -77,8 +78,24 @@ class YahtzeeStatisticsViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
+                // Try cache first
+                val cached = cache.getPlayerStatistics(playerId)
+                if (cached != null) {
+                    _uiState.update { 
+                        it.copy(
+                            statistics = cached,
+                            globalStatistics = null,
+                            isLoading = false,
+                            error = null
+                        )
+                    }
+                    return@launch
+                }
+                
+                // Cache miss - fetch from database
                 withContext(Dispatchers.IO) {
                     val stats = statsRepository.getPlayerStatistics(playerId)
+                    cache.putPlayerStatistics(playerId, stats)
                     _uiState.update { 
                         it.copy(
                             statistics = stats,
@@ -103,8 +120,24 @@ class YahtzeeStatisticsViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
+                // Try cache first
+                val cached = cache.getGlobalStatistics()
+                if (cached != null) {
+                    _uiState.update { 
+                        it.copy(
+                            globalStatistics = cached,
+                            statistics = null,
+                            isLoading = false,
+                            error = null
+                        )
+                    }
+                    return@launch
+                }
+                
+                // Cache miss - fetch from database
                 withContext(Dispatchers.IO) {
                     val stats = statsRepository.getGlobalStatistics()
+                    cache.putGlobalStatistics(stats)
                     _uiState.update { 
                         it.copy(
                             globalStatistics = stats,
@@ -122,6 +155,16 @@ class YahtzeeStatisticsViewModel(
                     )
                 }
             }
+        }
+    }
+    
+    /**
+     * Invalidate statistics cache.
+     * Call this when a game is finished or scores are updated.
+     */
+    fun invalidateCache() {
+        viewModelScope.launch {
+            cache.invalidateAll()
         }
     }
 }

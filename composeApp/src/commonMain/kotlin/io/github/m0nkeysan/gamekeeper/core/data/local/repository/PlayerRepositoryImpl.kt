@@ -32,6 +32,10 @@ class PlayerRepositoryImpl(
         return playerDao.getPlayerById(id)?.toDomain()
     }
     
+    override suspend fun getPlayersByIds(playerIds: List<String>): List<Player> {
+        return playerDao.getPlayersByIds(playerIds).map { it.toDomain() }
+    }
+    
     override suspend fun getPlayerByName(name: String): io.github.m0nkeysan.gamekeeper.core.model.Player? {
         return playerDao.getPlayerByName(name)?.toDomain()
     }

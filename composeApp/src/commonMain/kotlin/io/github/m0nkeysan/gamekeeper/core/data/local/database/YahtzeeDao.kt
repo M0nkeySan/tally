@@ -52,4 +52,10 @@ interface YahtzeeDao {
         WHERE g.isFinished = 1
     """)
     suspend fun getAllScoresFromFinishedGames(): List<YahtzeeScoreEntity>
+    
+    @Query("""
+        SELECT s.* FROM yahtzee_scores s
+        WHERE s.gameId IN (:gameIds)
+    """)
+    suspend fun getScoresForGames(gameIds: List<String>): List<YahtzeeScoreEntity>
 }

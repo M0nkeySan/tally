@@ -17,8 +17,12 @@ class YahtzeeStatisticsRepositoryImpl(
         val games = dao.getAllGamesForPlayer(playerId)
         val playerScores = dao.getAllScoresForPlayer(playerId)
         // Get all scores from the games this player participated in to calculate ranks correctly
-        val allScoresFromPlayerGames = dao.getAllScoresFromFinishedGames()
-            .filter { score -> games.any { it.id == score.gameId } }
+        val gameIds = games.map { it.id }
+        val allScoresFromPlayerGames = if (gameIds.isNotEmpty()) {
+            dao.getScoresForGames(gameIds)
+        } else {
+            emptyList()
+        }
         val player = playerRepository.getPlayerById(playerId)
         val playerName = player?.name ?: "Unknown"
         
@@ -41,7 +45,7 @@ class YahtzeeStatisticsRepositoryImpl(
         return playerIds
             .mapNotNull { playerId ->
                 try {
-                    playerRepository.getPlayerById(playerId.trim())
+                    playerRepository.getPlayerById(playerId)
                 } catch (e: Exception) {
                     null
                 }
