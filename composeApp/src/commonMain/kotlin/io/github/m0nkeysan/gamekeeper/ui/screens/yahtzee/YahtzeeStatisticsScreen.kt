@@ -137,6 +137,13 @@ fun YahtzeeStatisticsScreen(
                     }
                 }
 
+                state.selectedPlayerId == YahtzeeStatisticsViewModel.GLOBAL_ID && state.globalStatistics != null -> {
+                    Text(
+                        "Global Statistics loaded!",
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+
                 state.statistics != null -> {
                     StatisticsContent(
                         statistics = state.statistics!!
