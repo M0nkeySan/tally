@@ -120,38 +120,38 @@ fun PlayerSelectionScreen(
         
         AlertDialog(
             onDismissRequest = { playerToDelete = null },
-            title = { 
-                Text(
-                    if (gameCount > 0) "Deactivate Player?" else "Delete Player?"
-                ) 
-            },
-            text = { 
-                Text(
-                    if (gameCount > 0) {
-                        "Linked to $gameCount game(s). Player will be deactivated to preserve game history."
-                    } else {
-                        "This player has no game history. They will be permanently deleted."
-                    }
-                )
-            },
-             confirmButton = {
-                 TextButton(
-                     onClick = {
-                         playerToDelete?.let { player ->
-                             viewModel.deletePlayer(player)
-                             snackbarMessage = if (gameCount > 0) {
-                                 "Player '${player.name}' deactivated"
-                             } else {
-                                 "Player '${player.name}' deleted"
-                             }
-                         }
-                         playerToDelete = null
-                     },
-                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
-                 ) { 
-                     Text(if (gameCount > 0) "Deactivate" else "Delete") 
-                 }
+             title = { 
+                 Text(
+                     if (gameCount > 0) "Deactivate Player?" else "Delete Player?"
+                 ) 
              },
+             text = { 
+                 Text(
+                     if (gameCount > 0) {
+                         "Linked to $gameCount game(s). Player will be deactivated to preserve game history."
+                     } else {
+                         "This player has no game history. They will be permanently deleted."
+                     }
+                 )
+             },
+              confirmButton = {
+                  TextButton(
+                      onClick = {
+                          playerToDelete?.let { player ->
+                              viewModel.deletePlayer(player)
+                              snackbarMessage = if (gameCount > 0) {
+                                  "Player '${player.name}' deactivated"
+                              } else {
+                                  "Player '${player.name}' deleted"
+                              }
+                          }
+                          playerToDelete = null
+                      },
+                      colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                  ) { 
+                      Text(if (gameCount > 0) AppStrings.DIALOG_DEACTIVATE_PLAYER else AppStrings.DIALOG_DELETE_PLAYER) 
+                  }
+              },
             dismissButton = {
                 TextButton(onClick = { playerToDelete = null }) { Text(AppStrings.ACTION_CANCEL) }
             }

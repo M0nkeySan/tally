@@ -256,13 +256,13 @@ fun TarotRoundAdditionScreen(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         (0..3).forEach { b ->
-                            FilterChip(
-                                selected = bouts == b,
-                                onClick = { bouts = b },
-                                label = { Text("$b Bouts") },
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
+                             FilterChip(
+                                 selected = bouts == b,
+                                 onClick = { bouts = b },
+                                 label = { Text(AppStrings.TAROT_ROUND_LABEL_BOUTS.format(b)) },
+                                 modifier = Modifier.weight(1f)
+                             )
+                         }
                     }
                 }
 
@@ -313,14 +313,14 @@ fun TarotRoundAdditionScreen(
                         )
                         
                         Text(
-                            text = if (isWinner) "CONTRACT WON (+${(pAtqFloat - targetPoints).toInt()} pts)" 
-                                   else "CONTRACT LOST (${(pAtqFloat - targetPoints).toInt()} pts)",
-                            style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = statusColor,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
+                             text = if (isWinner) AppStrings.TAROT_ROUND_CONTRACT_WON.format((pAtqFloat - targetPoints).toInt())
+                                    else AppStrings.TAROT_ROUND_CONTRACT_LOST.format((pAtqFloat - targetPoints).toInt()),
+                             style = MaterialTheme.typography.labelMedium,
+                             fontWeight = FontWeight.Bold,
+                             color = statusColor,
+                             modifier = Modifier.fillMaxWidth(),
+                             textAlign = TextAlign.Center
+                         )
                     }
                 }
 
