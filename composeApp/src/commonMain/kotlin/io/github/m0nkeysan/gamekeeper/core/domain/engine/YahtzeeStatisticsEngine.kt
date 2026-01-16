@@ -18,11 +18,11 @@ object YahtzeeStatisticsEngine {
         playerId: String,
         playerName: String,
         games: List<YahtzeeGameEntity>,
+        playerScores: List<YahtzeeScoreEntity>,
         allScores: List<YahtzeeScoreEntity>
     ): YahtzeePlayerStatistics {
         val totalGames = games.size
         val finishedGames = games.count { it.isFinished }
-        val playerScores = allScores.filter { it.playerId == playerId }
         
         val wins = games.count { game ->
             game.isFinished && game.winnerName?.contains(playerName) == true
@@ -211,16 +211,17 @@ object YahtzeeStatisticsEngine {
             .filter { it.isFinished }
             .sortedByDescending { it.updatedAt }
             .take(10)
-            .mapIndexed { _, game ->
+            .map { game ->
                 val gameScores = allScores.filter { it.gameId == game.id }
                 val totalScoresMap = game.playerIds.split(",").associate { pid ->
-                    val playerGameScores = gameScores.filter { it.playerId == pid }
+                    val trimmedPid = pid.trim()
+                    val playerGameScores = gameScores.filter { it.playerId == trimmedPid }
                     val baseScore = playerGameScores.sumOf { it.score }
                     val upperScore = playerGameScores
                         .filter { YahtzeeCategory.valueOf(it.category).isUpperSection() }
                         .sumOf { it.score }
                     val bonus = if (upperScore >= 63) 35 else 0
-                    pid to (baseScore + bonus)
+                    trimmedPid to (baseScore + bonus)
                 }
                 
                 val playerScore = totalScoresMap[playerId] ?: 0

@@ -15,7 +15,10 @@ class YahtzeeStatisticsRepositoryImpl(
 
     override suspend fun getPlayerStatistics(playerId: String): YahtzeePlayerStatistics {
         val games = dao.getAllGamesForPlayer(playerId)
-        val allScores = dao.getAllScoresForPlayer(playerId)
+        val playerScores = dao.getAllScoresForPlayer(playerId)
+        // Get all scores from the games this player participated in to calculate ranks correctly
+        val allScoresFromPlayerGames = dao.getAllScoresFromFinishedGames()
+            .filter { score -> games.any { it.id == score.gameId } }
         val player = playerRepository.getPlayerById(playerId)
         val playerName = player?.name ?: "Unknown"
         
@@ -23,7 +26,8 @@ class YahtzeeStatisticsRepositoryImpl(
             playerId = playerId,
             playerName = playerName,
             games = games,
-            allScores = allScores
+            playerScores = playerScores,
+            allScores = allScoresFromPlayerGames
         )
     }
 
