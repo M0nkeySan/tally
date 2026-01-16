@@ -25,6 +25,7 @@ import io.github.m0nkeysan.gamekeeper.core.model.GlobalCategoryStat
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.formatAverage
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.getCategoryColor
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 /**
  * Color-coded heatmap displaying average scores for each Yahtzee category
@@ -42,7 +43,7 @@ fun CategoryHeatmap(
     ) {
         // Upper section
         Text(
-            text = "UPPER SECTION",
+            text = AppStrings.YAHTZEE_STATS_HEATMAP_UPPER,
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 4.dp)
@@ -66,7 +67,7 @@ fun CategoryHeatmap(
         
         // Lower section
         Text(
-            text = "LOWER SECTION",
+            text = AppStrings.YAHTZEE_STATS_HEATMAP_LOWER,
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 4.dp)
@@ -136,7 +137,7 @@ fun GlobalCategoryHeatmap(
     ) {
         // Upper section
         Text(
-            text = "UPPER SECTION",
+            text = AppStrings.YAHTZEE_STATS_HEATMAP_UPPER,
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 4.dp)
@@ -160,7 +161,7 @@ fun GlobalCategoryHeatmap(
         
         // Lower section
         Text(
-            text = "LOWER SECTION",
+            text = AppStrings.YAHTZEE_STATS_HEATMAP_LOWER,
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 4.dp)

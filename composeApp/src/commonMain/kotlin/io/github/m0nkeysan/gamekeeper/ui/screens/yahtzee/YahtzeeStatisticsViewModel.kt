@@ -6,6 +6,7 @@ import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeStatisticsRe
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeGlobalStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeePlayerStatistics
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -58,7 +59,7 @@ class YahtzeeStatisticsViewModel(
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
-                        error = "Failed to load: ${e.message}"
+                        error = String.format(AppStrings.YAHTZEE_ERROR_LOAD_FAILED, e.message ?: "Unknown")
                     )
                 }
             }
@@ -109,7 +110,7 @@ class YahtzeeStatisticsViewModel(
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
-                        error = "Failed to load statistics: ${e.message}"
+                        error = String.format(AppStrings.YAHTZEE_ERROR_STATS_FAILED, e.message ?: "Unknown")
                     )
                 }
             }
@@ -151,7 +152,7 @@ class YahtzeeStatisticsViewModel(
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
-                        error = "Failed to load global statistics: ${e.message}"
+                        error = String.format(AppStrings.YAHTZEE_ERROR_GLOBAL_FAILED, e.message ?: "Unknown")
                     )
                 }
             }

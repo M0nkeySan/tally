@@ -323,8 +323,91 @@ object AppStrings {
       const val HOME_DESC_FINGER_SELECTOR = "Randomly select a starting player with multi-touch"
       const val HOME_CD_COUNTER = "Counter game"
       const val HOME_CD_DICE = "Dice Roller game"
-      const val RESULTS_ACTION_BACK = "BACK TO HOME"
-      const val RESULTS_TITLE_TIE = "IT'S A TIE!"
-      const val RESULTS_TITLE_WINNER = "WE HAVE A WINNER!"
-      const val RESULTS_SECTION_SCORES = "FINAL SCORES"
+       const val RESULTS_ACTION_BACK = "BACK TO HOME"
+       const val RESULTS_TITLE_TIE = "IT'S A TIE!"
+       const val RESULTS_TITLE_WINNER = "WE HAVE A WINNER!"
+       const val RESULTS_SECTION_SCORES = "FINAL SCORES"
+       
+       // Yahtzee - Statistics Screen
+       const val YAHTZEE_STATS_TITLE = "Statistics"
+       const val YAHTZEE_STATS_GLOBAL = "⭐ Global Statistics"
+       const val YAHTZEE_STATS_SELECT_PLAYER = "Select Player"
+       const val YAHTZEE_STATS_NO_DATA = "No data available"
+       
+       // Player Statistics Sections
+       const val YAHTZEE_STATS_OVERALL_PERFORMANCE = "📊 Overall Performance"
+       const val YAHTZEE_STATS_SCORE_BOX = "📈 Score Box Performance"
+       const val YAHTZEE_STATS_RECENT_GAMES = "🎮 Recent Games"
+       
+       // Player Statistics Labels
+       const val YAHTZEE_STATS_TOTAL_GAMES = "Total Games"
+       const val YAHTZEE_STATS_FINISHED_GAMES = "Finished Games"
+       const val YAHTZEE_STATS_WINS = "Wins"
+       const val YAHTZEE_STATS_AVERAGE_SCORE = "Average Score"
+       const val YAHTZEE_STATS_PERSONAL_BEST = "Personal Best"
+       const val YAHTZEE_STATS_TOTAL_YAHTZEES = "Total Yahtzees"
+       const val YAHTZEE_STATS_YAHTZEE_RATE = "Yahtzee Rate"
+       const val YAHTZEE_STATS_UPPER_SECTION = "Upper Section"
+       const val YAHTZEE_STATS_LOWER_SECTION = "Lower Section"
+       const val YAHTZEE_STATS_BONUS_RATE = "Bonus Rate"
+       
+       // Global Statistics Sections
+       const val YAHTZEE_STATS_GLOBAL_OVERALL = "📊 Overall Statistics"
+       const val YAHTZEE_STATS_GLOBAL_FUN_FACTS = "🎲 Fun Facts"
+       const val YAHTZEE_STATS_GLOBAL_LEADERBOARDS = "🏆 Leaderboards"
+       const val YAHTZEE_STATS_GLOBAL_CATEGORY = "📈 Category Performance"
+       
+       // Global Statistics Labels
+       const val YAHTZEE_STATS_GLOBAL_FINISHED = "Finished Games"
+       const val YAHTZEE_STATS_GLOBAL_TOTAL_PLAYERS = "Total Players"
+       const val YAHTZEE_STATS_GLOBAL_MOST_ACTIVE = "Most Active Player"
+       const val YAHTZEE_STATS_GLOBAL_HIGH_SCORE = "All-Time High Score"
+       const val YAHTZEE_STATS_GLOBAL_AVERAGE_SCORE = "Average Score"
+       const val YAHTZEE_STATS_GLOBAL_TOTAL_YAHTZEES = "Total Yahtzees"
+       const val YAHTZEE_STATS_GLOBAL_YAHTZEE_RATE = "Yahtzee Rate"
+       const val YAHTZEE_STATS_GLOBAL_MOST_YAHTZEES_GAME = "Most Yahtzees (Single Game)"
+       const val YAHTZEE_STATS_GLOBAL_UPPER_BONUS = "Upper Bonus Rate"
+       const val YAHTZEE_STATS_GLOBAL_DICE_ROLLS = "Estimated Dice Rolls"
+       const val YAHTZEE_STATS_GLOBAL_POINTS_SCORED = "Total Points Scored"
+       const val YAHTZEE_STATS_GLOBAL_AVG_PLAYERS = "Avg Players/Game"
+       const val YAHTZEE_STATS_GLOBAL_LUCKIEST = "Luckiest Player"
+       const val YAHTZEE_STATS_GLOBAL_MOST_CONSISTENT = "Most Consistent"
+       const val YAHTZEE_STATS_GLOBAL_MOST_SCORED = "Most Scored Category"
+       const val YAHTZEE_STATS_GLOBAL_LEAST_SCORED = "Least Scored Category"
+       const val YAHTZEE_STATS_GLOBAL_BEST_AVG = "Best Average Category"
+       
+       // Leaderboards
+       const val YAHTZEE_STATS_LEADERBOARD_MOST_WINS = "Most Wins"
+       const val YAHTZEE_STATS_LEADERBOARD_HIGHEST_SCORES = "Highest Scores"
+       const val YAHTZEE_STATS_LEADERBOARD_MOST_YAHTZEES = "Most Yahtzees"
+       
+       // Category Heatmap Sections
+       const val YAHTZEE_STATS_HEATMAP_UPPER = "UPPER SECTION"
+       const val YAHTZEE_STATS_HEATMAP_LOWER = "LOWER SECTION"
+       
+       // Format Strings
+       const val YAHTZEE_FORMAT_WINS = "%s (%s)"
+       const val YAHTZEE_FORMAT_YAHTZEE_RATE = "%s per game"
+       const val YAHTZEE_FORMAT_ACTIVE_PLAYER = "%s (%d games)"
+       const val YAHTZEE_FORMAT_HIGH_SCORE = "%d by %s"
+       const val YAHTZEE_FORMAT_MOST_YAHTZEES = "%d by %s"
+       const val YAHTZEE_FORMAT_PLAYER_COUNT = "%d players"
+       const val YAHTZEE_FORMAT_LUCKIEST_PLAYER = "%s (%s/game)"
+       const val YAHTZEE_FORMAT_CATEGORY_AVG = "%s (%s)"
+       const val YAHTZEE_FORMAT_WINNER_SCORE = "Winner: %s"
+       
+       // Rank Indicators
+       const val YAHTZEE_RANK_FIRST = "🥇"
+       const val YAHTZEE_RANK_SECOND = "🥈"
+       const val YAHTZEE_RANK_THIRD = "🥉"
+       const val YAHTZEE_RANK_TROPHY = "🏆"
+       const val YAHTZEE_RANK_FORMAT = "#%d"
+       const val YAHTZEE_RANK_FIRST_PLACE = "🏆 1st"
+       const val YAHTZEE_RANK_SECOND_PLACE = "🥈 2nd"
+       const val YAHTZEE_RANK_THIRD_PLACE = "🥉 3rd"
+       
+       // Error Messages
+       const val YAHTZEE_ERROR_LOAD_FAILED = "Failed to load: %s"
+       const val YAHTZEE_ERROR_STATS_FAILED = "Failed to load statistics: %s"
+       const val YAHTZEE_ERROR_GLOBAL_FAILED = "Failed to load global statistics: %s"
 }

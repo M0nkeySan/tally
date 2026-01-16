@@ -46,6 +46,7 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.CategoryHeat
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GameSummaryRow
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GlobalCategoryHeatmap
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.StatisticRow
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,7 +71,7 @@ fun YahtzeeStatisticsScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            "Statistics",
+                            AppStrings.YAHTZEE_STATS_TITLE,
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
@@ -80,7 +81,7 @@ fun YahtzeeStatisticsScreen(
                     IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = AppStrings.ACTION_BACK
                         )
                     }
                 }
@@ -151,7 +152,7 @@ fun YahtzeeStatisticsScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("No data available")
+                        Text(AppStrings.YAHTZEE_STATS_NO_DATA)
                     }
                 }
             }
@@ -169,8 +170,8 @@ private fun PlayerSelectorDropdown(
 ) {
     val selectedPlayer = players.find { it.id == selectedPlayerId }
     val displayName = when (selectedPlayerId) {
-        YahtzeeStatisticsViewModel.GLOBAL_ID -> "⭐ Global Statistics"
-        else -> selectedPlayer?.name ?: "Select Player"
+        YahtzeeStatisticsViewModel.GLOBAL_ID -> AppStrings.YAHTZEE_STATS_GLOBAL
+        else -> selectedPlayer?.name ?: AppStrings.YAHTZEE_STATS_SELECT_PLAYER
     }
     
     Box(
@@ -216,7 +217,7 @@ private fun PlayerSelectorDropdown(
                     DropdownMenuItem(
                         text = { 
                             Text(
-                                "⭐ Global Statistics",
+                                AppStrings.YAHTZEE_STATS_GLOBAL,
                                 fontWeight = FontWeight.Bold
                             )
                         },
@@ -298,49 +299,49 @@ private fun OverallPerformanceCard(statistics: YahtzeePlayerStatistics) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "📊 Overall Performance",
+                text = AppStrings.YAHTZEE_STATS_OVERALL_PERFORMANCE,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
             StatisticRow(
-                label = "Total Games",
+                label = AppStrings.YAHTZEE_STATS_TOTAL_GAMES,
                 value = statistics.totalGames.toString()
             )
 
             StatisticRow(
-                label = "Finished Games",
+                label = AppStrings.YAHTZEE_STATS_FINISHED_GAMES,
                 value = statistics.finishedGames.toString()
             )
 
             StatisticRow(
-                label = "Wins",
-                value = "${statistics.wins} (${formatPercentage(statistics.winRate)})",
+                label = AppStrings.YAHTZEE_STATS_WINS,
+                value = String.format(AppStrings.YAHTZEE_FORMAT_WINS, statistics.wins, formatPercentage(statistics.winRate)),
                 valueColor = GameColors.Success
             )
 
             StatisticRow(
-                label = "Average Score",
+                label = AppStrings.YAHTZEE_STATS_AVERAGE_SCORE,
                 value = formatAverage(statistics.averageScore),
                 valueColor = GameColors.Primary
             )
 
             StatisticRow(
-                label = "Personal Best",
+                label = AppStrings.YAHTZEE_STATS_PERSONAL_BEST,
                 value = statistics.highScore.toString(),
                 valueColor = GameColors.Success
             )
 
             StatisticRow(
-                label = "Total Yahtzees",
+                label = AppStrings.YAHTZEE_STATS_TOTAL_YAHTZEES,
                 value = statistics.totalYahtzees.toString(),
                 valueColor = GameColors.TrophyGold
             )
 
             StatisticRow(
-                label = "Yahtzee Rate",
-                value = formatAverage(statistics.yahtzeeRate) + " per game",
+                label = AppStrings.YAHTZEE_STATS_YAHTZEE_RATE,
+                value = String.format(AppStrings.YAHTZEE_FORMAT_YAHTZEE_RATE, formatAverage(statistics.yahtzeeRate)),
                 valueColor = GameColors.TrophyGold
             )
         }
@@ -363,7 +364,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "📈 Score Box Performance",
+                text = AppStrings.YAHTZEE_STATS_SCORE_BOX,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -382,7 +383,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Upper Section",
+                        text = AppStrings.YAHTZEE_STATS_UPPER_SECTION,
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -399,7 +400,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Lower Section",
+                        text = AppStrings.YAHTZEE_STATS_LOWER_SECTION,
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -416,7 +417,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Bonus Rate",
+                        text = AppStrings.YAHTZEE_STATS_BONUS_RATE,
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -448,7 +449,7 @@ private fun RecentGamesCard(games: List<io.github.m0nkeysan.gamekeeper.core.mode
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "🎮 Recent Games",
+                text = AppStrings.YAHTZEE_STATS_RECENT_GAMES,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -517,19 +518,19 @@ private fun GlobalOverviewCard(statistics: io.github.m0nkeysan.gamekeeper.core.m
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "📊 Overall Statistics",
+                text = AppStrings.YAHTZEE_STATS_GLOBAL_OVERALL,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
 
-            StatisticRow("Total Games", statistics.totalGames.toString())
-            StatisticRow("Finished Games", statistics.finishedGames.toString())
-            StatisticRow("Total Players", statistics.totalPlayers.toString())
+            StatisticRow(AppStrings.YAHTZEE_STATS_TOTAL_GAMES, statistics.totalGames.toString())
+            StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_FINISHED, statistics.finishedGames.toString())
+            StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_TOTAL_PLAYERS, statistics.totalPlayers.toString())
             
             if (statistics.mostActivePlayer != null) {
                 StatisticRow(
-                    "Most Active Player",
-                    "${statistics.mostActivePlayer.playerName} (${statistics.mostActivePlayer.gamesPlayed} games)"
+                    AppStrings.YAHTZEE_STATS_GLOBAL_MOST_ACTIVE,
+                    String.format(AppStrings.YAHTZEE_FORMAT_ACTIVE_PLAYER, statistics.mostActivePlayer.playerName, statistics.mostActivePlayer.gamesPlayed)
                 )
             }
             
@@ -537,61 +538,61 @@ private fun GlobalOverviewCard(statistics: io.github.m0nkeysan.gamekeeper.core.m
             
             if (statistics.allTimeHighScore != null) {
                 StatisticRow(
-                    "All-Time High Score",
-                    "${statistics.allTimeHighScore.score} by ${statistics.allTimeHighScore.playerName}",
+                    AppStrings.YAHTZEE_STATS_GLOBAL_HIGH_SCORE,
+                    String.format(AppStrings.YAHTZEE_FORMAT_HIGH_SCORE, statistics.allTimeHighScore.score, statistics.allTimeHighScore.playerName),
                     valueColor = GameColors.TrophyGold
                 )
             }
             
             StatisticRow(
-                "Average Score",
+                AppStrings.YAHTZEE_STATS_GLOBAL_AVERAGE_SCORE,
                 formatAverage(statistics.averageScore),
                 valueColor = GameColors.Primary
             )
             
             StatisticRow(
-                "Total Yahtzees",
+                AppStrings.YAHTZEE_STATS_GLOBAL_TOTAL_YAHTZEES,
                 statistics.totalYahtzees.toString(),
                 valueColor = GameColors.Success
             )
             
             StatisticRow(
-                "Yahtzee Rate",
-                "${formatAverage(statistics.yahtzeeRate)} per game"
+                AppStrings.YAHTZEE_STATS_GLOBAL_YAHTZEE_RATE,
+                String.format(AppStrings.YAHTZEE_FORMAT_YAHTZEE_RATE, formatAverage(statistics.yahtzeeRate))
             )
             
             if (statistics.mostYahtzeesInGame != null && statistics.mostYahtzeesInGame.count > 0) {
                 StatisticRow(
-                    "Most Yahtzees (Single Game)",
-                    "${statistics.mostYahtzeesInGame.count} by ${statistics.mostYahtzeesInGame.playerName}",
+                    AppStrings.YAHTZEE_STATS_GLOBAL_MOST_YAHTZEES_GAME,
+                    String.format(AppStrings.YAHTZEE_FORMAT_MOST_YAHTZEES, statistics.mostYahtzeesInGame.count, statistics.mostYahtzeesInGame.playerName),
                     valueColor = GameColors.TrophyGold
                 )
             }
             
-            StatisticRow("Upper Bonus Rate", formatPercentage(statistics.upperBonusRate))
+            StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_UPPER_BONUS, formatPercentage(statistics.upperBonusRate))
             
             HorizontalDivider()
             
             Text(
-                text = "🎲 Fun Facts",
+                text = AppStrings.YAHTZEE_STATS_GLOBAL_FUN_FACTS,
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 8.dp)
             )
             
-            StatisticRow("Estimated Dice Rolls", statistics.estimatedDiceRolls.toString())
-            StatisticRow("Total Points Scored", statistics.totalPointsScored.toString())
-            StatisticRow("Avg Players/Game", formatAverage(statistics.averagePlayersPerGame))
+            StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_DICE_ROLLS, statistics.estimatedDiceRolls.toString())
+            StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_POINTS_SCORED, statistics.totalPointsScored.toString())
+            StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_AVG_PLAYERS, formatAverage(statistics.averagePlayersPerGame))
             
             if (statistics.luckiestPlayer != null) {
                 StatisticRow(
-                    "Luckiest Player",
-                    "${statistics.luckiestPlayer.playerName} (${formatAverage(statistics.luckiestPlayer.metric)}/game)"
+                    AppStrings.YAHTZEE_STATS_GLOBAL_LUCKIEST,
+                    String.format(AppStrings.YAHTZEE_FORMAT_LUCKIEST_PLAYER, statistics.luckiestPlayer.playerName, formatAverage(statistics.luckiestPlayer.metric))
                 )
             }
             
             if (statistics.mostConsistentPlayer != null) {
-                StatisticRow("Most Consistent", statistics.mostConsistentPlayer.playerName)
+                StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_MOST_CONSISTENT, statistics.mostConsistentPlayer.playerName)
             }
         }
     }
@@ -611,14 +612,14 @@ private fun GlobalLeaderboardCard(statistics: io.github.m0nkeysan.gamekeeper.cor
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "🏆 Leaderboards",
+                text = AppStrings.YAHTZEE_STATS_GLOBAL_LEADERBOARDS,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
             
             // Most Wins
             Text(
-                text = "Most Wins",
+                text = AppStrings.YAHTZEE_STATS_LEADERBOARD_MOST_WINS,
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
@@ -631,7 +632,7 @@ private fun GlobalLeaderboardCard(statistics: io.github.m0nkeysan.gamekeeper.cor
             
             // Highest Scores
             Text(
-                text = "Highest Scores",
+                text = AppStrings.YAHTZEE_STATS_LEADERBOARD_HIGHEST_SCORES,
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 4.dp)
@@ -644,7 +645,7 @@ private fun GlobalLeaderboardCard(statistics: io.github.m0nkeysan.gamekeeper.cor
             
             // Most Yahtzees
             Text(
-                text = "Most Yahtzees",
+                text = AppStrings.YAHTZEE_STATS_LEADERBOARD_MOST_YAHTZEES,
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 4.dp)
@@ -671,10 +672,10 @@ private fun GlobalLeaderboardRow(entry: io.github.m0nkeysan.gamekeeper.core.mode
             modifier = Modifier.weight(1f)
         ) {
             val medal = when (entry.rank) {
-                1 -> "🥇"
-                2 -> "🥈"
-                3 -> "🥉"
-                else -> "${entry.rank}."
+                1 -> AppStrings.YAHTZEE_RANK_FIRST
+                2 -> AppStrings.YAHTZEE_RANK_SECOND
+                3 -> AppStrings.YAHTZEE_RANK_THIRD
+                else -> String.format(AppStrings.YAHTZEE_RANK_FORMAT, entry.rank)
             }
             Text(
                 text = medal,
@@ -713,7 +714,7 @@ private fun GlobalCategoryAnalysisCard(statistics: io.github.m0nkeysan.gamekeepe
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "📈 Category Performance",
+                text = AppStrings.YAHTZEE_STATS_GLOBAL_CATEGORY,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -724,22 +725,22 @@ private fun GlobalCategoryAnalysisCard(statistics: io.github.m0nkeysan.gamekeepe
 
             if (statistics.mostScoredCategory != null) {
                 StatisticRow(
-                    "Most Scored Category",
+                    AppStrings.YAHTZEE_STATS_GLOBAL_MOST_SCORED,
                     statistics.mostScoredCategory.displayName
                 )
             }
             
             if (statistics.leastScoredCategory != null) {
                 StatisticRow(
-                    "Least Scored Category",
+                    AppStrings.YAHTZEE_STATS_GLOBAL_LEAST_SCORED,
                     statistics.leastScoredCategory.displayName
                 )
             }
             
             if (statistics.highestCategoryAverage != null) {
                 StatisticRow(
-                    "Best Average Category",
-                    "${statistics.highestCategoryAverage.category.displayName} (${formatAverage(statistics.highestCategoryAverage.average)})"
+                    AppStrings.YAHTZEE_STATS_GLOBAL_BEST_AVG,
+                    String.format(AppStrings.YAHTZEE_FORMAT_CATEGORY_AVG, statistics.highestCategoryAverage.category.displayName, formatAverage(statistics.highestCategoryAverage.average))
                 )
             }
         }
@@ -760,7 +761,7 @@ private fun GlobalRecentGamesCard(games: List<io.github.m0nkeysan.gamekeeper.cor
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "🎮 Recent Games",
+                text = AppStrings.YAHTZEE_STATS_RECENT_GAMES,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -787,12 +788,12 @@ private fun GlobalGameSummaryRow(game: io.github.m0nkeysan.gamekeeper.core.model
                 fontWeight = FontWeight.Medium
             )
             Text(
-                text = "Winner: ${game.winnerName}",
+                text = String.format(AppStrings.YAHTZEE_FORMAT_WINNER_SCORE, game.winnerName),
                 style = MaterialTheme.typography.bodySmall,
                 color = GameColors.Success
             )
             Text(
-                text = "${game.playerCount} players",
+                text = String.format(AppStrings.YAHTZEE_FORMAT_PLAYER_COUNT, game.playerCount),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

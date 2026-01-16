@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.GameSummary
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -85,10 +86,10 @@ fun GameSummaryRow(
                 }
                 
                 val rankText = when (game.rank) {
-                    1 -> "🏆 1st"
-                    2 -> "🥈 2nd"
-                    3 -> "🥉 3rd"
-                    else -> "#${game.rank}"
+                    1 -> AppStrings.YAHTZEE_RANK_FIRST_PLACE
+                    2 -> AppStrings.YAHTZEE_RANK_SECOND_PLACE
+                    3 -> AppStrings.YAHTZEE_RANK_THIRD_PLACE
+                    else -> String.format(AppStrings.YAHTZEE_RANK_FORMAT, game.rank)
                 }
                 
                 Text(
