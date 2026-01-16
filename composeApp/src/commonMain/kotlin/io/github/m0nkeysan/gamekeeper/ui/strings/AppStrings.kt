@@ -26,12 +26,13 @@ object AppStrings {
     // Player Selection Screen
     const val PLAYERS_NO_PLAYERS = "No players found. Add one!"
     
-     // Common Actions
-     const val ACTION_DELETE = "Delete"
-     const val ACTION_CANCEL = "Cancel"
-     const val ACTION_SAVE = "Save"
-     const val ACTION_BACK = "Back"
-     const val ACTION_CREATE = "Create"
+      // Common Actions
+      const val ACTION_DELETE = "Delete"
+      const val ACTION_CANCEL = "Cancel"
+      const val ACTION_SAVE = "Save"
+      const val ACTION_BACK = "Back"
+      const val ACTION_CREATE = "Create"
+      const val ACTION_RESET = "Reset"
     
      // Loading and States
      const val STATE_LOADING = "Loading..."
@@ -142,18 +143,15 @@ object AppStrings {
         const val COUNTER_SETTINGS_OPTION_MOST = "📈 Most points"
         const val COUNTER_SETTINGS_OPTION_LEAST = "📉 Least points"
         const val COUNTER_ACTION_CLOSE = "CLOSE"
-        const val COUNTER_DIALOG_RESET_TITLE = "Reset All Counters"
-        const val COUNTER_DIALOG_RESET_MESSAGE = "Are you sure you want to reset all counter values to 0?"
-        const val COUNTER_ACTION_RESET = "Reset"
-        const val COUNTER_DIALOG_DELETE_TITLE = "Delete Everything"
+         const val COUNTER_DIALOG_RESET_TITLE = "Reset All Counters"
+         const val COUNTER_DIALOG_RESET_MESSAGE = "Are you sure you want to reset all counter values to 0?"
+         const val COUNTER_DIALOG_DELETE_TITLE = "Delete Everything"
         const val COUNTER_DIALOG_DELETE_MESSAGE = "Are you sure you want to delete all counters? This action cannot be undone."
         const val COUNTER_ACTION_DELETE = "Delete Everything"
-        const val COUNTER_DIALOG_ADJUST_LABEL = "MANUAL ADJUST"
-        const val COUNTER_DIALOG_ADJUST_PLACEHOLDER = "0"
-        const val COUNTER_DIALOG_SET_SCORE_LABEL = "SET NEW SCORE"
-        const val COUNTER_ACTION_CANCEL = "CANCEL"
-        const val COUNTER_ACTION_SAVE = "SAVE"
-        const val COUNTER_CD_DECREASE = "Decrease"
+         const val COUNTER_DIALOG_ADJUST_LABEL = "MANUAL ADJUST"
+         const val COUNTER_DIALOG_ADJUST_PLACEHOLDER = "0"
+         const val COUNTER_DIALOG_SET_SCORE_LABEL = "SET NEW SCORE"
+         const val COUNTER_CD_DECREASE = "Decrease"
         const val COUNTER_CD_INCREASE = "Increase"
       
         // Counter - History & Edit
@@ -208,11 +206,9 @@ object AppStrings {
       const val DICE_ERROR_MIN_SIDES = "Minimum is %d sides"
       const val DICE_ERROR_MAX_SIDES = "Maximum is %d sides"
       const val DICE_PLACEHOLDER_CUSTOM = "2-99"
-      const val DICE_SETTING_ANIMATION = "Animation"
-      const val DICE_SETTING_SHAKE = "Shake to Roll"
-      const val DICE_ACTION_CANCEL = "Cancel"
-      const val DICE_ACTION_SAVE = "Save"
-      
+       const val DICE_SETTING_ANIMATION = "Animation"
+       const val DICE_SETTING_SHAKE = "Shake to Roll"
+       
         // Finger Selector
         const val FINGER_SELECTOR_DIALOG_TITLE = "Selector Settings"
        const val FINGER_SELECTOR_SECTION_MODE = "Mode"

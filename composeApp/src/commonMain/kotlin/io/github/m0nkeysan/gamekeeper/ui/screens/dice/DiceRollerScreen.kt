@@ -519,7 +519,7 @@ private fun DiceSettingsBottomSheetContent(
                     .height(48.dp),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
             ) {
-                Text(AppStrings.DICE_ACTION_CANCEL)
+                Text(AppStrings.ACTION_CANCEL)
             }
             Button(
                 onClick = {
@@ -540,7 +540,7 @@ private fun DiceSettingsBottomSheetContent(
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
-                Text(AppStrings.DICE_ACTION_SAVE)
+                Text(AppStrings.ACTION_SAVE)
             }
         }
 

@@ -105,7 +105,7 @@ fun GameCreationTemplate(
                         onClick = onBack,
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text(AppStrings.GAME_CREATION_ACTION_CANCEL)
+                        Text(AppStrings.ACTION_CANCEL)
                     }
                     
                     Button(

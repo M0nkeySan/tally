@@ -438,7 +438,7 @@ fun CounterScreen(
                              showResetConfirmation = false
                          }
                      ) {
-                         Text(AppStrings.COUNTER_ACTION_RESET)
+                         Text(AppStrings.ACTION_RESET)
                      }
                  },
                  dismissButton = {
@@ -681,7 +681,7 @@ fun SetScoreContent(
                      modifier = Modifier.weight(1f),
                      shape = MaterialTheme.shapes.medium
                  ) {
-                     Text(AppStrings.COUNTER_ACTION_CANCEL)
+                     Text(AppStrings.ACTION_CANCEL)
                  }
                  Button(
                      onClick = {
@@ -695,7 +695,7 @@ fun SetScoreContent(
                      ),
                      shape = MaterialTheme.shapes.medium
                  ) {
-                     Text(AppStrings.COUNTER_ACTION_SAVE, fontWeight = FontWeight.Bold)
+                     Text(AppStrings.ACTION_SAVE, fontWeight = FontWeight.Bold)
                  }
             }
         }
