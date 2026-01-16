@@ -6,6 +6,7 @@ import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeStatisticsRepository
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeePlayerStatistics
+import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeGlobalStatistics
 
 class YahtzeeStatisticsRepositoryImpl(
     private val dao: YahtzeeDao,
@@ -42,5 +43,16 @@ class YahtzeeStatisticsRepositoryImpl(
                 }
             }
             .sortedBy { it.name }
+    }
+    
+    override suspend fun getGlobalStatistics(): YahtzeeGlobalStatistics {
+        val allGames = dao.getAllFinishedGames()
+        val allScores = dao.getAllScoresFromFinishedGames()
+        
+        return YahtzeeStatisticsEngine.calculateGlobalStatistics(
+            allGames = allGames,
+            allScores = allScores,
+            playerRepository = playerRepository
+        )
     }
 }

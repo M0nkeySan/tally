@@ -41,4 +41,15 @@ interface YahtzeeDao {
 
     @Query("SELECT DISTINCT playerIds FROM yahtzee_games WHERE isFinished = 1")
     suspend fun getDistinctPlayerIds(): List<String>
+    
+    // Global statistics queries
+    @Query("SELECT * FROM yahtzee_games WHERE isFinished = 1 ORDER BY updatedAt DESC")
+    suspend fun getAllFinishedGames(): List<YahtzeeGameEntity>
+
+    @Query("""
+        SELECT s.* FROM yahtzee_scores s
+        INNER JOIN yahtzee_games g ON s.gameId = g.id
+        WHERE g.isFinished = 1
+    """)
+    suspend fun getAllScoresFromFinishedGames(): List<YahtzeeScoreEntity>
 }
