@@ -141,10 +141,11 @@ object AppStrings {
       const val TAROT_STATS_SECTION_CALLED_PERFORMANCE = "Called Performance"
       const val TAROT_STATS_ERROR_TITLE = "Oops! Something went wrong"
       
-      // Tarot - Scoring
-      const val TAROT_SCORING_CD_BACK = "Back"
-      const val TAROT_SCORING_CD_STATISTICS = "Statistics"
-      const val TAROT_SCORING_CD_ADD_ROUND = "Add Round"
+       // Tarot - Scoring
+       const val TAROT_SCORING_SCREEN_TITLE = "Game Scoring"
+       const val TAROT_SCORING_CD_BACK = "Back"
+       const val TAROT_SCORING_CD_STATISTICS = "Statistics"
+       const val TAROT_SCORING_CD_ADD_ROUND = "Add Round"
       const val TAROT_SCORING_SECTION_SCORES = "Scores"
       const val TAROT_SCORING_SECTION_HISTORY = "History"
       const val TAROT_SCORING_EMPTY_ROUNDS = "No rounds yet"
@@ -277,12 +278,13 @@ object AppStrings {
       const val FINGER_SELECTOR_INSTRUCTION_FORMAT = "%d finger%s will be chosen"
       const val FINGER_SELECTOR_ERROR_MIN_FINGERS = "Need at least %d fingers"
       
-      // Game Selection & Creation
-      const val GAME_SELECTION_ACTION_DELETE_ALL = "Delete All"
-      const val GAME_SELECTION_CD_BACK = "Back"
-      const val GAME_SELECTION_CD_MENU = "Menu"
-      const val GAME_SELECTION_CD_CREATE = "Create new game"
-      const val GAME_SELECTION_CD_DELETE_ALL = "Delete all games"
+       // Game Selection & Creation
+       const val GAME_SELECTION_ACTION_DELETE_ALL = "Delete All"
+       const val GAME_SELECTION_CD_BACK = "Back"
+       const val GAME_SELECTION_CD_MENU = "Menu"
+       const val GAME_SELECTION_CD_STATISTICS = "Statistics"
+       const val GAME_SELECTION_CD_CREATE = "Create new game"
+       const val GAME_SELECTION_CD_DELETE_ALL = "Delete all games"
       const val GAME_SELECTION_FAB_CREATE = "Create new game"
       const val GAME_SELECTION_LOADING = "Loading games..."
       const val GAME_SELECTION_EMPTY = "No games yet. Create one!"

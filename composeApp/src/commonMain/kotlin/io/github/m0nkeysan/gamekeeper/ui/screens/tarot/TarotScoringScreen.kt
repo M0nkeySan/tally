@@ -86,7 +86,7 @@ fun TarotScoringScreen(
              TopAppBar(
                  title = { 
                      Text(
-                         "Game Scoring",
+                         AppStrings.TAROT_SCORING_SCREEN_TITLE,
                          style = MaterialTheme.typography.headlineSmall,
                          fontWeight = FontWeight.Bold,
                          modifier = Modifier.fillMaxWidth(),

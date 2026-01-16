@@ -135,7 +135,7 @@ fun GameSelectionTemplate(
                         IconButton(onClick = {
                             onNavigateToStatistics()
                         }) {
-                            Icon(GameIcons.BarChart, contentDescription = "Statistics")
+                            Icon(GameIcons.BarChart, contentDescription = AppStrings.GAME_SELECTION_CD_STATISTICS)
                         }
                     }
                     Box {
