@@ -22,6 +22,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -164,6 +165,10 @@ private fun PlayerSelectorDropdown(
     onDropdownOpenChange: (Boolean) -> Unit
 ) {
     val selectedPlayer = players.find { it.id == selectedPlayerId }
+    val displayName = when (selectedPlayerId) {
+        YahtzeeStatisticsViewModel.GLOBAL_ID -> "⭐ Global Statistics"
+        else -> selectedPlayer?.name ?: "Select Player"
+    }
     
     Box(
         modifier = Modifier
@@ -187,7 +192,7 @@ private fun PlayerSelectorDropdown(
                         .height(40.dp)
                 ) {
                     Text(
-                        text = selectedPlayer?.name ?: "Select Player",
+                        text = displayName,
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Start
                     )
@@ -202,6 +207,24 @@ private fun PlayerSelectorDropdown(
                     expanded = isDropdownOpen,
                     onDismissRequest = { onDropdownOpenChange(false) }
                 ) {
+                    // Global option at top
+                    DropdownMenuItem(
+                        text = { 
+                            Text(
+                                "⭐ Global Statistics",
+                                fontWeight = FontWeight.Bold
+                            )
+                        },
+                        onClick = {
+                            onPlayerSelect(YahtzeeStatisticsViewModel.GLOBAL_ID)
+                            onDropdownOpenChange(false)
+                        }
+                    )
+                    
+                    // Divider
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+                    
+                    // Individual players
                     players.forEach { player ->
                         DropdownMenuItem(
                             text = { Text(player.name) },
