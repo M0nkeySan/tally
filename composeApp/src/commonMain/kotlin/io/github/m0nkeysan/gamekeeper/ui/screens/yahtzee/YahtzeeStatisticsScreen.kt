@@ -195,16 +195,13 @@ private fun PlayerSelectorDropdown(
                     onClick = { onDropdownOpenChange(!isDropdownOpen) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp)
+                        .height(40.dp)
                 ) {
                     Text(
                         text = displayName,
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 8.dp),
-                        textAlign = TextAlign.Start,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
+                            .weight(1f),
+                        textAlign = TextAlign.Start
                     )
                     Icon(
                         imageVector = Icons.Filled.ArrowDropDown,
