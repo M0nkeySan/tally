@@ -359,8 +359,8 @@ fun ScoreRow(
     if (showDialog) {
         if (options != null) {
             AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = { Text("Select score for ${category.displayName}") },
+                 onDismissRequest = { showDialog = false },
+                 title = { Text(AppStrings.YAHTZEE_DIALOG_SELECT_SCORE.format(category.displayName)) },
                 text = {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -396,8 +396,8 @@ fun ScoreRow(
             val isInvalid = inputScore != null && inputScore > 30
             
             AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = { Text("Enter score for ${category.displayName}") },
+                 onDismissRequest = { showDialog = false },
+                 title = { Text(AppStrings.YAHTZEE_DIALOG_ENTER_SCORE.format(category.displayName)) },
                 text = {
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         OutlinedTextField(
@@ -409,10 +409,10 @@ fun ScoreRow(
                             placeholder = { Text(AppStrings.YAHTZEE_PLACEHOLDER_DICE_SUM) },
                             isError = isInvalid,
                             supportingText = {
-                                if (isInvalid) {
-                                    Text("Score cannot be higher than 30")
-                                }
-                            }
+                                 if (isInvalid) {
+                                     Text(AppStrings.YAHTZEE_ERROR_SCORE_TOO_HIGH)
+                                 }
+                             }
                         )
                     }
                 },
