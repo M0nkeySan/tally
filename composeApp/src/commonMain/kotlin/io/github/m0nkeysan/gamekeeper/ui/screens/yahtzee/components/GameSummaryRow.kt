@@ -67,12 +67,12 @@ fun GameSummaryRow(
             }
             
             // Player count
-            Text(
-                text = "${game.playerCount}P",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
+             Text(
+                 text = String.format(AppStrings.COUNTER_FORMAT_PLAYER_COUNT, game.playerCount),
+                 style = MaterialTheme.typography.bodySmall,
+                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                 modifier = Modifier.padding(horizontal = 8.dp)
+             )
             
             // Rank and score
             androidx.compose.foundation.layout.Column(

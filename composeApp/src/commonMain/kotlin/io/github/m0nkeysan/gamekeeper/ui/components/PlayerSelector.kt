@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.core.model.playerNamesEqual
 import io.github.m0nkeysan.gamekeeper.core.model.sanitizePlayerName
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -142,21 +143,21 @@ fun PlayerSelectorField(
                     Icon(Icons.Default.Person, contentDescription = "Player avatar", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Text(
-                    text = "Select $label", 
+                    text = String.format(AppStrings.PLAYER_SELECTOR_PLACEHOLDER, label), 
                     style = MaterialTheme.typography.bodyLarge, 
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(1f)
                 )
             }
             
-            TextButton(
-                onClick = { showSheet = true },
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = if (isSelected) contentColor else MaterialTheme.colorScheme.primary
-                )
-            ) {
-                Text(if (isSelected) "CHANGE" else "SELECT", fontWeight = FontWeight.Bold)
-            }
+             TextButton(
+                 onClick = { showSheet = true },
+                 colors = ButtonDefaults.textButtonColors(
+                     contentColor = if (isSelected) contentColor else MaterialTheme.colorScheme.primary
+                 )
+             ) {
+                 Text(if (isSelected) AppStrings.PLAYER_SELECTOR_CHANGE else AppStrings.PLAYER_SELECTOR_SELECT, fontWeight = FontWeight.Bold)
+             }
         }
     }
 
@@ -223,15 +224,15 @@ fun PlayerSelectorContent(
             .padding(16.dp)
             .heightIn(max = 500.dp)
     ) {
-        Text(text = "Choose Player", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+         Text(text = AppStrings.PLAYER_SELECTOR_DIALOG_TITLE, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(16.dp))
 
-        OutlinedTextField(
-            value = searchQuery,
-            onValueChange = { searchQuery = it },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Search or add new...") },
-            leadingIcon = { Icon(Icons.Default.Search, null) },
+         OutlinedTextField(
+             value = searchQuery,
+             onValueChange = { searchQuery = it },
+             modifier = Modifier.fillMaxWidth(),
+             placeholder = { Text(AppStrings.PLAYER_SELECTOR_SEARCH_PLACEHOLDER) },
+             leadingIcon = { Icon(Icons.Default.Search, null) },
             trailingIcon = {
                 val sanitized = sanitizePlayerName(searchQuery)
                 if (sanitized != null && !allPlayers.any { it.isActive && playerNamesEqual(sanitized, it.name) }) {
@@ -289,14 +290,14 @@ fun PlayerSelectorContent(
                                 Icon(Icons.Default.Add, null, tint = Color.White, modifier = Modifier.size(20.dp))
                             }
                             Text(
-                                text = if (deactivatedPlayer != null && onReactivate != null) {
-                                    "Reactivate \"$searchQuery\""
-                                } else {
-                                    "Create \"$searchQuery\""
-                                },
-                                style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = FontWeight.Bold
-                            )
+                                 text = if (deactivatedPlayer != null && onReactivate != null) {
+                                     String.format(AppStrings.PLAYER_REACTIVATE_FORMAT, searchQuery)
+                                 } else {
+                                     String.format(AppStrings.PLAYER_CREATE_FORMAT, searchQuery)
+                                 },
+                                 style = MaterialTheme.typography.bodyLarge,
+                                 fontWeight = FontWeight.Bold
+                             )
                         }
                     }
                 }

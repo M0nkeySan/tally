@@ -90,7 +90,7 @@ fun PlayerDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = if (initialPlayer == null) "New Player" else "Edit Player",
+                        text = if (initialPlayer == null) AppStrings.PLAYER_DIALOG_NEW_TITLE else AppStrings.PLAYER_DIALOG_EDIT_TITLE,
                         modifier = Modifier.padding(24.dp),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Black
@@ -107,19 +107,19 @@ fun PlayerDialog(
                          value = name,
                          onValueChange = { name = it },
                          label = AppStrings.PLAYER_FIELD_NAME,
-                         placeholder = "Player Name",
+                         placeholder = AppStrings.PLAYER_PLACEHOLDER_NAME,
                          accentColor = composeColor,
                          modifier = Modifier.focusRequester(focusRequester)
                      )
                     
                     if (isNameTaken) {
-                        Text(
-                            text = "This name is already taken", 
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(start = 16.dp, top = 4.dp)
-                        )
-                    }
+                         Text(
+                             text = AppStrings.PLAYER_ERROR_NAME_TAKEN, 
+                             color = MaterialTheme.colorScheme.error,
+                             style = MaterialTheme.typography.bodySmall,
+                             modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                         )
+                     }
 
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         FieldLabel(text = AppStrings.PLAYER_LABEL_COLOR)
@@ -142,29 +142,29 @@ fun PlayerDialog(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextButton(onClick = onDismiss) {
-                        Text("Cancel", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                    Spacer(Modifier.width(8.dp))
-                    Button(
-                        onClick = { 
-                            sanitizePlayerName(name)?.let { sanitized ->
-                                onConfirm(sanitized, selectedColor)
-                            }
-                        },
-                        enabled = isNameValid,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = composeColor,
-                            contentColor = contentColor,
-                            disabledContainerColor = composeColor.copy(alpha = 0.3f),
-                            disabledContentColor = contentColor.copy(alpha = 0.5f)
-                        ),
-                        shape = MaterialTheme.shapes.medium
-                    ) {
-                        Text(
-                            if (initialPlayer == null) "Add" else "Save",
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                         Text(AppStrings.ACTION_CANCEL, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                     }
+                     Spacer(Modifier.width(8.dp))
+                     Button(
+                         onClick = { 
+                             sanitizePlayerName(name)?.let { sanitized ->
+                                 onConfirm(sanitized, selectedColor)
+                             }
+                         },
+                         enabled = isNameValid,
+                         colors = ButtonDefaults.buttonColors(
+                             containerColor = composeColor,
+                             contentColor = contentColor,
+                             disabledContainerColor = composeColor.copy(alpha = 0.3f),
+                             disabledContentColor = contentColor.copy(alpha = 0.5f)
+                         ),
+                         shape = MaterialTheme.shapes.medium
+                     ) {
+                         Text(
+                             if (initialPlayer == null) AppStrings.ACTION_CREATE else AppStrings.ACTION_SAVE,
+                             fontWeight = FontWeight.Bold
+                         )
+                     }
                 }
             }
         }

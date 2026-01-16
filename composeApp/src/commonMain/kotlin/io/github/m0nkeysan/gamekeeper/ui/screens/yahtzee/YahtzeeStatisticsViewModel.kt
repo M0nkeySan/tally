@@ -59,7 +59,7 @@ class YahtzeeStatisticsViewModel(
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
-                        error = String.format(AppStrings.YAHTZEE_ERROR_LOAD_FAILED, e.message ?: "Unknown")
+                        error = String.format(AppStrings.YAHTZEE_ERROR_LOAD_FAILED, e.message ?: AppStrings.ERROR_UNKNOWN)
                     )
                 }
             }
@@ -110,7 +110,7 @@ class YahtzeeStatisticsViewModel(
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
-                        error = String.format(AppStrings.YAHTZEE_ERROR_STATS_FAILED, e.message ?: "Unknown")
+                        error = String.format(AppStrings.YAHTZEE_ERROR_STATS_FAILED, e.message ?: AppStrings.ERROR_UNKNOWN)
                     )
                 }
             }
@@ -152,7 +152,7 @@ class YahtzeeStatisticsViewModel(
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
-                        error = String.format(AppStrings.YAHTZEE_ERROR_GLOBAL_FAILED, e.message ?: "Unknown")
+                        error = String.format(AppStrings.YAHTZEE_ERROR_GLOBAL_FAILED, e.message ?: AppStrings.ERROR_UNKNOWN)
                     )
                 }
             }

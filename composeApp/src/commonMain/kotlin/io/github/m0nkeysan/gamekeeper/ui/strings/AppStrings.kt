@@ -410,4 +410,34 @@ object AppStrings {
        const val YAHTZEE_ERROR_LOAD_FAILED = "Failed to load: %s"
        const val YAHTZEE_ERROR_STATS_FAILED = "Failed to load statistics: %s"
        const val YAHTZEE_ERROR_GLOBAL_FAILED = "Failed to load global statistics: %s"
+       
+       // Player Management - Dialog Titles
+       const val PLAYER_DIALOG_NEW_TITLE = "New Player"
+       const val PLAYER_DIALOG_EDIT_TITLE = "Edit Player"
+       
+       // Player Selector Component
+       const val PLAYER_SELECTOR_PLACEHOLDER = "Select %s"
+       const val PLAYER_SELECTOR_CHANGE = "CHANGE"
+       const val PLAYER_SELECTOR_SELECT = "SELECT"
+       const val PLAYER_SELECTOR_DIALOG_TITLE = "Choose Player"
+       const val PLAYER_SELECTOR_SEARCH_PLACEHOLDER = "Search or add new..."
+       const val PLAYER_REACTIVATE_FORMAT = "Reactivate \"%s\""
+       const val PLAYER_CREATE_FORMAT = "Create \"%s\""
+       
+       // Dice Roller Screen
+       const val DICE_SCREEN_TITLE = "Dice"
+       
+       // Color Picker
+       const val COLOR_PICKER_CD = "Custom Color"
+       const val COLOR_PICKER_DIALOG_TITLE = "Pick a Color"
+       
+       // Finger Selector
+       const val FINGER_SELECTOR_LABEL_FINGERS = "Number of Fingers"
+       const val FINGER_SELECTOR_LABEL_GROUPS = "Number of Groups"
+       
+       // Counter Screen - Player Count Format
+       const val COUNTER_FORMAT_PLAYER_COUNT = "%dP"
+       
+       // Error Handling
+       const val ERROR_UNKNOWN = "Unknown"
 }

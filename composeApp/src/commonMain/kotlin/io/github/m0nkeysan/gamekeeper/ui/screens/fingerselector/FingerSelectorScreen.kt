@@ -176,14 +176,14 @@ fun SelectionSettingsSheet(
             }
         }
 
-        // Count Selection
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            val title =
-                if (config.mode == SelectionMode.FINGERS) "Number of Fingers" else "Number of Groups"
-            val min = 1
-            val max = 5
+         // Count Selection
+         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+             val title =
+                 if (config.mode == SelectionMode.FINGERS) AppStrings.FINGER_SELECTOR_LABEL_FINGERS else AppStrings.FINGER_SELECTOR_LABEL_GROUPS
+             val min = 1
+             val max = 5
 
-            Text("$title: ${config.count}", style = MaterialTheme.typography.titleMedium)
+             Text("$title: ${config.count}", style = MaterialTheme.typography.titleMedium)
 
             Slider(
                 value = config.count.toFloat(),

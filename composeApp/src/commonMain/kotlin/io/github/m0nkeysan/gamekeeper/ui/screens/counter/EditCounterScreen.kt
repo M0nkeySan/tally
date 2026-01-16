@@ -110,7 +110,7 @@ fun EditCounterScreen(
                         Icon(GameIcons.ArrowBack, contentDescription = AppStrings.COUNTER_EDIT_CD_BACK)
                     }
                     Text(
-                        text = "Edit Counter",
+                        text = AppStrings.COUNTER_EDIT_TITLE,
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.ExtraBold
                     )

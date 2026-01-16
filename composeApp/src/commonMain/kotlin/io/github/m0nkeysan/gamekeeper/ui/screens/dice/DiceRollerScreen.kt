@@ -121,12 +121,12 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                         contentAlignment = Alignment.Center
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(
-                                "Dice",
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                             Text(
+                                 AppStrings.DICE_SCREEN_TITLE,
+                                 style = MaterialTheme.typography.titleLarge,
+                                 fontWeight = FontWeight.Bold
+                             )
+                         }
                     }
                 },
                 navigationIcon = {

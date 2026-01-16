@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import io.github.m0nkeysan.gamekeeper.ui.utils.colorToHSV
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import io.github.m0nkeysan.gamekeeper.ui.utils.hsvToColor
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -175,11 +176,11 @@ fun CustomPickerSwatch(
         border = if (isSelected) BorderStroke(3.dp, MaterialTheme.colorScheme.primary) else null
     ) {
         Box(contentAlignment = Alignment.Center) {
-            Icon(
-                imageVector = Icons.Default.Palette,
-                contentDescription = "Custom Color",
-                tint = if (color.luminance() > 0.5f) Color.Black else Color.White
-            )
+         Icon(
+             imageVector = Icons.Default.Palette,
+             contentDescription = AppStrings.COLOR_PICKER_CD,
+             tint = if (color.luminance() > 0.5f) Color.Black else Color.White
+         )
         }
     }
 }
@@ -203,53 +204,53 @@ fun ColorPickerDialog(
     }
 
     AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Pick a Color") },
-        text = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                ColorWheel(
-                    hue = hue,
-                    saturation = saturation,
-                    onChange = { newH, newS ->
-                        hue = newH
-                        saturation = newS
-                    },
-                    modifier = Modifier.size(250.dp)
-                )
+         onDismissRequest = onDismiss,
+         title = { Text(AppStrings.COLOR_PICKER_DIALOG_TITLE) },
+         text = {
+             Column(
+                 horizontalAlignment = Alignment.CenterHorizontally,
+                 verticalArrangement = Arrangement.spacedBy(16.dp)
+             ) {
+                 ColorWheel(
+                     hue = hue,
+                     saturation = saturation,
+                     onChange = { newH, newS ->
+                         hue = newH
+                         saturation = newS
+                     },
+                     modifier = Modifier.size(250.dp)
+                 )
 
-                BrightnessSlider(
-                    hue = hue,
-                    saturation = saturation,
-                    value = value,
-                    onValueChange = { value = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(30.dp)
-                )
+                 BrightnessSlider(
+                     hue = hue,
+                     saturation = saturation,
+                     value = value,
+                     onValueChange = { value = it },
+                     modifier = Modifier
+                         .fillMaxWidth()
+                         .height(30.dp)
+                 )
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .background(currentColor, RoundedCornerShape(4.dp))
-                        .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
-                )
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = {
-                val argb = currentColor.toArgb()
-                val hex = String.format("#%06X", (0xFFFFFF and argb))
-                onColorSelected(hex)
-            }) { Text("Save") }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
-        }
-    )
+                 Box(
+                     modifier = Modifier
+                         .fillMaxWidth()
+                         .height(40.dp)
+                         .background(currentColor, RoundedCornerShape(4.dp))
+                         .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
+                 )
+             }
+         },
+         confirmButton = {
+             TextButton(onClick = {
+                 val argb = currentColor.toArgb()
+                 val hex = String.format("#%06X", (0xFFFFFF and argb))
+                 onColorSelected(hex)
+             }) { Text(AppStrings.ACTION_SAVE) }
+         },
+         dismissButton = {
+             TextButton(onClick = onDismiss) { Text(AppStrings.ACTION_CANCEL) }
+         }
+     )
 }
 
 @Composable
