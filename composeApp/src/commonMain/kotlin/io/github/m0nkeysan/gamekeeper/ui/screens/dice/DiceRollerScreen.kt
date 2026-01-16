@@ -177,12 +177,12 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                         modifier = Modifier.padding(horizontal = 32.dp)
                     ) {
                         Text(
-                            text = "${configuration.numberOfDice} × d${configuration.diceType.sides}",
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.titleSmall,
-                            fontSize = 16.sp
-                        )
+                             text = AppStrings.DICE_DISPLAY_FORMAT.format(configuration.numberOfDice, configuration.diceType.sides),
+                             color = MaterialTheme.colorScheme.onPrimaryContainer,
+                             fontWeight = FontWeight.Bold,
+                             style = MaterialTheme.typography.titleSmall,
+                             fontSize = 16.sp
+                         )
                     }
                 }
             }
@@ -210,15 +210,15 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(bottom = 40.dp, start = 16.dp, end = 16.dp)
             ) {
-                if (roll != null && roll.individualResults.isNotEmpty()) {
-                    val rollsString = roll.individualResults.joinToString(" ") { "[$it]" }
-                    Text(
-                        text = "Rolls: $rollsString",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                 if (roll != null && roll.individualResults.isNotEmpty()) {
+                     val rollsString = roll.individualResults.joinToString(" ") { "[$it]" }
+                     Text(
+                         text = AppStrings.DICE_ROLLS_FORMAT.format(rollsString),
+                         style = MaterialTheme.typography.titleSmall,
+                         color = MaterialTheme.colorScheme.onBackground,
+                         fontSize = 18.sp,
+                         fontWeight = FontWeight.Bold
+                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Icon(
                         Icons.Default.South,
@@ -231,13 +231,13 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                     Spacer(modifier = Modifier.height(60.dp))
                 }
 
-                Text(
-                    text = "Total: ${roll?.total ?: 0}",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp
-                )
+                 Text(
+                     text = AppStrings.DICE_TOTAL_FORMAT.format(roll?.total ?: 0),
+                     style = MaterialTheme.typography.headlineSmall,
+                     color = MaterialTheme.colorScheme.primary,
+                     fontWeight = FontWeight.Bold,
+                     fontSize = 28.sp
+                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -434,15 +434,15 @@ private fun DiceSettingsBottomSheetContent(
                  }
              }
              
-             LaunchedEffect(customInput) {
-                 customInputError = when {
-                     customInput.isBlank() -> null
-                     customInput.toIntOrNull() == null -> AppStrings.DICE_ERROR_NOT_VALID
-                     customInput.toInt() < DiceConstants.MIN_CUSTOM_SIDES -> "Minimum is ${DiceConstants.MIN_CUSTOM_SIDES} sides"
-                     customInput.toInt() > DiceConstants.MAX_CUSTOM_SIDES -> "Maximum is ${DiceConstants.MAX_CUSTOM_SIDES} sides"
-                     else -> null
-                 }
-             }
+              LaunchedEffect(customInput) {
+                  customInputError = when {
+                      customInput.isBlank() -> null
+                      customInput.toIntOrNull() == null -> AppStrings.DICE_ERROR_NOT_VALID
+                      customInput.toInt() < DiceConstants.MIN_CUSTOM_SIDES -> AppStrings.DICE_ERROR_MIN_SIDES.format(DiceConstants.MIN_CUSTOM_SIDES)
+                      customInput.toInt() > DiceConstants.MAX_CUSTOM_SIDES -> AppStrings.DICE_ERROR_MAX_SIDES.format(DiceConstants.MAX_CUSTOM_SIDES)
+                      else -> null
+                  }
+              }
              
              TextField(
                  value = customInput,
