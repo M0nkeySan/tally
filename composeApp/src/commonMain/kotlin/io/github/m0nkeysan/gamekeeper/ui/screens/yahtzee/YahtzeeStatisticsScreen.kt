@@ -1,6 +1,5 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee
 
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,9 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -92,15 +92,17 @@ fun YahtzeeStatisticsScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Player selector bar below top bar
+            // Player selector dropdown below top bar
             if (state.availablePlayers.isNotEmpty()) {
-                PlayerSelectorBar(
+                PlayerSelectorDropdown(
                     players = state.availablePlayers,
                     selectedPlayerId = state.selectedPlayerId,
                     onPlayerSelect = { playerId ->
                         viewModel.selectPlayer(playerId)
                         showPlayerDropdown = false
-                    }
+                    },
+                    isDropdownOpen = showPlayerDropdown,
+                    onDropdownOpenChange = { showPlayerDropdown = it }
                 )
             }
 
@@ -154,38 +156,68 @@ fun YahtzeeStatisticsScreen(
 }
 
 @Composable
-private fun PlayerSelectorBar(
+private fun PlayerSelectorDropdown(
     players: List<io.github.m0nkeysan.gamekeeper.core.model.Player>,
     selectedPlayerId: String?,
-    onPlayerSelect: (String) -> Unit
+    onPlayerSelect: (String) -> Unit,
+    isDropdownOpen: Boolean,
+    onDropdownOpenChange: (Boolean) -> Unit
 ) {
-    Row(
+    val selectedPlayer = players.find { it.id == selectedPlayerId }
+    
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        Text(
-            text = "Player:",
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(end = 4.dp)
-        )
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                .height(48.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            players.forEach { player ->
-                androidx.compose.material3.FilterChip(
-                    selected = player.id == selectedPlayerId,
-                    onClick = { onPlayerSelect(player.id) },
-                    label = { Text(player.name) },
-                    modifier = Modifier.height(32.dp)
-                )
+            Text(
+                text = "Player:",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            Box(
+                modifier = Modifier.weight(1f)
+            ) {
+                Button(
+                    onClick = { onDropdownOpenChange(!isDropdownOpen) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
+                ) {
+                    Text(
+                        text = selectedPlayer?.name ?: "Select Player",
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Start
+                    )
+                    Icon(
+                        imageVector = Icons.Filled.ArrowDropDown,
+                        contentDescription = null,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+
+                DropdownMenu(
+                    expanded = isDropdownOpen,
+                    onDismissRequest = { onDropdownOpenChange(false) }
+                ) {
+                    players.forEach { player ->
+                        DropdownMenuItem(
+                            text = { Text(player.name) },
+                            onClick = {
+                                onPlayerSelect(player.id)
+                                onDropdownOpenChange(false)
+                            }
+                        )
+                    }
+                }
             }
         }
     }
