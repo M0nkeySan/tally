@@ -145,7 +145,7 @@ private fun CategoryBox(
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
-                text = category.displayName.split(" ").first().take(3).uppercase(),
+                text = category.displayName.split(" ").first().uppercase(),
                 style = MaterialTheme.typography.labelSmall,
                 fontSize = 9.sp,
                 fontWeight = FontWeight.Bold,

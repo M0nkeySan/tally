@@ -177,12 +177,6 @@ private fun PlayerSelectorDropdown(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Player:",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold
-            )
-
             Box(
                 modifier = Modifier.weight(1f)
             ) {
