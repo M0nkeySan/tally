@@ -313,10 +313,10 @@ fun RoundHistoryItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Round ${round.roundNumber} - $takerName",
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold
-                )
+                     text = AppStrings.TAROT_SCORING_ROUND_TITLE.format(round.roundNumber, takerName),
+                     style = MaterialTheme.typography.bodyMedium,
+                     fontWeight = FontWeight.Bold
+                 )
 
                 val displayScore = when (playerCount) {
                     5 -> {
@@ -339,15 +339,15 @@ fun RoundHistoryItem(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "${round.bid.displayName} • ${round.bouts} bouts • ${round.pointsScored} pts",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+                 text = AppStrings.TAROT_SCORING_ROUND_DETAILS.format(round.bid.displayName, round.bouts, round.pointsScored),
+                 style = MaterialTheme.typography.bodySmall,
+                 color = MaterialTheme.colorScheme.onSurfaceVariant
+             )
 
-            val announces = mutableListOf<String>()
-            if (round.hasPetitAuBout) announces.add("Petit au bout")
-            if (round.hasPoignee) announces.add("Poignée ${round.poigneeLevel?.displayName}")
-            if (round.chelem != ChelemType.NONE) announces.add("Chelem: ${round.chelem.displayName}")
+             val announces = mutableListOf<String>()
+             if (round.hasPetitAuBout) announces.add(AppStrings.TAROT_SCORING_ANNOUNCE_PETIT_AU_BOUT)
+             if (round.hasPoignee) announces.add(AppStrings.TAROT_SCORING_ANNOUNCE_POIGNEE.format(round.poigneeLevel?.displayName ?: ""))
+             if (round.chelem != ChelemType.NONE) announces.add(AppStrings.TAROT_SCORING_ANNOUNCE_CHELEM.format(round.chelem.displayName))
 
             if (announces.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(4.dp))

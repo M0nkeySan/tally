@@ -68,19 +68,19 @@ fun EditCounterScreen(
          AlertDialog(
              onDismissRequest = { showDeleteDialog = false },
              containerColor = MaterialTheme.colorScheme.surface,
-             title = { Text("Delete Counter", fontWeight = FontWeight.Bold) },
-             text = { Text("Are you sure you want to delete this counter? This action cannot be undone.") },
+             title = { Text(AppStrings.DIALOG_DELETE_COUNTER_TITLE, fontWeight = FontWeight.Bold) },
+             text = { Text(AppStrings.DIALOG_DELETE_COUNTER_MESSAGE) },
              confirmButton = {
                  TextButton(onClick = {
                      showDeleteDialog = false
                      onDelete(id)
                  }) {
-                     Text("Delete", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
+                     Text(AppStrings.ACTION_DELETE, color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
                  }
              },
              dismissButton = {
                  TextButton(onClick = { showDeleteDialog = false }) {
-                     Text("Cancel", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                     Text(AppStrings.ACTION_CANCEL, color = MaterialTheme.colorScheme.onSurfaceVariant)
                  }
              }
          )
@@ -181,23 +181,23 @@ fun EditCounterScreen(
             }
 
             // 2. Name Field
-            FlatTextField(
-                value = name,
-                onValueChange = { name = it },
-                label = AppStrings.COUNTER_EDIT_FIELD_NAME,
-                placeholder = "Player Name",
-                accentColor = selectedColor
-            )
+             FlatTextField(
+                 value = name,
+                 onValueChange = { name = it },
+                 label = AppStrings.COUNTER_EDIT_FIELD_NAME,
+                 placeholder = AppStrings.COUNTER_EDIT_PLACEHOLDER_NAME,
+                 accentColor = selectedColor
+             )
 
-            // 3. Value Field
-            FlatTextField(
-                value = countText,
-                onValueChange = { if (it.isEmpty() || it == "-" || it.all { char -> char.isDigit() || char == '-' }) countText = it },
-                label = AppStrings.COUNTER_EDIT_FIELD_VALUE,
-                placeholder = "0",
-                accentColor = selectedColor,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
+             // 3. Value Field
+             FlatTextField(
+                 value = countText,
+                 onValueChange = { if (it.isEmpty() || it == "-" || it.all { char -> char.isDigit() || char == '-' }) countText = it },
+                 label = AppStrings.COUNTER_EDIT_FIELD_VALUE,
+                 placeholder = AppStrings.COUNTER_EDIT_PLACEHOLDER_VALUE,
+                 accentColor = selectedColor,
+                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+             )
         }
     }
 }

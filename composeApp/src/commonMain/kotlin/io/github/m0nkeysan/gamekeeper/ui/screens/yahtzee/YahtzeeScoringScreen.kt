@@ -172,19 +172,19 @@ fun YahtzeeGameView(
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             val isTurn = selectedPlayerId == game.currentPlayerId
-                            if (isTurn) {
-                                Text(
-                                    text = "●",
-                                    color = MaterialTheme.colorScheme.primary,
-                                    fontSize = 12.sp
-                                )
-                            }
-                            
-                            Text(
-                                text = players.find { it.id == selectedPlayerId }?.name ?: "Unknown",
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.ExtraBold
-                            )
+                             if (isTurn) {
+                                 Text(
+                                     text = AppStrings.YAHTZEE_SCORING_TURN_INDICATOR,
+                                     color = MaterialTheme.colorScheme.primary,
+                                     fontSize = 12.sp
+                                 )
+                             }
+                             
+                             Text(
+                                 text = players.find { it.id == selectedPlayerId }?.name ?: AppStrings.YAHTZEE_SCORING_FALLBACK_NAME,
+                                 style = MaterialTheme.typography.titleLarge,
+                                 fontWeight = FontWeight.ExtraBold
+                             )
                             
                             Icon(
                                  imageVector = androidx.compose.material.icons.Icons.Default.ArrowDropDown,
@@ -193,8 +193,8 @@ fun YahtzeeGameView(
                         }
                         
                         val selectedPlayerTotal = remember(selectedPlayerId, state.scores) {
-                            "Total: ${viewModel.calculateTotalScore(selectedPlayerId)}"
-                        }
+                             AppStrings.YAHTZEE_SCORING_TOTAL_FORMAT.format(viewModel.calculateTotalScore(selectedPlayerId))
+                         }
                         Text(
                             text = selectedPlayerTotal,
                             style = MaterialTheme.typography.labelSmall,
@@ -258,15 +258,15 @@ fun YahtzeeGameView(
             modifier = Modifier.fillMaxWidth()
         ) {
             val isViewingSelf = selectedPlayerId == game.currentPlayerId
-            val displayedName = players.find { it.id == selectedPlayerId }?.name ?: "Unknown"
-            
-            Text(
-                text = if (isViewingSelf) "Your Turn" else "Viewing $displayedName's card",
-                modifier = Modifier.padding(8.dp).fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+             val displayedName = players.find { it.id == selectedPlayerId }?.name ?: AppStrings.YAHTZEE_SCORING_FALLBACK_NAME
+             
+             Text(
+                 text = if (isViewingSelf) AppStrings.YAHTZEE_SCORING_TURN_LABEL else AppStrings.YAHTZEE_SCORING_VIEWING_LABEL.format(displayedName),
+                 modifier = Modifier.padding(8.dp).fillMaxWidth(),
+                 textAlign = TextAlign.Center,
+                 style = MaterialTheme.typography.titleMedium,
+                 fontWeight = FontWeight.Bold
+             )
         }
 
         LazyColumn(
@@ -485,18 +485,18 @@ fun UpperBonusRow(score: Int) {
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("Upper Bonus (63+)", style = MaterialTheme.typography.bodySmall)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            if (needed > 0) {
-                Text("-$needed", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            Text(
-                text = if (score >= 63) "+35" else "0",
-                fontWeight = FontWeight.Bold,
-                color = if (score >= 63) GameColors.Success else GameColors.TextSecondary
-            )
-        }
+        Text(AppStrings.YAHTZEE_LABEL_UPPER_BONUS, style = MaterialTheme.typography.bodySmall)
+         Row(verticalAlignment = Alignment.CenterVertically) {
+             if (needed > 0) {
+                 Text(AppStrings.YAHTZEE_LABEL_BONUS_NEEDED.format(needed), style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+                 Spacer(modifier = Modifier.width(8.dp))
+             }
+             Text(
+                 text = if (score >= 63) AppStrings.YAHTZEE_LABEL_BONUS_EARNED else "0",
+                 fontWeight = FontWeight.Bold,
+                 color = if (score >= 63) GameColors.Success else GameColors.TextSecondary
+             )
+         }
     }
 }
 

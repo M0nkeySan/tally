@@ -401,18 +401,18 @@ fun CounterScreen(
                         )
 
                         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                            SettingsOption(
-                                text = "📈 Most points",
-                                isSelected = state.displayMode == CounterDisplayMode.MOST_POINTS,
-                                onClick = { viewModel.setDisplayMode(CounterDisplayMode.MOST_POINTS) }
-                            )
+                             SettingsOption(
+                                 text = AppStrings.COUNTER_SETTINGS_OPTION_MOST,
+                                 isSelected = state.displayMode == CounterDisplayMode.MOST_POINTS,
+                                 onClick = { viewModel.setDisplayMode(CounterDisplayMode.MOST_POINTS) }
+                             )
 
-                            SettingsOption(
-                                text = "📉 Least points",
-                                isSelected = state.displayMode == CounterDisplayMode.LEAST_POINTS,
-                                onClick = { viewModel.setDisplayMode(CounterDisplayMode.LEAST_POINTS) }
-                            )
-                        }
+                             SettingsOption(
+                                 text = AppStrings.COUNTER_SETTINGS_OPTION_LEAST,
+                                 isSelected = state.displayMode == CounterDisplayMode.LEAST_POINTS,
+                                 onClick = { viewModel.setDisplayMode(CounterDisplayMode.LEAST_POINTS) }
+                             )
+                         }
                     }
                 },
                 confirmButton = {
@@ -424,53 +424,53 @@ fun CounterScreen(
         }
 
         // --- Reset All Confirmation ---
-        if (showResetConfirmation) {
-            AlertDialog(
-                onDismissRequest = { showResetConfirmation = false },
-                title = { Text(AppStrings.COUNTER_DIALOG_RESET_TITLE) },
-                text = { Text("Are you sure you want to reset all counter values to 0?") },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            viewModel.resetAll()
-                            showResetConfirmation = false
-                        }
-                    ) {
-                        Text("Reset")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showResetConfirmation = false }) {
-                        Text("Cancel")
-                    }
-                }
-            )
-        }
+         if (showResetConfirmation) {
+             AlertDialog(
+                 onDismissRequest = { showResetConfirmation = false },
+                 title = { Text(AppStrings.COUNTER_DIALOG_RESET_TITLE) },
+                 text = { Text(AppStrings.COUNTER_DIALOG_RESET_MESSAGE) },
+                 confirmButton = {
+                     TextButton(
+                         onClick = {
+                             viewModel.resetAll()
+                             showResetConfirmation = false
+                         }
+                     ) {
+                         Text(AppStrings.COUNTER_ACTION_RESET)
+                     }
+                 },
+                 dismissButton = {
+                     TextButton(onClick = { showResetConfirmation = false }) {
+                         Text(AppStrings.ACTION_CANCEL)
+                     }
+                 }
+             )
+         }
 
         // --- Delete All Confirmation ---
-        if (showDeleteAllConfirmation) {
-            AlertDialog(
-                onDismissRequest = { showDeleteAllConfirmation = false },
-                title = { Text(AppStrings.COUNTER_DIALOG_DELETE_TITLE) },
-                text = { Text("Are you sure you want to delete all counters? This action cannot be undone.") },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            viewModel.deleteAll()
-                            showDeleteAllConfirmation = false
-                        },
-                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
-                    ) {
-                        Text(AppStrings.COUNTER_DIALOG_DELETE_TITLE)
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showDeleteAllConfirmation = false }) {
-                        Text("Cancel")
-                    }
-                }
-            )
-        }
+         if (showDeleteAllConfirmation) {
+             AlertDialog(
+                 onDismissRequest = { showDeleteAllConfirmation = false },
+                 title = { Text(AppStrings.COUNTER_DIALOG_DELETE_TITLE) },
+                 text = { Text(AppStrings.COUNTER_DIALOG_DELETE_MESSAGE) },
+                 confirmButton = {
+                     TextButton(
+                         onClick = {
+                             viewModel.deleteAll()
+                             showDeleteAllConfirmation = false
+                         },
+                         colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                     ) {
+                         Text(AppStrings.COUNTER_ACTION_DELETE)
+                     }
+                 },
+                 dismissButton = {
+                     TextButton(onClick = { showDeleteAllConfirmation = false }) {
+                         Text(AppStrings.ACTION_CANCEL)
+                     }
+                 }
+             )
+         }
     }
 }
 
@@ -583,25 +583,25 @@ fun QuickAdjustContent(
             }
 
             FlatTextField(
-                value = manualValue,
-                onValueChange = {
-                    if (it.all { char -> char.isDigit() || char == '-' }) manualValue = it
-                },
-                label = "MANUAL ADJUST",
-                placeholder = "0",
-                accentColor = Color(counter.color),
-                focusRequester = focusRequester,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        val value = manualValue.toIntOrNull() ?: 0
-                        onAdjust(if (isAddition) value else -value)
-                    }
-                )
-            )
+                 value = manualValue,
+                 onValueChange = {
+                     if (it.all { char -> char.isDigit() || char == '-' }) manualValue = it
+                 },
+                 label = AppStrings.COUNTER_DIALOG_ADJUST_LABEL,
+                 placeholder = AppStrings.COUNTER_DIALOG_ADJUST_PLACEHOLDER,
+                 accentColor = Color(counter.color),
+                 focusRequester = focusRequester,
+                 keyboardOptions = KeyboardOptions(
+                     keyboardType = KeyboardType.Number,
+                     imeAction = ImeAction.Done
+                 ),
+                 keyboardActions = KeyboardActions(
+                     onDone = {
+                         val value = manualValue.toIntOrNull() ?: 0
+                         onAdjust(if (isAddition) value else -value)
+                     }
+                 )
+             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -649,52 +649,52 @@ fun SetScoreContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             FlatTextField(
-                value = scoreValue,
-                onValueChange = {
-                    if (it.isEmpty() || it == "-" || it.all { char -> char.isDigit() || char == '-' }) scoreValue =
-                        it
-                },
-                placeholder = counter.count.toString(),
-                label = "SET NEW SCORE",
-                accentColor = Color(counter.color),
-                focusRequester = focusRequester,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        val value = scoreValue.toIntOrNull() ?: counter.count
-                        onSet(value)
-                    }
-                )
-            )
+                 value = scoreValue,
+                 onValueChange = {
+                     if (it.isEmpty() || it == "-" || it.all { char -> char.isDigit() || char == '-' }) scoreValue =
+                         it
+                 },
+                 placeholder = counter.count.toString(),
+                 label = AppStrings.COUNTER_DIALOG_SET_SCORE_LABEL,
+                 accentColor = Color(counter.color),
+                 focusRequester = focusRequester,
+                 keyboardOptions = KeyboardOptions(
+                     keyboardType = KeyboardType.Number,
+                     imeAction = ImeAction.Done
+                 ),
+                 keyboardActions = KeyboardActions(
+                     onDone = {
+                         val value = scoreValue.toIntOrNull() ?: counter.count
+                         onSet(value)
+                     }
+                 )
+             )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 OutlinedButton(
-                    onClick = onCancel,
-                    modifier = Modifier.weight(1f),
-                    shape = MaterialTheme.shapes.medium
-                ) {
-                    Text("CANCEL")
-                }
-                Button(
-                    onClick = {
-                        val value = scoreValue.toIntOrNull() ?: counter.count
-                        onSet(value)
-                    },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(counter.color),
-                        contentColor = Color.Black
-                    ),
-                    shape = MaterialTheme.shapes.medium
-                ) {
-                    Text("SAVE", fontWeight = FontWeight.Bold)
-                }
+                     onClick = onCancel,
+                     modifier = Modifier.weight(1f),
+                     shape = MaterialTheme.shapes.medium
+                 ) {
+                     Text(AppStrings.COUNTER_ACTION_CANCEL)
+                 }
+                 Button(
+                     onClick = {
+                         val value = scoreValue.toIntOrNull() ?: counter.count
+                         onSet(value)
+                     },
+                     modifier = Modifier.weight(1f),
+                     colors = ButtonDefaults.buttonColors(
+                         containerColor = Color(counter.color),
+                         contentColor = Color.Black
+                     ),
+                     shape = MaterialTheme.shapes.medium
+                 ) {
+                     Text(AppStrings.COUNTER_ACTION_SAVE, fontWeight = FontWeight.Bold)
+                 }
             }
         }
 

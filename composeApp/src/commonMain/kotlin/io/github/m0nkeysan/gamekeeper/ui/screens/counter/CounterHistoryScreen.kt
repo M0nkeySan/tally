@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.counter
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.activity.compose.BackHandler
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,11 +37,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.ACTION_CANCEL
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.COUNTER_DIALOG_DELETE_MESSAGE
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.COUNTER_HISTORY_DELETED_EMOJI
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.COUNTER_HISTORY_SUBTITLE
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.COUNTER_HISTORY_TITLE
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.DIALOG_DELETE_ALL_TITLE
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,7 +63,7 @@ fun CounterHistoryScreen(
         AlertDialog(
             onDismissRequest = { showDeleteAllDialog = false },
             title = { Text(AppStrings.COUNTER_HISTORY_CD_DELETE) },
-            text = { Text("Are you sure you want to delete all counter change histories? This cannot be undone.") },
+            text = { Text(COUNTER_DIALOG_DELETE_MESSAGE) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -66,12 +72,12 @@ fun CounterHistoryScreen(
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
                 ) {
-                    Text("Delete All")
+                    Text(DIALOG_DELETE_ALL_TITLE)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteAllDialog = false }) {
-                    Text("Cancel")
+                    Text(ACTION_CANCEL)
                 }
             }
         )
@@ -88,9 +94,9 @@ fun CounterHistoryScreen(
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("History")
+                            Text(COUNTER_HISTORY_TITLE)
                             Text(
-                                "⚠\uFE0F History is cleared when you close the app",
+                                COUNTER_HISTORY_SUBTITLE,
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -171,7 +177,7 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "🗑️",
+                    text = COUNTER_HISTORY_DELETED_EMOJI,
                     style = MaterialTheme.typography.headlineSmall
                 )
             }

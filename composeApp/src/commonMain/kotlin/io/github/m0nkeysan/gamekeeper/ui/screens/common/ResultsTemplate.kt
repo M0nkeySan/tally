@@ -109,7 +109,7 @@ fun ResultsTemplate(
             
             // Winner announcement
             Text(
-                text = if (winners.size > 1) "IT'S A TIE!" else "WE HAVE A WINNER!",
+                text = if (winners.size > 1) AppStrings.RESULTS_TITLE_TIE else AppStrings.RESULTS_TITLE_WINNER,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Black,
                 color = GameColors.Primary
