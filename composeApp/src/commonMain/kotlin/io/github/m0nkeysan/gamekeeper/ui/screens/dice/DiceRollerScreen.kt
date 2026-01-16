@@ -67,6 +67,8 @@ import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.gamekeeper.platform.rememberShakeDetector
 import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.CD_BACK
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.CD_SETTINGS
 
 /**
  * Main Dice Roller Screen
@@ -130,13 +132,13 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = onBack) { Icon(GameIcons.ArrowBack, "Back") }
+                    IconButton(onClick = onBack) { Icon(GameIcons.ArrowBack, CD_BACK) }
                 },
                 actions = {
                     IconButton(onClick = { showSettingsDialog = true }) {
                         Icon(
                             GameIcons.Settings,
-                            "Settings"
+                            CD_SETTINGS
                         )
                     }
                 }

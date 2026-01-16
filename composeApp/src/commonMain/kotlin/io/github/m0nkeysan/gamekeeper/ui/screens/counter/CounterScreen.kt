@@ -44,6 +44,8 @@ import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.COUNTER_ADD_LABEL
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.COUNTER_REMOVE_LABEL
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -553,7 +555,7 @@ fun QuickAdjustContent(
                     onClick = { isAddition = false },
                     label = {
                         Text(
-                            "REMOVE (-)",
+                            COUNTER_REMOVE_LABEL,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -569,7 +571,7 @@ fun QuickAdjustContent(
                     onClick = { isAddition = true },
                     label = {
                         Text(
-                            "ADD (+)",
+                            COUNTER_ADD_LABEL,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
