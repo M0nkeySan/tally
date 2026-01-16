@@ -73,7 +73,6 @@ private fun YahtzeeGameEntity.toDomain() = YahtzeeGame(
     players = emptyList(), // Players are resolved separately by ViewModel
     createdAt = createdAt,
     updatedAt = updatedAt,
-    scores = emptyMap(), // Scores are loaded separately
     name = name,
     playerIds = playerIds,
     firstPlayerId = firstPlayerId,

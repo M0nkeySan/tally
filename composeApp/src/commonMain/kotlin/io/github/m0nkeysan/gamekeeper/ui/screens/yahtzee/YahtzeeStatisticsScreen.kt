@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -40,14 +39,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeePlayerStatistics
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.CategoryHeatmap
-import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GlobalCategoryHeatmap
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GameSummaryRow
+import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GlobalCategoryHeatmap
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.StatisticRow
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
@@ -184,8 +181,8 @@ private fun PlayerSelectorDropdown(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                .height(48.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -220,34 +217,30 @@ private fun PlayerSelectorDropdown(
                         text = { 
                             Text(
                                 "⭐ Global Statistics",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 15.sp
+                                fontWeight = FontWeight.Bold
                             )
                         },
                         onClick = {
                             onPlayerSelect(YahtzeeStatisticsViewModel.GLOBAL_ID)
                             onDropdownOpenChange(false)
-                        },
-                        modifier = Modifier.padding(vertical = 8.dp)
+                        }
                     )
                     
                     // Divider
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
                     
                     // Individual players
                     players.forEach { player ->
                         DropdownMenuItem(
                             text = { 
                                 Text(
-                                    player.name,
-                                    fontSize = 15.sp
+                                    player.name
                                 )
                             },
                             onClick = {
                                 onPlayerSelect(player.id)
                                 onDropdownOpenChange(false)
-                            },
-                            modifier = Modifier.padding(vertical = 8.dp)
+                            }
                         )
                     }
                 }

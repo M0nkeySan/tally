@@ -21,14 +21,14 @@ class CounterHistoryStore {
      *
      * @param change The counter change to add
      */
-    suspend fun addChange(change: CounterChange) {
-        _history.value = _history.value + change
+    fun addChange(change: CounterChange) {
+        _history.value += change
     }
 
     /**
      * Delete all changes from history.
      */
-    suspend fun deleteAllChanges() {
+    fun deleteAllChanges() {
         _history.value = emptyList()
     }
 

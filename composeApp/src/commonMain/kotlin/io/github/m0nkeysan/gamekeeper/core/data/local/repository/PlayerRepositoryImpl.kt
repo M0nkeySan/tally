@@ -1,12 +1,10 @@
 package io.github.m0nkeysan.gamekeeper.core.data.local.repository
 
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.PlayerDao
-import io.github.m0nkeysan.gamekeeper.core.data.local.database.PlayerEntity
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.toDomain
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.toEntity
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.gamekeeper.core.model.Player
-import io.github.m0nkeysan.gamekeeper.core.model.playerNamesEqual
 import io.github.m0nkeysan.gamekeeper.core.model.sanitizePlayerName
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -16,19 +14,19 @@ class PlayerRepositoryImpl(
     private val gameQueryHelper: GameQueryHelper? = null
 ) : PlayerRepository {
     
-    override fun getAllPlayers(): Flow<List<io.github.m0nkeysan.gamekeeper.core.model.Player>> {
+    override fun getAllPlayers(): Flow<List<Player>> {
         return playerDao.getAllActivePlayers().map { entities ->
             entities.map { it.toDomain() }
         }
     }
     
-    override fun getAllPlayersIncludingInactive(): Flow<List<io.github.m0nkeysan.gamekeeper.core.model.Player>> {
+    override fun getAllPlayersIncludingInactive(): Flow<List<Player>> {
         return playerDao.getAllPlayersIncludingInactive().map { entities ->
             entities.map { it.toDomain() }
         }
     }
     
-    override suspend fun getPlayerById(id: String): io.github.m0nkeysan.gamekeeper.core.model.Player? {
+    override suspend fun getPlayerById(id: String): Player? {
         return playerDao.getPlayerById(id)?.toDomain()
     }
     
@@ -36,23 +34,23 @@ class PlayerRepositoryImpl(
         return playerDao.getPlayersByIds(playerIds).map { it.toDomain() }
     }
     
-    override suspend fun getPlayerByName(name: String): io.github.m0nkeysan.gamekeeper.core.model.Player? {
+    override suspend fun getPlayerByName(name: String): Player? {
         return playerDao.getPlayerByName(name)?.toDomain()
     }
     
-    override suspend fun insertPlayer(player: io.github.m0nkeysan.gamekeeper.core.model.Player) {
+    override suspend fun insertPlayer(player: Player) {
         playerDao.insertPlayer(player.toEntity())
     }
     
-    override suspend fun updatePlayer(player: io.github.m0nkeysan.gamekeeper.core.model.Player) {
+    override suspend fun updatePlayer(player: Player) {
         playerDao.updatePlayer(player.toEntity())
     }
     
-    override suspend fun deletePlayer(player: io.github.m0nkeysan.gamekeeper.core.model.Player) {
+    override suspend fun deletePlayer(player: Player) {
         playerDao.softDeletePlayer(player.id)
     }
     
-    override suspend fun reactivatePlayer(player: io.github.m0nkeysan.gamekeeper.core.model.Player) {
+    override suspend fun reactivatePlayer(player: Player) {
         playerDao.reactivatePlayer(player.id)
     }
     

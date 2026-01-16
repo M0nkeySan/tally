@@ -12,7 +12,7 @@ class HomeViewModel : ViewModel() {
 
     private val userPreferencesRepository = PlatformRepositories.getUserPreferencesRepository()
 
-    private val _cardOrder = MutableStateFlow<List<String>>(defaultCardOrder)
+    private val _cardOrder = MutableStateFlow(defaultCardOrder)
     val cardOrder: StateFlow<List<String>> = _cardOrder.asStateFlow()
 
     init {

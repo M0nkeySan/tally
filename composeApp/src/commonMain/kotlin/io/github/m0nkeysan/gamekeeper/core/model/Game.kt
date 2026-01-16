@@ -55,7 +55,6 @@ data class YahtzeeGame(
     override val players: List<Player>,
     override val createdAt: Long = 0L,
     override val updatedAt: Long = 0L,
-    val scores: Map<String, List<YahtzeeScore>> = emptyMap(),
     val name: String = "Yahtzee Game",
     val playerIds: String = "",
     val firstPlayerId: String = "",
@@ -65,8 +64,6 @@ data class YahtzeeGame(
 ) : Game() {
     
     val playerCount: Int get() = if (playerIds.isNotEmpty()) playerIds.split(",").size else players.size
-    
-    fun getCurrentPlayer(): Player? = players.find { it.id == currentPlayerId }
     
     fun getPlayerById(playerId: String): Player? = players.find { it.id == playerId }
     

@@ -1,9 +1,21 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
-import androidx.compose.material3.*
+import androidx.activity.compose.BackHandler
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
@@ -11,8 +23,6 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.home.HomeScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.home.HomeViewModel
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionViewModel
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import androidx.activity.compose.BackHandler
 import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 /**
@@ -43,9 +53,9 @@ import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 @Composable
 fun HomeNavigationTemplate(
     onNavigateTo: (String) -> Unit,
+    modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = viewModel { HomeViewModel() },
     playerViewModel: PlayerSelectionViewModel = viewModel { PlayerSelectionViewModel() },
-    modifier: Modifier = Modifier
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
 
@@ -97,7 +107,7 @@ fun HomeNavigationTemplate(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 ) {
-                    Icon(androidx.compose.material.icons.Icons.Default.Add, contentDescription = AppStrings.HOME_CD_FAB_ADD)
+                    Icon(Icons.Default.Add, contentDescription = AppStrings.HOME_CD_FAB_ADD)
                 }
             }
         }

@@ -1,7 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.core.data.local.database
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query

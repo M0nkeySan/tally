@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeStatisticsRepository
 import io.github.m0nkeysan.gamekeeper.core.model.Player
-import io.github.m0nkeysan.gamekeeper.core.model.YahtzeePlayerStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeGlobalStatistics
+import io.github.m0nkeysan.gamekeeper.core.model.YahtzeePlayerStatistics
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -155,16 +155,6 @@ class YahtzeeStatisticsViewModel(
                     )
                 }
             }
-        }
-    }
-    
-    /**
-     * Invalidate statistics cache.
-     * Call this when a game is finished or scores are updated.
-     */
-    fun invalidateCache() {
-        viewModelScope.launch {
-            cache.invalidateAll()
         }
     }
 }

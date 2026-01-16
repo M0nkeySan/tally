@@ -80,7 +80,7 @@ class UserPreferencesRepositoryImpl(
                  if (colonIndex == -1) {
                      Pair(part, "")
                  } else {
-                     Pair(part.substring(0, colonIndex), part.substring(colonIndex + 1))
+                     Pair(part.take(colonIndex), part.substring(colonIndex + 1))
                  }
              }
             

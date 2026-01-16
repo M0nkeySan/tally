@@ -109,8 +109,7 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             FingerSelectorGame(
-                config = config,
-                onBack = onBack
+                config = config
             )
         }
 
@@ -213,7 +212,6 @@ fun SelectionSettingsSheet(
 @Composable
 fun FingerSelectorGame(
     config: SelectionConfig,
-    onBack: () -> Unit
 ) {
     val fingers = remember { mutableStateMapOf<Long, FingerData>() }
     // We use a set for selected to support multiple selected fingers
@@ -295,7 +293,6 @@ fun FingerSelectorGame(
                 } else {
                     // Assign groups
                     val currentFingers = fingers.keys.toList().shuffled()
-                    val groupAssignments = mutableMapOf<Long, FingerData>()
 
                     currentFingers.forEachIndexed { index, id ->
                         val groupId = index % config.count
@@ -385,7 +382,7 @@ fun FingerSelectorGame(
                 var radius = baseRadius
 
                 if (selected.isNotEmpty()) {
-                    if (config.mode == SelectionMode.FINGERS && config.count == 1 && isSelected) {
+                    if (config.mode == SelectionMode.FINGERS && config.count == 1) {
                         // Single Finger: Expand to fill screen
                         drawCircle(
                             color = fingerData.color.copy(alpha = 0.8f),

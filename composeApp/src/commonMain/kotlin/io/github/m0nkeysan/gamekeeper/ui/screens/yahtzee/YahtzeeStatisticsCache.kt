@@ -73,15 +73,6 @@ class YahtzeeStatisticsCache(
         playerStatsCache.clear()
     }
     
-    /**
-     * Invalidate specific player's cached data.
-     * Also invalidates global stats since they depend on all player data.
-     */
-    suspend fun invalidatePlayer(playerId: String) = mutex.withLock {
-        playerStatsCache.remove(playerId)
-        globalStats = null
-    }
-    
     private fun isValid(timestamp: Long): Boolean {
         return (System.currentTimeMillis() - timestamp) < cacheDurationMs
     }

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -23,8 +22,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -42,17 +41,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
-import io.github.m0nkeysan.gamekeeper.core.model.BidStatistic
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
-import io.github.m0nkeysan.gamekeeper.core.model.GameStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.core.model.PlayerRanking
-import io.github.m0nkeysan.gamekeeper.core.model.PlayerStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.RoundStatistic
 import io.github.m0nkeysan.gamekeeper.core.model.TakerPerformance
-import io.github.m0nkeysan.gamekeeper.core.model.TarotGame
 import io.github.m0nkeysan.gamekeeper.core.model.TarotRound
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import kotlin.math.abs
 
 /**
  * Tarot Statistics Screen
@@ -689,10 +685,10 @@ private fun CurrentGamePlayerStatsCard(
                         }
                         
                         // Most successful bid (highest win rate) - use playerGameRounds with RoundStatistic
-                        val bidWinRates = bidsInGame.keys.associate { bid ->
+                        val bidWinRates = bidsInGame.keys.associateWith { bid ->
                             val bidRounds = playerGameRounds.filter { it.bid == bid }
                             val wins = bidRounds.count { it.contractWon }
-                            bid to if (bidRounds.isNotEmpty()) wins.toDouble() / bidRounds.size * 100 else 0.0
+                            if (bidRounds.isNotEmpty()) wins.toDouble() / bidRounds.size * 100 else 0.0
                         }
                         val mostSuccessfulBid = bidWinRates.maxByOrNull { it.value }
                         if (mostSuccessfulBid != null && mostSuccessfulBid.value > 0) {
@@ -793,7 +789,7 @@ private fun CurrentGamePlayerStatsCard(
                         
                         val pointsLost = playerGameRounds.filter { !it.contractWon }.sumOf { it.score }
                         val roundsLost = playerGameRounds.count { !it.contractWon }
-                        val avgPointsLost = if (roundsLost > 0) Math.abs(pointsLost.toDouble() / roundsLost) else 0.0
+                        val avgPointsLost = if (roundsLost > 0) abs(pointsLost.toDouble() / roundsLost) else 0.0
                         
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -846,7 +842,7 @@ private fun CurrentGamePlayerStatsCard(
                         
                         val calledPointsLost = calledGameRounds.filter { !it.contractWon }.sumOf { it.score }
                         val calledRoundsLost = calledGameRounds.count { !it.contractWon }
-                        val avgCalledPointsLost = if (calledRoundsLost > 0) Math.abs(calledPointsLost.toDouble() / calledRoundsLost) else 0.0
+                        val avgCalledPointsLost = if (calledRoundsLost > 0) abs(calledPointsLost.toDouble() / calledRoundsLost) else 0.0
                         
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -870,43 +866,6 @@ private fun CurrentGamePlayerStatsCard(
                     }
                 }
             }
-        }
-    }
-}
-
-
-/**
- * Bid statistic row showing win rate for a bid type
- */
-@Composable
-private fun BidStatisticRow(bid: BidStatistic) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                MaterialTheme.shapes.small
-            )
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            bid.bid.displayName,
-            style = MaterialTheme.typography.bodySmall
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(
-                "%.0f%%".format(bid.winRate),
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                "(${bid.timesPlayed})",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
     }
 }

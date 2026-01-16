@@ -2,7 +2,6 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.player
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.m0nkeysan.gamekeeper.core.data.local.repository.GameQueryHelper
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import kotlinx.coroutines.flow.SharingStarted

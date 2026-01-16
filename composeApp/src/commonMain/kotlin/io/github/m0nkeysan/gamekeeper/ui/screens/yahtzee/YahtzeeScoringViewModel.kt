@@ -55,10 +55,6 @@ class YahtzeeScoringViewModel : ViewModel() {
         }
     }
 
-    fun getPlayerName(index: Int): String {
-        return resolvedPlayers.getOrNull(index)?.name ?: "Unknown"
-    }
-
     fun getPlayers(): List<Player> = resolvedPlayers
 
     fun submitScore(playerId: String, category: YahtzeeCategory, score: Int, moveTurn: Boolean) {
