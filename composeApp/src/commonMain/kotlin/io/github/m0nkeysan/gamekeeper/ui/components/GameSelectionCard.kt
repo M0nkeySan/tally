@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 /**
  * Data class representing a game for display in selection screens.
@@ -85,7 +86,7 @@ fun GameSelectionCard(
             if (game.isFinished) {
                 Icon(
                     imageVector = Icons.Default.EmojiEvents,
-                    contentDescription = "Finished game",
+                    contentDescription = AppStrings.CD_FINISHED_GAME,
                     tint = GameColors.TrophyGold,
                     modifier = Modifier.size(32.dp)
                 )

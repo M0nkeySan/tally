@@ -12,6 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 
 /**
  * Flexible player selector that supports min/max player constraints.
@@ -67,7 +68,7 @@ fun FlexiblePlayerSelector(
                 ) {
                     Icon(
                         Icons.Default.Remove,
-                        contentDescription = "Remove player",
+                        contentDescription = AppStrings.CD_REMOVE_PLAYER,
                         tint = if (selectedPlayers.size > minPlayers) 
                             GameColors.Error 
                         else 
@@ -89,7 +90,7 @@ fun FlexiblePlayerSelector(
                 ) {
                     Icon(
                         Icons.Default.Add,
-                        contentDescription = "Add player",
+                        contentDescription = AppStrings.CD_ADD_PLAYER,
                         tint = if (selectedPlayers.size < maxPlayers) 
                             GameColors.Success 
                         else 

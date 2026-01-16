@@ -187,9 +187,9 @@ fun YahtzeeGameView(
                             )
                             
                             Icon(
-                                imageVector = androidx.compose.material.icons.Icons.Default.ArrowDropDown,
-                                contentDescription = "Select player dropdown"
-                            )
+                                 imageVector = androidx.compose.material.icons.Icons.Default.ArrowDropDown,
+                                 contentDescription = AppStrings.YAHTZEE_SCORING_CD_DROPDOWN
+                             )
                         }
                         
                         val selectedPlayerTotal = remember(selectedPlayerId, state.scores) {

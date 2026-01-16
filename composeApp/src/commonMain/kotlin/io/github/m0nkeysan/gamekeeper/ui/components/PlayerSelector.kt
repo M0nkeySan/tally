@@ -140,7 +140,7 @@ fun PlayerSelectorField(
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.Person, contentDescription = "Player avatar", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Icon(Icons.Default.Person, contentDescription = AppStrings.CD_PLAYER, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Text(
                     text = String.format(AppStrings.PLAYER_SELECTOR_PLACEHOLDER, label), 
@@ -240,7 +240,7 @@ fun PlayerSelectorContent(
                         handleCreateOrReactivate(searchQuery)
                         searchQuery = ""
                     }) {
-                        Icon(Icons.Default.Add, contentDescription = "Add New")
+                        Icon(Icons.Default.Add, contentDescription = AppStrings.CD_ADD)
                     }
                 }
             },
