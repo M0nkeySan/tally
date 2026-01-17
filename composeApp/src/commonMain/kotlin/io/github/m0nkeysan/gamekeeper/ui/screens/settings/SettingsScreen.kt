@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.gamekeeper.GameIcons
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStringsEn
+import io.github.m0nkeysan.gamekeeper.ui.strings.LocalStrings
 
 /**
  * Main settings screen containing all app settings.
@@ -38,7 +38,7 @@ import io.github.m0nkeysan.gamekeeper.ui.strings.AppStringsEn
 fun SettingsScreen(
     onBack: () -> Unit
 ) {
-    val strings = AppStringsEn
+    val strings = LocalStrings.current
     val showAppearanceSettings = remember { mutableStateOf(false) }
     val showLanguageSettings = remember { mutableStateOf(false) }
 

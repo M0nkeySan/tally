@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.domain.model.AppTheme
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStringsEn
+import io.github.m0nkeysan.gamekeeper.ui.strings.LocalStrings
 import kotlinx.coroutines.launch
 
 /**
@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 fun AppearanceSettingsScreen(
     onBack: () -> Unit
 ) {
-    val strings = AppStringsEn
+    val strings = LocalStrings.current
     val scope = rememberCoroutineScope()
     
     // Track selected theme
