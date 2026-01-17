@@ -3,6 +3,7 @@ package io.github.m0nkeysan.gamekeeper.core.data.local.repository
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.UserPreferencesDao
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.UserPreferencesEntity
 import io.github.m0nkeysan.gamekeeper.core.domain.model.AppLocale
+import io.github.m0nkeysan.gamekeeper.core.domain.model.AppTheme
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.UserPreferencesRepository
 import io.github.m0nkeysan.gamekeeper.core.model.DiceConfiguration
 import io.github.m0nkeysan.gamekeeper.core.model.DiceType
@@ -17,6 +18,7 @@ class UserPreferencesRepositoryImpl(
         private const val KEY_CARD_ORDER = "home_card_order"
         private const val KEY_DICE_CONFIG = "dice_configuration"
         private const val KEY_LOCALE = "app_locale"
+        private const val KEY_THEME = "app_theme"
     }
 
     override fun getCardOrder(): Flow<List<String>?> {
@@ -122,5 +124,13 @@ class UserPreferencesRepositoryImpl(
 
     override suspend fun saveLocale(locale: AppLocale) {
         saveString(KEY_LOCALE, locale.code)
+    }
+
+    override fun getTheme(): Flow<AppTheme> =
+        getString(KEY_THEME, AppTheme.SYSTEM_DEFAULT.code)
+            .map { AppTheme.fromCode(it) }
+
+    override suspend fun saveTheme(theme: AppTheme) {
+        saveString(KEY_THEME, theme.code)
     }
 }

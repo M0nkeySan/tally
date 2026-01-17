@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -13,19 +15,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.ui.strings.AppStringsEn
 
 /**
- * Main settings screen that contains language and other settings.
+ * Main settings screen containing all app settings.
+ *
+ * Sections:
+ * - Appearance (Theme: Light, Dark, System Default)
+ * - Language (Language: English, French, System Default)
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,12 +39,16 @@ fun SettingsScreen(
     onBack: () -> Unit
 ) {
     val strings = AppStringsEn
+    val showAppearanceSettings = remember { mutableStateOf(false) }
     val showLanguageSettings = remember { mutableStateOf(false) }
-    var currentShowLanguageSettings by showLanguageSettings
 
-    if (currentShowLanguageSettings) {
+    if (showAppearanceSettings.value) {
+        AppearanceSettingsScreen(
+            onBack = { showAppearanceSettings.value = false }
+        )
+    } else if (showLanguageSettings.value) {
         LanguageSettingsScreen(
-            onBack = { currentShowLanguageSettings = false }
+            onBack = { showLanguageSettings.value = false }
         )
     } else {
         Scaffold(
@@ -53,19 +63,55 @@ fun SettingsScreen(
                 )
             }
         ) { padding ->
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
             ) {
-                // Language Settings Option
-                SettingsOption(
-                    title = strings.SETTINGS_LANGUAGE,
-                    onClick = { currentShowLanguageSettings = true }
-                )
+                // Appearance Section
+                item {
+                    SettingsSectionHeader("Appearance")
+                }
+                item {
+                    SettingsOption(
+                        title = "Theme",
+                        onClick = { showAppearanceSettings.value = true }
+                    )
+                }
+                item {
+                    Divider(modifier = Modifier.padding(vertical = 8.dp))
+                }
+
+                // Language Section
+                item {
+                    SettingsSectionHeader("Language")
+                }
+                item {
+                    SettingsOption(
+                        title = strings.SETTINGS_LANGUAGE,
+                        onClick = { showLanguageSettings.value = true }
+                    )
+                }
             }
         }
     }
+}
+
+/**
+ * Settings section header.
+ */
+@Composable
+private fun SettingsSectionHeader(title: String) {
+    Text(
+        text = title,
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+    )
 }
 
 /**

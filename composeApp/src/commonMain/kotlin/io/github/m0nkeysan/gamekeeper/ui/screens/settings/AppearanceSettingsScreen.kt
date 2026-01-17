@@ -22,42 +22,41 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.GameIcons
-import io.github.m0nkeysan.gamekeeper.core.domain.model.AppLocale
+import io.github.m0nkeysan.gamekeeper.core.domain.model.AppTheme
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
-import io.github.m0nkeysan.gamekeeper.ui.strings.LocalStrings
+import io.github.m0nkeysan.gamekeeper.ui.strings.AppStringsEn
 import kotlinx.coroutines.launch
 
 /**
- * Language settings screen for selecting app language (locale).
+ * Appearance settings screen for selecting app theme.
  *
  * Features:
- * - Select from: English, French, or System Default
+ * - Select from: Light, Dark, or System Default
  * - Changes apply immediately with UI recomposition
  * - Selection is persisted to user preferences
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LanguageSettingsScreen(
+fun AppearanceSettingsScreen(
     onBack: () -> Unit
 ) {
-    val strings = LocalStrings.current
-    val localeManager = remember { PlatformRepositories.getLocaleManager() }
+    val strings = AppStringsEn
     val scope = rememberCoroutineScope()
     
-    // Track selected locale
-    val selectedLocale = remember { mutableStateOf(AppLocale.ENGLISH) }
+    // Track selected theme
+    val selectedTheme = remember { mutableStateOf(AppTheme.SYSTEM_DEFAULT) }
     
-    // Load current locale preference on screen enter
+    // Load current theme preference on screen enter
     LaunchedEffect(Unit) {
-        localeManager.getActiveLocale().collect { locale ->
-            selectedLocale.value = locale
+        PlatformRepositories.getUserPreferencesRepository().getTheme().collect { theme ->
+            selectedTheme.value = theme
         }
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(strings.SETTINGS_LANGUAGE) },
+                title = { Text("Theme") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(GameIcons.ArrowBack, contentDescription = strings.ACTION_BACK)
@@ -71,15 +70,15 @@ fun LanguageSettingsScreen(
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            // Language options
-            AppLocale.entries.forEach { locale ->
-                LanguageOption(
-                    locale = locale,
-                    isSelected = selectedLocale.value == locale,
+            // Theme options
+            AppTheme.entries.forEach { theme ->
+                ThemeOption(
+                    theme = theme,
+                    isSelected = selectedTheme.value == theme,
                     onClick = {
-                        selectedLocale.value = locale
+                        selectedTheme.value = theme
                         scope.launch {
-                            localeManager.setLocale(locale)
+                            PlatformRepositories.getUserPreferencesRepository().saveTheme(theme)
                         }
                     }
                 )
@@ -89,11 +88,11 @@ fun LanguageSettingsScreen(
 }
 
 /**
- * Single language option with radio button.
+ * Single theme option with radio button.
  */
 @Composable
-private fun LanguageOption(
-    locale: AppLocale,
+private fun ThemeOption(
+    theme: AppTheme,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -110,7 +109,7 @@ private fun LanguageOption(
             modifier = Modifier.padding(end = 16.dp)
         )
         Text(
-            text = locale.displayName,
+            text = theme.displayName,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.weight(1f)
         )
