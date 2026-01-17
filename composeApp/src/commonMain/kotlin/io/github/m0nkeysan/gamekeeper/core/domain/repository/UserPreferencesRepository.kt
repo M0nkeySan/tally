@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.core.domain.repository
 
+import io.github.m0nkeysan.gamekeeper.core.domain.model.AppLocale
 import io.github.m0nkeysan.gamekeeper.core.model.DiceConfiguration
 import kotlinx.coroutines.flow.Flow
 
@@ -12,4 +13,7 @@ interface UserPreferencesRepository {
     
     fun getDiceConfiguration(): Flow<DiceConfiguration>
     suspend fun saveDiceConfiguration(config: DiceConfiguration)
+
+    fun getLocale(): Flow<AppLocale>
+    suspend fun saveLocale(locale: AppLocale)
 }

@@ -2,6 +2,7 @@ package io.github.m0nkeysan.gamekeeper.core.data.local.repository
 
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.UserPreferencesDao
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.UserPreferencesEntity
+import io.github.m0nkeysan.gamekeeper.core.domain.model.AppLocale
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.UserPreferencesRepository
 import io.github.m0nkeysan.gamekeeper.core.model.DiceConfiguration
 import io.github.m0nkeysan.gamekeeper.core.model.DiceType
@@ -15,6 +16,7 @@ class UserPreferencesRepositoryImpl(
     companion object {
         private const val KEY_CARD_ORDER = "home_card_order"
         private const val KEY_DICE_CONFIG = "dice_configuration"
+        private const val KEY_LOCALE = "app_locale"
     }
 
     override fun getCardOrder(): Flow<List<String>?> {
@@ -73,44 +75,52 @@ class UserPreferencesRepositoryImpl(
     }
     
      private fun parseDiceConfiguration(json: String): DiceConfiguration {
-         return try {
-             val cleaned = json.removeSurrounding("{", "}")
-             val parts = cleaned.split(",").associate { part ->
-                 val colonIndex = part.indexOf(":")
-                 if (colonIndex == -1) {
-                     Pair(part, "")
-                 } else {
-                     Pair(part.take(colonIndex), part.substring(colonIndex + 1))
+          return try {
+              val cleaned = json.removeSurrounding("{", "}")
+              val parts = cleaned.split(",").associate { part ->
+                  val colonIndex = part.indexOf(":")
+                  if (colonIndex == -1) {
+                      Pair(part, "")
+                  } else {
+                      Pair(part.take(colonIndex), part.substring(colonIndex + 1))
+                  }
+              }
+             
+             val numberOfDice = parts["numberOfDice"]?.toIntOrNull() ?: 1
+             val diceType = when {
+                 parts["diceType"]?.startsWith("CUSTOM:") == true -> {
+                     val sides = parts["diceType"]?.removePrefix("CUSTOM:")?.toIntOrNull() ?: 6
+                     DiceType.Custom(sides)
                  }
+                 else -> DiceType.fromSides(when (parts["diceType"]) {
+                     "D4" -> 4
+                     "D6" -> 6
+                     "D8" -> 8
+                     "D10" -> 10
+                     "D12" -> 12
+                     "D20" -> 20
+                     else -> 6
+                 })
              }
-            
-            val numberOfDice = parts["numberOfDice"]?.toIntOrNull() ?: 1
-            val diceType = when {
-                parts["diceType"]?.startsWith("CUSTOM:") == true -> {
-                    val sides = parts["diceType"]?.removePrefix("CUSTOM:")?.toIntOrNull() ?: 6
-                    DiceType.Custom(sides)
-                }
-                else -> DiceType.fromSides(when (parts["diceType"]) {
-                    "D4" -> 4
-                    "D6" -> 6
-                    "D8" -> 8
-                    "D10" -> 10
-                    "D12" -> 12
-                    "D20" -> 20
-                    else -> 6
-                })
-            }
-            val animationEnabled = parts["animation"]?.toBoolean() ?: true
-            val shakeEnabled = parts["shake"]?.toBoolean() ?: false
-            
-            DiceConfiguration(
-                numberOfDice = numberOfDice,
-                diceType = diceType,
-                animationEnabled = animationEnabled,
-                shakeEnabled = shakeEnabled
-            )
-        } catch (e: Exception) {
-            DiceConfiguration()
-        }
+             val animationEnabled = parts["animation"]?.toBoolean() ?: true
+             val shakeEnabled = parts["shake"]?.toBoolean() ?: false
+             
+             DiceConfiguration(
+                 numberOfDice = numberOfDice,
+                 diceType = diceType,
+                 animationEnabled = animationEnabled,
+                 shakeEnabled = shakeEnabled
+             )
+         } catch (e: Exception) {
+             DiceConfiguration()
+         }
+     }
+
+    override fun getLocale(): Flow<AppLocale> =
+        getString(KEY_LOCALE, AppLocale.SYSTEM_DEFAULT.code)
+            .map { AppLocale.fromCode(it) }
+
+    override suspend fun saveLocale(locale: AppLocale) {
+        saveString(KEY_LOCALE, locale.code)
     }
 }

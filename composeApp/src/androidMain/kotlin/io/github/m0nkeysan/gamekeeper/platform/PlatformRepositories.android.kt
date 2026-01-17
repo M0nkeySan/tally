@@ -19,6 +19,7 @@ import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotStatisticsRepo
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.UserPreferencesRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeStatisticsRepository
+import io.github.m0nkeysan.gamekeeper.ui.strings.LocaleManager
 
 actual object PlatformRepositories {
     private var database: GameDatabase? = null
@@ -33,6 +34,7 @@ actual object PlatformRepositories {
     private var yahtzeeStatisticsRepository: YahtzeeStatisticsRepository? = null
     private var gameQueryHelper: GameQueryHelper? = null
     private var historyStore: CounterHistoryStore? = null
+    private var localeManager: LocaleManager? = null
 
     fun init(context: Context) {
         if (database == null) {
@@ -114,6 +116,12 @@ actual object PlatformRepositories {
     actual fun getGameQueryHelper(): GameQueryHelper {
         return gameQueryHelper ?: GameQueryHelper(getDatabase().tarotDao(), getDatabase().yahtzeeDao()).also {
             gameQueryHelper = it
+        }
+    }
+
+    actual fun getLocaleManager(): LocaleManager {
+        return localeManager ?: LocaleManager(getUserPreferencesRepository()).also {
+            localeManager = it
         }
     }
 }

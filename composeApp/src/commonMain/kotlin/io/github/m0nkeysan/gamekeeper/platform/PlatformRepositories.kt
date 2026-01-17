@@ -8,6 +8,7 @@ import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.TarotStatisticsRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeStatisticsRepository
+import io.github.m0nkeysan.gamekeeper.ui.strings.LocaleManager
 
 expect object PlatformRepositories {
     fun getPlayerRepository(): PlayerRepository
@@ -18,4 +19,5 @@ expect object PlatformRepositories {
     fun getYahtzeeRepository(): YahtzeeRepository
     fun getYahtzeeStatisticsRepository(): YahtzeeStatisticsRepository
     fun getGameQueryHelper(): GameQueryHelper
+    fun getLocaleManager(): LocaleManager
 }
