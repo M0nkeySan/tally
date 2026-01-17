@@ -16,13 +16,11 @@ import io.github.m0nkeysan.gamekeeper.ui.theme.AppTheme
 fun App() {
     // Setup locale manager and observe active locale changes
     val localeManager = remember { PlatformRepositories.getLocaleManager() }
-    val activeLocale = localeManager.getActiveLocale().collectAsState(initial = null)
+    val activeLocale = localeManager.getActiveLocale().collectAsState(initial = AppLocale.ENGLISH)
     
     // Get the appropriate StringProvider based on active locale
-    val strings = remember(activeLocale.value) {
-        activeLocale.value?.let { localeManager.getStringProvider(it) } 
-            ?: localeManager.getStringProvider(AppLocale.ENGLISH)
-    }
+    // This will recompose whenever activeLocale changes
+    val strings = localeManager.getStringProvider(activeLocale.value)
     
     // Observe theme preference
     val userPreferencesRepository = remember { PlatformRepositories.getUserPreferencesRepository() }
