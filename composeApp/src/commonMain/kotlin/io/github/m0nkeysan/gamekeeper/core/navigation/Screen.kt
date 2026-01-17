@@ -32,4 +32,5 @@ sealed class Screen(val route: String) {
      data object History : Screen("history")
      data object Players : Screen("players")
      data object DiceRoller : Screen("dice_roller")
+     data object Settings : Screen("settings")
 }

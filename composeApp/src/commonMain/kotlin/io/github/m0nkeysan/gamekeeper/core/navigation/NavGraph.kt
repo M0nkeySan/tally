@@ -25,6 +25,7 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeScoringScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeSummaryScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeStatisticsScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterViewModel
+import io.github.m0nkeysan.gamekeeper.ui.screens.settings.SettingsScreen
 
 @Composable
 fun GameNavGraph() {
@@ -264,10 +265,16 @@ fun GameNavGraph() {
             )
         }
 
-        composable(route = Screen.DiceRoller.route) {
-            DiceRollerScreen(
-                onBack = { navController.popBackStack() }
-            )
-        }
-    }
+         composable(route = Screen.DiceRoller.route) {
+             DiceRollerScreen(
+                 onBack = { navController.popBackStack() }
+             )
+         }
+
+         composable(route = Screen.Settings.route) {
+             SettingsScreen(
+                 onBack = { navController.popBackStack() }
+             )
+         }
+     }
 }

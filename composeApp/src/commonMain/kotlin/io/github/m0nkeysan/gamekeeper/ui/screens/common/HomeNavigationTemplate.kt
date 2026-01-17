@@ -23,15 +23,17 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.home.HomeScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.home.HomeViewModel
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionViewModel
+import io.github.m0nkeysan.gamekeeper.ui.screens.settings.SettingsScreen
 import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import io.github.m0nkeysan.gamekeeper.core.navigation.Screen
 
 /**
- * Navigation template for the home screen with bottom bar for switching between Games and Players tabs.
- * Only appears on the home screen to manage navigation between game selection and player management.
+ * Navigation template for the home screen with bottom bar for switching between Games, Players, and Settings tabs.
+ * Only appears on the home screen to manage navigation between game selection, player management, and settings.
  *
  * Features:
- * - Bottom navigation bar with Games and Players tabs (icons only, no labels)
- * - Conditional rendering of HomeScreen (Games tab) and PlayerSelectionScreen (Players tab)
+ * - Bottom navigation bar with Games, Players, and Settings tabs (icons only, no labels)
+ * - Conditional rendering of HomeScreen (Games tab), PlayerSelectionScreen (Players tab), and SettingsScreen (Settings tab)
  * - Active tab highlighted in primary color
  * - Persists selected tab state during session
  *
@@ -59,8 +61,8 @@ fun HomeNavigationTemplate(
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
 
-    // Handle system back gesture - go to home screen when on players tab
-    BackHandler(enabled = selectedTab == 1) {
+    // Handle system back gesture - go to home screen when on players or settings tab
+    BackHandler(enabled = selectedTab == 1 || selectedTab == 2) {
         selectedTab = 0
     }
 
@@ -98,6 +100,19 @@ fun HomeNavigationTemplate(
                     },
                     alwaysShowLabel = false
                 )
+
+                // Settings Tab
+                NavigationBarItem(
+                    selected = selectedTab == 2,
+                    onClick = { selectedTab = 2 },
+                    icon = {
+                        Icon(
+                            imageVector = GameIcons.Settings,
+                            contentDescription = AppStrings.CD_SETTINGS
+                        )
+                    },
+                    alwaysShowLabel = false
+                )
             }
         },
         floatingActionButton = {
@@ -113,22 +128,27 @@ fun HomeNavigationTemplate(
         }
     ) { paddingValues ->
         when (selectedTab) {
-            0 -> {
-                HomeScreen(
-                    onNavigateTo = onNavigateTo,
-                    viewModel = homeViewModel,
-                    modifier = Modifier
-                )
-            }
-            1 -> {
-                PlayerSelectionScreen(
-                    onBack = { /* No-op: staying in tab */ },
-                    viewModel = playerViewModel,
-                    showBackButton = false,
-                    triggerAddDialog = showAddPlayerDialog,
-                    onAddDialogHandled = { showAddPlayerDialog = false }
-                )
-            }
-        }
+             0 -> {
+                 HomeScreen(
+                     onNavigateTo = onNavigateTo,
+                     viewModel = homeViewModel,
+                     modifier = Modifier
+                 )
+             }
+             1 -> {
+                 PlayerSelectionScreen(
+                     onBack = { /* No-op: staying in tab */ },
+                     viewModel = playerViewModel,
+                     showBackButton = false,
+                     triggerAddDialog = showAddPlayerDialog,
+                     onAddDialogHandled = { showAddPlayerDialog = false }
+                 )
+             }
+             2 -> {
+                 SettingsScreen(
+                     onBack = { /* No-op: staying in tab */ }
+                 )
+             }
+         }
     }
 }
