@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,15 +45,11 @@ fun LanguageSettingsScreen(
     val localeManager = remember { PlatformRepositories.getLocaleManager() }
     val scope = rememberCoroutineScope()
     
-    // Track selected locale
-    val selectedLocale = remember { mutableStateOf(AppLocale.ENGLISH) }
+    // Observe active locale changes to update UI in real-time
+    val activeLocale = localeManager.getActiveLocale().collectAsState(initial = AppLocale.ENGLISH)
     
-    // Load current locale preference on screen enter
-    LaunchedEffect(Unit) {
-        localeManager.getActiveLocale().collect { locale ->
-            selectedLocale.value = locale
-        }
-    }
+    // Track selected locale (synced with active locale)
+    val selectedLocale = remember(activeLocale.value) { mutableStateOf(activeLocale.value) }
 
     Scaffold(
         topBar = {
