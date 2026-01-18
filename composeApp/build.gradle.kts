@@ -79,3 +79,15 @@ dependencies {
 
     debugImplementation(compose.uiTooling)
 }
+
+// Ensure resource accessor generation completes before Kotlin compilation
+afterEvaluate {
+    val generateResourcesTask = tasks.findByName("generateResourceAccessorsForCommonMain")
+    if (generateResourcesTask != null) {
+        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+            if (name.contains("Android") || name.contains("Jvm")) {
+                dependsOn(generateResourcesTask)
+            }
+        }
+    }
+}
