@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Home Screen -->
+    <string name="home_title">GameKeeper</string>
+    <string name="home_cd_games">Jeux</string>
+    <string name="home_cd_players">Joueurs</string>
+    <string name="home_cd_finger_selector">Jeu Sélecteur de doigts</string>
+    <string name="home_title_finger_selector">Sélecteur de doigts</string>
+    <string name="home_desc_finger_selector">Sélectionnez aléatoirement un joueur de départ avec plusieurs doigts</string>
+    <string name="home_cd_counter">Jeu Compteur</string>
+    <string name="home_cd_dice">Jeu Lanceur de dés</string>
+
+    <!-- Counter Screen -->
+    <string name="counter_title">Compteur</string>
+    <string name="counter_settings">Paramètres</string>
+    <string name="counter_reinitialize_all">Réinitialiser tout</string>
+    <string name="counter_delete_everything">Supprimer tout</string>
+    <string name="counter_empty_state">Appuyez sur + pour ajouter un compteur</string>
+    <string name="counter_remove_label">SUPPRIMER (-)</string>
+    <string name="counter_add_label">AJOUTER (+)</string>
+    <string name="counter_cd_add">Ajouter un compteur</string>
+    <string name="counter_cd_history">Historique</string>
+    <string name="counter_cd_reset_all">Réinitialiser tous les compteurs</string>
+    <string name="counter_cd_delete_all">Supprimer tous les compteurs</string>
+    <string name="counter_dialog_settings_title">Paramètres du compteur</string>
+    <string name="counter_dialog_settings_label">Mettre en évidence le joueur avec :</string>
+    <string name="counter_settings_option_most">📈 Plus de points</string>
+    <string name="counter_settings_option_least">📉 Moins de points</string>
+    <string name="counter_action_close">FERMER</string>
+    <string name="counter_dialog_reset_title">Réinitialiser tous les compteurs</string>
+    <string name="counter_dialog_reset_message">Êtes-vous sûr de vouloir réinitialiser tous les compteurs à 0 ?</string>
+    <string name="counter_dialog_delete_title">Supprimer tout</string>
+    <string name="counter_dialog_delete_message">Êtes-vous sûr de vouloir supprimer tous les compteurs ? Cette action est irréversible.</string>
+    <string name="counter_action_delete">Supprimer tout</string>
+    <string name="counter_dialog_adjust_label">AJUSTEMENT MANUEL</string>
+    <string name="counter_dialog_adjust_placeholder">0</string>
+    <string name="counter_dialog_set_score_label">DÉFINIR NOUVEAU SCORE</string>
+    <string name="counter_cd_decrease">Diminuer</string>
+    <string name="counter_cd_increase">Augmenter</string>
+    <string name="counter_leader_display_format">%s %s</string>
+    <string name="counter_history_title">Historique</string>
+    <string name="counter_history_subtitle">⚠️ L\'historique est effacé à la fermeture de l\'application</string>
+    <string name="counter_history_cd_delete">Supprimer tous les historiques</string>
+    <string name="counter_history_empty">Aucun changement de compteur pour le moment</string>
+    <string name="counter_history_deleted_emoji">🗑️</string>
+    <string name="counter_history_deleted_text">Supprimé</string>
+    <string name="counter_edit_title">Modifier le compteur</string>
+    <string name="counter_edit_cd_delete">Supprimer</string>
+    <string name="counter_edit_action_save">ENREGISTRER LES MODIFICATIONS</string>
+    <string name="counter_edit_label_color">COULEUR D\'ACCENTUATION</string>
+    <string name="counter_edit_field_name">NOM</string>
+    <string name="counter_edit_placeholder_name">Nom du joueur</string>
+    <string name="counter_edit_field_value">VALEUR</string>
+    <string name="counter_edit_placeholder_value">0</string>
+    <string name="counter_format_player_count">%dJ</string>
+
+    <!-- Player Selection Screen -->
+    <string name="players_no_players">Aucun joueur trouvé. Ajoutez-en un !</string>
+    <string name="players_count_format">Joueurs (%d/%d)</string>
+
+    <!-- Common Actions -->
+    <string name="action_delete">Supprimer</string>
+    <string name="action_delete_all">Tout supprimer</string>
+    <string name="action_cancel">Annuler</string>
+    <string name="action_save">Enregistrer</string>
+    <string name="action_back">Retour</string>
+    <string name="action_create">Créer</string>
+    <string name="action_reset">Réinitialiser</string>
+    <string name="action_retry">Réessayer</string>
+    <string name="action_ok">OK</string>
+
+    <!-- Loading and States -->
+    <string name="state_loading">Chargement...</string>
+    <string name="state_loading_games">Chargement des jeux...</string>
+
+    <!-- Game Specific -->
+    <string name="game_tarot">Tarot</string>
+    <string name="game_yahtzee">Yahtzee</string>
+    <string name="game_finger_selector">Sélecteur de doigts</string>
+    <string name="game_counter">Compteur</string>
+    <string name="game_dice">Lanceur de dés</string>
+
+    <!-- Descriptions -->
+    <string name="desc_tarot">Inscrivez les points des parties de Tarot pour 3, 4 ou 5 joueurs</string>
+    <string name="desc_yahtzee">Complétez la feuille de pointage Yahtzee avec bonus automatiques</string>
+    <string name="desc_counter">Compteur simple pour n\'importe quel jeu de société</string>
+    <string name="desc_dice">Lancez des dés personnalisés pour n\'importe quel jeu de société</string>
+
+    <!-- Game Operations -->
+    <string name="game_delete_all_title">Supprimer tous les jeux</string>
+    <string name="game_delete_all_confirm">Êtes-vous sûr de vouloir supprimer tous les jeux ? Cette action est irréversible.</string>
+    <string name="game_create">Créer un jeu</string>
+
+    <!-- Common Content Descriptions (Accessibility) -->
+    <string name="cd_back">Retour</string>
+    <string name="cd_settings">Paramètres</string>
+    <string name="cd_add">Ajouter</string>
+    <string name="cd_menu">Menu</string>
+    <string name="cd_add_player">Ajouter un joueur</string>
+    <string name="cd_toggle_collapse">Réduire</string>
+    <string name="cd_toggle_expand">Développer</string>
+    <string name="cd_player">Avatar du joueur</string>
+    <string name="cd_game_icon">Icône du jeu</string>
+    <string name="cd_yahtzee_icon">Yahtzee</string>
+    <string name="cd_tarot_icon">Tarot</string>
+    <string name="cd_finished_game">Jeu terminé</string>
+    <string name="cd_remove_player">Supprimer le joueur</string>
+
+    <!-- Common Dialogs -->
+    <string name="dialog_delete_all_title">Tout supprimer</string>
+    <string name="dialog_delete_counter_title">Supprimer le compteur</string>
+    <string name="dialog_delete_counter_message">Êtes-vous sûr de vouloir supprimer ce compteur ? Cette action est irréversible.</string>
+    <string name="dialog_deactivate_player">Désactiver</string>
+    <string name="dialog_delete_player">Supprimer</string>
+
+    <!-- Tarot - Statistics -->
+    <string name="tarot_stats_tab_current_game">Partie actuelle</string>
+    <string name="tarot_stats_tab_player_stats">Statistiques des joueurs</string>
+    <string name="tarot_stats_label_called">Appelé</string>
+    <string name="tarot_stats_label_as_taker">En tant que preneur</string>
+    <string name="tarot_stats_label_win_rate">Taux de victoire</string>
+    <string name="tarot_stats_label_favorite_bid">Enchère préférée :</string>
+    <string name="tarot_stats_label_most_successful">Plus réussi :</string>
+    <string name="tarot_stats_section_performance_details">Détails des performances</string>
+    <string name="tarot_stats_label_avg_bouts">Moy. Bouts/Manche</string>
+    <string name="tarot_stats_label_avg_won">Moy. Remportée</string>
+    <string name="tarot_stats_label_avg_lost">Moy. Perdue</string>
+    <string name="tarot_stats_section_called_performance">Performance appelée</string>
+    <string name="tarot_stats_error_title">Oups ! Quelque chose s\'est mal passé</string>
+
+    <!-- Tarot - Scoring -->
+    <string name="tarot_scoring_screen_title">Pointage de la partie</string>
+    <string name="tarot_scoring_cd_add_round">Ajouter une manche</string>
+    <string name="tarot_scoring_section_scores">Points</string>
+    <string name="tarot_scoring_section_history">Historique</string>
+    <string name="tarot_scoring_empty_rounds">Aucune manche pour le moment</string>
+    <string name="tarot_scoring_round_title">Manche %1$d - %2$s</string>
+    <string name="tarot_scoring_round_details">%1$s • %2$d bouts • %3$d pts</string>
+    <string name="tarot_scoring_announce_petit_au_bout">Petit au bout</string>
+    <string name="tarot_scoring_announce_poignee">Poignée %s</string>
+    <string name="tarot_scoring_announce_chelem">Chelem : %s</string>
+    <string name="tarot_scoring_game_title">Parties de Tarot</string>
+
+    <!-- Tarot - Round Addition -->
+    <string name="tarot_round_action_save">ENREGISTRER LA MANCHE</string>
+    <string name="tarot_round_section_players">JOUEURS</string>
+    <string name="tarot_round_label_taker">PRENEUR</string>
+    <string name="tarot_round_label_called_player">JOUEUR APPELÉ</string>
+    <string name="tarot_round_section_bid">ENCHÈRE</string>
+    <string name="tarot_round_section_bouts">BOUTS</string>
+    <string name="tarot_round_label_bouts">%d Bouts</string>
+    <string name="tarot_round_section_points">POINTS</string>
+    <string name="tarot_round_field_attacker_score">Attaquant</string>
+    <string name="tarot_round_label_defense">DÉFENSE</string>
+    <string name="tarot_round_contract_won">CONTRAT GAGNÉ (+%d pts)</string>
+    <string name="tarot_round_contract_lost">CONTRAT PERDU (%d pts)</string>
+    <string name="tarot_round_section_announces">ANNONCES</string>
+    <string name="tarot_round_announce_petit_au_bout">Petit au bout</string>
+    <string name="tarot_round_announce_poignee">Poignée</string>
+    <string name="tarot_round_label_chelem">Chelem</string>
+
+    <!-- Yahtzee - Scoring -->
+    <string name="yahtzee_scoring_cd_previous">Joueur précédent</string>
+    <string name="yahtzee_scoring_turn_indicator">●</string>
+    <string name="yahtzee_scoring_fallback_name">Inconnu</string>
+    <string name="yahtzee_scoring_cd_dropdown">Liste déroulante de sélection du joueur</string>
+    <string name="yahtzee_scoring_total_format">Total : %d</string>
+    <string name="yahtzee_scoring_cd_next">Joueur suivant</string>
+    <string name="yahtzee_scoring_turn_label">À votre tour</string>
+    <string name="yahtzee_scoring_viewing_label">Consultation de la feuille de %s</string>
+    <string name="yahtzee_section_upper">Section supérieure</string>
+    <string name="yahtzee_section_lower">Section inférieure</string>
+    <string name="yahtzee_dialog_select_score">Sélectionnez le score pour %s</string>
+    <string name="yahtzee_dialog_enter_score">Entrez le score pour %s</string>
+    <string name="yahtzee_placeholder_dice_sum">Somme des dés</string>
+    <string name="yahtzee_error_score_too_high">Le score ne peut pas dépasser 30</string>
+    <string name="yahtzee_label_upper_bonus">Bonus supérieur (63+)</string>
+    <string name="yahtzee_label_bonus_needed">-%d</string>
+    <string name="yahtzee_label_bonus_earned">+35</string>
+    <string name="yahtzee_label_total_score">SCORE TOTAL</string>
+    <string name="yahtzee_game_title">Parties de Yahtzee</string>
+    <string name="yahtzee_new_game_title">Nouvelle partie de Yahtzee</string>
+    <string name="yahtzee_game_name_default">Partie de Yahtzee</string>
+
+    <!-- Dice Roller -->
+    <string name="dice_display_format">%1$d × d%2$d</string>
+    <string name="dice_rolls_format">Lancers : %s</string>
+    <string name="dice_total_format">Total : %d</string>
+    <string name="dice_instruction_tap">Appuyez n\'importe où pour lancer. Appui long pour les paramètres.</string>
+    <string name="dice_dialog_title">Paramètres des dés</string>
+    <string name="dice_field_number">Nombre de dés</string>
+    <string name="dice_field_type">Type de dé</string>
+    <string name="dice_field_custom">Dé personnalisé</string>
+    <string name="dice_error_not_valid">Doit être un nombre valide</string>
+    <string name="dice_error_min_sides">Le minimum est %d faces</string>
+    <string name="dice_error_max_sides">Le maximum est %d faces</string>
+    <string name="dice_placeholder_custom">2-99</string>
+    <string name="dice_setting_animation">Animation</string>
+    <string name="dice_setting_shake">Secouer pour lancer</string>
+    <string name="dice_screen_title">Dés</string>
+
+    <!-- Finger Selector -->
+    <string name="finger_selector_dialog_title">Paramètres du sélecteur</string>
+    <string name="finger_selector_section_mode">Mode</string>
+    <string name="finger_selector_mode_fingers">Doigts</string>
+    <string name="finger_selector_mode_groups">Groupes</string>
+    <string name="finger_selector_cd_touch">Touchez ici pour placer le doigt</string>
+    <string name="finger_selector_instruction_place">Placez vos doigts</string>
+    <string name="finger_selector_instruction_wait">Attendre l\'attribution des groupes</string>
+    <string name="finger_selector_slider_value_format">%s : %d</string>
+    <string name="finger_selector_label_fingers">Nombre de doigts</string>
+    <string name="finger_selector_label_groups">Nombre de groupes</string>
+
+    <!-- Game Selection & Creation -->
+    <string name="game_selection_cd_statistics">Statistiques</string>
+    <string name="game_selection_cd_create">Créer un nouveau jeu</string>
+    <string name="game_selection_cd_delete_all">Supprimer tous les jeux</string>
+    <string name="game_selection_loading">Chargement des jeux...</string>
+    <string name="game_selection_empty">Aucun jeu pour le moment. Créez-en un !</string>
+    <string name="game_selection_cd_delete_game">Supprimer le jeu</string>
+    <string name="game_creation_action_cancel">Annuler</string>
+    <string name="game_creation_action_create">Créer un jeu</string>
+    <string name="game_creation_new_tarot_title">Nouvelle partie de Tarot</string>
+    <string name="game_creation_tarot_name_default">Partie de Tarot</string>
+    <string name="game_creation_field_game_name">Nom du jeu</string>
+    <string name="game_deletion_dialog_tarot_title">Supprimer le jeu</string>
+    <string name="game_deletion_dialog_tarot_message">Êtes-vous sûr de vouloir supprimer le jeu \'%s\' ? Toutes les manches seront également supprimées.</string>
+    <string name="game_deletion_dialog_yahtzee_title">Supprimer le jeu</string>
+    <string name="game_deletion_dialog_yahtzee_message">Êtes-vous sûr de vouloir supprimer \'%s\' ? Tous les scores seront perdus.</string>
+
+    <!-- Player Management -->
+    <string name="player_section_players">Joueurs</string>
+    <string name="player_section_deactivated">Désactivés</string>
+    <string name="player_field_name">NOM</string>
+    <string name="player_placeholder_name">Nom du joueur</string>
+    <string name="player_error_name_taken">Ce nom est déjà pris</string>
+    <string name="player_label_color">COULEUR DE L\'AVATAR</string>
+    <string name="player_cd_edit">Modifier</string>
+    <string name="player_dialog_new_title">Nouveau joueur</string>
+    <string name="player_dialog_edit_title">Modifier le joueur</string>
+    <string name="player_selector_placeholder">Sélectionner %s</string>
+    <string name="player_selector_change">MODIFIER</string>
+    <string name="player_selector_select">SÉLECTIONNER</string>
+    <string name="player_selector_dialog_title">Choisir un joueur</string>
+    <string name="player_selector_search_placeholder">Rechercher ou ajouter...</string>
+    <string name="player_reactivate_format">Réactiver \"%s\"</string>
+    <string name="player_create_format">Créer \"%s\"</string>
+
+    <!-- Results -->
+    <string name="results_action_back">RETOUR À L\'ACCUEIL</string>
+    <string name="results_title_tie">C\'EST UNE ÉGALITÉ !</string>
+    <string name="results_title_winner">NOUS AVONS UN GAGNANT !</string>
+    <string name="results_section_scores">SCORES FINAUX</string>
+
+    <!-- Yahtzee - Statistics Screen -->
+    <string name="yahtzee_stats_global">⭐ Statistiques globales</string>
+    <string name="yahtzee_stats_select_player">Sélectionner un joueur</string>
+    <string name="yahtzee_stats_no_data">Aucune donnée disponible</string>
+
+    <!-- Player Statistics Sections -->
+    <string name="yahtzee_stats_overall_performance">📊 Performances globales</string>
+    <string name="yahtzee_stats_score_box">📈 Performances de la boîte de pointage</string>
+    <string name="yahtzee_stats_recent_games">🎮 Parties récentes</string>
+
+    <!-- Player Statistics Labels -->
+    <string name="yahtzee_stats_total_games">Nombre total de parties</string>
+    <string name="yahtzee_stats_finished_games">Parties terminées</string>
+    <string name="yahtzee_stats_wins">Victoires</string>
+    <string name="yahtzee_stats_average_score">Score moyen</string>
+    <string name="yahtzee_stats_personal_best">Meilleur résultat personnel</string>
+    <string name="yahtzee_stats_total_yahtzees">Total de Yahtzees</string>
+    <string name="yahtzee_stats_yahtzee_rate">Taux de Yahtzee</string>
+    <string name="yahtzee_stats_upper_section">Section supérieure</string>
+    <string name="yahtzee_stats_lower_section">Section inférieure</string>
+    <string name="yahtzee_stats_bonus_rate">Taux de bonus</string>
+
+    <!-- Global Statistics Sections -->
+    <string name="yahtzee_stats_global_overall">📊 Statistiques globales</string>
+    <string name="yahtzee_stats_global_fun_facts">🎲 Faits amusants</string>
+    <string name="yahtzee_stats_global_leaderboards">🏆 Classements</string>
+    <string name="yahtzee_stats_global_category">📈 Performances par catégorie</string>
+
+    <!-- Global Statistics Labels -->
+    <string name="yahtzee_stats_global_finished">Parties terminées</string>
+    <string name="yahtzee_stats_global_total_players">Nombre total de joueurs</string>
+    <string name="yahtzee_stats_global_most_active">Joueur le plus actif</string>
+    <string name="yahtzee_stats_global_high_score">Meilleur score de tous les temps</string>
+    <string name="yahtzee_stats_global_average_score">Score moyen</string>
+    <string name="yahtzee_stats_global_total_yahtzees">Total de Yahtzees</string>
+    <string name="yahtzee_stats_global_yahtzee_rate">Taux de Yahtzee</string>
+    <string name="yahtzee_stats_global_most_yahtzees_game">Plus de Yahtzees (partie unique)</string>
+    <string name="yahtzee_stats_global_upper_bonus">Taux de bonus supérieur</string>
+    <string name="yahtzee_stats_global_dice_rolls">Lancers de dés estimés</string>
+    <string name="yahtzee_stats_global_points_scored">Points total marqués</string>
+    <string name="yahtzee_stats_global_avg_players">Moy. joueurs/partie</string>
+    <string name="yahtzee_stats_global_luckiest">Joueur le plus chanceux</string>
+    <string name="yahtzee_stats_global_most_consistent">Plus constant</string>
+    <string name="yahtzee_stats_global_most_scored">Catégorie la plus marquée</string>
+    <string name="yahtzee_stats_global_least_scored">Catégorie la moins marquée</string>
+    <string name="yahtzee_stats_global_best_avg">Meilleure catégorie moyenne</string>
+
+    <!-- Leaderboards -->
+    <string name="yahtzee_stats_leaderboard_most_wins">Plus de victoires</string>
+    <string name="yahtzee_stats_leaderboard_highest_scores">Meilleurs scores</string>
+    <string name="yahtzee_stats_leaderboard_most_yahtzees">Plus de Yahtzees</string>
+
+    <!-- Category Heatmap Sections -->
+    <string name="yahtzee_stats_heatmap_upper">SECTION SUPÉRIEURE</string>
+    <string name="yahtzee_stats_heatmap_lower">SECTION INFÉRIEURE</string>
+
+    <!-- Format Strings -->
+    <string name="yahtzee_format_wins">%1$s (%2$s)</string>
+    <string name="yahtzee_format_yahtzee_rate">%s par partie</string>
+    <string name="yahtzee_format_active_player">%1$s (%2$d parties)</string>
+    <string name="yahtzee_format_high_score">%1$d par %2$s</string>
+    <string name="yahtzee_format_most_yahtzees">%1$d par %2$s</string>
+    <string name="yahtzee_format_player_count">%d joueurs</string>
+    <string name="yahtzee_format_luckiest_player">%1$s (%2$s/partie)</string>
+    <string name="yahtzee_format_category_avg">%1$s (%2$s)</string>
+    <string name="yahtzee_format_winner_score">Gagnant : %s</string>
+
+    <!-- Rank Indicators -->
+    <string name="yahtzee_rank_first">🥇</string>
+    <string name="yahtzee_rank_second">🥈</string>
+    <string name="yahtzee_rank_third">🥉</string>
+    <string name="yahtzee_rank_format">#%d</string>
+    <string name="yahtzee_rank_first_place">🏆 1er</string>
+    <string name="yahtzee_rank_second_place">🥈 2e</string>
+    <string name="yahtzee_rank_third_place">🥉 3e</string>
+
+    <!-- Error Messages -->
+    <string name="yahtzee_error_load_failed">Impossible de charger : %s</string>
+    <string name="yahtzee_error_stats_failed">Impossible de charger les statistiques : %s</string>
+    <string name="yahtzee_error_global_failed">Impossible de charger les statistiques globales : %s</string>
+
+    <!-- Color Picker -->
+    <string name="color_picker_cd">Couleur personnalisée</string>
+    <string name="color_picker_dialog_title">Choisir une couleur</string>
+
+    <!-- Error Handling -->
+    <string name="error_unknown">Inconnu</string>
+
+    <!-- Validation Messages -->
+    <string name="error_min_fingers">Besoin d\'au moins %d doigts</string>
+    <string name="error_player_count_range">Le nombre de joueurs doit être entre %d et %d</string>
+    <string name="player_count_display">%1$d joueur%2$s</string>
+
+    <!-- Settings -->
+    <string name="settings_language">Langue</string>
+
+    <!-- Plurals -->
+    <plurals name="player_count">
+        <item quantity="one">%d joueur</item>
+        <item quantity="other">%d joueurs</item>
+    </plurals>
+
+    <plurals name="game_count">
+        <item quantity="one">%d jeu</item>
+        <item quantity="other">%d jeux</item>
+    </plurals>
+</resources>
