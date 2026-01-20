@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Home Screen -->
+    <string name="home_title">GameKeeper</string>
+    <string name="home_cd_games">Games</string>
+    <string name="home_cd_players">Players</string>
+    <string name="home_cd_finger_selector">Finger Selector game</string>
+    <string name="home_title_finger_selector">Finger Selector</string>
+    <string name="home_desc_finger_selector">Randomly select a starting player with multi-touch</string>
+    <string name="home_cd_counter">Counter game</string>
+    <string name="home_cd_dice">Dice Roller game</string>
+</resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Player Selection Screen -->
+    <string name="players_no_players">Aucun joueur trouvé. Ajoutez-en un !</string>
+    <string name="players_count_format">Joueurs (%d/%d)</string>
+
+    <!-- Player Management -->
+    <string name="player_section_players">Joueurs</string>
+    <string name="player_section_deactivated">Désactivés</string>
+    <string name="player_field_name">NOM</string>
+    <string name="player_placeholder_name">Nom du joueur</string>
+    <string name="player_error_name_taken">Ce nom est déjà pris</string>
+    <string name="player_label_color">COULEUR DE L'AVATAR</string>
+    <string name="player_cd_edit">Modifier</string>
+    <string name="player_dialog_new_title">Nouveau joueur</string>
+    <string name="player_dialog_edit_title">Modifier le joueur</string>
+    <string name="player_selector_placeholder">Sélectionner %s</string>
+    <string name="player_selector_change">MODIFIER</string>
+    <string name="player_selector_select">SÉLECTIONNER</string>
+    <string name="player_selector_dialog_title">Choisir un joueur</string>
+    <string name="player_selector_search_placeholder">Rechercher ou ajouter...</string>
+    <string name="player_reactivate_format">Réactiver \"%s\"</string>
+    <string name="player_create_format">Créer \"%s\"</string>
+
+    <!-- Player Management Messages -->
+    <string name="player_reactivated_message">Le joueur \'%s\' a été réactivé</string>
+    <string name="dialog_deactivate_title">Désactiver le joueur ?</string>
+    <string name="dialog_delete_title">Supprimer le joueur ?</string>
+    <string name="dialog_deactivate_message">Lié à %d partie(s). Le joueur sera désactivé pour préserver l'historique.</string>
+    <string name="dialog_delete_message">Ce joueur n'a pas d'historique. Il sera définitivement supprimé.</string>
+    <string name="player_deactivated_message">Le joueur \'%s\' a été désactivé</string>
+    <string name="player_deleted_message">Le joueur \'%s\' a été supprimé</string>
+</resources>

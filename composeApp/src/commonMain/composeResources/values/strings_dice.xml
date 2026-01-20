@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dice Roller -->
+    <string name="dice_display_format">%1$d × d%2$d</string>
+    <string name="dice_rolls_format">Rolls: %s</string>
+    <string name="dice_total_format">Total: %d</string>
+    <string name="dice_instruction_tap">Tap anywhere to roll. Long-press the box for settings.</string>
+    <string name="dice_dialog_title">Dice Settings</string>
+    <string name="dice_field_number">Number of Dice</string>
+    <string name="dice_field_type">Dice Type</string>
+    <string name="dice_field_custom">Custom Dice</string>
+    <string name="dice_error_not_valid">Must be a valid number</string>
+    <string name="dice_error_min_sides">Minimum is %d sides</string>
+    <string name="dice_error_max_sides">Maximum is %d sides</string>
+    <string name="dice_placeholder_custom">2-99</string>
+    <string name="dice_setting_animation">Animation</string>
+    <string name="dice_setting_shake">Shake to Roll</string>
+    <string name="dice_screen_title">Dice</string>
+</resources>

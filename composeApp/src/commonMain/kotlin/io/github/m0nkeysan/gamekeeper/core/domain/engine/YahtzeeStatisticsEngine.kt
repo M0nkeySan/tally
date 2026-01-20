@@ -325,6 +325,7 @@ object YahtzeeStatisticsEngine {
         val mostScoredCategory = categoryStats.entries.maxByOrNull { it.value.totalTimesScored }?.key
         val leastScoredCategory = categoryStats.entries.minByOrNull { it.value.totalTimesScored }?.key
         val highestCategoryAverage = categoryStats.entries
+            .filter { it.key != YahtzeeCategory.YAHTZEE }
             .maxByOrNull { it.value.average }
             ?.let { CategoryRecord(it.key, it.value.average) }
         

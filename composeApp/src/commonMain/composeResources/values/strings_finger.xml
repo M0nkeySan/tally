@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Finger Selector -->
+    <string name="finger_selector_dialog_title">Selector Settings</string>
+    <string name="finger_selector_section_mode">Mode</string>
+    <string name="finger_selector_mode_fingers">Fingers</string>
+    <string name="finger_selector_mode_groups">Groups</string>
+    <string name="finger_selector_cd_touch">Touch here to place finger</string>
+    <string name="finger_selector_instruction_place">Place your fingers</string>
+    <string name="finger_selector_instruction_wait">Wait for group assignment</string>
+    <string name="finger_selector_slider_value_format">%s: %d</string>
+    <string name="finger_selector_label_fingers">Number of Fingers</string>
+    <string name="finger_selector_label_groups">Number of Groups</string>
+</resources>

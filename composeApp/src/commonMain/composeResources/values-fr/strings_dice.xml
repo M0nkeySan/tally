@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dice Roller -->
+    <string name="dice_display_format">%1$d × d%2$d</string>
+    <string name="dice_rolls_format">Lancers : %s</string>
+    <string name="dice_total_format">Total : %d</string>
+    <string name="dice_instruction_tap">Appuyez n'importe où pour lancer. Appui long pour les paramètres.</string>
+    <string name="dice_dialog_title">Paramètres des dés</string>
+    <string name="dice_field_number">Nombre de dés</string>
+    <string name="dice_field_type">Type de dé</string>
+    <string name="dice_field_custom">Dé personnalisé</string>
+    <string name="dice_error_not_valid">Doit être un nombre valide</string>
+    <string name="dice_error_min_sides">Le minimum est %d faces</string>
+    <string name="dice_error_max_sides">Le maximum est %d faces</string>
+    <string name="dice_placeholder_custom">2-99</string>
+    <string name="dice_setting_animation">Animation</string>
+    <string name="dice_setting_shake">Secouer pour lancer</string>
+    <string name="dice_screen_title">Dés</string>
+</resources>

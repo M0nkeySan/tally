@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tarot - Statistics -->
+    <string name="tarot_stats_tab_current_game">Partie actuelle</string>
+    <string name="tarot_stats_tab_player_stats">Statistiques des joueurs</string>
+    <string name="tarot_stats_label_called">Appelé</string>
+    <string name="tarot_stats_label_as_taker">Prise</string>
+    <string name="tarot_stats_label_win_rate">Taux de victoire</string>
+    <string name="tarot_stats_label_favorite_bid">Enchère préférée :</string>
+    <string name="tarot_stats_label_most_successful">Plus réussi :</string>
+    <string name="tarot_stats_section_performance_details">Détails des performances</string>
+    <string name="tarot_stats_label_avg_bouts">Moy. Bouts/Manche</string>
+    <string name="tarot_stats_label_avg_won">Moy. Remportée</string>
+    <string name="tarot_stats_label_avg_lost">Moy. Perdue</string>
+    <string name="tarot_stats_section_called_performance">Performance appelée</string>
+    <string name="tarot_stats_error_title">Oups ! Quelque chose s'est mal passé</string>
+
+    <!-- Tarot - Scoring -->
+    <string name="tarot_scoring_screen_title">Pointage de la partie</string>
+    <string name="tarot_scoring_cd_add_round">Ajouter une manche</string>
+    <string name="tarot_scoring_section_scores">Points</string>
+    <string name="tarot_scoring_section_history">Historique</string>
+    <string name="tarot_scoring_empty_rounds">Aucune manche pour le moment</string>
+    <string name="tarot_scoring_round_title">Manche %1$d - %2$s</string>
+    <string name="tarot_scoring_round_details">%1$s • %2$d bouts • %3$d pts</string>
+    <string name="tarot_scoring_announce_petit_au_bout">Petit au bout</string>
+    <string name="tarot_scoring_announce_poignee">Poignée %s</string>
+    <string name="tarot_scoring_announce_chelem">Chelem : %s</string>
+    <string name="tarot_scoring_game_title">Parties de Tarot</string>
+
+    <!-- Tarot - Round Addition -->
+    <string name="tarot_round_action_save">ENREGISTRER LA MANCHE</string>
+    <string name="tarot_round_section_players">JOUEURS</string>
+    <string name="tarot_round_label_taker">PRENEUR</string>
+    <string name="tarot_round_label_called_player">JOUEUR APPELÉ</string>
+    <string name="tarot_round_section_bid">ENCHÈRE</string>
+    <string name="tarot_round_section_bouts">BOUTS</string>
+    <string name="tarot_round_label_bouts">%d Bouts</string>
+    <string name="tarot_round_section_points">POINTS</string>
+    <string name="tarot_round_field_attacker_score">Attaquant</string>
+    <string name="tarot_round_label_defense">DÉFENSE</string>
+    <string name="tarot_round_contract_won">CONTRAT GAGNÉ (+%d pts)</string>
+    <string name="tarot_round_contract_lost">CONTRAT PERDU (%d pts)</string>
+    <string name="tarot_round_section_announces">ANNONCES</string>
+    <string name="tarot_round_announce_petit_au_bout">Petit au bout</string>
+    <string name="tarot_round_announce_poignee">Poignée</string>
+    <string name="tarot_round_label_chelem">Chelem</string>
+</resources>

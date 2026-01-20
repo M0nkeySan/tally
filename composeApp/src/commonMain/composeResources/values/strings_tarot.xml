@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tarot - Statistics -->
+    <string name="tarot_stats_tab_current_game">Current Game</string>
+    <string name="tarot_stats_tab_player_stats">Player Stats</string>
+    <string name="tarot_stats_label_called">Called</string>
+    <string name="tarot_stats_label_as_taker">As Taker</string>
+    <string name="tarot_stats_label_win_rate">Win Rate</string>
+    <string name="tarot_stats_label_favorite_bid">Favorite Bid:</string>
+    <string name="tarot_stats_label_most_successful">Most Successful:</string>
+    <string name="tarot_stats_section_performance_details">Performance Details</string>
+    <string name="tarot_stats_label_avg_bouts">Avg Bouts/Round</string>
+    <string name="tarot_stats_label_avg_won">Avg Won</string>
+    <string name="tarot_stats_label_avg_lost">Avg Lost</string>
+    <string name="tarot_stats_section_called_performance">Called Performance</string>
+    <string name="tarot_stats_error_title">Oops! Something went wrong</string>
+
+    <!-- Tarot - Scoring -->
+    <string name="tarot_scoring_screen_title">Game Scoring</string>
+    <string name="tarot_scoring_cd_add_round">Add Round</string>
+    <string name="tarot_scoring_section_scores">Scores</string>
+    <string name="tarot_scoring_section_history">History</string>
+    <string name="tarot_scoring_empty_rounds">No rounds yet</string>
+    <string name="tarot_scoring_round_title">Round %1$d - %2$s</string>
+    <string name="tarot_scoring_round_details">%1$s • %2$d bouts • %3$d pts</string>
+    <string name="tarot_scoring_announce_petit_au_bout">Petit au bout</string>
+    <string name="tarot_scoring_announce_poignee">Poignée %s</string>
+    <string name="tarot_scoring_announce_chelem">Chelem: %s</string>
+    <string name="tarot_scoring_game_title">Tarot Games</string>
+
+    <!-- Tarot - Round Addition -->
+    <string name="tarot_round_action_save">SAVE ROUND</string>
+    <string name="tarot_round_section_players">PLAYERS</string>
+    <string name="tarot_round_label_taker">TAKER</string>
+    <string name="tarot_round_label_called_player">CALLED PLAYER</string>
+    <string name="tarot_round_section_bid">BID</string>
+    <string name="tarot_round_section_bouts">BOUTS</string>
+    <string name="tarot_round_label_bouts">%d Bouts</string>
+    <string name="tarot_round_section_points">POINTS</string>
+    <string name="tarot_round_field_attacker_score">Attacker</string>
+    <string name="tarot_round_label_defense">DEFENSE</string>
+    <string name="tarot_round_contract_won">CONTRACT WON (+%d pts)</string>
+    <string name="tarot_round_contract_lost">CONTRACT LOST (%d pts)</string>
+    <string name="tarot_round_section_announces">ANNOUNCES</string>
+    <string name="tarot_round_announce_petit_au_bout">Petit au bout</string>
+    <string name="tarot_round_announce_poignee">Poignée</string>
+    <string name="tarot_round_label_chelem">Chelem</string>
+</resources>

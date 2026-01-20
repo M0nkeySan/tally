@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Error Handling -->
+    <string name="error_unknown">Inconnu</string>
+
+    <!-- Validation Messages -->
+    <string name="error_min_fingers">Besoin d'au moins %d doigts</string>
+    <string name="error_player_count_range">Le nombre de joueurs doit être entre %d et %d</string>
+    <string name="player_count_display">%1$d joueur%2$s</string>
+</resources>

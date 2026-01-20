@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Game Specific -->
+    <string name="game_tarot">Tarot</string>
+    <string name="game_yahtzee">Yahtzee</string>
+    <string name="game_finger_selector">Sélecteur de doigts</string>
+    <string name="game_counter">Compteur</string>
+    <string name="game_dice">Lanceur de dés</string>
+
+    <!-- Descriptions -->
+    <string name="desc_tarot">Inscrivez les points des parties de Tarot pour 3, 4 ou 5 joueurs</string>
+    <string name="desc_yahtzee">Complétez la feuille de pointage Yahtzee avec bonus automatiques</string>
+    <string name="desc_counter">Compteur simple pour n'importe quel jeu de société</string>
+    <string name="desc_dice">Lancez des dés personnalisés pour n'importe quel jeu de société</string>
+
+    <!-- Game Operations -->
+    <string name="game_delete_all_title">Supprimer toutes les parties</string>
+    <string name="game_delete_all_confirm">Êtes-vous sûr de vouloir supprimer toutes les parties ? Cette action est irréversible.</string>
+    <string name="game_create">Créer une partie</string>
+
+    <!-- Game Selection & Creation -->
+    <string name="game_selection_cd_statistics">Statistiques</string>
+    <string name="game_selection_cd_create">Créer une nouvelle partie</string>
+    <string name="game_selection_cd_delete_all">Supprimer toutes les parties</string>
+    <string name="game_selection_loading">Chargement des parties...</string>
+    <string name="game_selection_empty">Aucune partie pour le moment. Créez-en une !</string>
+    <string name="game_selection_cd_delete_game">Supprimer la partie</string>
+    <string name="game_creation_action_cancel">Annuler</string>
+    <string name="game_creation_action_create">Créer une partie</string>
+    <string name="game_creation_new_tarot_title">Nouvelle partie de Tarot</string>
+    <string name="game_creation_tarot_name_default">Partie de Tarot</string>
+    <string name="game_creation_field_game_name">Nom de la partie</string>
+    <string name="game_deletion_dialog_tarot_title">Supprimer la partie</string>
+    <string name="game_deletion_dialog_tarot_message">Êtes-vous sûr de vouloir supprimer la partie '%s' ? Toutes les manches seront également supprimées.</string>
+    <string name="game_deletion_dialog_yahtzee_title">Supprimer la partie</string>
+    <string name="game_deletion_dialog_yahtzee_message">Êtes-vous sûr de vouloir supprimer '%s' ? Tous les scores seront perdus.</string>
+</resources>

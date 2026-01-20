@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Counter Screen -->
+    <string name="counter_title">Compteur</string>
+    <string name="counter_settings">Paramètres</string>
+    <string name="counter_reinitialize_all">Réinitialiser tout</string>
+    <string name="counter_delete_everything">Supprimer tout</string>
+    <string name="counter_empty_state">Appuyez sur + pour ajouter un compteur</string>
+    <string name="counter_remove_label">RETIRER (-)</string>
+    <string name="counter_add_label">AJOUTER (+)</string>
+    <string name="counter_cd_add">Ajouter un compteur</string>
+    <string name="counter_cd_history">Historique</string>
+    <string name="counter_cd_reset_all">Réinitialiser tous les compteurs</string>
+    <string name="counter_cd_delete_all">Supprimer tous les compteurs</string>
+    <string name="counter_dialog_settings_title">Paramètres du compteur</string>
+    <string name="counter_dialog_settings_label">Mettre en évidence le joueur avec :</string>
+    <string name="counter_settings_option_most">📈 Plus de points</string>
+    <string name="counter_settings_option_least">📉 Moins de points</string>
+    <string name="counter_action_close">FERMER</string>
+    <string name="counter_dialog_reset_title">Réinitialiser tous les compteurs</string>
+    <string name="counter_dialog_reset_message">Êtes-vous sûr de vouloir réinitialiser tous les compteurs à 0 ?</string>
+    <string name="counter_dialog_delete_title">Supprimer tout</string>
+    <string name="counter_dialog_delete_message">Êtes-vous sûr de vouloir supprimer tous les compteurs ? Cette action est irréversible.</string>
+    <string name="counter_action_delete">Supprimer tout</string>
+    <string name="counter_dialog_adjust_label">AJUSTEMENT MANUEL</string>
+    <string name="counter_dialog_adjust_placeholder">0</string>
+    <string name="counter_dialog_set_score_label">DÉFINIR NOUVEAU SCORE</string>
+    <string name="counter_cd_decrease">Diminuer</string>
+    <string name="counter_cd_increase">Augmenter</string>
+    <string name="counter_leader_display_format">%s %s</string>
+    <string name="counter_history_title">Historique</string>
+    <string name="counter_history_subtitle">⚠️ L'historique est effacé à la fermeture de l'application</string>
+    <string name="counter_history_cd_delete">Supprimer tous les historiques</string>
+    <string name="counter_history_empty">Aucun changement pour le moment</string>
+    <string name="counter_history_deleted_emoji">🗑️</string>
+    <string name="counter_history_deleted_text">Supprimé</string>
+    <string name="counter_edit_title">Modifier le compteur</string>
+    <string name="counter_edit_cd_delete">Supprimer</string>
+    <string name="counter_edit_action_save">ENREGISTRER LES MODIFICATIONS</string>
+    <string name="counter_edit_label_color">COULEUR D'ACCENTUATION</string>
+    <string name="counter_edit_field_name">NOM</string>
+    <string name="counter_edit_placeholder_name">Nom du joueur</string>
+    <string name="counter_edit_field_value">VALEUR</string>
+    <string name="counter_edit_placeholder_value">0</string>
+    <string name="counter_format_player_count">%dJ</string>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Game Specific -->
+    <string name="game_tarot">Tarot</string>
+    <string name="game_yahtzee">Yahtzee</string>
+    <string name="game_finger_selector">Finger Selector</string>
+    <string name="game_counter">Counter</string>
+    <string name="game_dice">Dice Roller</string>
+
+    <!-- Descriptions -->
+    <string name="desc_tarot">Score Tarot games for 3, 4, or 5 players</string>
+    <string name="desc_yahtzee">Complete Yahtzee scorecard with automatic bonuses</string>
+    <string name="desc_counter">Simple counter for any board game</string>
+    <string name="desc_dice">Roll customizable dice for any board game</string>
+
+    <!-- Game Operations -->
+    <string name="game_delete_all_title">Delete All Games</string>
+    <string name="game_delete_all_confirm">Are you sure you want to delete all games? This cannot be undone.</string>
+    <string name="game_create">Create Game</string>
+
+    <!-- Game Selection & Creation -->
+    <string name="game_selection_cd_statistics">Statistics</string>
+    <string name="game_selection_cd_create">Create new game</string>
+    <string name="game_selection_cd_delete_all">Delete all games</string>
+    <string name="game_selection_loading">Loading games...</string>
+    <string name="game_selection_empty">No games yet. Create one!</string>
+    <string name="game_selection_cd_delete_game">Delete game</string>
+    <string name="game_creation_action_cancel">Cancel</string>
+    <string name="game_creation_action_create">Create Game</string>
+    <string name="game_creation_new_tarot_title">New Tarot Game</string>
+    <string name="game_creation_tarot_name_default">Tarot Game</string>
+    <string name="game_creation_field_game_name">Game Name</string>
+    <string name="game_deletion_dialog_tarot_title">Delete Game</string>
+    <string name="game_deletion_dialog_tarot_message">Are you sure you want to delete the game \'%s\'? This will also delete all rounds in this game.</string>
+    <string name="game_deletion_dialog_yahtzee_title">Delete Game</string>
+    <string name="game_deletion_dialog_yahtzee_message">Are you sure you want to delete \'%s\'? All scores will be lost.</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Results -->
+    <string name="results_action_back">RETOUR À L'ACCUEIL</string>
+    <string name="results_title_tie">C'EST UNE ÉGALITÉ !</string>
+    <string name="results_title_winner">NOUS AVONS UN GAGNANT !</string>
+    <string name="results_section_scores">SCORES FINAUX</string>
+</resources>

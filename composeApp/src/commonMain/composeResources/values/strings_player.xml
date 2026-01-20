@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Player Selection Screen -->
+    <string name="players_no_players">No players found. Add one!</string>
+    <string name="players_count_format">Players (%d/%d)</string>
+
+    <!-- Player Management -->
+    <string name="player_section_players">Players</string>
+    <string name="player_section_deactivated">Deactivated</string>
+    <string name="player_field_name">NAME</string>
+    <string name="player_placeholder_name">Player Name</string>
+    <string name="player_error_name_taken">This name is already taken</string>
+    <string name="player_label_color">AVATAR COLOR</string>
+    <string name="player_cd_edit">Edit</string>
+    <string name="player_dialog_new_title">New Player</string>
+    <string name="player_dialog_edit_title">Edit Player</string>
+    <string name="player_selector_placeholder">Select %s</string>
+    <string name="player_selector_change">CHANGE</string>
+    <string name="player_selector_select">SELECT</string>
+    <string name="player_selector_dialog_title">Choose Player</string>
+    <string name="player_selector_search_placeholder">Search or add new...</string>
+    <string name="player_reactivate_format">Reactivate \"%s\"</string>
+    <string name="player_create_format">Create \"%s\"</string>
+
+    <!-- Player Management Messages -->
+    <string name="player_reactivated_message">Player \'%s\' has been reactivated</string>
+    <string name="dialog_deactivate_title">Deactivate Player?</string>
+    <string name="dialog_delete_title">Delete Player?</string>
+    <string name="dialog_deactivate_message">Linked to %d game(s). Player will be deactivated to preserve game history.</string>
+    <string name="dialog_delete_message">This player has no game history. They will be permanently deleted.</string>
+    <string name="player_deactivated_message">Player \'%s\' deactivated</string>
+    <string name="player_deleted_message">Player \'%s\' deleted</string>
+</resources>

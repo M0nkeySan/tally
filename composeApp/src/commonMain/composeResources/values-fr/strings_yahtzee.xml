@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Yahtzee - Scoring -->
+    <string name="yahtzee_scoring_cd_previous">Joueur précédent</string>
+    <string name="yahtzee_scoring_turn_indicator">●</string>
+    <string name="yahtzee_scoring_fallback_name">Inconnu</string>
+    <string name="yahtzee_scoring_cd_dropdown">Liste déroulante de sélection du joueur</string>
+    <string name="yahtzee_scoring_total_format">Total : %d</string>
+    <string name="yahtzee_scoring_cd_next">Joueur suivant</string>
+    <string name="yahtzee_scoring_turn_label">À votre tour</string>
+    <string name="yahtzee_scoring_viewing_label">Consultation de la feuille de %s</string>
+    <string name="yahtzee_section_upper">Section supérieure</string>
+    <string name="yahtzee_section_lower">Section inférieure</string>
+    <string name="yahtzee_dialog_select_score">Sélectionnez le score pour %s</string>
+    <string name="yahtzee_dialog_enter_score">Entrez le score pour %s</string>
+    <string name="yahtzee_placeholder_dice_sum">Somme des dés</string>
+    <string name="yahtzee_error_score_too_high">Le score ne peut pas dépasser 30</string>
+    <string name="yahtzee_label_upper_bonus">Bonus supérieur (63+)</string>
+    <string name="yahtzee_label_bonus_needed">-%d</string>
+    <string name="yahtzee_label_bonus_earned">+35</string>
+    <string name="yahtzee_label_total_score">SCORE TOTAL</string>
+    <string name="yahtzee_game_title">Parties de Yahtzee</string>
+    <string name="yahtzee_new_game_title">Nouvelle partie de Yahtzee</string>
+    <string name="yahtzee_game_name_default">Partie de Yahtzee</string>
+
+    <!-- Yahtzee - Statistics Screen -->
+    <string name="yahtzee_stats_global">⭐ Statistiques globales</string>
+    <string name="yahtzee_stats_select_player">Sélectionner un joueur</string>
+    <string name="yahtzee_stats_no_data">Aucune donnée disponible</string>
+
+    <!-- Player Statistics Sections -->
+    <string name="yahtzee_stats_overall_performance">📊 Performances globales</string>
+    <string name="yahtzee_stats_score_box">📈 Performances par section</string>
+    <string name="yahtzee_stats_recent_games">🎮 Parties récentes</string>
+
+    <!-- Player Statistics Labels -->
+    <string name="yahtzee_stats_total_games">Nombre total de parties</string>
+    <string name="yahtzee_stats_finished_games">Parties terminées</string>
+    <string name="yahtzee_stats_wins">Victoires</string>
+    <string name="yahtzee_stats_average_score">Score moyen</string>
+    <string name="yahtzee_stats_personal_best">Meilleur résultat personnel</string>
+    <string name="yahtzee_stats_total_yahtzees">Total de Yahtzees</string>
+    <string name="yahtzee_stats_yahtzee_rate">Taux de Yahtzee</string>
+    <string name="yahtzee_stats_upper_section">Supérieure</string>
+    <string name="yahtzee_stats_lower_section">Inférieure</string>
+    <string name="yahtzee_stats_bonus_rate">Taux de bonus</string>
+
+    <!-- Global Statistics Sections -->
+    <string name="yahtzee_stats_global_overall">📊 Statistiques globales</string>
+    <string name="yahtzee_stats_global_fun_facts">🎲 Faits amusants</string>
+    <string name="yahtzee_stats_global_leaderboards">🏆 Classements</string>
+    <string name="yahtzee_stats_global_category">📈 Performances par catégorie</string>
+
+    <!-- Global Statistics Labels -->
+    <string name="yahtzee_stats_global_finished">Parties terminées</string>
+    <string name="yahtzee_stats_global_total_players">Nombre total de joueurs</string>
+    <string name="yahtzee_stats_global_most_active">Joueur le plus actif</string>
+    <string name="yahtzee_stats_global_high_score">Meilleur score de tous les temps</string>
+    <string name="yahtzee_stats_global_average_score">Score moyen</string>
+    <string name="yahtzee_stats_global_total_yahtzees">Total de Yahtzees</string>
+    <string name="yahtzee_stats_global_yahtzee_rate">Taux de Yahtzee</string>
+    <string name="yahtzee_stats_global_most_yahtzees_game">Plus de Yahtzees (partie unique)</string>
+    <string name="yahtzee_stats_global_upper_bonus">Taux de bonus supérieur</string>
+    <string name="yahtzee_stats_global_dice_rolls">Lancers de dés estimés</string>
+    <string name="yahtzee_stats_global_points_scored">Points total marqués</string>
+    <string name="yahtzee_stats_global_avg_players">Moy. joueurs/partie</string>
+    <string name="yahtzee_stats_global_luckiest">Joueur le plus chanceux</string>
+    <string name="yahtzee_stats_global_most_consistent">Plus constant</string>
+    <string name="yahtzee_stats_global_most_scored">Catégorie la plus marquée</string>
+    <string name="yahtzee_stats_global_least_scored">Catégorie la moins marquée</string>
+    <string name="yahtzee_stats_global_best_avg">Meilleure catégorie moyenne</string>
+
+    <!-- Leaderboards -->
+    <string name="yahtzee_stats_leaderboard_most_wins">Plus de victoires</string>
+    <string name="yahtzee_stats_leaderboard_highest_scores">Meilleurs scores</string>
+    <string name="yahtzee_stats_leaderboard_most_yahtzees">Plus de Yahtzees</string>
+
+    <!-- Category Heatmap Sections -->
+    <string name="yahtzee_stats_heatmap_upper">SUPÉRIEURE</string>
+    <string name="yahtzee_stats_heatmap_lower">INFÉRIEURE</string>
+
+    <!-- Format Strings -->
+    <string name="yahtzee_format_wins">%1$s (%2$s)</string>
+    <string name="yahtzee_format_yahtzee_rate">%s par partie</string>
+    <string name="yahtzee_format_active_player">%1$s (%2$d parties)</string>
+    <string name="yahtzee_format_high_score">%1$d par %2$s</string>
+    <string name="yahtzee_format_most_yahtzees">%1$d par %2$s</string>
+    <string name="yahtzee_format_player_count">%d joueurs</string>
+    <string name="yahtzee_format_luckiest_player">%1$s (%2$s/partie)</string>
+    <string name="yahtzee_format_category_avg">%1$s (%2$s)</string>
+    <string name="yahtzee_format_winner_score">Gagnant : %s</string>
+
+    <!-- Rank Indicators -->
+    <string name="yahtzee_rank_first">🥇</string>
+    <string name="yahtzee_rank_second">🥈</string>
+    <string name="yahtzee_rank_third">🥉</string>
+    <string name="yahtzee_rank_format">#%d</string>
+    <string name="yahtzee_rank_first_place">🏆 1er</string>
+    <string name="yahtzee_rank_second_place">🥈 2e</string>
+    <string name="yahtzee_rank_third_place">🥉 3e</string>
+
+    <!-- Error Messages -->
+    <string name="yahtzee_error_load_failed">Impossible de charger : %s</string>
+    <string name="yahtzee_error_stats_failed">Impossible de charger les statistiques : %s</string>
+    <string name="yahtzee_error_global_failed">Impossible de charger les statistiques globales : %s</string>
+</resources>

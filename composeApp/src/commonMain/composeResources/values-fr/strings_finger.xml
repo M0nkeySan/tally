@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Finger Selector -->
+    <string name="finger_selector_dialog_title">Paramètres du sélecteur</string>
+    <string name="finger_selector_section_mode">Mode</string>
+    <string name="finger_selector_mode_fingers">Doigts</string>
+    <string name="finger_selector_mode_groups">Groupes</string>
+    <string name="finger_selector_cd_touch">Touchez ici pour placer le doigt</string>
+    <string name="finger_selector_instruction_place">Placez vos doigts</string>
+    <string name="finger_selector_instruction_wait">Attendre l'attribution des groupes</string>
+    <string name="finger_selector_slider_value_format">%s : %d</string>
+    <string name="finger_selector_label_fingers">Nombre de doigts</string>
+    <string name="finger_selector_label_groups">Nombre de groupes</string>
+</resources>
