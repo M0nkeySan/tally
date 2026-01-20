@@ -1,35 +1,63 @@
 package io.github.m0nkeysan.gamekeeper
 
-import android.graphics.Color
+import android.content.Context
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
+import io.github.m0nkeysan.gamekeeper.ui.strings.LocaleManager
+import kotlinx.coroutines.launch
+import java.util.Locale
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.auto(
-                Color.TRANSPARENT,
-                Color.TRANSPARENT
-            ),
-            navigationBarStyle = SystemBarStyle.auto(
-                Color.TRANSPARENT,
-                Color.TRANSPARENT
-            )
+            statusBarStyle = SystemBarStyle.auto(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.auto(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT)
         )
 
         PlatformRepositories.init(applicationContext)
 
+        lifecycleScope.launch {
+            LocaleManager.instance.currentLocale.collect { languageCode ->
+                val currentConfig = resources.configuration
+                val currentLanguage = currentConfig.locales[0].language
+
+                if (currentLanguage != languageCode) {
+                    updateAndroidLocale(this@MainActivity, languageCode)
+                }
+            }
+        }
+
         setContent {
             App()
         }
+    }
+
+    private fun updateAndroidLocale(context: Context, languageCode: String) {
+        val parts = languageCode.split("_", "-")
+        val locale = when (parts.size) {
+            1 -> Locale(parts[0])
+            2 -> Locale(parts[0], parts[1])
+            else -> Locale(parts[0], parts[1], parts[2])
+        }
+
+        Locale.setDefault(locale)
+
+        val resources = context.resources
+        val configuration = resources.configuration
+        configuration.setLocale(locale)
+        configuration.setLayoutDirection(locale)
+
+        @Suppress("DEPRECATION")
+        resources.updateConfiguration(configuration, resources.displayMetrics)
     }
 }
 

@@ -8,12 +8,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.HomeNavigationTemplate
-import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterHistoryScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterViewModel
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.EditCounterScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.dice.DiceRollerScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.fingerselector.FingerSelectorScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.settings.SettingsScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameCreationScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotRoundAdditionScreen
@@ -22,10 +24,8 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotStatisticsScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeGameCreationScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeGameSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeScoringScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeSummaryScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeStatisticsScreen
-import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterViewModel
-import io.github.m0nkeysan.gamekeeper.ui.screens.settings.SettingsScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.YahtzeeSummaryScreen
 
 @Composable
 fun GameNavGraph() {
@@ -272,9 +272,7 @@ fun GameNavGraph() {
          }
 
          composable(route = Screen.Settings.route) {
-             SettingsScreen(
-                 onBack = { navController.popBackStack() }
-             )
+             SettingsScreen()
          }
      }
 }

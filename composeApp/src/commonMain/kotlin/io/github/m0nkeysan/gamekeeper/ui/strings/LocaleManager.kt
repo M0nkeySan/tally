@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class LocaleManager(
     private val userPreferencesRepository: UserPreferencesRepository
@@ -23,12 +24,15 @@ class LocaleManager(
     init {
         scope.launch {
             userPreferencesRepository.getLocale().collect { savedLanguage ->
-                _currentLocale.value = savedLanguage.code
+                val code = savedLanguage.code
+                _currentLocale.value = code
+                applySystemLocale(code)
             }
         }
     }
 
     fun setLocale(languageCode: String) {
+        applySystemLocale(languageCode)
         _currentLocale.value = languageCode
         scope.launch {
             userPreferencesRepository.saveLocale(AppLocale.fromCode(languageCode))
@@ -37,15 +41,30 @@ class LocaleManager(
 
     fun getCurrentLocale(): String = _currentLocale.value
 
-    /**
-     * Returns the default locale on first launch:
-     * - Uses system language if supported (en, fr)
-     * - Falls back to English if system language not supported
-     */
     private fun getDefaultLocale(): String {
         val supportedLanguages = listOf("en", "fr")
         val systemLang = getSystemLocaleCode()
         return if (systemLang in supportedLanguages) systemLang else "en"
+    }
+
+    /**
+     * Updates the Java default Locale.
+     * This ensures that when Compose redraws (triggered by the 'key' in UI),
+     * stringResource() picks up the correct language file.
+     */
+    private fun applySystemLocale(languageCode: String) {
+        try {
+            // Handle cases like "en", "en-US", "fr_FR"
+            val parts = languageCode.split("_", "-")
+            val locale = when (parts.size) {
+                1 -> Locale(parts[0])
+                2 -> Locale(parts[0], parts[1])
+                else -> Locale(parts[0], parts[1], parts[2])
+            }
+            Locale.setDefault(locale)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     companion object {

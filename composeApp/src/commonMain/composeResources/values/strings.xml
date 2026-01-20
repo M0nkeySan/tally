@@ -355,6 +355,11 @@
     <string name="player_count_display">%1$d player%2$s</string>
 
     <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_system">System Default</string>
     <string name="settings_language">Language</string>
 
     <!-- Plurals -->

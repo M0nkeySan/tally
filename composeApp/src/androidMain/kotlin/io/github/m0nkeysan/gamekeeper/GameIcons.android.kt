@@ -5,6 +5,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.AddBox
+import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.EmojiEvents
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TouchApp
+import androidx.compose.material.icons.filled.Translate
 import androidx.compose.ui.graphics.vector.ImageVector
 
 actual object GameIcons {
@@ -38,4 +40,6 @@ actual object GameIcons {
     actual val Trophy: ImageVector = Icons.Default.EmojiEvents
     actual val ExpandMore: ImageVector = Icons.Default.ExpandMore
     actual val ExpandLess: ImageVector = Icons.Default.ExpandLess
+    actual val Brightness4: ImageVector = Icons.Default.Brightness4
+    actual val Translate: ImageVector = Icons.Default.Translate
 }

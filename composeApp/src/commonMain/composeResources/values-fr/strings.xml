@@ -355,6 +355,11 @@
     <string name="player_count_display">%1$d joueur%2$s</string>
 
     <!-- Settings -->
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_theme">Thème</string>
+    <string name="settings_theme_light">Clair</string>
+    <string name="settings_theme_dark">Sombre</string>
+    <string name="settings_theme_system">Système par défaut</string>
     <string name="settings_language">Langue</string>
 
     <!-- Plurals -->

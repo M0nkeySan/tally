@@ -19,17 +19,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_add_player
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
+import io.github.m0nkeysan.gamekeeper.generated.resources.home_cd_games
+import io.github.m0nkeysan.gamekeeper.generated.resources.home_cd_players
 import io.github.m0nkeysan.gamekeeper.ui.screens.home.HomeScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.home.HomeViewModel
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionViewModel
 import io.github.m0nkeysan.gamekeeper.ui.screens.settings.SettingsScreen
 import org.jetbrains.compose.resources.stringResource
-import io.github.m0nkeysan.gamekeeper.generated.resources.cd_add_player
-import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
-import io.github.m0nkeysan.gamekeeper.generated.resources.home_cd_games
-import io.github.m0nkeysan.gamekeeper.generated.resources.home_cd_players
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 /**
  * Navigation template for the home screen with bottom bar for switching between Games, Players, and Settings tabs.
@@ -149,9 +149,7 @@ fun HomeNavigationTemplate(
                  )
              }
              2 -> {
-                 SettingsScreen(
-                     onBack = { /* No-op: staying in tab */ }
-                 )
+                 SettingsScreen()
              }
          }
     }

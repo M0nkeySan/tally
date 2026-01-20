@@ -20,4 +20,6 @@ expect object GameIcons {
     val Trophy: ImageVector
     val ExpandMore: ImageVector
     val ExpandLess: ImageVector
+    val Brightness4: ImageVector
+    val Translate: ImageVector
 }

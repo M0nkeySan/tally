@@ -2,137 +2,229 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Divider
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
-import org.jetbrains.compose.resources.stringResource
-import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
-import io.github.m0nkeysan.gamekeeper.generated.resources.action_retry
-import io.github.m0nkeysan.gamekeeper.generated.resources.settings_language
+import io.github.m0nkeysan.gamekeeper.core.domain.model.AppLocale
+import io.github.m0nkeysan.gamekeeper.core.domain.model.AppTheme
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
+import io.github.m0nkeysan.gamekeeper.generated.resources.settings_language
+import io.github.m0nkeysan.gamekeeper.generated.resources.settings_theme
+import io.github.m0nkeysan.gamekeeper.generated.resources.settings_theme_dark
+import io.github.m0nkeysan.gamekeeper.generated.resources.settings_theme_light
+import io.github.m0nkeysan.gamekeeper.generated.resources.settings_theme_system
+import io.github.m0nkeysan.gamekeeper.generated.resources.settings_title
+import org.jetbrains.compose.resources.stringResource
 
-/**
- * Main settings screen containing all app settings.
- *
- * Sections:
- * - Appearance (Theme: Light, Dark, System Default)
- * - Language (Language: English, French, System Default)
- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    onBack: () -> Unit
+    viewModel: SettingsViewModel = viewModel()
 ) {
-    val showAppearanceSettings = remember { mutableStateOf(false) }
-    val showLanguageSettings = remember { mutableStateOf(false) }
+    val uiState by viewModel.uiState.collectAsState()
 
-    if (showAppearanceSettings.value) {
-        AppearanceSettingsScreen(
-            onBack = { showAppearanceSettings.value = false }
-        )
-    } else if (showLanguageSettings.value) {
-        LanguageSettingsScreen(
-            onBack = { showLanguageSettings.value = false }
-        )
-    } else {
+    var showThemeDialog by remember { mutableStateOf(false) }
+    var showLanguageDialog by remember { mutableStateOf(false) }
+
+    key(uiState.currentLocaleCode) {
         Scaffold(
-             topBar = {
-                 TopAppBar(
-                     title = { Text(stringResource(Res.string.settings_language)) },
-                     navigationIcon = {
-                         IconButton(onClick = onBack) {
-                             Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
-                         }
-                     }
-                 )
-             }
-         ) { padding ->
-             LazyColumn(
-                 modifier = Modifier
-                     .fillMaxSize()
-                     .padding(padding)
-             ) {
-                 // Appearance Section
-                 item {
-                     SettingsSectionHeader(stringResource(Res.string.action_retry))
-                 }
-                 item {
-                     SettingsOption(
-                         title = "Theme",
-                         onClick = { showAppearanceSettings.value = true }
-                     )
-                 }
-                 item {
-                     Divider(modifier = Modifier.padding(vertical = 8.dp))
-                 }
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = { Text(stringResource(Res.string.settings_title)) }
+                )
+            }
+        ) { padding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(top = 16.dp)
+            ) {
+                // Theme Card
+                SettingsCard(
+                    icon = GameIcons.Brightness4,
+                    title = stringResource(Res.string.settings_theme),
+                    subtitle = getThemeDisplayName(uiState.currentTheme),
+                    onClick = { showThemeDialog = true }
+                )
 
-                 // Language Section
-                 item {
-                     SettingsSectionHeader("Language")
-                 }
-                 item {
-                     SettingsOption(
-                         title = stringResource(Res.string.settings_language),
-                         onClick = { showLanguageSettings.value = true }
-                     )
-                 }
+                // Language Card
+                SettingsCard(
+                    icon = GameIcons.Translate,
+                    title = stringResource(Res.string.settings_language),
+                    subtitle = AppLocale.fromCode(uiState.currentLocaleCode).displayName,
+                    onClick = { showLanguageDialog = true }
+                )
             }
         }
+    }
+
+    if (showThemeDialog) {
+        SelectionDialog(
+            title = stringResource(Res.string.settings_theme),
+            options = AppTheme.entries,
+            currentSelection = uiState.currentTheme,
+            onDismiss = { showThemeDialog = false },
+            onOptionSelected = {
+                viewModel.setTheme(it)
+                showThemeDialog = false
+            },
+            labelProvider = { getThemeDisplayName(it) }
+        )
+    }
+
+    if (showLanguageDialog) {
+        SelectionDialog(
+            title = stringResource(Res.string.settings_language),
+            options = AppLocale.entries,
+            currentSelection = AppLocale.fromCode(uiState.currentLocaleCode),
+            onDismiss = { showLanguageDialog = false },
+            onOptionSelected = {
+                viewModel.setLocale(it.code)
+                showLanguageDialog = false
+            },
+            labelProvider = { it.displayName }
+        )
+    }
+}
+
+// Helper to map enum to string resource
+@Composable
+private fun getThemeDisplayName(theme: AppTheme): String {
+    return when (theme) {
+        AppTheme.LIGHT -> stringResource(Res.string.settings_theme_light)
+        AppTheme.DARK -> stringResource(Res.string.settings_theme_dark)
+        AppTheme.SYSTEM_DEFAULT -> stringResource(Res.string.settings_theme_system)
     }
 }
 
 /**
- * Settings section header.
+ * Generic Selection Dialog to replace duplicate code for Theme/Language
  */
 @Composable
-private fun SettingsSectionHeader(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleMedium,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 14.sp,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+private fun <T> SelectionDialog(
+    title: String,
+    options: List<T>,
+    currentSelection: T,
+    onDismiss: () -> Unit,
+    onOptionSelected: (T) -> Unit,
+    labelProvider: @Composable (T) -> String
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            Column {
+                options.forEach { option ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onOptionSelected(option) }
+                            .padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = option == currentSelection,
+                            onClick = { onOptionSelected(option) }
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = labelProvider(option),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(Res.string.action_cancel))
+            }
+        }
     )
 }
 
-/**
- * Reusable settings option item.
- */
 @Composable
-private fun SettingsOption(
+private fun SettingsCard(
+    icon: ImageVector,
     title: String,
+    subtitle: String,
     onClick: () -> Unit
 ) {
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(16.dp)
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Medium
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
         )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(24.dp), // Standard icon size
+                tint = MaterialTheme.colorScheme.primary
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
