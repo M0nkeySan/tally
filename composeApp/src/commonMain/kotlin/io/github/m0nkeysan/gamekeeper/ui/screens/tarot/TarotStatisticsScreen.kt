@@ -54,6 +54,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.action_retry
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_toggle_collapse
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_toggle_expand
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_error_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_as_taker
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_avg_bouts
@@ -68,6 +69,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_pe
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_tab_current_game
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_tab_player_stats
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_title
 
 /**
  * Tarot Statistics Screen
@@ -104,7 +106,7 @@ fun TarotStatisticsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                             stringResource(Res.string.cd_settings),
+                             stringResource(Res.string.tarot_stats_title),
                              style = MaterialTheme.typography.titleLarge,
                              fontWeight = FontWeight.Bold
                          )

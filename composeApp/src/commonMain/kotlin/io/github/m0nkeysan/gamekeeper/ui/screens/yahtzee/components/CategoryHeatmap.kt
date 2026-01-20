@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.gamekeeper.core.model.CategoryStat
 import io.github.m0nkeysan.gamekeeper.core.model.GlobalCategoryStat
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
+import io.github.m0nkeysan.gamekeeper.core.model.getLocalizedName
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.formatAverage
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.getCategoryColor
 import org.jetbrains.compose.resources.stringResource
@@ -243,7 +244,7 @@ private fun CategoryBox(
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
-                text = category.displayName.split(" ").first().uppercase(),
+                text = category.getLocalizedName().split(" ").first().uppercase(),
                 style = MaterialTheme.typography.labelSmall,
                 fontSize = 9.sp,
                 fontWeight = FontWeight.Bold,
@@ -286,7 +287,7 @@ private fun GlobalCategoryBox(
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
-                text = category.displayName.split(" ").first().uppercase(),
+                text = category.getLocalizedName().split(" ").first().uppercase(),
                 style = MaterialTheme.typography.labelSmall,
                 fontSize = 9.sp,
                 fontWeight = FontWeight.Bold,

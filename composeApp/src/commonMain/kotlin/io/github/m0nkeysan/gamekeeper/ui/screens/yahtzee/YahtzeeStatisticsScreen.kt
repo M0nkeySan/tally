@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeePlayerStatistics
+import io.github.m0nkeysan.gamekeeper.core.model.getLocalizedName
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.CategoryHeatmap
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GameSummaryRow
@@ -67,6 +68,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_average_
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_bonus_rate
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_finished_games
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_average_score
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_avg_players
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_best_avg
@@ -127,7 +129,7 @@ fun YahtzeeStatisticsScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            stringResource(Res.string.cd_settings),
+                            stringResource(Res.string.yahtzee_stats_title),
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
@@ -782,21 +784,21 @@ private fun GlobalCategoryAnalysisCard(statistics: io.github.m0nkeysan.gamekeepe
             if (statistics.mostScoredCategory != null) {
                 StatisticRow(
                     stringResource(Res.string.yahtzee_stats_global_most_scored),
-                    statistics.mostScoredCategory.displayName
+                    statistics.mostScoredCategory.getLocalizedName()
                 )
             }
             
             if (statistics.leastScoredCategory != null) {
                 StatisticRow(
                     stringResource(Res.string.yahtzee_stats_global_least_scored),
-                    statistics.leastScoredCategory.displayName
+                    statistics.leastScoredCategory.getLocalizedName()
                 )
             }
             
             if (statistics.highestCategoryAverage != null) {
                 StatisticRow(
                     stringResource(Res.string.yahtzee_stats_global_best_avg),
-                    String.format(stringResource(Res.string.yahtzee_format_category_avg), statistics.highestCategoryAverage.category.displayName, formatAverage(statistics.highestCategoryAverage.average))
+                    String.format(stringResource(Res.string.yahtzee_format_category_avg), statistics.highestCategoryAverage.category.getLocalizedName(), formatAverage(statistics.highestCategoryAverage.average))
                 )
             }
         }

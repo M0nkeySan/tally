@@ -23,7 +23,23 @@
     <string name="yahtzee_new_game_title">Nouvelle partie de Yahtzee</string>
     <string name="yahtzee_game_name_default">Partie de Yahtzee</string>
 
+    <!-- Yahtzee - Categories -->
+    <string name="yahtzee_category_aces">Un</string>
+    <string name="yahtzee_category_twos">Deux</string>
+    <string name="yahtzee_category_threes">Trois</string>
+    <string name="yahtzee_category_fours">Quatre</string>
+    <string name="yahtzee_category_fives">Cinq</string>
+    <string name="yahtzee_category_sixes">Six</string>
+    <string name="yahtzee_category_chance">Chance (total des 5 dés)</string>
+    <string name="yahtzee_category_three_of_kind">Brelan</string>
+    <string name="yahtzee_category_four_of_kind">Carré</string>
+    <string name="yahtzee_category_full_house">Full</string>
+    <string name="yahtzee_category_small_straight">Petite suite</string>
+    <string name="yahtzee_category_large_straight">Grande suite</string>
+    <string name="yahtzee_category_yahtzee">Yahtzee</string>
+
     <!-- Yahtzee - Statistics Screen -->
+    <string name="yahtzee_stats_title">Statistiques</string>
     <string name="yahtzee_stats_global">⭐ Statistiques globales</string>
     <string name="yahtzee_stats_select_player">Sélectionner un joueur</string>
     <string name="yahtzee_stats_no_data">Aucune donnée disponible</string>

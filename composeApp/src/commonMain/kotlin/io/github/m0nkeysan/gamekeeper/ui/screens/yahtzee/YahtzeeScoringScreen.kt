@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
+import io.github.m0nkeysan.gamekeeper.core.model.getLocalizedName
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
@@ -382,7 +383,7 @@ fun ScoreRow(
         if (options != null) {
             AlertDialog(
                  onDismissRequest = { showDialog = false },
-                 title = { Text(stringResource(Res.string.yahtzee_dialog_select_score).format(category.displayName)) },
+                 title = { Text(stringResource(Res.string.yahtzee_dialog_select_score).format(category.getLocalizedName())) },
                 text = {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -419,7 +420,7 @@ fun ScoreRow(
             
             AlertDialog(
                  onDismissRequest = { showDialog = false },
-                 title = { Text(stringResource(Res.string.yahtzee_dialog_enter_score).format(category.displayName)) },
+                 title = { Text(stringResource(Res.string.yahtzee_dialog_enter_score).format(category.getLocalizedName())) },
                 text = {
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         OutlinedTextField(
@@ -478,7 +479,7 @@ fun ScoreRow(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = category.displayName, 
+                text = category.getLocalizedName(), 
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.weight(1f)
             )

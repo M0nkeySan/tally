@@ -23,7 +23,23 @@
     <string name="yahtzee_new_game_title">New Yahtzee Game</string>
     <string name="yahtzee_game_name_default">Yahtzee Game</string>
 
+    <!-- Yahtzee - Categories -->
+    <string name="yahtzee_category_aces">Ones</string>
+    <string name="yahtzee_category_twos">Twos</string>
+    <string name="yahtzee_category_threes">Threes</string>
+    <string name="yahtzee_category_fours">Fours</string>
+    <string name="yahtzee_category_fives">Fives</string>
+    <string name="yahtzee_category_sixes">Sixes</string>
+    <string name="yahtzee_category_chance">Chance (total of 5 dices)</string>
+    <string name="yahtzee_category_three_of_kind">Three of a Kind</string>
+    <string name="yahtzee_category_four_of_kind">Four of a Kind</string>
+    <string name="yahtzee_category_full_house">Full House</string>
+    <string name="yahtzee_category_small_straight">Small Straight</string>
+    <string name="yahtzee_category_large_straight">Large Straight</string>
+    <string name="yahtzee_category_yahtzee">Yahtzee</string>
+
     <!-- Yahtzee - Statistics Screen -->
+    <string name="yahtzee_stats_title">Statistics</string>
     <string name="yahtzee_stats_global">⭐ Global Statistics</string>
     <string name="yahtzee_stats_select_player">Select Player</string>
     <string name="yahtzee_stats_no_data">No data available</string>

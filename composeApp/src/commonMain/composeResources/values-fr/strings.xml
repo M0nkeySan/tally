@@ -18,6 +18,7 @@
     <!-- Common Content Descriptions (Accessibility) -->
     <string name="cd_back">Retour</string>
     <string name="cd_settings">Paramètres</string>
+    <string name="cd_statistics">Statistiques</string>
     <string name="cd_add">Ajouter</string>
     <string name="cd_menu">Menu</string>
     <string name="cd_add_player">Ajouter un joueur</string>

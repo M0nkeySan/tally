@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tarot - Statistics -->
+    <string name="tarot_stats_title">Statistiques</string>
     <string name="tarot_stats_tab_current_game">Partie actuelle</string>
     <string name="tarot_stats_tab_player_stats">Statistiques des joueurs</string>
     <string name="tarot_stats_label_called">Appelé</string>
