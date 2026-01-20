@@ -37,17 +37,22 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.ACTION_CANCEL
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.COUNTER_DIALOG_DELETE_MESSAGE
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.COUNTER_HISTORY_DELETED_EMOJI
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.COUNTER_HISTORY_SUBTITLE
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.COUNTER_HISTORY_TITLE
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.DIALOG_DELETE_ALL_TITLE
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import org.jetbrains.compose.resources.stringResource
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_dialog_delete_message
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_history_cd_delete
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_history_deleted_emoji
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_history_deleted_text
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_history_empty
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_history_subtitle
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_history_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_delete_all_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,8 +67,8 @@ fun CounterHistoryScreen(
     if (showDeleteAllDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteAllDialog = false },
-            title = { Text(AppStrings.COUNTER_HISTORY_CD_DELETE) },
-            text = { Text(COUNTER_DIALOG_DELETE_MESSAGE) },
+            title = { Text(stringResource(Res.string.counter_history_cd_delete)) },
+            text = { Text(stringResource(Res.string.counter_dialog_delete_message)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -72,12 +77,12 @@ fun CounterHistoryScreen(
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
                 ) {
-                    Text(DIALOG_DELETE_ALL_TITLE)
+                    Text(stringResource(Res.string.dialog_delete_all_title))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteAllDialog = false }) {
-                    Text(ACTION_CANCEL)
+                    Text(stringResource(Res.string.action_cancel))
                 }
             }
         )
@@ -94,9 +99,9 @@ fun CounterHistoryScreen(
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(COUNTER_HISTORY_TITLE)
+                            Text(stringResource(Res.string.counter_history_title))
                             Text(
-                                COUNTER_HISTORY_SUBTITLE,
+                                stringResource(Res.string.counter_history_subtitle),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -105,13 +110,13 @@ fun CounterHistoryScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackPressed) {
-                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
+                        Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
                     }
                 },
                 actions = {
                     if (mergedHistory.isNotEmpty()) {
                         IconButton(onClick = { showDeleteAllDialog = true }) {
-                            Icon(GameIcons.Delete, contentDescription = AppStrings.COUNTER_HISTORY_CD_DELETE)
+                            Icon(GameIcons.Delete, contentDescription = stringResource(Res.string.counter_history_cd_delete))
                         }
                     }
                 }
@@ -130,7 +135,7 @@ fun CounterHistoryScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        AppStrings.COUNTER_HISTORY_EMPTY,
+                        stringResource(Res.string.counter_history_empty),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -177,7 +182,7 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = COUNTER_HISTORY_DELETED_EMOJI,
+                    text = stringResource(Res.string.counter_history_deleted_emoji),
                     style = MaterialTheme.typography.headlineSmall
                 )
             }
@@ -216,13 +221,13 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
             )
         }
         
-        // Total delta display or AppStrings.COUNTER_HISTORY_DELETED_TEXT text
+        // Total delta display or stringResource(Res.string.counter_history_deleted_text) text
         Column(
             horizontalAlignment = Alignment.End
         ) {
             if (mergedChange.isDeleted) {
                 Text(
-                    text = AppStrings.COUNTER_HISTORY_DELETED_TEXT,
+                    text = stringResource(Res.string.counter_history_deleted_text),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp

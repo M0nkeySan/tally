@@ -55,7 +55,24 @@ import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
 import io.github.m0nkeysan.gamekeeper.ui.components.showSuccessSnackbar
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_add_player
+import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_deactivate_message
+import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_deactivate_player
+import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_deactivate_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_delete_message
+import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_delete_player
+import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_delete_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_cd_edit
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_deactivated_message
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_deleted_message
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_reactivated_message
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_section_deactivated
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_section_players
+import io.github.m0nkeysan.gamekeeper.generated.resources.players_no_players
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,9 +102,10 @@ fun PlayerSelectionScreen(
     }
     
     // Show snackbar when player is reactivated
+    val reactivatedFormat = stringResource(Res.string.player_reactivated_message)
     LaunchedEffect(playerToReactivate) {
         if (playerToReactivate != null) {
-            showSuccessSnackbar(snackbarHostState, "Player '${playerToReactivate!!.name}' has been reactivated")
+            showSuccessSnackbar(snackbarHostState, reactivatedFormat.format(playerToReactivate!!.name))
             playerToReactivate = null
         }
     }
@@ -118,19 +136,25 @@ fun PlayerSelectionScreen(
             gameCount = viewModel.getGameCountForPlayer(playerToDelete!!.id)
         }
         
+        // Extract all dialog strings
+        val deactivateTitle = stringResource(Res.string.dialog_deactivate_title)
+        val deleteTitle = stringResource(Res.string.dialog_delete_title)
+        val deactivateMessage = stringResource(Res.string.dialog_deactivate_message)
+        val deleteMessage = stringResource(Res.string.dialog_delete_message)
+        val deactivatedFormat = stringResource(Res.string.player_deactivated_message)
+        val deletedFormat = stringResource(Res.string.player_deleted_message)
+        
         AlertDialog(
             onDismissRequest = { playerToDelete = null },
              title = { 
-                 Text(
-                     if (gameCount > 0) "Deactivate Player?" else "Delete Player?"
-                 ) 
+                 Text(if (gameCount > 0) deactivateTitle else deleteTitle) 
              },
              text = { 
                  Text(
                      if (gameCount > 0) {
-                         "Linked to $gameCount game(s). Player will be deactivated to preserve game history."
+                         deactivateMessage.format(gameCount)
                      } else {
-                         "This player has no game history. They will be permanently deleted."
+                         deleteMessage
                      }
                  )
              },
@@ -140,20 +164,20 @@ fun PlayerSelectionScreen(
                           playerToDelete?.let { player ->
                               viewModel.deletePlayer(player)
                               snackbarMessage = if (gameCount > 0) {
-                                  "Player '${player.name}' deactivated"
+                                  deactivatedFormat.format(player.name)
                               } else {
-                                  "Player '${player.name}' deleted"
+                                  deletedFormat.format(player.name)
                               }
                           }
                           playerToDelete = null
                       },
                       colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
                   ) { 
-                      Text(if (gameCount > 0) AppStrings.DIALOG_DEACTIVATE_PLAYER else AppStrings.DIALOG_DELETE_PLAYER) 
+                      Text(if (gameCount > 0) stringResource(Res.string.dialog_deactivate_player) else stringResource(Res.string.dialog_delete_player)) 
                   }
               },
             dismissButton = {
-                TextButton(onClick = { playerToDelete = null }) { Text(AppStrings.ACTION_CANCEL) }
+                TextButton(onClick = { playerToDelete = null }) { Text(stringResource(Res.string.action_cancel)) }
             }
         )
     }
@@ -180,17 +204,17 @@ fun PlayerSelectionScreen(
                             modifier = Modifier.fillMaxWidth(),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(AppStrings.PLAYER_SECTION_PLAYERS)
+                            Text(stringResource(Res.string.player_section_players))
                         }
                     },
                     navigationIcon = {
                         IconButton(onClick = onBack) {
-                            Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
+                            Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
                         }
                     },
                     actions = {
                         IconButton(onClick = { showAddDialog = true }) {
-                            Icon(Icons.Default.Add, contentDescription = AppStrings.CD_ADD_PLAYER)
+                            Icon(Icons.Default.Add, contentDescription = stringResource(Res.string.cd_add_player))
                         }
                     }
                 )
@@ -201,12 +225,12 @@ fun PlayerSelectionScreen(
                             modifier = Modifier.fillMaxWidth(),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(AppStrings.PLAYER_SECTION_PLAYERS)
+                            Text(stringResource(Res.string.player_section_players))
                         }
                     },
                     actions = {
                         IconButton(onClick = { showAddDialog = true }) {
-                            Icon(Icons.Default.Add, contentDescription = AppStrings.CD_ADD_PLAYER)
+                            Icon(Icons.Default.Add, contentDescription = stringResource(Res.string.cd_add_player))
                         }
                     }
                 )
@@ -225,7 +249,7 @@ fun PlayerSelectionScreen(
                     .padding(paddingValues),
                 contentAlignment = Alignment.Center
             ) {
-                Text(AppStrings.PLAYERS_NO_PLAYERS)
+                Text(stringResource(Res.string.players_no_players))
             }
         } else {
             LazyColumn(
@@ -238,7 +262,7 @@ fun PlayerSelectionScreen(
                 // ACTIVE PLAYERS SECTION
                 if (activePlayers.isNotEmpty()) {
                     item {
-                        Text(AppStrings.PLAYER_SECTION_PLAYERS, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                        Text(stringResource(Res.string.player_section_players), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     }
                     items(activePlayers, key = { it.id }) { player ->
                         val dismissState = rememberSwipeToDismissBoxState()
@@ -285,7 +309,7 @@ fun PlayerSelectionScreen(
                 if (deactivatedPlayers.isNotEmpty()) {
                     item {
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text(AppStrings.PLAYER_SECTION_DEACTIVATED, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                        Text(stringResource(Res.string.player_section_deactivated), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     }
                      items(deactivatedPlayers, key = { it.id }) { player ->
 
@@ -367,7 +391,7 @@ fun PlayerCard(player: Player, isActive: Boolean = true, onClick: () -> Unit) {
             if (isActive) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = AppStrings.PLAYER_CD_EDIT,
+                    contentDescription = stringResource(Res.string.player_cd_edit),
                     tint = contentColor
                 )
             }

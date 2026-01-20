@@ -49,12 +49,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import io.github.m0nkeysan.gamekeeper.ui.utils.colorToHSV
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import io.github.m0nkeysan.gamekeeper.ui.utils.hsvToColor
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_save
+import io.github.m0nkeysan.gamekeeper.generated.resources.color_picker_cd
+import io.github.m0nkeysan.gamekeeper.generated.resources.color_picker_dialog_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 val DEFAULT_COLOR_PRESETS = listOf(
     "#F44336", // Red
@@ -178,7 +183,7 @@ fun CustomPickerSwatch(
         Box(contentAlignment = Alignment.Center) {
          Icon(
              imageVector = Icons.Default.Palette,
-             contentDescription = AppStrings.COLOR_PICKER_CD,
+             contentDescription = stringResource(Res.string.color_picker_cd),
              tint = if (color.luminance() > 0.5f) Color.Black else Color.White
          )
         }
@@ -205,7 +210,7 @@ fun ColorPickerDialog(
 
     AlertDialog(
          onDismissRequest = onDismiss,
-         title = { Text(AppStrings.COLOR_PICKER_DIALOG_TITLE) },
+         title = { Text(stringResource(Res.string.color_picker_dialog_title)) },
          text = {
              Column(
                  horizontalAlignment = Alignment.CenterHorizontally,
@@ -245,10 +250,10 @@ fun ColorPickerDialog(
                  val argb = currentColor.toArgb()
                  val hex = String.format("#%06X", (0xFFFFFF and argb))
                  onColorSelected(hex)
-             }) { Text(AppStrings.ACTION_SAVE) }
+             }) { Text(stringResource(Res.string.action_save)) }
          },
          dismissButton = {
-             TextButton(onClick = onDismiss) { Text(AppStrings.ACTION_CANCEL) }
+             TextButton(onClick = onDismiss) { Text(stringResource(Res.string.action_cancel)) }
          }
      )
 }

@@ -12,7 +12,11 @@ import io.github.m0nkeysan.gamekeeper.ui.components.FlexiblePlayerSelector
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameCreationTemplate
 import io.github.m0nkeysan.gamekeeper.core.domain.GameConfig
 import io.github.m0nkeysan.gamekeeper.ui.utils.generateRandomHexColor
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_creation_field_game_name
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_creation_new_tarot_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_creation_tarot_name_default
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 @Composable
 fun TarotGameCreationScreen(
@@ -26,14 +30,16 @@ fun TarotGameCreationScreen(
 
     val canCreate = gameName.isNotBlank() && selectedPlayers.size in GameConfig.TAROT_MIN_PLAYERS..GameConfig.TAROT_MAX_PLAYERS && selectedPlayers.all { it != null }
 
+    val defaultGameName = stringResource(Res.string.game_creation_tarot_name_default)
+
     GameCreationTemplate(
-        title = AppStrings.GAME_CREATION_NEW_TAROT_TITLE,
+        title = stringResource(Res.string.game_creation_new_tarot_title),
         onBack = onBack,
         onCreate = {
             val finalPlayers: List<Player> = selectedPlayers.filterNotNull()
             if (finalPlayers.size in GameConfig.TAROT_MIN_PLAYERS..GameConfig.TAROT_MAX_PLAYERS) {
                 viewModel.createGame(
-                    name = gameName.ifBlank { AppStrings.GAME_CREATION_TAROT_NAME_DEFAULT },
+                    name = gameName.ifBlank { defaultGameName },
                     playerCount = finalPlayers.size,
                     players = finalPlayers,
                     onCreated = onGameCreated
@@ -46,7 +52,7 @@ fun TarotGameCreationScreen(
             OutlinedTextField(
                 value = gameName,
                 onValueChange = { gameName = it },
-                label = { Text(AppStrings.GAME_CREATION_FIELD_GAME_NAME) },
+                label = { Text(stringResource(Res.string.game_creation_field_game_name)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )

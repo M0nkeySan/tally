@@ -43,12 +43,25 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.navigation.Screen
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.generated.resources.desc_counter
+import io.github.m0nkeysan.gamekeeper.generated.resources.desc_dice
+import io.github.m0nkeysan.gamekeeper.generated.resources.desc_tarot
+import io.github.m0nkeysan.gamekeeper.generated.resources.desc_yahtzee
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_counter
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_dice
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_tarot
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_yahtzee
+import io.github.m0nkeysan.gamekeeper.generated.resources.home_cd_counter
+import io.github.m0nkeysan.gamekeeper.generated.resources.home_cd_dice
+import io.github.m0nkeysan.gamekeeper.generated.resources.home_cd_finger_selector
+import io.github.m0nkeysan.gamekeeper.generated.resources.home_desc_finger_selector
+import io.github.m0nkeysan.gamekeeper.generated.resources.home_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.home_title_finger_selector
 import io.github.m0nkeysan.gamekeeper.ui.components.GameCard
 import io.github.m0nkeysan.gamekeeper.ui.components.TarotIcon
 import io.github.m0nkeysan.gamekeeper.ui.components.YahtzeeIcon
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.HOME_DESC_FINGER_SELECTOR
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.HOME_TITLE_FINGER_SELECTOR
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +76,8 @@ fun HomeScreen(
 
     val activeOrder = localCardOrder ?: cardOrder
 
-    val features = remember(activeOrder) {
+    val gameFeatureMap = getGameFeatureMap()
+    val features = remember(activeOrder, gameFeatureMap) {
         activeOrder.mapNotNull { id -> gameFeatureMap[id] }
     }
 
@@ -83,7 +97,7 @@ fun HomeScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            AppStrings.HOME_TITLE,
+                            stringResource(Res.string.home_title),
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.fillMaxWidth(),
@@ -235,34 +249,35 @@ data class GameFeature(
     val route: String
 )
 
-private val gameFeatureMap = mapOf(
+@Composable
+private fun getGameFeatureMap() = mapOf(
     "finger_selector" to GameFeature(
         id = "finger_selector",
         icon = {
             Icon(
                 GameIcons.TouchApp,
-                contentDescription = AppStrings.HOME_CD_FINGER_SELECTOR,
+                contentDescription = stringResource(Res.string.home_cd_finger_selector),
                 Modifier
                     .width(64.dp)
                     .height(64.dp)
             )
         },
-        title = HOME_TITLE_FINGER_SELECTOR,
-        description = HOME_DESC_FINGER_SELECTOR,
+        title = stringResource(Res.string.home_title_finger_selector),
+        description = stringResource(Res.string.home_desc_finger_selector),
         route = Screen.FingerSelector.route
     ),
     "tarot" to GameFeature(
         id = "tarot",
         icon = { TarotIcon() },
-        title = AppStrings.GAME_TAROT,
-        description = AppStrings.DESC_TAROT,
+        title = stringResource(Res.string.game_tarot),
+        description = stringResource(Res.string.desc_tarot),
         route = Screen.Tarot.route
     ),
     "yahtzee" to GameFeature(
         id = "yahtzee",
         icon = { YahtzeeIcon() },
-        title = AppStrings.GAME_YAHTZEE,
-        description = AppStrings.DESC_YAHTZEE,
+        title = stringResource(Res.string.game_yahtzee),
+        description = stringResource(Res.string.desc_yahtzee),
         route = Screen.Yahtzee.route
     ),
     "counter" to GameFeature(
@@ -270,14 +285,14 @@ private val gameFeatureMap = mapOf(
         icon = {
             Icon(
                 GameIcons.AddBox,
-                contentDescription = AppStrings.HOME_CD_COUNTER,
+                contentDescription = stringResource(Res.string.home_cd_counter),
                 Modifier
                     .width(64.dp)
                     .height(64.dp)
             )
         },
-        title = AppStrings.GAME_COUNTER,
-        description = AppStrings.DESC_COUNTER,
+        title = stringResource(Res.string.game_counter),
+        description = stringResource(Res.string.desc_counter),
         route = Screen.Counter.route
     ),
     "dice_roller" to GameFeature(
@@ -285,14 +300,14 @@ private val gameFeatureMap = mapOf(
         icon = {
             Icon(
                 GameIcons.Casino,
-                contentDescription = AppStrings.HOME_CD_DICE,
+                contentDescription = stringResource(Res.string.home_cd_dice),
                 Modifier
                     .width(64.dp)
                     .height(64.dp)
             )
         },
-        title = AppStrings.GAME_DICE,
-        description = AppStrings.DESC_DICE,
+        title = stringResource(Res.string.game_dice),
+        description = stringResource(Res.string.desc_dice),
         route = Screen.DiceRoller.route
     )
 )

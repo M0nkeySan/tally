@@ -41,7 +41,21 @@ import io.github.m0nkeysan.gamekeeper.ui.components.ColorSelectorRow
 import io.github.m0nkeysan.gamekeeper.ui.components.FieldLabel
 import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_delete
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_edit_action_save
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_edit_cd_delete
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_edit_field_name
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_edit_field_value
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_edit_label_color
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_edit_placeholder_name
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_edit_placeholder_value
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_edit_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_delete_counter_message
+import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_delete_counter_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,19 +82,19 @@ fun EditCounterScreen(
          AlertDialog(
              onDismissRequest = { showDeleteDialog = false },
              containerColor = MaterialTheme.colorScheme.surface,
-             title = { Text(AppStrings.DIALOG_DELETE_COUNTER_TITLE, fontWeight = FontWeight.Bold) },
-             text = { Text(AppStrings.DIALOG_DELETE_COUNTER_MESSAGE) },
+             title = { Text(stringResource(Res.string.dialog_delete_counter_title), fontWeight = FontWeight.Bold) },
+             text = { Text(stringResource(Res.string.dialog_delete_counter_message)) },
              confirmButton = {
                  TextButton(onClick = {
                      showDeleteDialog = false
                      onDelete(id)
                  }) {
-                     Text(AppStrings.ACTION_DELETE, color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
+                     Text(stringResource(Res.string.action_delete), color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
                  }
              },
              dismissButton = {
                  TextButton(onClick = { showDeleteDialog = false }) {
-                     Text(AppStrings.ACTION_CANCEL, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                     Text(stringResource(Res.string.action_cancel), color = MaterialTheme.colorScheme.onSurfaceVariant)
                  }
              }
          )
@@ -107,15 +121,15 @@ fun EditCounterScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
+                        Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
                     }
                     Text(
-                        text = AppStrings.COUNTER_EDIT_TITLE,
+                        text = stringResource(Res.string.counter_edit_title),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.ExtraBold
                     )
                     IconButton(onClick = { showDeleteDialog = true }) {
-                        Icon(GameIcons.Delete, contentDescription = AppStrings.COUNTER_EDIT_CD_DELETE)
+                        Icon(GameIcons.Delete, contentDescription = stringResource(Res.string.counter_edit_cd_delete))
                     }
                 }
             }
@@ -150,7 +164,7 @@ fun EditCounterScreen(
                     elevation = null
                 ) {
                     Text(
-                        text = AppStrings.COUNTER_EDIT_ACTION_SAVE,
+                        text = stringResource(Res.string.counter_edit_action_save),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Black,
                         letterSpacing = 1.sp
@@ -170,7 +184,7 @@ fun EditCounterScreen(
 
             // 1. Unified Color Selection
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                FieldLabel(text = AppStrings.COUNTER_EDIT_LABEL_COLOR)
+                FieldLabel(text = stringResource(Res.string.counter_edit_label_color))
                 ColorSelectorRow(
                     selectedColorHex = selectedColorHex,
                     onColorSelected = { hex ->
@@ -184,8 +198,8 @@ fun EditCounterScreen(
              FlatTextField(
                  value = name,
                  onValueChange = { name = it },
-                 label = AppStrings.COUNTER_EDIT_FIELD_NAME,
-                 placeholder = AppStrings.COUNTER_EDIT_PLACEHOLDER_NAME,
+                 label = stringResource(Res.string.counter_edit_field_name),
+                 placeholder = stringResource(Res.string.counter_edit_placeholder_name),
                  accentColor = selectedColor
              )
 
@@ -193,8 +207,8 @@ fun EditCounterScreen(
              FlatTextField(
                  value = countText,
                  onValueChange = { if (it.isEmpty() || it == "-" || it.all { char -> char.isDigit() || char == '-' }) countText = it },
-                 label = AppStrings.COUNTER_EDIT_FIELD_VALUE,
-                 placeholder = AppStrings.COUNTER_EDIT_PLACEHOLDER_VALUE,
+                 label = stringResource(Res.string.counter_edit_field_value),
+                 placeholder = stringResource(Res.string.counter_edit_placeholder_value),
                  accentColor = selectedColor,
                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
              )

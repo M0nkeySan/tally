@@ -48,7 +48,17 @@ import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.core.model.playerNamesEqual
 import io.github.m0nkeysan.gamekeeper.core.model.sanitizePlayerName
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_add
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_player
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_create_format
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_reactivate_format
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_selector_change
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_selector_dialog_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_selector_placeholder
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_selector_search_placeholder
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_selector_select
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -140,10 +150,10 @@ fun PlayerSelectorField(
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.Person, contentDescription = AppStrings.CD_PLAYER, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Icon(Icons.Default.Person, contentDescription = stringResource(Res.string.cd_player), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Text(
-                    text = String.format(AppStrings.PLAYER_SELECTOR_PLACEHOLDER, label), 
+                    text = String.format(stringResource(Res.string.player_selector_placeholder), label), 
                     style = MaterialTheme.typography.bodyLarge, 
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(1f)
@@ -156,7 +166,7 @@ fun PlayerSelectorField(
                      contentColor = if (isSelected) contentColor else MaterialTheme.colorScheme.primary
                  )
              ) {
-                 Text(if (isSelected) AppStrings.PLAYER_SELECTOR_CHANGE else AppStrings.PLAYER_SELECTOR_SELECT, fontWeight = FontWeight.Bold)
+                 Text(if (isSelected) stringResource(Res.string.player_selector_change) else stringResource(Res.string.player_selector_select), fontWeight = FontWeight.Bold)
              }
         }
     }
@@ -224,14 +234,15 @@ fun PlayerSelectorContent(
             .padding(16.dp)
             .heightIn(max = 500.dp)
     ) {
-         Text(text = AppStrings.PLAYER_SELECTOR_DIALOG_TITLE, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+         Text(text = stringResource(
+             Res.string.player_selector_dialog_title), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(16.dp))
 
          OutlinedTextField(
              value = searchQuery,
              onValueChange = { searchQuery = it },
              modifier = Modifier.fillMaxWidth(),
-             placeholder = { Text(AppStrings.PLAYER_SELECTOR_SEARCH_PLACEHOLDER) },
+             placeholder = { Text(stringResource(Res.string.player_selector_search_placeholder)) },
              leadingIcon = { Icon(Icons.Default.Search, null) },
             trailingIcon = {
                 val sanitized = sanitizePlayerName(searchQuery)
@@ -240,7 +251,7 @@ fun PlayerSelectorContent(
                         handleCreateOrReactivate(searchQuery)
                         searchQuery = ""
                     }) {
-                        Icon(Icons.Default.Add, contentDescription = AppStrings.CD_ADD)
+                        Icon(Icons.Default.Add, contentDescription = stringResource(Res.string.cd_add))
                     }
                 }
             },
@@ -291,9 +302,9 @@ fun PlayerSelectorContent(
                             }
                             Text(
                                  text = if (deactivatedPlayer != null && onReactivate != null) {
-                                     String.format(AppStrings.PLAYER_REACTIVATE_FORMAT, searchQuery)
+                                     String.format(stringResource(Res.string.player_reactivate_format), searchQuery)
                                  } else {
-                                     String.format(AppStrings.PLAYER_CREATE_FORMAT, searchQuery)
+                                     String.format(stringResource(Res.string.player_create_format), searchQuery)
                                  },
                                  style = MaterialTheme.typography.bodyLarge,
                                  fontWeight = FontWeight.Bold

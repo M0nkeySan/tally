@@ -21,11 +21,26 @@ import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
+import io.github.m0nkeysan.gamekeeper.generated.resources.error_min_fingers
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_cd_touch
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_dialog_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_instruction_place
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_instruction_wait
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_label_fingers
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_label_groups
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_mode_fingers
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_mode_groups
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_section_mode
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_slider_value_format
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_finger_selector
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 // Vibrant colors for fingers
 private val fingerColors = listOf(
@@ -78,7 +93,7 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                AppStrings.GAME_FINGER_SELECTOR,
+                                stringResource(Res.string.game_finger_selector),
                                 style = MaterialTheme.typography.headlineSmall,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.fillMaxWidth(),
@@ -96,12 +111,12 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
+                        Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
                     }
                 },
                 actions = {
                     IconButton(onClick = { showSettings = true }) {
-                        Icon(GameIcons.Settings, contentDescription = AppStrings.CD_SETTINGS)
+                        Icon(GameIcons.Settings, contentDescription = stringResource(Res.string.cd_settings))
                     }
                 }
             )
@@ -139,13 +154,13 @@ fun SelectionSettingsSheet(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(
-            text = AppStrings.FINGER_SELECTOR_DIALOG_TITLE,
+            text = stringResource(Res.string.finger_selector_dialog_title),
             style = MaterialTheme.typography.headlineMedium
         )
 
         // Mode Selection
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(AppStrings.FINGER_SELECTOR_SECTION_MODE, style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(Res.string.finger_selector_section_mode), style = MaterialTheme.typography.titleMedium)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(
                     selected = config.mode == SelectionMode.FINGERS,
@@ -157,7 +172,7 @@ fun SelectionSettingsSheet(
                             )
                         )
                     },
-                    label = { Text(AppStrings.FINGER_SELECTOR_MODE_FINGERS) },
+                    label = { Text(stringResource(Res.string.finger_selector_mode_fingers)) },
                     leadingIcon = { Icon(GameIcons.TouchApp, "Fingers filter") }
                 )
                 FilterChip(
@@ -170,7 +185,7 @@ fun SelectionSettingsSheet(
                             )
                         )
                     },
-                    label = { Text(AppStrings.FINGER_SELECTOR_MODE_GROUPS) },
+                    label = { Text(stringResource(Res.string.finger_selector_mode_groups)) },
                     leadingIcon = { Icon(GameIcons.Group, null) }
                 )
             }
@@ -179,11 +194,11 @@ fun SelectionSettingsSheet(
          // Count Selection
          Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
              val title =
-                 if (config.mode == SelectionMode.FINGERS) AppStrings.FINGER_SELECTOR_LABEL_FINGERS else AppStrings.FINGER_SELECTOR_LABEL_GROUPS
+                 if (config.mode == SelectionMode.FINGERS) stringResource(Res.string.finger_selector_label_fingers) else stringResource(Res.string.finger_selector_label_groups)
              val min = 1
              val max = 5
 
-             Text(AppStrings.FINGER_SELECTOR_SLIDER_VALUE_FORMAT.format(title, config.count), style = MaterialTheme.typography.titleMedium)
+             Text(stringResource(Res.string.finger_selector_slider_value_format).format(title, config.count), style = MaterialTheme.typography.titleMedium)
 
             Slider(
                 value = config.count.toFloat(),
@@ -466,19 +481,19 @@ fun FingerSelectorGame(
                 ) {
                     Icon(
                         imageVector = GameIcons.TouchApp,
-                        contentDescription = AppStrings.FINGER_SELECTOR_CD_TOUCH,
+                        contentDescription = stringResource(Res.string.finger_selector_cd_touch),
                         tint = Color.White.copy(alpha = 0.6f),
                         modifier = Modifier.size(64.dp)
                     )
                     Text(
-                        text = AppStrings.FINGER_SELECTOR_INSTRUCTION_PLACE,
+                        text = stringResource(Res.string.finger_selector_instruction_place),
                         color = Color.White.copy(alpha = 0.8f),
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center
                     )
                     Text(
                         text = if (config.mode == SelectionMode.GROUPS)
-                            AppStrings.FINGER_SELECTOR_INSTRUCTION_WAIT
+                            stringResource(Res.string.finger_selector_instruction_wait)
                         else
                             "${config.count} finger${if (config.count > 1) "s" else ""} will be chosen",
                         color = Color.White.copy(alpha = 0.5f),
@@ -499,7 +514,7 @@ fun FingerSelectorGame(
                     contentAlignment = Alignment.BottomCenter
                 ) {
                     Text(
-                        text = AppStrings.ERROR_MIN_FINGERS.format(minFingers),
+                        text = stringResource(Res.string.error_min_fingers).format(minFingers),
                         color = Color.White.copy(alpha = 0.6f),
                         fontSize = 16.sp,
                         textAlign = TextAlign.Center

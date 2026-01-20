@@ -1,22 +1,67 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberSwipeToDismissBoxState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.GameIcons
-import io.github.m0nkeysan.gamekeeper.ui.components.*
+import io.github.m0nkeysan.gamekeeper.ui.components.EmptyState
+import io.github.m0nkeysan.gamekeeper.ui.components.GameDisplay
+import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
+import io.github.m0nkeysan.gamekeeper.ui.components.GameSelectionCard
+import io.github.m0nkeysan.gamekeeper.ui.components.LoadingState
+import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_delete_all
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_menu
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_create
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_delete_all_confirm
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_delete_all_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_cd_create
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_cd_delete_all
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_cd_delete_game
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_cd_statistics
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_empty
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_loading
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 /**
  * Reusable template for game selection screens.
@@ -83,8 +128,8 @@ fun GameSelectionTemplate(
     if (showDeleteAllDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteAllDialog = false },
-            title = { Text(AppStrings.GAME_DELETE_ALL_TITLE) },
-            text = { Text(AppStrings.GAME_DELETE_ALL_CONFIRM) },
+            title = { Text(stringResource(Res.string.game_delete_all_title)) },
+            text = { Text(stringResource(Res.string.game_delete_all_confirm)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -93,12 +138,12 @@ fun GameSelectionTemplate(
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
                 ) {
-                    Text(AppStrings.ACTION_DELETE_ALL)
+                    Text(stringResource(Res.string.action_delete_all))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteAllDialog = false }) {
-                    Text(AppStrings.ACTION_CANCEL)
+                    Text(stringResource(Res.string.action_cancel))
                 }
             }
         )
@@ -126,7 +171,7 @@ fun GameSelectionTemplate(
                     IconButton(onClick = onBack) {
                         Icon(
                             GameIcons.ArrowBack,
-                            contentDescription = AppStrings.ACTION_BACK
+                            contentDescription = stringResource(Res.string.action_back)
                         )
                     }
                 },
@@ -135,14 +180,14 @@ fun GameSelectionTemplate(
                         IconButton(onClick = {
                             onNavigateToStatistics()
                         }) {
-                            Icon(GameIcons.BarChart, contentDescription = AppStrings.GAME_SELECTION_CD_STATISTICS)
+                            Icon(GameIcons.BarChart, contentDescription = stringResource(Res.string.game_selection_cd_statistics))
                         }
                     }
                     Box {
                         IconButton(onClick = { showMenu = true }) {
                             Icon(
                                 GameIcons.MoreVert,
-                                contentDescription = AppStrings.CD_MENU
+                                contentDescription = stringResource(Res.string.cd_menu)
                             )
                         }
                         DropdownMenu(
@@ -150,7 +195,7 @@ fun GameSelectionTemplate(
                             onDismissRequest = { showMenu = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text(AppStrings.GAME_CREATE) },
+                                text = { Text(stringResource(Res.string.game_create)) },
                                 onClick = {
                                     showMenu = false
                                     onCreateNew()
@@ -158,13 +203,13 @@ fun GameSelectionTemplate(
                                 leadingIcon = {
                                     Icon(
                                         Icons.Default.Add,
-                                        contentDescription = AppStrings.GAME_SELECTION_CD_CREATE
+                                        contentDescription = stringResource(Res.string.game_selection_cd_create)
                                     )
                                 }
                             )
                             if (onDeleteAllGames != null && games.isNotEmpty()) {
                                 DropdownMenuItem(
-                                    text = { Text(AppStrings.GAME_DELETE_ALL_TITLE) },
+                                    text = { Text(stringResource(Res.string.game_delete_all_title)) },
                                     onClick = {
                                         showMenu = false
                                         showDeleteAllDialog = true
@@ -172,7 +217,7 @@ fun GameSelectionTemplate(
                                     leadingIcon = {
                                         Icon(
                                             GameIcons.Delete,
-                                            contentDescription = AppStrings.GAME_SELECTION_CD_DELETE_ALL
+                                            contentDescription = stringResource(Res.string.game_selection_cd_delete_all)
                                         )
                                     }
                                 )
@@ -187,7 +232,7 @@ fun GameSelectionTemplate(
                 onClick = onCreateNew,
                 containerColor = GameColors.Primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = AppStrings.GAME_SELECTION_CD_CREATE)
+                Icon(Icons.Default.Add, contentDescription = stringResource(Res.string.game_selection_cd_create))
             }
         },
         snackbarHost = {
@@ -197,14 +242,14 @@ fun GameSelectionTemplate(
         when {
             isLoading -> {
                 LoadingState(
-                    message = AppStrings.GAME_SELECTION_LOADING,
+                    message = stringResource(Res.string.game_selection_loading),
                     modifier = Modifier.padding(paddingValues)
                 )
             }
 
             games.isEmpty() -> {
                 EmptyState(
-                    message = AppStrings.GAME_SELECTION_EMPTY,
+                    message = stringResource(Res.string.game_selection_empty),
                     actionLabel = "Create Game",
                     onAction = onCreateNew,
                     modifier = Modifier.padding(paddingValues)
@@ -240,7 +285,7 @@ fun GameSelectionTemplate(
                                 ) {
                                     Icon(
                                         imageVector = GameIcons.Delete,
-                                        contentDescription = AppStrings.GAME_SELECTION_CD_DELETE_GAME,
+                                        contentDescription = stringResource(Res.string.game_selection_cd_delete_game),
                                         tint = GameColors.Error,
                                         modifier = Modifier.size(32.dp)
                                     )

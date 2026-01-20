@@ -24,8 +24,10 @@ import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.domain.model.AppTheme
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
-import io.github.m0nkeysan.gamekeeper.ui.strings.LocalStrings
+import org.jetbrains.compose.resources.stringResource
 import kotlinx.coroutines.launch
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 /**
  * Appearance settings screen for selecting app theme.
@@ -40,7 +42,6 @@ import kotlinx.coroutines.launch
 fun AppearanceSettingsScreen(
     onBack: () -> Unit
 ) {
-    val strings = LocalStrings.current
     val scope = rememberCoroutineScope()
     
     // Track selected theme
@@ -59,7 +60,7 @@ fun AppearanceSettingsScreen(
                 title = { Text("Theme") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = strings.ACTION_BACK)
+                        Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
                     }
                 }
             )

@@ -25,7 +25,10 @@ import io.github.m0nkeysan.gamekeeper.core.model.GlobalCategoryStat
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.formatAverage
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.getCategoryColor
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_heatmap_lower
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_heatmap_upper
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 /**
  * Color-coded heatmap displaying average scores for each Yahtzee category
@@ -43,7 +46,7 @@ fun CategoryHeatmap(
     ) {
         // Upper section
         Text(
-            text = AppStrings.YAHTZEE_STATS_HEATMAP_UPPER,
+            text = stringResource(Res.string.yahtzee_stats_heatmap_upper),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 4.dp)
@@ -67,7 +70,7 @@ fun CategoryHeatmap(
         
         // Lower section
         Text(
-            text = AppStrings.YAHTZEE_STATS_HEATMAP_LOWER,
+            text = stringResource(Res.string.yahtzee_stats_heatmap_lower),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 4.dp)
@@ -137,7 +140,7 @@ fun GlobalCategoryHeatmap(
     ) {
         // Upper section
         Text(
-            text = AppStrings.YAHTZEE_STATS_HEATMAP_UPPER,
+            text = stringResource(Res.string.yahtzee_stats_heatmap_upper),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 4.dp)
@@ -161,7 +164,7 @@ fun GlobalCategoryHeatmap(
         
         // Lower section
         Text(
-            text = AppStrings.YAHTZEE_STATS_HEATMAP_LOWER,
+            text = stringResource(Res.string.yahtzee_stats_heatmap_lower),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 4.dp)

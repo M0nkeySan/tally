@@ -50,8 +50,21 @@ import io.github.m0nkeysan.gamekeeper.core.model.TarotRound
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
 import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_announce_chelem
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_announce_petit_au_bout
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_announce_poignee
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_cd_add_round
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_empty_rounds
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_round_details
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_round_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_screen_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_section_history
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_section_scores
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,7 +99,7 @@ fun TarotScoringScreen(
              TopAppBar(
                  title = { 
                      Text(
-                         AppStrings.TAROT_SCORING_SCREEN_TITLE,
+                         stringResource(Res.string.tarot_scoring_screen_title),
                          style = MaterialTheme.typography.headlineSmall,
                          fontWeight = FontWeight.Bold,
                          modifier = Modifier.fillMaxWidth(),
@@ -95,12 +108,12 @@ fun TarotScoringScreen(
                  },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
+                        Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
                     }
                 },
                 actions = {
                     IconButton(onClick = { onNavigateToStatistics(gameId) }) {
-                        Icon(GameIcons.BarChart, contentDescription = AppStrings.CD_SETTINGS)
+                        Icon(GameIcons.BarChart, contentDescription = stringResource(Res.string.cd_settings))
                     }
                 }
             )
@@ -110,7 +123,7 @@ fun TarotScoringScreen(
                 onClick = { onAddNewRound(null) },
                 containerColor = GameColors.Primary
             ) {
-                Icon(GameIcons.Add, contentDescription = AppStrings.TAROT_SCORING_CD_ADD_ROUND)
+                Icon(GameIcons.Add, contentDescription = stringResource(Res.string.tarot_scoring_cd_add_round))
             }
         },
         snackbarHost = {
@@ -172,7 +185,7 @@ fun PlayerSummarySection(
 ) {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Text(
-            text = AppStrings.TAROT_SCORING_SECTION_SCORES,
+            text = stringResource(Res.string.tarot_scoring_section_scores),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
@@ -253,7 +266,7 @@ fun RoundHistorySection(
             .padding(horizontal = 16.dp)
     ) {
         Text(
-            text = AppStrings.TAROT_SCORING_SECTION_HISTORY,
+            text = stringResource(Res.string.tarot_scoring_section_history),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
@@ -263,7 +276,7 @@ fun RoundHistorySection(
         if (rounds.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(
-                    text = AppStrings.TAROT_SCORING_EMPTY_ROUNDS,
+                    text = stringResource(Res.string.tarot_scoring_empty_rounds),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -313,7 +326,7 @@ fun RoundHistoryItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                     text = AppStrings.TAROT_SCORING_ROUND_TITLE.format(round.roundNumber, takerName),
+                     text = stringResource(Res.string.tarot_scoring_round_title).format(round.roundNumber, takerName),
                      style = MaterialTheme.typography.bodyMedium,
                      fontWeight = FontWeight.Bold
                  )
@@ -339,15 +352,15 @@ fun RoundHistoryItem(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                 text = AppStrings.TAROT_SCORING_ROUND_DETAILS.format(round.bid.displayName, round.bouts, round.pointsScored),
+                 text = stringResource(Res.string.tarot_scoring_round_details).format(round.bid.displayName, round.bouts, round.pointsScored),
                  style = MaterialTheme.typography.bodySmall,
                  color = MaterialTheme.colorScheme.onSurfaceVariant
              )
 
              val announces = mutableListOf<String>()
-             if (round.hasPetitAuBout) announces.add(AppStrings.TAROT_SCORING_ANNOUNCE_PETIT_AU_BOUT)
-             if (round.hasPoignee) announces.add(AppStrings.TAROT_SCORING_ANNOUNCE_POIGNEE.format(round.poigneeLevel?.displayName ?: ""))
-             if (round.chelem != ChelemType.NONE) announces.add(AppStrings.TAROT_SCORING_ANNOUNCE_CHELEM.format(round.chelem.displayName))
+             if (round.hasPetitAuBout) announces.add(stringResource(Res.string.tarot_scoring_announce_petit_au_bout))
+             if (round.hasPoignee) announces.add(stringResource(Res.string.tarot_scoring_announce_poignee).format(round.poigneeLevel?.displayName ?: ""))
+             if (round.chelem != ChelemType.NONE) announces.add(stringResource(Res.string.tarot_scoring_announce_chelem).format(round.chelem.displayName))
 
             if (announces.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(4.dp))

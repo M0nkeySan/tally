@@ -46,8 +46,64 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.CategoryHeat
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GameSummaryRow
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GlobalCategoryHeatmap
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.StatisticRow
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_format_active_player
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_format_category_avg
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_format_high_score
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_format_luckiest_player
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_format_most_yahtzees
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_format_player_count
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_format_winner_score
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_format_wins
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_format_yahtzee_rate
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_rank_first
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_rank_format
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_rank_second
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_rank_third
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_average_score
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_bonus_rate
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_finished_games
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_average_score
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_avg_players
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_best_avg
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_category
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_dice_rolls
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_finished
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_fun_facts
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_high_score
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_leaderboards
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_least_scored
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_luckiest
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_most_active
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_most_consistent
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_most_scored
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_most_yahtzees_game
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_overall
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_points_scored
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_total_players
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_total_yahtzees
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_upper_bonus
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_yahtzee_rate
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_leaderboard_highest_scores
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_leaderboard_most_wins
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_leaderboard_most_yahtzees
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_lower_section
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_no_data
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_overall_performance
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_personal_best
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_recent_games
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_score_box
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_select_player
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_total_games
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_total_yahtzees
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_upper_section
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_wins
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_yahtzee_rate
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,7 +127,7 @@ fun YahtzeeStatisticsScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            AppStrings.CD_SETTINGS,
+                            stringResource(Res.string.cd_settings),
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
@@ -81,7 +137,7 @@ fun YahtzeeStatisticsScreen(
                     IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = AppStrings.ACTION_BACK
+                            contentDescription = stringResource(Res.string.action_back)
                         )
                     }
                 }
@@ -152,7 +208,7 @@ fun YahtzeeStatisticsScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(AppStrings.YAHTZEE_STATS_NO_DATA)
+                        Text(stringResource(Res.string.yahtzee_stats_no_data))
                     }
                 }
             }
@@ -170,8 +226,8 @@ private fun PlayerSelectorDropdown(
 ) {
     val selectedPlayer = players.find { it.id == selectedPlayerId }
     val displayName = when (selectedPlayerId) {
-        YahtzeeStatisticsViewModel.GLOBAL_ID -> AppStrings.YAHTZEE_STATS_GLOBAL
-        else -> selectedPlayer?.name ?: AppStrings.YAHTZEE_STATS_SELECT_PLAYER
+        YahtzeeStatisticsViewModel.GLOBAL_ID -> stringResource(Res.string.yahtzee_stats_global)
+        else -> selectedPlayer?.name ?: stringResource(Res.string.yahtzee_stats_select_player)
     }
     
     Box(
@@ -217,7 +273,7 @@ private fun PlayerSelectorDropdown(
                     DropdownMenuItem(
                         text = { 
                             Text(
-                                AppStrings.YAHTZEE_STATS_GLOBAL,
+                                stringResource(Res.string.yahtzee_stats_global),
                                 fontWeight = FontWeight.Bold
                             )
                         },
@@ -299,49 +355,49 @@ private fun OverallPerformanceCard(statistics: YahtzeePlayerStatistics) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = AppStrings.YAHTZEE_STATS_OVERALL_PERFORMANCE,
+                text = stringResource(Res.string.yahtzee_stats_overall_performance),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
             StatisticRow(
-                label = AppStrings.YAHTZEE_STATS_TOTAL_GAMES,
+                label = stringResource(Res.string.yahtzee_stats_total_games),
                 value = statistics.totalGames.toString()
             )
 
             StatisticRow(
-                label = AppStrings.YAHTZEE_STATS_FINISHED_GAMES,
+                label = stringResource(Res.string.yahtzee_stats_finished_games),
                 value = statistics.finishedGames.toString()
             )
 
             StatisticRow(
-                label = AppStrings.YAHTZEE_STATS_WINS,
-                value = String.format(AppStrings.YAHTZEE_FORMAT_WINS, statistics.wins, formatPercentage(statistics.winRate)),
+                label = stringResource(Res.string.yahtzee_stats_wins),
+                value = String.format(stringResource(Res.string.yahtzee_format_wins), statistics.wins, formatPercentage(statistics.winRate)),
                 valueColor = GameColors.Success
             )
 
             StatisticRow(
-                label = AppStrings.YAHTZEE_STATS_AVERAGE_SCORE,
+                label = stringResource(Res.string.yahtzee_stats_average_score),
                 value = formatAverage(statistics.averageScore),
                 valueColor = GameColors.Primary
             )
 
             StatisticRow(
-                label = AppStrings.YAHTZEE_STATS_PERSONAL_BEST,
+                label = stringResource(Res.string.yahtzee_stats_personal_best),
                 value = statistics.highScore.toString(),
                 valueColor = GameColors.Success
             )
 
             StatisticRow(
-                label = AppStrings.YAHTZEE_STATS_TOTAL_YAHTZEES,
+                label = stringResource(Res.string.yahtzee_stats_total_yahtzees),
                 value = statistics.totalYahtzees.toString(),
                 valueColor = GameColors.TrophyGold
             )
 
             StatisticRow(
-                label = AppStrings.YAHTZEE_STATS_YAHTZEE_RATE,
-                value = String.format(AppStrings.YAHTZEE_FORMAT_YAHTZEE_RATE, formatAverage(statistics.yahtzeeRate)),
+                label = stringResource(Res.string.yahtzee_stats_yahtzee_rate),
+                value = String.format(stringResource(Res.string.yahtzee_format_yahtzee_rate), formatAverage(statistics.yahtzeeRate)),
                 valueColor = GameColors.TrophyGold
             )
         }
@@ -364,7 +420,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = AppStrings.YAHTZEE_STATS_SCORE_BOX,
+                text = stringResource(Res.string.yahtzee_stats_score_box),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -383,7 +439,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = AppStrings.YAHTZEE_STATS_UPPER_SECTION,
+                        text = stringResource(Res.string.yahtzee_stats_upper_section),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -400,7 +456,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = AppStrings.YAHTZEE_STATS_LOWER_SECTION,
+                        text = stringResource(Res.string.yahtzee_stats_lower_section),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -417,7 +473,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = AppStrings.YAHTZEE_STATS_BONUS_RATE,
+                        text = stringResource(Res.string.yahtzee_stats_bonus_rate),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -449,7 +505,7 @@ private fun RecentGamesCard(games: List<io.github.m0nkeysan.gamekeeper.core.mode
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = AppStrings.YAHTZEE_STATS_RECENT_GAMES,
+                text = stringResource(Res.string.yahtzee_stats_recent_games),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -518,19 +574,19 @@ private fun GlobalOverviewCard(statistics: io.github.m0nkeysan.gamekeeper.core.m
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = AppStrings.YAHTZEE_STATS_GLOBAL_OVERALL,
+                text = stringResource(Res.string.yahtzee_stats_global_overall),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
 
-            StatisticRow(AppStrings.YAHTZEE_STATS_TOTAL_GAMES, statistics.totalGames.toString())
-            StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_FINISHED, statistics.finishedGames.toString())
-            StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_TOTAL_PLAYERS, statistics.totalPlayers.toString())
+            StatisticRow(stringResource(Res.string.yahtzee_stats_total_games), statistics.totalGames.toString())
+            StatisticRow(stringResource(Res.string.yahtzee_stats_global_finished), statistics.finishedGames.toString())
+            StatisticRow(stringResource(Res.string.yahtzee_stats_global_total_players), statistics.totalPlayers.toString())
             
             if (statistics.mostActivePlayer != null) {
                 StatisticRow(
-                    AppStrings.YAHTZEE_STATS_GLOBAL_MOST_ACTIVE,
-                    String.format(AppStrings.YAHTZEE_FORMAT_ACTIVE_PLAYER, statistics.mostActivePlayer.playerName, statistics.mostActivePlayer.gamesPlayed)
+                    stringResource(Res.string.yahtzee_stats_global_most_active),
+                    String.format(stringResource(Res.string.yahtzee_format_active_player), statistics.mostActivePlayer.playerName, statistics.mostActivePlayer.gamesPlayed)
                 )
             }
             
@@ -538,61 +594,61 @@ private fun GlobalOverviewCard(statistics: io.github.m0nkeysan.gamekeeper.core.m
             
             if (statistics.allTimeHighScore != null) {
                 StatisticRow(
-                    AppStrings.YAHTZEE_STATS_GLOBAL_HIGH_SCORE,
-                    String.format(AppStrings.YAHTZEE_FORMAT_HIGH_SCORE, statistics.allTimeHighScore.score, statistics.allTimeHighScore.playerName),
+                    stringResource(Res.string.yahtzee_stats_global_high_score),
+                    String.format(stringResource(Res.string.yahtzee_format_high_score), statistics.allTimeHighScore.score, statistics.allTimeHighScore.playerName),
                     valueColor = GameColors.TrophyGold
                 )
             }
             
             StatisticRow(
-                AppStrings.YAHTZEE_STATS_GLOBAL_AVERAGE_SCORE,
+                stringResource(Res.string.yahtzee_stats_global_average_score),
                 formatAverage(statistics.averageScore),
                 valueColor = GameColors.Primary
             )
             
             StatisticRow(
-                AppStrings.YAHTZEE_STATS_GLOBAL_TOTAL_YAHTZEES,
+                stringResource(Res.string.yahtzee_stats_global_total_yahtzees),
                 statistics.totalYahtzees.toString(),
                 valueColor = GameColors.Success
             )
             
             StatisticRow(
-                AppStrings.YAHTZEE_STATS_GLOBAL_YAHTZEE_RATE,
-                String.format(AppStrings.YAHTZEE_FORMAT_YAHTZEE_RATE, formatAverage(statistics.yahtzeeRate))
+                stringResource(Res.string.yahtzee_stats_global_yahtzee_rate),
+                String.format(stringResource(Res.string.yahtzee_format_yahtzee_rate), formatAverage(statistics.yahtzeeRate))
             )
             
             if (statistics.mostYahtzeesInGame != null && statistics.mostYahtzeesInGame.count > 0) {
                 StatisticRow(
-                    AppStrings.YAHTZEE_STATS_GLOBAL_MOST_YAHTZEES_GAME,
-                    String.format(AppStrings.YAHTZEE_FORMAT_MOST_YAHTZEES, statistics.mostYahtzeesInGame.count, statistics.mostYahtzeesInGame.playerName),
+                    stringResource(Res.string.yahtzee_stats_global_most_yahtzees_game),
+                    String.format(stringResource(Res.string.yahtzee_format_most_yahtzees), statistics.mostYahtzeesInGame.count, statistics.mostYahtzeesInGame.playerName),
                     valueColor = GameColors.TrophyGold
                 )
             }
             
-            StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_UPPER_BONUS, formatPercentage(statistics.upperBonusRate))
+            StatisticRow(stringResource(Res.string.yahtzee_stats_global_upper_bonus), formatPercentage(statistics.upperBonusRate))
             
             HorizontalDivider()
             
             Text(
-                text = AppStrings.YAHTZEE_STATS_GLOBAL_FUN_FACTS,
+                text = stringResource(Res.string.yahtzee_stats_global_fun_facts),
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 8.dp)
             )
             
-            StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_DICE_ROLLS, statistics.estimatedDiceRolls.toString())
-            StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_POINTS_SCORED, statistics.totalPointsScored.toString())
-            StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_AVG_PLAYERS, formatAverage(statistics.averagePlayersPerGame))
+            StatisticRow(stringResource(Res.string.yahtzee_stats_global_dice_rolls), statistics.estimatedDiceRolls.toString())
+            StatisticRow(stringResource(Res.string.yahtzee_stats_global_points_scored), statistics.totalPointsScored.toString())
+            StatisticRow(stringResource(Res.string.yahtzee_stats_global_avg_players), formatAverage(statistics.averagePlayersPerGame))
             
             if (statistics.luckiestPlayer != null) {
                 StatisticRow(
-                    AppStrings.YAHTZEE_STATS_GLOBAL_LUCKIEST,
-                    String.format(AppStrings.YAHTZEE_FORMAT_LUCKIEST_PLAYER, statistics.luckiestPlayer.playerName, formatAverage(statistics.luckiestPlayer.metric))
+                    stringResource(Res.string.yahtzee_stats_global_luckiest),
+                    String.format(stringResource(Res.string.yahtzee_format_luckiest_player), statistics.luckiestPlayer.playerName, formatAverage(statistics.luckiestPlayer.metric))
                 )
             }
             
             if (statistics.mostConsistentPlayer != null) {
-                StatisticRow(AppStrings.YAHTZEE_STATS_GLOBAL_MOST_CONSISTENT, statistics.mostConsistentPlayer.playerName)
+                StatisticRow(stringResource(Res.string.yahtzee_stats_global_most_consistent), statistics.mostConsistentPlayer.playerName)
             }
         }
     }
@@ -612,14 +668,14 @@ private fun GlobalLeaderboardCard(statistics: io.github.m0nkeysan.gamekeeper.cor
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = AppStrings.YAHTZEE_STATS_GLOBAL_LEADERBOARDS,
+                text = stringResource(Res.string.yahtzee_stats_global_leaderboards),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
             
             // Most Wins
             Text(
-                text = AppStrings.YAHTZEE_STATS_LEADERBOARD_MOST_WINS,
+                text = stringResource(Res.string.yahtzee_stats_leaderboard_most_wins),
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
@@ -632,7 +688,7 @@ private fun GlobalLeaderboardCard(statistics: io.github.m0nkeysan.gamekeeper.cor
             
             // Highest Scores
             Text(
-                text = AppStrings.YAHTZEE_STATS_LEADERBOARD_HIGHEST_SCORES,
+                text = stringResource(Res.string.yahtzee_stats_leaderboard_highest_scores),
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 4.dp)
@@ -645,7 +701,7 @@ private fun GlobalLeaderboardCard(statistics: io.github.m0nkeysan.gamekeeper.cor
             
             // Most Yahtzees
             Text(
-                text = AppStrings.YAHTZEE_STATS_LEADERBOARD_MOST_YAHTZEES,
+                text = stringResource(Res.string.yahtzee_stats_leaderboard_most_yahtzees),
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 4.dp)
@@ -672,10 +728,10 @@ private fun GlobalLeaderboardRow(entry: io.github.m0nkeysan.gamekeeper.core.mode
             modifier = Modifier.weight(1f)
         ) {
             val medal = when (entry.rank) {
-                1 -> AppStrings.YAHTZEE_RANK_FIRST
-                2 -> AppStrings.YAHTZEE_RANK_SECOND
-                3 -> AppStrings.YAHTZEE_RANK_THIRD
-                else -> String.format(AppStrings.YAHTZEE_RANK_FORMAT, entry.rank)
+                1 -> stringResource(Res.string.yahtzee_rank_first)
+                2 -> stringResource(Res.string.yahtzee_rank_second)
+                3 -> stringResource(Res.string.yahtzee_rank_third)
+                else -> String.format(stringResource(Res.string.yahtzee_rank_format), entry.rank)
             }
             Text(
                 text = medal,
@@ -714,7 +770,7 @@ private fun GlobalCategoryAnalysisCard(statistics: io.github.m0nkeysan.gamekeepe
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = AppStrings.YAHTZEE_STATS_GLOBAL_CATEGORY,
+                text = stringResource(Res.string.yahtzee_stats_global_category),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -725,22 +781,22 @@ private fun GlobalCategoryAnalysisCard(statistics: io.github.m0nkeysan.gamekeepe
 
             if (statistics.mostScoredCategory != null) {
                 StatisticRow(
-                    AppStrings.YAHTZEE_STATS_GLOBAL_MOST_SCORED,
+                    stringResource(Res.string.yahtzee_stats_global_most_scored),
                     statistics.mostScoredCategory.displayName
                 )
             }
             
             if (statistics.leastScoredCategory != null) {
                 StatisticRow(
-                    AppStrings.YAHTZEE_STATS_GLOBAL_LEAST_SCORED,
+                    stringResource(Res.string.yahtzee_stats_global_least_scored),
                     statistics.leastScoredCategory.displayName
                 )
             }
             
             if (statistics.highestCategoryAverage != null) {
                 StatisticRow(
-                    AppStrings.YAHTZEE_STATS_GLOBAL_BEST_AVG,
-                    String.format(AppStrings.YAHTZEE_FORMAT_CATEGORY_AVG, statistics.highestCategoryAverage.category.displayName, formatAverage(statistics.highestCategoryAverage.average))
+                    stringResource(Res.string.yahtzee_stats_global_best_avg),
+                    String.format(stringResource(Res.string.yahtzee_format_category_avg), statistics.highestCategoryAverage.category.displayName, formatAverage(statistics.highestCategoryAverage.average))
                 )
             }
         }
@@ -761,7 +817,7 @@ private fun GlobalRecentGamesCard(games: List<io.github.m0nkeysan.gamekeeper.cor
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = AppStrings.YAHTZEE_STATS_RECENT_GAMES,
+                text = stringResource(Res.string.yahtzee_stats_recent_games),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -788,12 +844,12 @@ private fun GlobalGameSummaryRow(game: io.github.m0nkeysan.gamekeeper.core.model
                 fontWeight = FontWeight.Medium
             )
             Text(
-                text = String.format(AppStrings.YAHTZEE_FORMAT_WINNER_SCORE, game.winnerName),
+                text = String.format(stringResource(Res.string.yahtzee_format_winner_score), game.winnerName),
                 style = MaterialTheme.typography.bodySmall,
                 color = GameColors.Success
             )
             Text(
-                text = String.format(AppStrings.YAHTZEE_FORMAT_PLAYER_COUNT, game.playerCount),
+                text = String.format(stringResource(Res.string.yahtzee_format_player_count), game.playerCount),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

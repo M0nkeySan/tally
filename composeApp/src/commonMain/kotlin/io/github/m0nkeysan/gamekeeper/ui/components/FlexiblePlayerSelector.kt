@@ -1,18 +1,34 @@
 package io.github.m0nkeysan.gamekeeper.ui.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_add_player
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_remove_player
+import io.github.m0nkeysan.gamekeeper.generated.resources.error_player_count_range
+import io.github.m0nkeysan.gamekeeper.generated.resources.players_count_format
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 /**
  * Flexible player selector that supports min/max player constraints.
@@ -47,7 +63,7 @@ fun FlexiblePlayerSelector(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = AppStrings.PLAYERS_COUNT_FORMAT.format(selectedPlayers.size, maxPlayers),
+                text = stringResource(Res.string.players_count_format).format(selectedPlayers.size, maxPlayers),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -68,7 +84,7 @@ fun FlexiblePlayerSelector(
                 ) {
                     Icon(
                         Icons.Default.Remove,
-                        contentDescription = AppStrings.CD_REMOVE_PLAYER,
+                        contentDescription = stringResource(Res.string.cd_remove_player),
                         tint = if (selectedPlayers.size > minPlayers) 
                             GameColors.Error 
                         else 
@@ -90,7 +106,8 @@ fun FlexiblePlayerSelector(
                 ) {
                     Icon(
                         Icons.Default.Add,
-                        contentDescription = AppStrings.CD_ADD_PLAYER,
+                        contentDescription = stringResource(
+                            Res.string.cd_add_player),
                         tint = if (selectedPlayers.size < maxPlayers) 
                             GameColors.Success 
                         else 
@@ -103,7 +120,7 @@ fun FlexiblePlayerSelector(
         // Validation error message
         if (showError) {
             Text(
-                text = AppStrings.ERROR_PLAYER_COUNT_RANGE.format(minPlayers, maxPlayers),
+                text = stringResource(Res.string.error_player_count_range).format(minPlayers, maxPlayers),
                 style = MaterialTheme.typography.bodySmall,
                 color = GameColors.Error
             )

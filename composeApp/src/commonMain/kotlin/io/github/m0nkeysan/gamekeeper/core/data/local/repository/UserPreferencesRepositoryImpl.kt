@@ -7,6 +7,7 @@ import io.github.m0nkeysan.gamekeeper.core.domain.model.AppTheme
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.UserPreferencesRepository
 import io.github.m0nkeysan.gamekeeper.core.model.DiceConfiguration
 import io.github.m0nkeysan.gamekeeper.core.model.DiceType
+import io.github.m0nkeysan.gamekeeper.platform.getSystemLocaleCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -119,7 +120,7 @@ class UserPreferencesRepositoryImpl(
      }
 
     override fun getLocale(): Flow<AppLocale> =
-        getString(KEY_LOCALE, AppLocale.SYSTEM_DEFAULT.code)
+        getString(KEY_LOCALE, getDefaultLocaleCode())
             .map { AppLocale.fromCode(it) }
 
     override suspend fun saveLocale(locale: AppLocale) {
@@ -132,5 +133,16 @@ class UserPreferencesRepositoryImpl(
 
     override suspend fun saveTheme(theme: AppTheme) {
         saveString(KEY_THEME, theme.code)
+    }
+
+    /**
+     * Returns the default locale code on first launch:
+     * - Uses system language if supported (en, fr)
+     * - Falls back to English if system language not supported
+     */
+    private fun getDefaultLocaleCode(): String {
+        val supportedLanguages = listOf("en", "fr")
+        val systemLang = getSystemLocaleCode()
+        return if (systemLang in supportedLanguages) systemLang else "en"
     }
 }

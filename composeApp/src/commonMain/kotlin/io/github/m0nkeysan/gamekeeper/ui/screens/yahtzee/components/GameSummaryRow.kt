@@ -14,11 +14,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.GameSummary
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import org.jetbrains.compose.resources.stringResource
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_format_player_count
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_rank_first_place
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_rank_format
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_rank_second_place
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_rank_third_place
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 /**
  * Row displaying a summary of a single completed game
@@ -68,7 +74,7 @@ fun GameSummaryRow(
             
             // Player count
              Text(
-                 text = String.format(AppStrings.COUNTER_FORMAT_PLAYER_COUNT, game.playerCount),
+                 text = String.format(stringResource(Res.string.counter_format_player_count), game.playerCount),
                  style = MaterialTheme.typography.bodySmall,
                  color = MaterialTheme.colorScheme.onSurfaceVariant,
                  modifier = Modifier.padding(horizontal = 8.dp)
@@ -86,10 +92,10 @@ fun GameSummaryRow(
                 }
                 
                 val rankText = when (game.rank) {
-                    1 -> AppStrings.YAHTZEE_RANK_FIRST_PLACE
-                    2 -> AppStrings.YAHTZEE_RANK_SECOND_PLACE
-                    3 -> AppStrings.YAHTZEE_RANK_THIRD_PLACE
-                    else -> String.format(AppStrings.YAHTZEE_RANK_FORMAT, game.rank)
+                    1 -> stringResource(Res.string.yahtzee_rank_first_place)
+                    2 -> stringResource(Res.string.yahtzee_rank_second_place)
+                    3 -> stringResource(Res.string.yahtzee_rank_third_place)
+                    else -> String.format(stringResource(Res.string.yahtzee_rank_format), game.rank)
                 }
                 
                 Text(

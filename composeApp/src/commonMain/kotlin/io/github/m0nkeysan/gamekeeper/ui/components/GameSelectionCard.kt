@@ -13,7 +13,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_finished_game
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_count_display
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 /**
  * Data class representing a game for display in selection screens.
@@ -69,7 +72,7 @@ fun GameSelectionCard(
                 Spacer(modifier = Modifier.height(4.dp))
                 
                 Text(
-                    text = AppStrings.PLAYER_COUNT_DISPLAY.format(game.playerCount, if (game.playerCount > 1) "s" else ""),
+                    text = stringResource(Res.string.player_count_display).format(game.playerCount, if (game.playerCount > 1) "s" else ""),
                     style = MaterialTheme.typography.bodyMedium,
                     color = GameColors.TextSecondary
                 )
@@ -86,7 +89,7 @@ fun GameSelectionCard(
             if (game.isFinished) {
                 Icon(
                     imageVector = Icons.Default.EmojiEvents,
-                    contentDescription = AppStrings.CD_FINISHED_GAME,
+                    contentDescription = stringResource(Res.string.cd_finished_game),
                     tint = GameColors.TrophyGold,
                     modifier = Modifier.size(32.dp)
                 )

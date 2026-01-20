@@ -24,8 +24,12 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.home.HomeViewModel
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionViewModel
 import io.github.m0nkeysan.gamekeeper.ui.screens.settings.SettingsScreen
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
-import io.github.m0nkeysan.gamekeeper.core.navigation.Screen
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_add_player
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
+import io.github.m0nkeysan.gamekeeper.generated.resources.home_cd_games
+import io.github.m0nkeysan.gamekeeper.generated.resources.home_cd_players
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 /**
  * Navigation template for the home screen with bottom bar for switching between Games, Players, and Settings tabs.
@@ -82,7 +86,7 @@ fun HomeNavigationTemplate(
                     icon = {
                         Icon(
                             imageVector = GameIcons.GridView,
-                            contentDescription = AppStrings.HOME_CD_GAMES
+                            contentDescription = stringResource(Res.string.home_cd_games)
                         )
                     },
                     alwaysShowLabel = false
@@ -95,7 +99,7 @@ fun HomeNavigationTemplate(
                     icon = {
                         Icon(
                             imageVector = GameIcons.Group,
-                            contentDescription = AppStrings.HOME_CD_PLAYERS
+                            contentDescription = stringResource(Res.string.home_cd_players)
                         )
                     },
                     alwaysShowLabel = false
@@ -108,7 +112,7 @@ fun HomeNavigationTemplate(
                     icon = {
                         Icon(
                             imageVector = GameIcons.Settings,
-                            contentDescription = AppStrings.CD_SETTINGS
+                            contentDescription = stringResource(Res.string.cd_settings)
                         )
                     },
                     alwaysShowLabel = false
@@ -122,7 +126,7 @@ fun HomeNavigationTemplate(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 ) {
-                    Icon(Icons.Default.Add, contentDescription = AppStrings.CD_ADD_PLAYER)
+                    Icon(Icons.Default.Add, contentDescription = stringResource(Res.string.cd_add_player))
                 }
             }
         }

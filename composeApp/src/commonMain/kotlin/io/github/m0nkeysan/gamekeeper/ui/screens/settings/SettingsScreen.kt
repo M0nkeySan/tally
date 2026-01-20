@@ -15,16 +15,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.gamekeeper.GameIcons
-import io.github.m0nkeysan.gamekeeper.ui.strings.LocalStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_retry
+import io.github.m0nkeysan.gamekeeper.generated.resources.settings_language
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 /**
  * Main settings screen containing all app settings.
@@ -38,7 +40,6 @@ import io.github.m0nkeysan.gamekeeper.ui.strings.LocalStrings
 fun SettingsScreen(
     onBack: () -> Unit
 ) {
-    val strings = LocalStrings.current
     val showAppearanceSettings = remember { mutableStateOf(false) }
     val showLanguageSettings = remember { mutableStateOf(false) }
 
@@ -52,46 +53,46 @@ fun SettingsScreen(
         )
     } else {
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(strings.SETTINGS_LANGUAGE) },
-                    navigationIcon = {
-                        IconButton(onClick = onBack) {
-                            Icon(GameIcons.ArrowBack, contentDescription = strings.ACTION_BACK)
-                        }
-                    }
-                )
-            }
-        ) { padding ->
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-            ) {
-                // Appearance Section
-                item {
-                    SettingsSectionHeader("Appearance")
-                }
-                item {
-                    SettingsOption(
-                        title = "Theme",
-                        onClick = { showAppearanceSettings.value = true }
-                    )
-                }
-                item {
-                    Divider(modifier = Modifier.padding(vertical = 8.dp))
-                }
+             topBar = {
+                 TopAppBar(
+                     title = { Text(stringResource(Res.string.settings_language)) },
+                     navigationIcon = {
+                         IconButton(onClick = onBack) {
+                             Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
+                         }
+                     }
+                 )
+             }
+         ) { padding ->
+             LazyColumn(
+                 modifier = Modifier
+                     .fillMaxSize()
+                     .padding(padding)
+             ) {
+                 // Appearance Section
+                 item {
+                     SettingsSectionHeader(stringResource(Res.string.action_retry))
+                 }
+                 item {
+                     SettingsOption(
+                         title = "Theme",
+                         onClick = { showAppearanceSettings.value = true }
+                     )
+                 }
+                 item {
+                     Divider(modifier = Modifier.padding(vertical = 8.dp))
+                 }
 
-                // Language Section
-                item {
-                    SettingsSectionHeader("Language")
-                }
-                item {
-                    SettingsOption(
-                        title = strings.SETTINGS_LANGUAGE,
-                        onClick = { showLanguageSettings.value = true }
-                    )
-                }
+                 // Language Section
+                 item {
+                     SettingsSectionHeader("Language")
+                 }
+                 item {
+                     SettingsOption(
+                         title = stringResource(Res.string.settings_language),
+                         onClick = { showLanguageSettings.value = true }
+                     )
+                 }
             }
         }
     }

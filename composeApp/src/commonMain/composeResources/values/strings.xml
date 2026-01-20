@@ -246,6 +246,15 @@
     <string name="player_reactivate_format">Reactivate \"%s\"</string>
     <string name="player_create_format">Create \"%s\"</string>
 
+    <!-- Player Management Messages -->
+    <string name="player_reactivated_message">Player \'%s\' has been reactivated</string>
+    <string name="dialog_deactivate_title">Deactivate Player?</string>
+    <string name="dialog_delete_title">Delete Player?</string>
+    <string name="dialog_deactivate_message">Linked to %d game(s). Player will be deactivated to preserve game history.</string>
+    <string name="dialog_delete_message">This player has no game history. They will be permanently deleted.</string>
+    <string name="player_deactivated_message">Player \'%s\' deactivated</string>
+    <string name="player_deleted_message">Player \'%s\' deleted</string>
+
     <!-- Results -->
     <string name="results_action_back">BACK TO HOME</string>
     <string name="results_title_tie">IT\'S A TIE!</string>

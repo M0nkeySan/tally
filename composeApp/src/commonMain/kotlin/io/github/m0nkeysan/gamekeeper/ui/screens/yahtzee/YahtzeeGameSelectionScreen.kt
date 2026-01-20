@@ -11,7 +11,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.ui.components.GameDisplay
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameSelectionTemplate
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_delete
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_deletion_dialog_yahtzee_message
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_deletion_dialog_yahtzee_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_game_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 @Composable
 fun YahtzeeGameSelectionScreen(
@@ -27,8 +32,8 @@ fun YahtzeeGameSelectionScreen(
     if (gameToDelete != null) {
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { gameToDelete = null },
-            title = { Text(AppStrings.GAME_DELETION_DIALOG_YAHTZEE_TITLE) },
-             text = { Text(AppStrings.GAME_DELETION_DIALOG_YAHTZEE_MESSAGE.format(gameToDelete?.name)) },
+            title = { Text(stringResource(Res.string.game_deletion_dialog_yahtzee_title)) },
+             text = { Text(stringResource(Res.string.game_deletion_dialog_yahtzee_message).format(gameToDelete?.name)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -37,12 +42,12 @@ fun YahtzeeGameSelectionScreen(
                     },
                     colors = androidx.compose.material3.ButtonDefaults.textButtonColors(contentColor = androidx.compose.material3.MaterialTheme.colorScheme.error)
                 ) {
-                    Text(AppStrings.ACTION_DELETE)
+                    Text(stringResource(Res.string.action_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { gameToDelete = null }) {
-                    Text(AppStrings.ACTION_DELETE)
+                    Text(stringResource(Res.string.action_delete))
                 }
             }
         )
@@ -61,7 +66,7 @@ fun YahtzeeGameSelectionScreen(
     }
 
     GameSelectionTemplate(
-        title = AppStrings.YAHTZEE_GAME_TITLE,
+        title = stringResource(Res.string.yahtzee_game_title),
         games = games,
         onGameSelect = onSelectGame,
         onCreateNew = onCreateNewGame,

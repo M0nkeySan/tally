@@ -39,7 +39,7 @@
     <string name="counter_cd_increase">Augmenter</string>
     <string name="counter_leader_display_format">%s %s</string>
     <string name="counter_history_title">Historique</string>
-    <string name="counter_history_subtitle">⚠️ L\'historique est effacé à la fermeture de l\'application</string>
+    <string name="counter_history_subtitle">⚠️ L'historique est effacé à la fermeture de l'application</string>
     <string name="counter_history_cd_delete">Supprimer tous les historiques</string>
     <string name="counter_history_empty">Aucun changement de compteur pour le moment</string>
     <string name="counter_history_deleted_emoji">🗑️</string>
@@ -47,7 +47,7 @@
     <string name="counter_edit_title">Modifier le compteur</string>
     <string name="counter_edit_cd_delete">Supprimer</string>
     <string name="counter_edit_action_save">ENREGISTRER LES MODIFICATIONS</string>
-    <string name="counter_edit_label_color">COULEUR D\'ACCENTUATION</string>
+    <string name="counter_edit_label_color">COULEUR D'ACCENTUATION</string>
     <string name="counter_edit_field_name">NOM</string>
     <string name="counter_edit_placeholder_name">Nom du joueur</string>
     <string name="counter_edit_field_value">VALEUR</string>
@@ -83,8 +83,8 @@
     <!-- Descriptions -->
     <string name="desc_tarot">Inscrivez les points des parties de Tarot pour 3, 4 ou 5 joueurs</string>
     <string name="desc_yahtzee">Complétez la feuille de pointage Yahtzee avec bonus automatiques</string>
-    <string name="desc_counter">Compteur simple pour n\'importe quel jeu de société</string>
-    <string name="desc_dice">Lancez des dés personnalisés pour n\'importe quel jeu de société</string>
+    <string name="desc_counter">Compteur simple pour n'importe quel jeu de société</string>
+    <string name="desc_dice">Lancez des dés personnalisés pour n'importe quel jeu de société</string>
 
     <!-- Game Operations -->
     <string name="game_delete_all_title">Supprimer tous les jeux</string>
@@ -126,7 +126,7 @@
     <string name="tarot_stats_label_avg_won">Moy. Remportée</string>
     <string name="tarot_stats_label_avg_lost">Moy. Perdue</string>
     <string name="tarot_stats_section_called_performance">Performance appelée</string>
-    <string name="tarot_stats_error_title">Oups ! Quelque chose s\'est mal passé</string>
+    <string name="tarot_stats_error_title">Oups ! Quelque chose s'est mal passé</string>
 
     <!-- Tarot - Scoring -->
     <string name="tarot_scoring_screen_title">Pointage de la partie</string>
@@ -186,7 +186,7 @@
     <string name="dice_display_format">%1$d × d%2$d</string>
     <string name="dice_rolls_format">Lancers : %s</string>
     <string name="dice_total_format">Total : %d</string>
-    <string name="dice_instruction_tap">Appuyez n\'importe où pour lancer. Appui long pour les paramètres.</string>
+    <string name="dice_instruction_tap">Appuyez n'importe où pour lancer. Appui long pour les paramètres.</string>
     <string name="dice_dialog_title">Paramètres des dés</string>
     <string name="dice_field_number">Nombre de dés</string>
     <string name="dice_field_type">Type de dé</string>
@@ -206,7 +206,7 @@
     <string name="finger_selector_mode_groups">Groupes</string>
     <string name="finger_selector_cd_touch">Touchez ici pour placer le doigt</string>
     <string name="finger_selector_instruction_place">Placez vos doigts</string>
-    <string name="finger_selector_instruction_wait">Attendre l\'attribution des groupes</string>
+    <string name="finger_selector_instruction_wait">Attendre l'attribution des groupes</string>
     <string name="finger_selector_slider_value_format">%s : %d</string>
     <string name="finger_selector_label_fingers">Nombre de doigts</string>
     <string name="finger_selector_label_groups">Nombre de groupes</string>
@@ -224,9 +224,9 @@
     <string name="game_creation_tarot_name_default">Partie de Tarot</string>
     <string name="game_creation_field_game_name">Nom du jeu</string>
     <string name="game_deletion_dialog_tarot_title">Supprimer le jeu</string>
-    <string name="game_deletion_dialog_tarot_message">Êtes-vous sûr de vouloir supprimer le jeu \'%s\' ? Toutes les manches seront également supprimées.</string>
+    <string name="game_deletion_dialog_tarot_message">Êtes-vous sûr de vouloir supprimer le jeu '%s' ? Toutes les manches seront également supprimées.</string>
     <string name="game_deletion_dialog_yahtzee_title">Supprimer le jeu</string>
-    <string name="game_deletion_dialog_yahtzee_message">Êtes-vous sûr de vouloir supprimer \'%s\' ? Tous les scores seront perdus.</string>
+    <string name="game_deletion_dialog_yahtzee_message">Êtes-vous sûr de vouloir supprimer '%s' ? Tous les scores seront perdus.</string>
 
     <!-- Player Management -->
     <string name="player_section_players">Joueurs</string>
@@ -234,7 +234,7 @@
     <string name="player_field_name">NOM</string>
     <string name="player_placeholder_name">Nom du joueur</string>
     <string name="player_error_name_taken">Ce nom est déjà pris</string>
-    <string name="player_label_color">COULEUR DE L\'AVATAR</string>
+    <string name="player_label_color">COULEUR DE L'AVATAR</string>
     <string name="player_cd_edit">Modifier</string>
     <string name="player_dialog_new_title">Nouveau joueur</string>
     <string name="player_dialog_edit_title">Modifier le joueur</string>
@@ -246,9 +246,18 @@
     <string name="player_reactivate_format">Réactiver \"%s\"</string>
     <string name="player_create_format">Créer \"%s\"</string>
 
+    <!-- Messages de Gestion des Joueurs -->
+    <string name="player_reactivated_message">Le joueur \'%s\' a été réactivé</string>
+    <string name="dialog_deactivate_title">Désactiver le joueur ?</string>
+    <string name="dialog_delete_title">Supprimer le joueur ?</string>
+    <string name="dialog_deactivate_message">Lié à %d partie(s). Le joueur sera désactivé pour préserver l'historique.</string>
+    <string name="dialog_delete_message">Ce joueur n'a pas d'historique. Il sera définitivement supprimé.</string>
+    <string name="player_deactivated_message">Le joueur \'%s\' a été désactivé</string>
+    <string name="player_deleted_message">Le joueur \'%s\' a été supprimé</string>
+
     <!-- Results -->
-    <string name="results_action_back">RETOUR À L\'ACCUEIL</string>
-    <string name="results_title_tie">C\'EST UNE ÉGALITÉ !</string>
+    <string name="results_action_back">RETOUR À L'ACCUEIL</string>
+    <string name="results_title_tie">C'EST UNE ÉGALITÉ !</string>
     <string name="results_title_winner">NOUS AVONS UN GAGNANT !</string>
     <string name="results_section_scores">SCORES FINAUX</string>
 
@@ -341,7 +350,7 @@
     <string name="error_unknown">Inconnu</string>
 
     <!-- Validation Messages -->
-    <string name="error_min_fingers">Besoin d\'au moins %d doigts</string>
+    <string name="error_min_fingers">Besoin d'au moins %d doigts</string>
     <string name="error_player_count_range">Le nombre de joueurs doit être entre %d et %d</string>
     <string name="player_count_display">%1$d joueur%2$s</string>
 

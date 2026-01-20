@@ -22,10 +22,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.ACTION_RETRY
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.STATE_LOADING
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.STATE_LOADING_GAMES
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_retry
+import io.github.m0nkeysan.gamekeeper.generated.resources.state_loading
+import io.github.m0nkeysan.gamekeeper.generated.resources.state_loading_games
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 /**
  * Loading state display with centered spinner and message.
@@ -44,7 +46,7 @@ import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 @Composable
 fun LoadingState(
     modifier: Modifier = Modifier,
-    message: String = STATE_LOADING,
+    message: String = stringResource(Res.string.state_loading),
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -180,7 +182,7 @@ fun ErrorState(
                         containerColor = GameColors.Error
                     )
                 ) {
-                    Text(ACTION_RETRY)
+                    Text(stringResource(Res.string.action_retry))
                 }
             }
         }
@@ -190,7 +192,7 @@ fun ErrorState(
 @Preview(showBackground = true)
 @Composable
 private fun LoadingStatePreview() {
-    LoadingState(message = STATE_LOADING_GAMES)
+    LoadingState(message = stringResource(Res.string.state_loading_games))
 }
 
 @Preview(showBackground = true)

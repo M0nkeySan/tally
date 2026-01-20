@@ -25,7 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_game_icon
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 /**
  * Reusable game feature card for displaying games on home screen.
@@ -90,7 +92,7 @@ fun GameCard(
 @Composable
 private fun GameCardPreview() {
     GameCard(
-        icon = { Icon(Icons.Default.Casino, contentDescription = AppStrings.CD_GAME_ICON) },
+        icon = { Icon(Icons.Default.Casino, contentDescription = stringResource(Res.string.cd_game_icon)) },
         title = "Tarot",
         description = "Score Tarot games for 3-5 players",
         onClick = {}

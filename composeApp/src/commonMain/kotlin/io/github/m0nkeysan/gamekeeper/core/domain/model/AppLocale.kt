@@ -9,8 +9,7 @@ package io.github.m0nkeysan.gamekeeper.core.domain.model
  */
 enum class AppLocale(val code: String, val displayName: String) {
     ENGLISH("en", "English"),
-    FRENCH("fr", "Français"),
-    SYSTEM_DEFAULT("system", "System Default");
+    FRENCH("fr", "Français");
 
     companion object {
         /**

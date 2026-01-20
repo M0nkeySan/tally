@@ -6,7 +6,6 @@ import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeStatisticsRe
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeGlobalStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeePlayerStatistics
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +13,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.error_unknown
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_error_global_failed
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_error_load_failed
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_error_stats_failed
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 data class YahtzeeStatisticsUiState(
     val isLoading: Boolean = true,
@@ -59,7 +64,7 @@ class YahtzeeStatisticsViewModel(
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
-                        error = String.format(AppStrings.YAHTZEE_ERROR_LOAD_FAILED, e.message ?: AppStrings.ERROR_UNKNOWN)
+                        error = "Failed to load: ${e.message ?: "Unknown error"}"
                     )
                 }
             }
@@ -110,7 +115,7 @@ class YahtzeeStatisticsViewModel(
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
-                        error = String.format(AppStrings.YAHTZEE_ERROR_STATS_FAILED, e.message ?: AppStrings.ERROR_UNKNOWN)
+                        error = "Failed to load statistics: ${e.message ?: "Unknown error"}"
                     )
                 }
             }
@@ -152,7 +157,7 @@ class YahtzeeStatisticsViewModel(
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
-                        error = String.format(AppStrings.YAHTZEE_ERROR_GLOBAL_FAILED, e.message ?: AppStrings.ERROR_UNKNOWN)
+                        error = "Failed to load global statistics: ${e.message ?: "Unknown error"}"
                     )
                 }
             }

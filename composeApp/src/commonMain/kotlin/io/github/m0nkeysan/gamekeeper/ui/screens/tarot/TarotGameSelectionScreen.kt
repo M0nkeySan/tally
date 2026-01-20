@@ -4,7 +4,13 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.ui.components.GameDisplay
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameSelectionTemplate
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_delete
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_deletion_dialog_tarot_message
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_deletion_dialog_tarot_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_game_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 @Composable
 fun TarotGameSelectionScreen(
@@ -19,8 +25,8 @@ fun TarotGameSelectionScreen(
      if (gameToDelete != null) {
          androidx.compose.material3.AlertDialog(
              onDismissRequest = { gameToDelete = null },
-             title = { androidx.compose.material3.Text(AppStrings.GAME_DELETION_DIALOG_TAROT_TITLE) },
-             text = { androidx.compose.material3.Text(AppStrings.GAME_DELETION_DIALOG_TAROT_MESSAGE.format(gameToDelete?.name ?: "")) },
+             title = { androidx.compose.material3.Text(stringResource(Res.string.game_deletion_dialog_tarot_title)) },
+             text = { androidx.compose.material3.Text(stringResource(Res.string.game_deletion_dialog_tarot_message).format(gameToDelete?.name ?: "")) },
              confirmButton = {
                  androidx.compose.material3.TextButton(
                      onClick = {
@@ -29,12 +35,12 @@ fun TarotGameSelectionScreen(
                      },
                      colors = androidx.compose.material3.ButtonDefaults.textButtonColors(contentColor = androidx.compose.material3.MaterialTheme.colorScheme.error)
                  ) {
-                     androidx.compose.material3.Text(AppStrings.ACTION_DELETE)
+                     androidx.compose.material3.Text(stringResource(Res.string.action_delete))
                  }
              },
              dismissButton = {
                  androidx.compose.material3.TextButton(onClick = { gameToDelete = null }) {
-                     androidx.compose.material3.Text(AppStrings.ACTION_CANCEL)
+                     androidx.compose.material3.Text(stringResource(Res.string.action_cancel))
                  }
              }
          )
@@ -53,7 +59,7 @@ fun TarotGameSelectionScreen(
     }
 
     GameSelectionTemplate(
-        title = AppStrings.TAROT_SCORING_GAME_TITLE,
+        title = stringResource(Res.string.tarot_scoring_game_title),
         games = games,
         onGameSelect = onSelectGame,
         onCreateNew = onCreateNewGame,

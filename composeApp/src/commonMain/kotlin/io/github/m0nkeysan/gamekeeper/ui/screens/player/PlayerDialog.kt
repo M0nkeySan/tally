@@ -36,7 +36,17 @@ import io.github.m0nkeysan.gamekeeper.ui.components.DIALOG_COLOR_PRESETS
 import io.github.m0nkeysan.gamekeeper.ui.components.FieldLabel
 import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
 import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_create
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_save
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_dialog_edit_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_dialog_new_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_error_name_taken
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_field_name
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_label_color
+import io.github.m0nkeysan.gamekeeper.generated.resources.player_placeholder_name
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 @Composable
 fun PlayerDialog(
@@ -90,7 +100,7 @@ fun PlayerDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = if (initialPlayer == null) AppStrings.PLAYER_DIALOG_NEW_TITLE else AppStrings.PLAYER_DIALOG_EDIT_TITLE,
+                        text = if (initialPlayer == null) stringResource(Res.string.player_dialog_new_title) else stringResource(Res.string.player_dialog_edit_title),
                         modifier = Modifier.padding(24.dp),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Black
@@ -106,15 +116,15 @@ fun PlayerDialog(
                     FlatTextField(
                          value = name,
                          onValueChange = { name = it },
-                         label = AppStrings.PLAYER_FIELD_NAME,
-                         placeholder = AppStrings.PLAYER_PLACEHOLDER_NAME,
+                         label = stringResource(Res.string.player_field_name),
+                         placeholder = stringResource(Res.string.player_placeholder_name),
                          accentColor = composeColor,
                          modifier = Modifier.focusRequester(focusRequester)
                      )
                     
                     if (isNameTaken) {
                          Text(
-                             text = AppStrings.PLAYER_ERROR_NAME_TAKEN, 
+                             text = stringResource(Res.string.player_error_name_taken), 
                              color = MaterialTheme.colorScheme.error,
                              style = MaterialTheme.typography.bodySmall,
                              modifier = Modifier.padding(start = 16.dp, top = 4.dp)
@@ -122,7 +132,7 @@ fun PlayerDialog(
                      }
 
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        FieldLabel(text = AppStrings.PLAYER_LABEL_COLOR)
+                        FieldLabel(text = stringResource(Res.string.player_label_color))
 
                         ColorSelectorRow(
                             selectedColorHex = selectedColor,
@@ -142,7 +152,7 @@ fun PlayerDialog(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextButton(onClick = onDismiss) {
-                         Text(AppStrings.ACTION_CANCEL, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                         Text(stringResource(Res.string.action_cancel), color = MaterialTheme.colorScheme.onSurfaceVariant)
                      }
                      Spacer(Modifier.width(8.dp))
                      Button(
@@ -161,7 +171,7 @@ fun PlayerDialog(
                          shape = MaterialTheme.shapes.medium
                      ) {
                          Text(
-                             if (initialPlayer == null) AppStrings.ACTION_CREATE else AppStrings.ACTION_SAVE,
+                             if (initialPlayer == null) stringResource(Res.string.action_create) else stringResource(Res.string.action_save),
                              fontWeight = FontWeight.Bold
                          )
                      }

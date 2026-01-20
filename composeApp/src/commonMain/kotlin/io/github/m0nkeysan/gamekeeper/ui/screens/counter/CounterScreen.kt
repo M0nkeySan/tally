@@ -43,9 +43,41 @@ import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.COUNTER_ADD_LABEL
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings.COUNTER_REMOVE_LABEL
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_reset
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_save
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_menu
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_action_close
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_action_delete
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_cd_add
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_add_label
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_remove_label
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_cd_decrease
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_cd_delete_all
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_cd_history
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_cd_increase
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_cd_reset_all
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_delete_everything
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_dialog_adjust_label
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_dialog_adjust_placeholder
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_dialog_delete_message
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_dialog_delete_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_dialog_reset_message
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_dialog_reset_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_dialog_set_score_label
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_dialog_settings_label
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_dialog_settings_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_empty_state
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_leader_display_format
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_reinitialize_all
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_settings
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_settings_option_least
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_settings_option_most
+import io.github.m0nkeysan.gamekeeper.generated.resources.counter_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,10 +131,10 @@ fun CounterScreen(
                         if (leader != null && state.counters.isNotEmpty()) {
                             val emoji =
                                 if (state.displayMode == CounterDisplayMode.MOST_POINTS) "📈" else "📉"
-                            Text(AppStrings.COUNTER_LEADER_DISPLAY_FORMAT.format(emoji, leader.name), fontWeight = FontWeight.ExtraBold)
+                            Text(stringResource(Res.string.counter_leader_display_format).format(emoji, leader.name), fontWeight = FontWeight.ExtraBold)
                         } else {
                             Text(
-                                AppStrings.COUNTER_TITLE,
+                                stringResource(Res.string.counter_title),
                                 style = MaterialTheme.typography.headlineSmall,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.fillMaxWidth(),
@@ -113,7 +145,7 @@ fun CounterScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = AppStrings.ACTION_BACK)
+                        Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
                     }
                 },
                 actions = {
@@ -121,21 +153,21 @@ fun CounterScreen(
                         viewModel.addRandomCounter()
                         hapticController.performHapticFeedback(HapticType.LIGHT)
                     }) {
-                        Icon(GameIcons.Add, contentDescription = AppStrings.COUNTER_CD_ADD)
+                        Icon(GameIcons.Add, contentDescription = stringResource(Res.string.counter_cd_add))
                     }
                     IconButton(onClick = { onNavigateToHistory() }) {
-                        Icon(GameIcons.History, contentDescription = AppStrings.COUNTER_CD_HISTORY)
+                        Icon(GameIcons.History, contentDescription = stringResource(Res.string.counter_cd_history))
                     }
                     Box {
                         IconButton(onClick = { showMenu = true }) {
-                            Icon(GameIcons.MoreVert, contentDescription = AppStrings.CD_MENU)
+                            Icon(GameIcons.MoreVert, contentDescription = stringResource(Res.string.cd_menu))
                         }
                         DropdownMenu(
                             expanded = showMenu,
                             onDismissRequest = { showMenu = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text(AppStrings.COUNTER_SETTINGS) },
+                                text = { Text(stringResource(Res.string.counter_settings)) },
                                 onClick = {
                                     showMenu = false
                                     showSettingsDialog = true
@@ -143,12 +175,12 @@ fun CounterScreen(
                                 leadingIcon = {
                                     Icon(
                                         GameIcons.Settings,
-                                        contentDescription = AppStrings.CD_SETTINGS
+                                        contentDescription = stringResource(Res.string.cd_settings)
                                     )
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text(AppStrings.COUNTER_REINITIALIZE_ALL) },
+                                text = { Text(stringResource(Res.string.counter_reinitialize_all)) },
                                 onClick = {
                                     showMenu = false
                                     showResetConfirmation = true
@@ -156,12 +188,12 @@ fun CounterScreen(
                                 leadingIcon = {
                                     Icon(
                                         GameIcons.Refresh,
-                                        contentDescription = AppStrings.COUNTER_CD_RESET_ALL
+                                        contentDescription = stringResource(Res.string.counter_cd_reset_all)
                                     )
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text(AppStrings.COUNTER_DELETE_EVERYTHING) },
+                                text = { Text(stringResource(Res.string.counter_delete_everything)) },
                                 onClick = {
                                     showMenu = false
                                     showDeleteAllConfirmation = true
@@ -169,7 +201,7 @@ fun CounterScreen(
                                 leadingIcon = {
                                     Icon(
                                         GameIcons.Delete,
-                                        contentDescription = AppStrings.COUNTER_CD_DELETE_ALL
+                                        contentDescription = stringResource(Res.string.counter_cd_delete_all)
                                     )
                                 }
                             )
@@ -195,7 +227,7 @@ fun CounterScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = AppStrings.COUNTER_EMPTY_STATE,
+                        text = stringResource(Res.string.counter_empty_state),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -393,24 +425,24 @@ fun CounterScreen(
         if (showSettingsDialog) {
             AlertDialog(
                 onDismissRequest = { showSettingsDialog = false },
-                title = { Text(AppStrings.COUNTER_DIALOG_SETTINGS_TITLE) },
+                title = { Text(stringResource(Res.string.counter_dialog_settings_title)) },
                 text = {
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         Text(
-                            AppStrings.COUNTER_DIALOG_SETTINGS_LABEL,
+                            stringResource(Res.string.counter_dialog_settings_label),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold
                         )
 
                         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                              SettingsOption(
-                                 text = AppStrings.COUNTER_SETTINGS_OPTION_MOST,
+                                 text = stringResource(Res.string.counter_settings_option_most),
                                  isSelected = state.displayMode == CounterDisplayMode.MOST_POINTS,
                                  onClick = { viewModel.setDisplayMode(CounterDisplayMode.MOST_POINTS) }
                              )
 
                              SettingsOption(
-                                 text = AppStrings.COUNTER_SETTINGS_OPTION_LEAST,
+                                 text = stringResource(Res.string.counter_settings_option_least),
                                  isSelected = state.displayMode == CounterDisplayMode.LEAST_POINTS,
                                  onClick = { viewModel.setDisplayMode(CounterDisplayMode.LEAST_POINTS) }
                              )
@@ -419,7 +451,7 @@ fun CounterScreen(
                 },
                 confirmButton = {
                     TextButton(onClick = { showSettingsDialog = false }) {
-                        Text(AppStrings.COUNTER_ACTION_CLOSE)
+                        Text(stringResource(Res.string.counter_action_close))
                     }
                 }
             )
@@ -429,8 +461,8 @@ fun CounterScreen(
          if (showResetConfirmation) {
              AlertDialog(
                  onDismissRequest = { showResetConfirmation = false },
-                 title = { Text(AppStrings.COUNTER_DIALOG_RESET_TITLE) },
-                 text = { Text(AppStrings.COUNTER_DIALOG_RESET_MESSAGE) },
+                 title = { Text(stringResource(Res.string.counter_dialog_reset_title)) },
+                 text = { Text(stringResource(Res.string.counter_dialog_reset_message)) },
                  confirmButton = {
                      TextButton(
                          onClick = {
@@ -438,12 +470,12 @@ fun CounterScreen(
                              showResetConfirmation = false
                          }
                      ) {
-                         Text(AppStrings.ACTION_RESET)
+                         Text(stringResource(Res.string.action_reset))
                      }
                  },
                  dismissButton = {
                      TextButton(onClick = { showResetConfirmation = false }) {
-                         Text(AppStrings.ACTION_CANCEL)
+                         Text(stringResource(Res.string.action_cancel))
                      }
                  }
              )
@@ -453,8 +485,8 @@ fun CounterScreen(
          if (showDeleteAllConfirmation) {
              AlertDialog(
                  onDismissRequest = { showDeleteAllConfirmation = false },
-                 title = { Text(AppStrings.COUNTER_DIALOG_DELETE_TITLE) },
-                 text = { Text(AppStrings.COUNTER_DIALOG_DELETE_MESSAGE) },
+                 title = { Text(stringResource(Res.string.counter_dialog_delete_title)) },
+                 text = { Text(stringResource(Res.string.counter_dialog_delete_message)) },
                  confirmButton = {
                      TextButton(
                          onClick = {
@@ -463,12 +495,12 @@ fun CounterScreen(
                          },
                          colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
                      ) {
-                         Text(AppStrings.COUNTER_ACTION_DELETE)
+                         Text(stringResource(Res.string.counter_action_delete))
                      }
                  },
                  dismissButton = {
                      TextButton(onClick = { showDeleteAllConfirmation = false }) {
-                         Text(AppStrings.ACTION_CANCEL)
+                         Text(stringResource(Res.string.action_cancel))
                      }
                  }
              )
@@ -555,7 +587,7 @@ fun QuickAdjustContent(
                     onClick = { isAddition = false },
                     label = {
                         Text(
-                            COUNTER_REMOVE_LABEL,
+                            stringResource(Res.string.counter_remove_label),
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -571,7 +603,7 @@ fun QuickAdjustContent(
                     onClick = { isAddition = true },
                     label = {
                         Text(
-                            COUNTER_ADD_LABEL,
+                            stringResource(Res.string.counter_add_label),
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -589,8 +621,8 @@ fun QuickAdjustContent(
                  onValueChange = {
                      if (it.all { char -> char.isDigit() || char == '-' }) manualValue = it
                  },
-                 label = AppStrings.COUNTER_DIALOG_ADJUST_LABEL,
-                 placeholder = AppStrings.COUNTER_DIALOG_ADJUST_PLACEHOLDER,
+                 label = stringResource(Res.string.counter_dialog_adjust_label),
+                 placeholder = stringResource(Res.string.counter_dialog_adjust_placeholder),
                  accentColor = Color(counter.color),
                  focusRequester = focusRequester,
                  keyboardOptions = KeyboardOptions(
@@ -657,7 +689,7 @@ fun SetScoreContent(
                          it
                  },
                  placeholder = counter.count.toString(),
-                 label = AppStrings.COUNTER_DIALOG_SET_SCORE_LABEL,
+                 label = stringResource(Res.string.counter_dialog_set_score_label),
                  accentColor = Color(counter.color),
                  focusRequester = focusRequester,
                  keyboardOptions = KeyboardOptions(
@@ -681,7 +713,7 @@ fun SetScoreContent(
                      modifier = Modifier.weight(1f),
                      shape = MaterialTheme.shapes.medium
                  ) {
-                     Text(AppStrings.ACTION_CANCEL)
+                     Text(stringResource(Res.string.action_cancel))
                  }
                  Button(
                      onClick = {
@@ -695,7 +727,7 @@ fun SetScoreContent(
                      ),
                      shape = MaterialTheme.shapes.medium
                  ) {
-                     Text(AppStrings.ACTION_SAVE, fontWeight = FontWeight.Bold)
+                     Text(stringResource(Res.string.action_save), fontWeight = FontWeight.Bold)
                  }
             }
         }
@@ -796,7 +828,7 @@ fun CounterCard(
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(GameIcons.Remove, contentDescription = AppStrings.COUNTER_CD_DECREASE, tint = contentColor)
+                    Icon(GameIcons.Remove, contentDescription = stringResource(Res.string.counter_cd_decrease), tint = contentColor)
                 }
 
                 Text(
@@ -824,7 +856,7 @@ fun CounterCard(
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(GameIcons.Add, contentDescription = AppStrings.COUNTER_CD_INCREASE, tint = contentColor)
+                    Icon(GameIcons.Add, contentDescription = stringResource(Res.string.counter_cd_increase), tint = contentColor)
                 }
             }
         }

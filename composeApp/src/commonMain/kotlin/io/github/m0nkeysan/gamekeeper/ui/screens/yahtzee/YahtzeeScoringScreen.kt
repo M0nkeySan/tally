@@ -56,8 +56,29 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
-import io.github.m0nkeysan.gamekeeper.ui.strings.AppStrings
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
+import io.github.m0nkeysan.gamekeeper.generated.resources.action_ok
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_dialog_enter_score
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_dialog_select_score
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_error_score_too_high
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_label_bonus_earned
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_label_bonus_needed
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_label_total_score
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_label_upper_bonus
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_placeholder_dice_sum
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_scoring_cd_dropdown
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_scoring_cd_next
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_scoring_cd_previous
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_scoring_fallback_name
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_scoring_total_format
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_scoring_turn_indicator
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_scoring_turn_label
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_scoring_viewing_label
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_section_lower
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_section_upper
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -154,7 +175,7 @@ fun YahtzeeGameView(
                 ) {
                     Icon(
                         imageVector = androidx.compose.material.icons.Icons.AutoMirrored.Filled.KeyboardArrowLeft, 
-                        contentDescription = AppStrings.YAHTZEE_SCORING_CD_PREVIOUS
+                        contentDescription = stringResource(Res.string.yahtzee_scoring_cd_previous)
                     )
                 }
 
@@ -174,26 +195,27 @@ fun YahtzeeGameView(
                             val isTurn = selectedPlayerId == game.currentPlayerId
                              if (isTurn) {
                                  Text(
-                                     text = AppStrings.YAHTZEE_SCORING_TURN_INDICATOR,
+                                     text = stringResource(Res.string.yahtzee_scoring_turn_indicator),
                                      color = MaterialTheme.colorScheme.primary,
                                      fontSize = 12.sp
                                  )
                              }
                              
                              Text(
-                                 text = players.find { it.id == selectedPlayerId }?.name ?: AppStrings.YAHTZEE_SCORING_FALLBACK_NAME,
+                                 text = players.find { it.id == selectedPlayerId }?.name ?: stringResource(Res.string.yahtzee_scoring_fallback_name),
                                  style = MaterialTheme.typography.titleLarge,
                                  fontWeight = FontWeight.ExtraBold
                              )
                             
                             Icon(
                                  imageVector = androidx.compose.material.icons.Icons.Default.ArrowDropDown,
-                                 contentDescription = AppStrings.YAHTZEE_SCORING_CD_DROPDOWN
+                                 contentDescription = stringResource(Res.string.yahtzee_scoring_cd_dropdown)
                              )
                         }
                         
-                        val selectedPlayerTotal = remember(selectedPlayerId, state.scores) {
-                             AppStrings.YAHTZEE_SCORING_TOTAL_FORMAT.format(viewModel.calculateTotalScore(selectedPlayerId))
+                        val totalFormat = stringResource(Res.string.yahtzee_scoring_total_format)
+                        val selectedPlayerTotal = remember(selectedPlayerId, state.scores, totalFormat) {
+                             totalFormat.format(viewModel.calculateTotalScore(selectedPlayerId))
                          }
                         Text(
                             text = selectedPlayerTotal,
@@ -247,7 +269,7 @@ fun YahtzeeGameView(
                 ) {
                     Icon(
                         imageVector = androidx.compose.material.icons.Icons.AutoMirrored.Filled.KeyboardArrowRight, 
-                        contentDescription = AppStrings.YAHTZEE_SCORING_CD_NEXT
+                        contentDescription = stringResource(Res.string.yahtzee_scoring_cd_next)
                     )
                 }
             }
@@ -258,10 +280,10 @@ fun YahtzeeGameView(
             modifier = Modifier.fillMaxWidth()
         ) {
             val isViewingSelf = selectedPlayerId == game.currentPlayerId
-             val displayedName = players.find { it.id == selectedPlayerId }?.name ?: AppStrings.YAHTZEE_SCORING_FALLBACK_NAME
+             val displayedName = players.find { it.id == selectedPlayerId }?.name ?: stringResource(Res.string.yahtzee_scoring_fallback_name)
              
              Text(
-                 text = if (isViewingSelf) AppStrings.YAHTZEE_SCORING_TURN_LABEL else AppStrings.YAHTZEE_SCORING_VIEWING_LABEL.format(displayedName),
+                 text = if (isViewingSelf) stringResource(Res.string.yahtzee_scoring_turn_label) else stringResource(Res.string.yahtzee_scoring_viewing_label).format(displayedName),
                  modifier = Modifier.padding(8.dp).fillMaxWidth(),
                  textAlign = TextAlign.Center,
                  style = MaterialTheme.typography.titleMedium,
@@ -274,7 +296,7 @@ fun YahtzeeGameView(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            item { SectionHeader(AppStrings.YAHTZEE_SECTION_UPPER) }
+            item { SectionHeader(stringResource(Res.string.yahtzee_section_upper)) }
             items(YahtzeeCategory.entries.filter { it.isUpperSection() }) { category ->
                 val currentScore = state.scores[selectedPlayerId]?.get(category)
                 ScoreRow(
@@ -294,7 +316,7 @@ fun YahtzeeGameView(
             }
             
             item { Spacer(modifier = Modifier.height(16.dp)) }
-            item { SectionHeader(AppStrings.YAHTZEE_SECTION_LOWER) }
+            item { SectionHeader(stringResource(Res.string.yahtzee_section_lower)) }
             items(YahtzeeCategory.entries.filter { it.isLowerSection() }) { category ->
                 val currentScore = state.scores[selectedPlayerId]?.get(category)
                 ScoreRow(
@@ -360,7 +382,7 @@ fun ScoreRow(
         if (options != null) {
             AlertDialog(
                  onDismissRequest = { showDialog = false },
-                 title = { Text(AppStrings.YAHTZEE_DIALOG_SELECT_SCORE.format(category.displayName)) },
+                 title = { Text(stringResource(Res.string.yahtzee_dialog_select_score).format(category.displayName)) },
                 text = {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -386,7 +408,7 @@ fun ScoreRow(
                 confirmButton = {},
                 dismissButton = {
                     TextButton(onClick = { showDialog = false }) {
-                        Text(AppStrings.ACTION_CANCEL)
+                        Text(stringResource(Res.string.action_cancel))
                     }
                 }
             )
@@ -397,7 +419,7 @@ fun ScoreRow(
             
             AlertDialog(
                  onDismissRequest = { showDialog = false },
-                 title = { Text(AppStrings.YAHTZEE_DIALOG_ENTER_SCORE.format(category.displayName)) },
+                 title = { Text(stringResource(Res.string.yahtzee_dialog_enter_score).format(category.displayName)) },
                 text = {
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         OutlinedTextField(
@@ -406,11 +428,11 @@ fun ScoreRow(
                             keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
                             modifier = Modifier.fillMaxWidth(),
                             singleLine = true,
-                            placeholder = { Text(AppStrings.YAHTZEE_PLACEHOLDER_DICE_SUM) },
+                            placeholder = { Text(stringResource(Res.string.yahtzee_placeholder_dice_sum)) },
                             isError = isInvalid,
                             supportingText = {
                                  if (isInvalid) {
-                                     Text(AppStrings.YAHTZEE_ERROR_SCORE_TOO_HIGH)
+                                     Text(stringResource(Res.string.yahtzee_error_score_too_high))
                                  }
                              }
                         )
@@ -427,12 +449,12 @@ fun ScoreRow(
                         },
                         enabled = !isInvalid
                     ) {
-                        Text(AppStrings.ACTION_OK)
+                        Text(stringResource(Res.string.action_ok))
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showDialog = false }) {
-                        Text(AppStrings.ACTION_CANCEL)
+                        Text(stringResource(Res.string.action_cancel))
                     }
                 }
             )
@@ -485,14 +507,14 @@ fun UpperBonusRow(score: Int) {
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(AppStrings.YAHTZEE_LABEL_UPPER_BONUS, style = MaterialTheme.typography.bodySmall)
+        Text(stringResource(Res.string.yahtzee_label_upper_bonus), style = MaterialTheme.typography.bodySmall)
          Row(verticalAlignment = Alignment.CenterVertically) {
              if (needed > 0) {
-                 Text(AppStrings.YAHTZEE_LABEL_BONUS_NEEDED.format(needed), style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+                 Text(stringResource(Res.string.yahtzee_label_bonus_needed).format(needed), style = MaterialTheme.typography.labelSmall, color = Color.Gray)
                  Spacer(modifier = Modifier.width(8.dp))
              }
              Text(
-                 text = if (score >= 63) AppStrings.YAHTZEE_LABEL_BONUS_EARNED else "0",
+                 text = if (score >= 63) stringResource(Res.string.yahtzee_label_bonus_earned) else "0",
                  fontWeight = FontWeight.Bold,
                  color = if (score >= 63) GameColors.Success else GameColors.TextSecondary
              )
@@ -512,7 +534,7 @@ fun TotalScoreRow(total: Int) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(AppStrings.YAHTZEE_LABEL_TOTAL_SCORE, fontWeight = FontWeight.Black)
+            Text(stringResource(Res.string.yahtzee_label_total_score), fontWeight = FontWeight.Black)
             Text(
                 text = total.toString(),
                 style = MaterialTheme.typography.headlineMedium,
