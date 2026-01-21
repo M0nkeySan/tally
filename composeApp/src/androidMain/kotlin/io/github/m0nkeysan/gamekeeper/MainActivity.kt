@@ -43,12 +43,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateAndroidLocale(context: Context, languageCode: String) {
         val parts = languageCode.split("_", "-")
-        val locale = when (parts.size) {
-            1 -> Locale(parts[0])
-            2 -> Locale(parts[0], parts[1])
-            else -> Locale(parts[0], parts[1], parts[2])
+        val localeBuilder = Locale.Builder().setLanguage(parts[0])
+        
+        if (parts.size >= 2 && parts[1].isNotEmpty()) {
+            localeBuilder.setRegion(parts[1])
         }
-
+        if (parts.size >= 3 && parts[2].isNotEmpty()) {
+            localeBuilder.setVariant(parts[2])
+        }
+        
+        val locale = localeBuilder.build()
         Locale.setDefault(locale)
 
         val resources = context.resources
