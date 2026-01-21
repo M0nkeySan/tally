@@ -15,6 +15,17 @@
     <string name="tarot_stats_label_avg_lost">Avg Lost</string>
     <string name="tarot_stats_section_called_performance">Called Performance</string>
     <string name="tarot_stats_error_title">Oops! Something went wrong</string>
+    <string name="tarot_stats_section_round_breakdown">Round Breakdown</string>
+    <string name="tarot_stats_empty_rounds">No rounds played yet</string>
+    <string name="tarot_stats_section_current_standings">Current Standings</string>
+    <string name="tarot_stats_format_as_taker">%1$d/%2$d as taker</string>
+    <string name="tarot_stats_label_round">Round %d</string>
+    <string name="tarot_stats_contract_won">✓ Won</string>
+    <string name="tarot_stats_contract_lost">✗ Lost</string>
+    <string name="tarot_stats_section_taker_performance">Taker Performance 📊</string>
+    <string name="tarot_stats_label_bids_used">Bids Used:</string>
+    <string name="tarot_stats_label_with_partners">With Partners:</string>
+    <string name="tarot_stats_section_bids_in_game">Bids in This Game</string>
 
     <!-- Tarot - Scoring -->
     <string name="tarot_scoring_screen_title">Game Scoring</string>

@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +27,6 @@ import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,14 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.GameIcons
-import io.github.m0nkeysan.gamekeeper.ui.components.EmptyState
-import io.github.m0nkeysan.gamekeeper.ui.components.GameDisplay
-import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
-import io.github.m0nkeysan.gamekeeper.ui.components.GameSelectionCard
-import io.github.m0nkeysan.gamekeeper.ui.components.LoadingState
-import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_delete_all
@@ -61,7 +54,14 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_cd_dele
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_cd_statistics
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_empty
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_loading
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.ui.components.EmptyState
+import io.github.m0nkeysan.gamekeeper.ui.components.GameDisplay
+import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
+import io.github.m0nkeysan.gamekeeper.ui.components.GameSelectionCard
+import io.github.m0nkeysan.gamekeeper.ui.components.LoadingState
+import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Reusable template for game selection screens.
@@ -152,20 +152,15 @@ fun GameSelectionTemplate(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
-                    Box(
+                    Text(
+                        title,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            title,
-                            style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                        textAlign = TextAlign.Center
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
@@ -180,7 +175,10 @@ fun GameSelectionTemplate(
                         IconButton(onClick = {
                             onNavigateToStatistics()
                         }) {
-                            Icon(GameIcons.BarChart, contentDescription = stringResource(Res.string.game_selection_cd_statistics))
+                            Icon(
+                                GameIcons.BarChart,
+                                contentDescription = stringResource(Res.string.game_selection_cd_statistics)
+                            )
                         }
                     }
                     Box {
@@ -232,7 +230,10 @@ fun GameSelectionTemplate(
                 onClick = onCreateNew,
                 containerColor = GameColors.Primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = stringResource(Res.string.game_selection_cd_create))
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = stringResource(Res.string.game_selection_cd_create)
+                )
             }
         },
         snackbarHost = {

@@ -68,6 +68,17 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_ca
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_performance_details
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_tab_current_game
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_tab_player_stats
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_round_breakdown
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_empty_rounds
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_current_standings
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_format_as_taker
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_round
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_contract_won
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_contract_lost
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_taker_performance
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_bids_used
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_with_partners
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_bids_in_game
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_title
 
@@ -219,7 +230,7 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                 Text(
-                    "Round Breakdown",
+                    stringResource(Res.string.tarot_stats_section_round_breakdown),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -259,7 +270,7 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                             )
                             Text(
-                                "No rounds played yet",
+                                stringResource(Res.string.tarot_stats_empty_rounds),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -323,7 +334,7 @@ private fun PlayerRankingsCard(rankings: List<PlayerRanking>) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                "Current Standings",
+                stringResource(Res.string.tarot_stats_section_current_standings),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -377,7 +388,7 @@ private fun RankingRow(ranking: PlayerRanking) {
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    "${ranking.roundsWonAsTaker}/${ranking.roundsPlayedAsTaker} as taker",
+                    stringResource(Res.string.tarot_stats_format_as_taker, ranking.roundsWonAsTaker, ranking.roundsPlayedAsTaker),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -417,7 +428,7 @@ private fun RoundBreakdownItem(round: RoundStatistic) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    "Round ${round.roundNumber}",
+                    stringResource(Res.string.tarot_stats_label_round, round.roundNumber),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -446,7 +457,10 @@ private fun RoundBreakdownItem(round: RoundStatistic) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    if (round.contractWon) "✓ Won" else "✗ Lost",
+                    if (round.contractWon) 
+                        stringResource(Res.string.tarot_stats_contract_won) 
+                    else 
+                        stringResource(Res.string.tarot_stats_contract_lost),
                     style = MaterialTheme.typography.labelMedium,
                     color = if (round.contractWon) 
                         MaterialTheme.colorScheme.secondary 
@@ -480,7 +494,7 @@ private fun TakerPerformanceCard(performanceMap: Map<String, TakerPerformance>) 
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                "Taker Performance 📊",
+                stringResource(Res.string.tarot_stats_section_taker_performance),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -530,7 +544,7 @@ private fun TakerPerformanceRow(performance: TakerPerformance) {
         // Bid distribution
         if (performance.bidDistribution.isNotEmpty()) {
             Text(
-                "Bids Used:",
+                stringResource(Res.string.tarot_stats_label_bids_used),
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold
             )
@@ -563,7 +577,7 @@ private fun TakerPerformanceRow(performance: TakerPerformance) {
         performance.partnerStats?.let { partners ->
             if (partners.isNotEmpty()) {
                 Text(
-                    "With Partners:",
+                    stringResource(Res.string.tarot_stats_label_with_partners),
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -739,7 +753,7 @@ private fun CurrentGamePlayerStatsCard(
                         }
                         
                         Text(
-                            "Bids in This Game",
+                            stringResource(Res.string.tarot_stats_section_bids_in_game),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier

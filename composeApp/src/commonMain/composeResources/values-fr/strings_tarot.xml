@@ -15,6 +15,17 @@
     <string name="tarot_stats_label_avg_lost">Moy. Perdue</string>
     <string name="tarot_stats_section_called_performance">Performance appelée</string>
     <string name="tarot_stats_error_title">Oups ! Quelque chose s'est mal passé</string>
+    <string name="tarot_stats_section_round_breakdown">Détail des manches</string>
+    <string name="tarot_stats_empty_rounds">Aucune manche jouée pour le moment</string>
+    <string name="tarot_stats_section_current_standings">Classement actuel</string>
+    <string name="tarot_stats_format_as_taker">%1$d/%2$d en preneur</string>
+    <string name="tarot_stats_label_round">Manche %d</string>
+    <string name="tarot_stats_contract_won">✓ Gagné</string>
+    <string name="tarot_stats_contract_lost">✗ Perdu</string>
+    <string name="tarot_stats_section_taker_performance">Performance des preneurs 📊</string>
+    <string name="tarot_stats_label_bids_used">Enchères utilisées :</string>
+    <string name="tarot_stats_label_with_partners">Avec partenaires :</string>
+    <string name="tarot_stats_section_bids_in_game">Enchères dans cette partie</string>
 
     <!-- Tarot - Scoring -->
     <string name="tarot_scoring_screen_title">Pointage de la partie</string>

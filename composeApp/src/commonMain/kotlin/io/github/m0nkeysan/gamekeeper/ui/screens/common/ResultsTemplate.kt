@@ -1,7 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,12 +14,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,14 +27,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.github.m0nkeysan.gamekeeper.ui.components.ResultsCard
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.results_action_back
 import io.github.m0nkeysan.gamekeeper.generated.resources.results_section_scores
 import io.github.m0nkeysan.gamekeeper.generated.resources.results_title_tie
 import io.github.m0nkeysan.gamekeeper.generated.resources.results_title_winner
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.ui.components.ResultsCard
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Reusable template for game results/summary screens.
@@ -79,17 +78,12 @@ fun ResultsTemplate(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = { 
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            "Game Over", 
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Game Over",
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             )
         },
@@ -116,7 +110,7 @@ fun ResultsTemplate(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(24.dp))
-            
+
             // Trophy icon
             Icon(
                 imageVector = Icons.Default.EmojiEvents,
@@ -124,17 +118,19 @@ fun ResultsTemplate(
                 modifier = Modifier.size(100.dp),
                 tint = GameColors.TrophyGold
             )
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             // Winner announcement
             Text(
-                text = if (winners.size > 1) stringResource(Res.string.results_title_tie) else stringResource(Res.string.results_title_winner),
+                text = if (winners.size > 1) stringResource(Res.string.results_title_tie) else stringResource(
+                    Res.string.results_title_winner
+                ),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Black,
                 color = GameColors.Primary
             )
-            
+
             Text(
                 text = winners.joinToString(" & ") { it.first }.uppercase(),
                 style = MaterialTheme.typography.displaySmall,
@@ -142,9 +138,9 @@ fun ResultsTemplate(
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            
+
             Spacer(modifier = Modifier.height(48.dp))
-            
+
             // Final scores header
             Text(
                 text = stringResource(Res.string.results_section_scores),
@@ -153,9 +149,9 @@ fun ResultsTemplate(
                 color = GameColors.TextSecondary,
                 letterSpacing = 1.5.sp
             )
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             // Results list
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
