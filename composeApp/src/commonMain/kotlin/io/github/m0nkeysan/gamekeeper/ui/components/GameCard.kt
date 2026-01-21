@@ -23,11 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_game_icon
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Reusable game feature card for displaying games on home screen.

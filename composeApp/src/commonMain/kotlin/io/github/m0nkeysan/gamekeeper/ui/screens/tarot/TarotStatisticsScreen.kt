@@ -46,41 +46,41 @@ import io.github.m0nkeysan.gamekeeper.core.model.PlayerRanking
 import io.github.m0nkeysan.gamekeeper.core.model.RoundStatistic
 import io.github.m0nkeysan.gamekeeper.core.model.TakerPerformance
 import io.github.m0nkeysan.gamekeeper.core.model.TarotRound
-import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
-import kotlin.math.abs
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.core.utils.format
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_retry
-import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_toggle_collapse
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_toggle_expand
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_contract_lost
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_contract_won
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_empty_rounds
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_error_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_format_as_taker
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_as_taker
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_avg_bouts
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_avg_lost
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_avg_won
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_bids_used
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_called
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_favorite_bid
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_most_successful
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_win_rate
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_called_performance
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_performance_details
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_tab_current_game
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_tab_player_stats
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_round_breakdown
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_empty_rounds
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_current_standings
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_format_as_taker
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_round
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_contract_won
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_contract_lost
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_taker_performance
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_bids_used
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_win_rate
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_with_partners
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_bids_in_game
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
-import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_called_performance
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_current_standings
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_performance_details
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_round_breakdown
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_taker_performance
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_tab_current_game
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_tab_player_stats
+import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_title
+import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
+import org.jetbrains.compose.resources.stringResource
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 /**
  * Tarot Statistics Screen
@@ -104,10 +104,10 @@ fun TarotStatisticsScreen(
             playerRepository = PlatformRepositories.getPlayerRepository()
         )
     }
-    
+
     val state by viewModel.uiState.collectAsState()
     var selectedTab by remember { mutableIntStateOf(0) }
-    
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -117,10 +117,10 @@ fun TarotStatisticsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                             stringResource(Res.string.tarot_stats_title),
-                             style = MaterialTheme.typography.titleLarge,
-                             fontWeight = FontWeight.Bold
-                         )
+                            stringResource(Res.string.tarot_stats_title),
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
                         state.game?.let {
                             Text(
                                 it.name,
@@ -131,10 +131,10 @@ fun TarotStatisticsScreen(
                     }
                 },
                 navigationIcon = {
-                     IconButton(onClick = onBack) {
-                         Icon(GameIcons.ArrowBack, stringResource(Res.string.action_back))
-                     }
-                 }
+                    IconButton(onClick = onBack) {
+                        Icon(GameIcons.ArrowBack, stringResource(Res.string.action_back))
+                    }
+                }
             )
         },
         containerColor = MaterialTheme.colorScheme.background
@@ -155,7 +155,7 @@ fun TarotStatisticsScreen(
                 }
                 return@Column
             }
-            
+
             // Error state
             if (state.error != null) {
                 ErrorStateCard(
@@ -164,7 +164,7 @@ fun TarotStatisticsScreen(
                 )
                 return@Column
             }
-            
+
             // Tab navigation
             PrimaryTabRow(
                 selectedTabIndex = selectedTab,
@@ -181,7 +181,7 @@ fun TarotStatisticsScreen(
                     text = { Text(stringResource(Res.string.tarot_stats_tab_player_stats)) }
                 )
             }
-            
+
             // Tab content
             when (selectedTab) {
                 0 -> CurrentGameTab(state)
@@ -207,14 +207,14 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
                 PlayerRankingsCard(state.currentGameRankings)
             }
         }
-        
+
         // Taker Performance Card (only if 3+ rounds)
         if (state.hasMinimumRounds && state.takerPerformance.isNotEmpty()) {
             item {
                 TakerPerformanceCard(state.takerPerformance)
             }
         }
-        
+
         // Round Breakdown Section
         if (state.roundBreakdown.isNotEmpty()) {
             item {
@@ -229,22 +229,25 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                Text(
-                    stringResource(Res.string.tarot_stats_section_round_breakdown),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .background(
-                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                            MaterialTheme.shapes.small
+                        Text(
+                            stringResource(Res.string.tarot_stats_section_round_breakdown),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .background(
+                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                    MaterialTheme.shapes.small
+                                )
+                                .padding(8.dp)
+                                .fillMaxWidth(),
+                            textAlign = TextAlign.Center
                         )
-                        .padding(8.dp)
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
                         state.roundBreakdown.reversed().forEach { round ->
-                        RoundBreakdownItem(round)
-                    } } } }
+                            RoundBreakdownItem(round)
+                        }
+                    }
+                }
+            }
         } else {
             item {
                 Card(
@@ -279,7 +282,7 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
                 }
             }
         }
-        
+
         item {
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -310,7 +313,7 @@ private fun PlayerStatsTab(state: TarotStatisticsState) {
                 }
             }
         }
-        
+
         item {
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -346,7 +349,7 @@ private fun PlayerRankingsCard(rankings: List<PlayerRanking>) {
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
-            
+
             rankings.forEach { ranking ->
                 RankingRow(ranking)
             }
@@ -388,20 +391,24 @@ private fun RankingRow(ranking: PlayerRanking) {
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    stringResource(Res.string.tarot_stats_format_as_taker, ranking.roundsWonAsTaker, ranking.roundsPlayedAsTaker),
+                    stringResource(
+                        Res.string.tarot_stats_format_as_taker,
+                        ranking.roundsWonAsTaker,
+                        ranking.roundsPlayedAsTaker
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
-        
+
         Text(
             if (ranking.totalScore > 0) "+${ranking.totalScore}" else "${ranking.totalScore}",
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
-            color = if (ranking.totalScore > 0) 
-                MaterialTheme.colorScheme.secondary 
-            else 
+            color = if (ranking.totalScore > 0)
+                MaterialTheme.colorScheme.secondary
+            else
                 MaterialTheme.colorScheme.error
         )
     }
@@ -438,7 +445,7 @@ private fun RoundBreakdownItem(round: RoundStatistic) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -450,21 +457,21 @@ private fun RoundBreakdownItem(round: RoundStatistic) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    if (round.contractWon) 
-                        stringResource(Res.string.tarot_stats_contract_won) 
-                    else 
+                    if (round.contractWon)
+                        stringResource(Res.string.tarot_stats_contract_won)
+                    else
                         stringResource(Res.string.tarot_stats_contract_lost),
                     style = MaterialTheme.typography.labelMedium,
-                    color = if (round.contractWon) 
-                        MaterialTheme.colorScheme.secondary 
-                    else 
+                    color = if (round.contractWon)
+                        MaterialTheme.colorScheme.secondary
+                    else
                         MaterialTheme.colorScheme.error
                 )
                 Text(
@@ -498,7 +505,7 @@ private fun TakerPerformanceCard(performanceMap: Map<String, TakerPerformance>) 
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
-            
+
             performanceMap.values.forEach { performance ->
                 TakerPerformanceRow(performance)
             }
@@ -534,13 +541,13 @@ private fun TakerPerformanceRow(performance: TakerPerformance) {
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    "${performance.wins}/${performance.takerRounds} (${String.format("%.1f", performance.winRate)}%)",
+                    "${performance.wins}/${performance.takerRounds} (${performance.winRate.format(1)}%)",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
-        
+
         // Bid distribution
         if (performance.bidDistribution.isNotEmpty()) {
             Text(
@@ -572,7 +579,7 @@ private fun TakerPerformanceRow(performance: TakerPerformance) {
                 }
             }
         }
-        
+
         // Partner stats (5-player only)
         performance.partnerStats?.let { partners ->
             if (partners.isNotEmpty()) {
@@ -583,7 +590,7 @@ private fun TakerPerformanceRow(performance: TakerPerformance) {
                 )
                 partners.forEach { (_, partner) ->
                     Text(
-                        "• ${partner.partnerName}: ${partner.wins}/${partner.gamesPlayed} (${String.format("%.1f", partner.winRate)}%)",
+                        "• ${partner.partnerName}: ${partner.wins}/${partner.gamesPlayed} (${partner.winRate.format(1)}%)",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(start = 8.dp)
@@ -604,7 +611,7 @@ private fun CurrentGamePlayerStatsCard(
     allRounds: List<TarotRound>
 ) {
     var isExpanded by remember { mutableStateOf(true) }
-    
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -629,275 +636,287 @@ private fun CurrentGamePlayerStatsCard(
                     fontWeight = FontWeight.Bold
                 )
                 Icon(
-                     imageVector = if (isExpanded) GameIcons.ExpandLess else GameIcons.ExpandMore,
-                     contentDescription = if (isExpanded) stringResource(Res.string.cd_toggle_collapse) else stringResource(Res.string.cd_toggle_expand),
-                     modifier = Modifier.size(24.dp)
-                 )
+                    imageVector = if (isExpanded) GameIcons.ExpandLess else GameIcons.ExpandMore,
+                    contentDescription = if (isExpanded) stringResource(Res.string.cd_toggle_collapse) else stringResource(
+                        Res.string.cd_toggle_expand
+                    ),
+                    modifier = Modifier.size(24.dp)
+                )
             }
-            
+
             // Expanded content
             if (isExpanded) {
                 Column(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp).fillMaxWidth(),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                        .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-            
-            // Current game stats
-            val takerRounds = allRounds.count { it.takerPlayerId == player.id }
-            val takerWins = allRounds.count { 
-                it.takerPlayerId == player.id && it.score > 0 
-            }
 
-            // Called rounds (times player was called as partner)
-            val calledRounds = allRounds.count { it.calledPlayerId == player.id }
-            val calledWins = allRounds.count { 
-                it.calledPlayerId == player.id && it.score > 0
-            }
-            
-            // Total rounds as taker or called
-            val totalRounds = takerRounds + calledRounds
-            val totalWins = takerWins + calledWins
-            val winRate = if (totalRounds > 0) 
-                (totalWins.toDouble() / totalRounds) * 100 
-            else 0.0
-            
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                StatItem(
-                    label = stringResource(Res.string.tarot_stats_label_called),
-                    value = calledRounds.toString(),
-                    modifier = Modifier.weight(1f)
-                )
-                StatItem(
-                    label = stringResource(Res.string.tarot_stats_label_as_taker),
-                    value = "$takerWins/$takerRounds",
-                    modifier = Modifier.weight(1f)
-                )
-                StatItem(
-                    label = stringResource(Res.string.tarot_stats_label_win_rate),
-                    value = "%.0f%%".format(winRate),
-                    modifier = Modifier.weight(1f)
-                )
-            }
-            
-            // Bid breakdown for this game - using RoundStatistic which has proper data
-            val playerGameRounds = rounds.filter { it.taker.id == player.id }
-            val playerAllRounds = allRounds.filter { it.takerPlayerId == player.id }
-            
-            if (playerAllRounds.isNotEmpty()) {
-                val bidsInGame = playerAllRounds.groupingBy { it.bid }.eachCount()
-                
-                if (bidsInGame.isNotEmpty()) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        // Favorite bid (most played)
-                        val favoriteBid = bidsInGame.maxByOrNull { it.value }
-                        if (favoriteBid != null) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(
-                                        MaterialTheme.colorScheme.secondaryContainer,
-                                        MaterialTheme.shapes.small
-                                    )
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    stringResource(Res.string.tarot_stats_label_favorite_bid),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    "${favoriteBid.key.displayName} (${favoriteBid.value}x)",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                        
-                        // Most successful bid (highest win rate) - use playerGameRounds with RoundStatistic
-                        val bidWinRates = bidsInGame.keys.associateWith { bid ->
-                            val bidRounds = playerGameRounds.filter { it.bid == bid }
-                            val wins = bidRounds.count { it.contractWon }
-                            if (bidRounds.isNotEmpty()) wins.toDouble() / bidRounds.size * 100 else 0.0
-                        }
-                        val mostSuccessfulBid = bidWinRates.maxByOrNull { it.value }
-                        if (mostSuccessfulBid != null && mostSuccessfulBid.value > 0) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(
-                                        MaterialTheme.colorScheme.tertiaryContainer,
-                                        MaterialTheme.shapes.small
-                                    )
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    stringResource(Res.string.tarot_stats_label_most_successful),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    "${mostSuccessfulBid.key.displayName} (${String.format("%.0f", mostSuccessfulBid.value)}%)",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                        
-                        Text(
-                            stringResource(Res.string.tarot_stats_section_bids_in_game),
-                            style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier
-                                .background(
-                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                    MaterialTheme.shapes.small
-                                )
-                                .padding(8.dp)
-                                .fillMaxWidth(),
-                            textAlign = TextAlign.Center
+                    // Current game stats
+                    val takerRounds = allRounds.count { it.takerPlayerId == player.id }
+                    val takerWins = allRounds.count {
+                        it.takerPlayerId == player.id && it.score > 0
+                    }
+
+                    // Called rounds (times player was called as partner)
+                    val calledRounds = allRounds.count { it.calledPlayerId == player.id }
+                    val calledWins = allRounds.count {
+                        it.calledPlayerId == player.id && it.score > 0
+                    }
+
+                    // Total rounds as taker or called
+                    val totalRounds = takerRounds + calledRounds
+                    val totalWins = takerWins + calledWins
+                    val winRate = if (totalRounds > 0)
+                        (totalWins.toDouble() / totalRounds) * 100
+                    else 0.0
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        StatItem(
+                            label = stringResource(Res.string.tarot_stats_label_called),
+                            value = calledRounds.toString(),
+                            modifier = Modifier.weight(1f)
                         )
-                        bidsInGame.forEach { (bid, count) ->
-                            Row(
+                        StatItem(
+                            label = stringResource(Res.string.tarot_stats_label_as_taker),
+                            value = "$takerWins/$takerRounds",
+                            modifier = Modifier.weight(1f)
+                        )
+                        StatItem(
+                            label = stringResource(Res.string.tarot_stats_label_win_rate),
+                            value = "${winRate.format(0)}%",
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+
+                    // Bid breakdown for this game - using RoundStatistic which has proper data
+                    val playerGameRounds = rounds.filter { it.taker.id == player.id }
+                    val playerAllRounds = allRounds.filter { it.takerPlayerId == player.id }
+
+                    if (playerAllRounds.isNotEmpty()) {
+                        val bidsInGame = playerAllRounds.groupingBy { it.bid }.eachCount()
+
+                        if (bidsInGame.isNotEmpty()) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                // Favorite bid (most played)
+                                val favoriteBid = bidsInGame.maxByOrNull { it.value }
+                                if (favoriteBid != null) {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(
+                                                MaterialTheme.colorScheme.secondaryContainer,
+                                                MaterialTheme.shapes.small
+                                            )
+                                            .padding(8.dp),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            stringResource(Res.string.tarot_stats_label_favorite_bid),
+                                            style = MaterialTheme.typography.bodySmall,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        Text(
+                                            "${favoriteBid.key.displayName} (${favoriteBid.value}x)",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
+
+                                // Most successful bid (highest win rate) - use playerGameRounds with RoundStatistic
+                                val bidWinRates = bidsInGame.keys.associateWith { bid ->
+                                    val bidRounds = playerGameRounds.filter { it.bid == bid }
+                                    val wins = bidRounds.count { it.contractWon }
+                                    if (bidRounds.isNotEmpty()) wins.toDouble() / bidRounds.size * 100 else 0.0
+                                }
+                                val mostSuccessfulBid = bidWinRates.maxByOrNull { it.value }
+                                if (mostSuccessfulBid != null && mostSuccessfulBid.value > 0) {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(
+                                                MaterialTheme.colorScheme.tertiaryContainer,
+                                                MaterialTheme.shapes.small
+                                            )
+                                            .padding(8.dp),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            stringResource(Res.string.tarot_stats_label_most_successful),
+                                            style = MaterialTheme.typography.bodySmall,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        Text(
+                                            "${mostSuccessfulBid.key.displayName} (${mostSuccessfulBid.value.format(0)}%",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
+
+                                Text(
+                                    stringResource(Res.string.tarot_stats_section_bids_in_game),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier
+                                        .background(
+                                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                            MaterialTheme.shapes.small
+                                        )
+                                        .padding(8.dp)
+                                        .fillMaxWidth(),
+                                    textAlign = TextAlign.Center
+                                )
+                                bidsInGame.forEach { (bid, count) ->
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(
+                                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                                MaterialTheme.shapes.small
+                                            )
+                                            .padding(8.dp),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            bid.displayName,
+                                            style = MaterialTheme.typography.bodySmall
+                                        )
+                                        Text(
+                                            "x$count",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        // Detailed averages section - use playerGameRounds with RoundStatistic
+                        if (playerGameRounds.isNotEmpty()) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(
+                                    stringResource(Res.string.tarot_stats_section_performance_details),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier
+                                        .background(
+                                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                            MaterialTheme.shapes.small
+                                        )
+                                        .padding(8.dp)
+                                        .fillMaxWidth(),
+                                    textAlign = TextAlign.Center
+                                )
+
+                                // Average bouts
+                                val totalBouts = playerGameRounds.sumOf { it.bouts }
+                                val avgBouts = totalBouts.toDouble() / playerGameRounds.size
+                                StatItem(
+                                    label = stringResource(Res.string.tarot_stats_label_avg_bouts),
+                                    value = avgBouts.format(1),
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+
+                                // Points won/lost
+                                val pointsWon =
+                                    playerGameRounds.filter { it.contractWon }.sumOf { it.score }
+                                val roundsWon = playerGameRounds.count { it.contractWon }
+                                val avgPointsWon =
+                                    if (roundsWon > 0) pointsWon.toDouble() / roundsWon else 0.0
+
+                                val pointsLost =
+                                    playerGameRounds.filter { !it.contractWon }.sumOf { it.score }
+                                val roundsLost = playerGameRounds.count { !it.contractWon }
+                                val avgPointsLost =
+                                    if (roundsLost > 0) abs(pointsLost.toDouble() / roundsLost) else 0.0
+
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    StatItem(
+                                        label = stringResource(Res.string.tarot_stats_label_avg_won),
+                                        value = avgPointsWon.format(0),
+                                        modifier = Modifier.weight(1f),
+                                        valueColor = MaterialTheme.colorScheme.secondary
+                                    )
+                                    StatItem(
+                                        label = stringResource(Res.string.tarot_stats_label_avg_lost),
+                                        value = avgPointsLost.format(0),
+                                        modifier = Modifier.weight(1f),
+                                        valueColor = MaterialTheme.colorScheme.error
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    // Called player statistics - outside playerAllRounds check so it shows for called-only players
+                    if (calledRounds > 0) {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(
+                                stringResource(Res.string.tarot_stats_section_called_performance),
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
                                 modifier = Modifier
-                                    .fillMaxWidth()
                                     .background(
                                         MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
                                         MaterialTheme.shapes.small
                                     )
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    bid.displayName,
-                                    style = MaterialTheme.typography.bodySmall
-                                )
-                                Text(
-                                    "x$count",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    fontWeight = FontWeight.Bold
-                                )
+                                    .padding(8.dp)
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Center
+                            )
+
+                            // Called win/loss statistics
+                            val calledGameRounds =
+                                allRounds.filter { it.calledPlayerId == player.id }
+                                    .mapNotNull { tarotRound ->
+                                        rounds.find { it.roundNumber == tarotRound.roundNumber }
+                                    }
+
+                            if (calledGameRounds.isNotEmpty()) {
+                                val calledPointsWon =
+                                    calledGameRounds.filter { it.contractWon }.sumOf { it.score }
+                                val calledRoundsWon = calledGameRounds.count { it.contractWon }
+                                val avgCalledPointsWon =
+                                    if (calledRoundsWon > 0) calledPointsWon.toDouble() / calledRoundsWon else 0.0
+
+                                val calledPointsLost =
+                                    calledGameRounds.filter { !it.contractWon }.sumOf { it.score }
+                                val calledRoundsLost = calledGameRounds.count { !it.contractWon }
+                                val avgCalledPointsLost =
+                                    if (calledRoundsLost > 0) abs(calledPointsLost.toDouble() / calledRoundsLost) else 0.0
+
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    StatItem(
+                                        label = stringResource(Res.string.tarot_stats_label_avg_won),
+                                        value = avgCalledPointsWon.roundToInt().toString(),
+                                        modifier = Modifier.weight(1f),
+                                        valueColor = MaterialTheme.colorScheme.secondary
+                                    )
+                                    StatItem(
+                                        label = stringResource(Res.string.tarot_stats_label_avg_lost),
+                                        value = avgCalledPointsLost.roundToInt().toString(),
+                                        modifier = Modifier.weight(1f),
+                                        valueColor = MaterialTheme.colorScheme.error
+                                    )
+                                }
                             }
                         }
-                    }
-                }
-                
-                // Detailed averages section - use playerGameRounds with RoundStatistic
-                if (playerGameRounds.isNotEmpty()) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(
-                            stringResource(Res.string.tarot_stats_section_performance_details),
-                            style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier
-                                .background(
-                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                    MaterialTheme.shapes.small
-                                )
-                                .padding(8.dp)
-                                .fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                        
-                        // Average bouts
-                        val totalBouts = playerGameRounds.sumOf { it.bouts }
-                        val avgBouts = totalBouts.toDouble() / playerGameRounds.size
-                        StatItem(
-                            label = stringResource(Res.string.tarot_stats_label_avg_bouts),
-                            value = String.format("%.1f", avgBouts),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        
-                        // Points won/lost
-                        val pointsWon = playerGameRounds.filter { it.contractWon }.sumOf { it.score }
-                        val roundsWon = playerGameRounds.count { it.contractWon }
-                        val avgPointsWon = if (roundsWon > 0) pointsWon.toDouble() / roundsWon else 0.0
-                        
-                        val pointsLost = playerGameRounds.filter { !it.contractWon }.sumOf { it.score }
-                        val roundsLost = playerGameRounds.count { !it.contractWon }
-                        val avgPointsLost = if (roundsLost > 0) abs(pointsLost.toDouble() / roundsLost) else 0.0
-                        
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            StatItem(
-                                label = stringResource(Res.string.tarot_stats_label_avg_won),
-                                value = String.format("%.0f", avgPointsWon),
-                                modifier = Modifier.weight(1f),
-                                valueColor = MaterialTheme.colorScheme.secondary
-                            )
-                            StatItem(
-                                label = stringResource(Res.string.tarot_stats_label_avg_lost),
-                                value = String.format("%.0f", avgPointsLost),
-                                modifier = Modifier.weight(1f),
-                                valueColor = MaterialTheme.colorScheme.error
-                            )
-                        }
-                    }
-                }
-            }
-            
-            // Called player statistics - outside playerAllRounds check so it shows for called-only players
-            if (calledRounds > 0) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        stringResource(Res.string.tarot_stats_section_called_performance),
-                        style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .background(
-                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                MaterialTheme.shapes.small
-                            )
-                            .padding(8.dp)
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                    
-                    // Called win/loss statistics
-                    val calledGameRounds = allRounds.filter { it.calledPlayerId == player.id }
-                        .mapNotNull { tarotRound ->
-                        rounds.find { it.roundNumber == tarotRound.roundNumber }
-                    }
-                    
-                    if (calledGameRounds.isNotEmpty()) {
-                        val calledPointsWon = calledGameRounds.filter { it.contractWon }.sumOf { it.score }
-                        val calledRoundsWon = calledGameRounds.count { it.contractWon }
-                        val avgCalledPointsWon = if (calledRoundsWon > 0) calledPointsWon.toDouble() / calledRoundsWon else 0.0
-                        
-                        val calledPointsLost = calledGameRounds.filter { !it.contractWon }.sumOf { it.score }
-                        val calledRoundsLost = calledGameRounds.count { !it.contractWon }
-                        val avgCalledPointsLost = if (calledRoundsLost > 0) abs(calledPointsLost.toDouble() / calledRoundsLost) else 0.0
-                        
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            StatItem(
-                                label = stringResource(Res.string.tarot_stats_label_avg_won),
-                                value = String.format("%.0f", avgCalledPointsWon),
-                                modifier = Modifier.weight(1f),
-                                valueColor = MaterialTheme.colorScheme.secondary
-                            )
-                            StatItem(
-                                label = stringResource(Res.string.tarot_stats_label_avg_lost),
-                                value = String.format("%.0f", avgCalledPointsLost),
-                                modifier = Modifier.weight(1f),
-                                valueColor = MaterialTheme.colorScheme.error
-                            )
-                    }
-                }
-            }
                     }
                 }
             }

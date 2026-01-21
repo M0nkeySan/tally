@@ -1,12 +1,44 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.fingerselector
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -18,14 +50,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.gamekeeper.GameIcons
-import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
-import io.github.m0nkeysan.gamekeeper.platform.HapticType
-import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
-import kotlinx.coroutines.delay
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.random.Random
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
 import io.github.m0nkeysan.gamekeeper.generated.resources.error_min_fingers
@@ -40,7 +66,14 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_mode_g
 import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_section_mode
 import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_slider_value_format
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_finger_selector
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.platform.HapticType
+import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
+import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.stringResource
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.random.Random
 
 // Vibrant colors for fingers
 private val fingerColors = listOf(
@@ -111,12 +144,18 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
+                        Icon(
+                            GameIcons.ArrowBack,
+                            contentDescription = stringResource(Res.string.action_back)
+                        )
                     }
                 },
                 actions = {
                     IconButton(onClick = { showSettings = true }) {
-                        Icon(GameIcons.Settings, contentDescription = stringResource(Res.string.cd_settings))
+                        Icon(
+                            GameIcons.Settings,
+                            contentDescription = stringResource(Res.string.cd_settings)
+                        )
                     }
                 }
             )
@@ -160,7 +199,10 @@ fun SelectionSettingsSheet(
 
         // Mode Selection
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(stringResource(Res.string.finger_selector_section_mode), style = MaterialTheme.typography.titleMedium)
+            Text(
+                stringResource(Res.string.finger_selector_section_mode),
+                style = MaterialTheme.typography.titleMedium
+            )
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(
                     selected = config.mode == SelectionMode.FINGERS,
@@ -191,14 +233,22 @@ fun SelectionSettingsSheet(
             }
         }
 
-         // Count Selection
-         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-             val title =
-                 if (config.mode == SelectionMode.FINGERS) stringResource(Res.string.finger_selector_label_fingers) else stringResource(Res.string.finger_selector_label_groups)
-             val min = 1
-             val max = 5
+        // Count Selection
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            val title =
+                if (config.mode == SelectionMode.FINGERS) stringResource(Res.string.finger_selector_label_fingers) else stringResource(
+                    Res.string.finger_selector_label_groups
+                )
+            val min = 1
+            val max = 5
 
-             Text(stringResource(Res.string.finger_selector_slider_value_format).format(title, config.count), style = MaterialTheme.typography.titleMedium)
+            Text(
+                stringResource(
+                    Res.string.finger_selector_slider_value_format,
+                    title,
+                    config.count
+                ), style = MaterialTheme.typography.titleMedium
+            )
 
             Slider(
                 value = config.count.toFloat(),
@@ -432,10 +482,12 @@ fun FingerSelectorGame(
                 if (!hideOrbit) {
                     val orbitRadius = radius + 30f
                     val currentAngle = orbitAngle + fingerData.orbitPhase
+                    val angleInRadians = currentAngle.toDouble() * (PI / 180.0)
+
                     val orbitX =
-                        fingerData.position.x + orbitRadius * cos(Math.toRadians(currentAngle.toDouble())).toFloat()
+                        fingerData.position.x + orbitRadius * cos(angleInRadians).toFloat()
                     val orbitY =
-                        fingerData.position.y + orbitRadius * sin(Math.toRadians(currentAngle.toDouble())).toFloat()
+                        fingerData.position.y + orbitRadius * sin(angleInRadians).toFloat()
 
                     drawCircle(
                         color = fingerData.color.copy(alpha = 0.3f),
@@ -514,7 +566,7 @@ fun FingerSelectorGame(
                     contentAlignment = Alignment.BottomCenter
                 ) {
                     Text(
-                        text = stringResource(Res.string.error_min_fingers).format(minFingers),
+                        text = stringResource(Res.string.error_min_fingers, minFingers),
                         color = Color.White.copy(alpha = 0.6f),
                         fontSize = 16.sp,
                         textAlign = TextAlign.Center

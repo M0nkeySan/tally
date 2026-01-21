@@ -31,7 +31,7 @@
     <string name="game_creation_tarot_name_default">Tarot Game</string>
     <string name="game_creation_field_game_name">Game Name</string>
     <string name="game_deletion_dialog_tarot_title">Delete Game</string>
-    <string name="game_deletion_dialog_tarot_message">Are you sure you want to delete the game \'%s\'? This will also delete all rounds in this game.</string>
+    <string name="game_deletion_dialog_tarot_message">Are you sure you want to delete the game \'%1$s\'? This will also delete all rounds in this game.</string>
     <string name="game_deletion_dialog_yahtzee_title">Delete Game</string>
-    <string name="game_deletion_dialog_yahtzee_message">Are you sure you want to delete \'%s\'? All scores will be lost.</string>
+    <string name="game_deletion_dialog_yahtzee_message">Are you sure you want to delete \'%1$s\'? All scores will be lost.</string>
 </resources>

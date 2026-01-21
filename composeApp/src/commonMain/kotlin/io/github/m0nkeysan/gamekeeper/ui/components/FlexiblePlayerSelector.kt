@@ -22,13 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.Player
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_add_player
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_remove_player
 import io.github.m0nkeysan.gamekeeper.generated.resources.error_player_count_range
 import io.github.m0nkeysan.gamekeeper.generated.resources.players_count_format
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Flexible player selector that supports min/max player constraints.
@@ -63,7 +63,7 @@ fun FlexiblePlayerSelector(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(Res.string.players_count_format).format(selectedPlayers.size, maxPlayers),
+                text = stringResource(Res.string.players_count_format, selectedPlayers.size, maxPlayers),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -120,7 +120,7 @@ fun FlexiblePlayerSelector(
         // Validation error message
         if (showError) {
             Text(
-                text = stringResource(Res.string.error_player_count_range).format(minPlayers, maxPlayers),
+                text = stringResource(Res.string.error_player_count_range, minPlayers, maxPlayers),
                 style = MaterialTheme.typography.bodySmall,
                 color = GameColors.Error
             )

@@ -1,6 +1,7 @@
 package io.github.m0nkeysan.gamekeeper.core.data.local.repository
 
-import androidx.room.withTransaction
+import androidx.room.immediateTransaction
+import androidx.room.useWriterConnection
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.GameDatabase
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.YahtzeeDao
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.YahtzeeGameEntity
@@ -38,10 +39,11 @@ class YahtzeeRepositoryImpl(
 
     override suspend fun deleteGame(game: YahtzeeGame) {
         try {
-            // Use transaction for atomic delete operation
-            database.withTransaction {
-                dao.deleteScoresForGame(game.id)
-                dao.deleteGame(game.toEntity())
+            database.useWriterConnection { transactor ->
+                transactor.immediateTransaction<Unit> {
+                    dao.deleteScoresForGame(game.id)
+                    dao.deleteGame(game.toEntity())
+                }
             }
         } catch (e: Exception) {
             throw Exception("Failed to delete Yahtzee game: ${e.message}", e)

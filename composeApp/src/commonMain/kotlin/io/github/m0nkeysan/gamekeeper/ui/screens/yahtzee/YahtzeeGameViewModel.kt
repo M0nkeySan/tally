@@ -49,7 +49,7 @@ class YahtzeeGameViewModel : ViewModel() {
     private fun loadGames() {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     repository.getAllGames().collect { games ->
                         val displayModels = games.map { game ->
                             val names = game.playerIds.split(",").map { id ->
@@ -95,7 +95,7 @@ class YahtzeeGameViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val gameId = withContext(Dispatchers.IO) {
+                val gameId = withContext(Dispatchers.Default) {
                     players.forEach { player ->
                         if (playerRepository.getPlayerById(player.id) == null) {
                             playerRepository.insertPlayer(player)
@@ -123,7 +123,7 @@ class YahtzeeGameViewModel : ViewModel() {
     fun deleteGame(game: YahtzeeGame, onError: (String) -> Unit = {}) {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     repository.deleteGame(game)
                 }
             } catch (e: Exception) {
@@ -147,7 +147,7 @@ class YahtzeeGameViewModel : ViewModel() {
     fun savePlayer(player: Player, onError: (String) -> Unit = {}) {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     if (playerRepository.getPlayerById(player.id) == null) {
                         // Use createPlayerOrReactivate to check for deactivated players
                         playerRepository.createPlayerOrReactivate(player.name, player.avatarColor)

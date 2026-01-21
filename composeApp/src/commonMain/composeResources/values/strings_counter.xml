@@ -27,7 +27,7 @@
     <string name="counter_dialog_set_score_label">SET NEW SCORE</string>
     <string name="counter_cd_decrease">Decrease</string>
     <string name="counter_cd_increase">Increase</string>
-    <string name="counter_leader_display_format">%s %s</string>
+    <string name="counter_leader_display_format">%1$s %2$s</string>
     <string name="counter_history_title">History</string>
     <string name="counter_history_subtitle">⚠️ History is cleared when you close the app</string>
     <string name="counter_history_cd_delete">Delete all histories</string>
@@ -42,5 +42,5 @@
     <string name="counter_edit_placeholder_name">Player Name</string>
     <string name="counter_edit_field_value">VALUE</string>
     <string name="counter_edit_placeholder_value">0</string>
-    <string name="counter_format_player_count">%dP</string>
+    <string name="counter_format_player_count">%1$dP</string>
 </resources>

@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.core.data.local.database
 
+import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 
@@ -16,6 +17,7 @@ import androidx.room.RoomDatabase
     version = 2,
     exportSchema = false
 )
+@ConstructedBy(GameDatabaseConstructor::class)
 abstract class GameDatabase : RoomDatabase() {
     abstract fun playerDao(): PlayerDao
     abstract fun userPreferencesDao(): UserPreferencesDao

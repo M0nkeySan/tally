@@ -27,7 +27,7 @@
     <string name="counter_dialog_set_score_label">DÉFINIR NOUVEAU SCORE</string>
     <string name="counter_cd_decrease">Diminuer</string>
     <string name="counter_cd_increase">Augmenter</string>
-    <string name="counter_leader_display_format">%s %s</string>
+    <string name="counter_leader_display_format">%1$s %2$s</string>
     <string name="counter_history_title">Historique</string>
     <string name="counter_history_subtitle">⚠️ L'historique est effacé à la fermeture de l'application</string>
     <string name="counter_history_cd_delete">Supprimer tous les historiques</string>
@@ -42,5 +42,5 @@
     <string name="counter_edit_placeholder_name">Nom du joueur</string>
     <string name="counter_edit_field_value">VALEUR</string>
     <string name="counter_edit_placeholder_value">0</string>
-    <string name="counter_format_player_count">%dJ</string>
+    <string name="counter_format_player_count">%1$dJ</string>
 </resources>

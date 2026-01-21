@@ -1,22 +1,33 @@
 package io.github.m0nkeysan.gamekeeper.ui.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EmojiEvents
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.tooling.preview.Preview
-import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_finished_game
 import io.github.m0nkeysan.gamekeeper.generated.resources.player_count_display
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Data class representing a game for display in selection screens.
@@ -72,7 +83,7 @@ fun GameSelectionCard(
                 Spacer(modifier = Modifier.height(4.dp))
                 
                 Text(
-                    text = stringResource(Res.string.player_count_display).format(game.playerCount, if (game.playerCount > 1) "s" else ""),
+                    text = stringResource(Res.string.player_count_display, game.playerCount, if (game.playerCount > 1) "s" else ""),
                     style = MaterialTheme.typography.bodyMedium,
                     color = GameColors.TextSecondary
                 )

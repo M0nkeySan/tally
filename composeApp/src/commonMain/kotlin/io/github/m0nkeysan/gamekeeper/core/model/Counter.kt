@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.core.model
 
+import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
 import kotlinx.serialization.Serializable
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid

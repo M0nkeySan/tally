@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
+import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
 import kotlinx.coroutines.flow.Flow
 
 @Dao

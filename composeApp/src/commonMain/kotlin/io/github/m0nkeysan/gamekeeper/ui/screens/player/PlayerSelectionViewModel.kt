@@ -32,7 +32,6 @@ class PlayerSelectionViewModel : ViewModel() {
             try {
                 playerRepository.createPlayerOrReactivate(name, color)
             } catch (e: Exception) {
-                // Handle error if necessary
             }
         }
     }

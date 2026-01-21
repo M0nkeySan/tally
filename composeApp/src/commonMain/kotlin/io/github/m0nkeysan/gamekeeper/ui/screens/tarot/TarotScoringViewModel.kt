@@ -26,7 +26,7 @@ class TarotScoringViewModel : ViewModel() {
     fun loadGame(gameId: String) {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     val game = repository.getGameById(gameId)
                     if (game == null) {
                         _state.update { it.copy(error = "Game not found") }
@@ -103,7 +103,7 @@ class TarotScoringViewModel : ViewModel() {
                     score = result.totalScore
                 )
 
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     repository.addRound(round, gameId)
                 }
                 _state.update { it.copy(error = null) }

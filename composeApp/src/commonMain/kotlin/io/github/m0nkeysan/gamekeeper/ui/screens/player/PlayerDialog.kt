@@ -31,12 +31,7 @@ import androidx.compose.ui.window.Dialog
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.core.model.playerNamesEqual
 import io.github.m0nkeysan.gamekeeper.core.model.sanitizePlayerName
-import io.github.m0nkeysan.gamekeeper.ui.components.ColorSelectorRow
-import io.github.m0nkeysan.gamekeeper.ui.components.DIALOG_COLOR_PRESETS
-import io.github.m0nkeysan.gamekeeper.ui.components.FieldLabel
-import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
-import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_create
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_save
@@ -46,7 +41,12 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.player_error_name_take
 import io.github.m0nkeysan.gamekeeper.generated.resources.player_field_name
 import io.github.m0nkeysan.gamekeeper.generated.resources.player_label_color
 import io.github.m0nkeysan.gamekeeper.generated.resources.player_placeholder_name
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.ui.components.ColorSelectorRow
+import io.github.m0nkeysan.gamekeeper.ui.components.DIALOG_COLOR_PRESETS
+import io.github.m0nkeysan.gamekeeper.ui.components.FieldLabel
+import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
+import io.github.m0nkeysan.gamekeeper.ui.utils.parseColor
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PlayerDialog(
@@ -56,14 +56,12 @@ fun PlayerDialog(
     onConfirm: (name: String, color: String) -> Unit
 ) {
     var name by remember { mutableStateOf(initialPlayer?.name ?: "") }
-    // Default color if adding, or player's color if editing
     var selectedColor by remember { mutableStateOf(initialPlayer?.avatarColor ?: DIALOG_COLOR_PRESETS.random()) }
     val focusRequester = remember { FocusRequester() }
 
     val composeColor = remember(selectedColor) { parseColor(selectedColor) }
     val contentColor = if (composeColor.luminance() > 0.5f) Color.Black else Color.White
-    
-    // Request focus on name input when adding new player
+
     LaunchedEffect(initialPlayer) {
         if (initialPlayer == null) {
             focusRequester.requestFocus()

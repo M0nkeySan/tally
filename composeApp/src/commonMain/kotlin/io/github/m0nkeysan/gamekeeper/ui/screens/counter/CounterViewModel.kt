@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.gamekeeper.core.model.Counter
-import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
+import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import kotlinx.coroutines.flow.MutableStateFlow

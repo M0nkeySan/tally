@@ -49,7 +49,7 @@ class YahtzeeStatisticsViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     val players = statsRepository.getAvailablePlayers()
                     _uiState.update { 
                         it.copy(
@@ -99,7 +99,7 @@ class YahtzeeStatisticsViewModel(
                 }
                 
                 // Cache miss - fetch from database
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     val stats = statsRepository.getPlayerStatistics(playerId)
                     cache.putPlayerStatistics(playerId, stats)
                     _uiState.update { 
@@ -141,7 +141,7 @@ class YahtzeeStatisticsViewModel(
                 }
                 
                 // Cache miss - fetch from database
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     val stats = statsRepository.getGlobalStatistics()
                     cache.putGlobalStatistics(stats)
                     _uiState.update { 

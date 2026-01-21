@@ -2,6 +2,7 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee
 
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeGlobalStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeePlayerStatistics
+import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -40,7 +41,7 @@ class YahtzeeStatisticsCache(
      * Cache global statistics with current timestamp
      */
     suspend fun putGlobalStatistics(stats: YahtzeeGlobalStatistics) = mutex.withLock {
-        globalStats = CachedItem(stats, System.currentTimeMillis())
+        globalStats = CachedItem(stats, getCurrentTimeMillis())
     }
     
     /**
@@ -61,7 +62,7 @@ class YahtzeeStatisticsCache(
      * Cache player statistics with current timestamp
      */
     suspend fun putPlayerStatistics(playerId: String, stats: YahtzeePlayerStatistics) = mutex.withLock {
-        playerStatsCache[playerId] = CachedItem(stats, System.currentTimeMillis())
+        playerStatsCache[playerId] = CachedItem(stats, getCurrentTimeMillis())
     }
     
     /**
@@ -74,6 +75,6 @@ class YahtzeeStatisticsCache(
     }
     
     private fun isValid(timestamp: Long): Boolean {
-        return (System.currentTimeMillis() - timestamp) < cacheDurationMs
+        return (getCurrentTimeMillis() - timestamp) < cacheDurationMs
     }
 }

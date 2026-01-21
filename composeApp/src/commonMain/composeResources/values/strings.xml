@@ -44,12 +44,12 @@
 
     <!-- Plurals -->
     <plurals name="player_count">
-        <item quantity="one">%d player</item>
-        <item quantity="other">%d players</item>
+        <item quantity="one">%1$d player</item>
+        <item quantity="other">%1$d players</item>
     </plurals>
 
     <plurals name="game_count">
-        <item quantity="one">%d game</item>
-        <item quantity="other">%d games</item>
+        <item quantity="one">%1$d game</item>
+        <item quantity="other">%1$d games</item>
     </plurals>
 </resources>

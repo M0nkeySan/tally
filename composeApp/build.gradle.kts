@@ -16,6 +16,18 @@ kotlin {
         }
     }
     
+    // iOS targets for device and simulators
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
+    }
+    
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
@@ -30,18 +42,31 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.jetbrains.lifecycle.viewmodelCompose)
+            implementation(libs.jetbrains.lifecycle.runtimeCompose)
+            implementation(libs.jetbrains.navigation.compose)
+            implementation(libs.jetbrains.compose.ui.backhandler)
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
-            implementation(libs.androidx.navigation.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        
+        // iOS source set configuration
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        
+        val iosMain by creating {
+            dependsOn(commonMain.get())
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
         }
     }
 }
@@ -76,6 +101,9 @@ android {
 dependencies {
     add("kspCommonMainMetadata", libs.room.compiler)
     add("kspAndroid", libs.room.compiler)
+    add("kspIosX64", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
 
     debugImplementation(compose.uiTooling)
 }

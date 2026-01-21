@@ -751,7 +751,7 @@ Text(stringResource(Res.string.tarot_stats_format_as_taker, wins, total))
 ```kotlin
 // Instead of passing args to stringResource()
 val roundNumber = 5
-Text(stringResource(Res.string.tarot_stats_label_round).format(roundNumber))
+Text(stringResource(Res.string.tarot_stats_label_round, roundNumber))
 ```
 
 Both approaches work, but passing arguments to `stringResource()` is more common.

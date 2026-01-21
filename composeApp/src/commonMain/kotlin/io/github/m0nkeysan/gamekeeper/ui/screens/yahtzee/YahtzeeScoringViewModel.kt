@@ -6,7 +6,7 @@ import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeCategory
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeGame
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeeScore
 import io.github.m0nkeysan.gamekeeper.core.model.Player
-import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
+import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -32,7 +32,7 @@ class YahtzeeScoringViewModel : ViewModel() {
 
     fun loadGame(gameId: String) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 val game = repository.getGameById(gameId) ?: return@withContext
 
                 val playerIds = game.playerIds.split(",")
@@ -61,7 +61,7 @@ class YahtzeeScoringViewModel : ViewModel() {
         val currentGame = _state.value.game ?: return
 
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 repository.saveScore(
                     YahtzeeScore(
                         category = category,
@@ -101,7 +101,7 @@ class YahtzeeScoringViewModel : ViewModel() {
         val winnerNames = winners.joinToString(" & ") { it.first }
 
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 val updatedGame = currentGame.copy(
                     isFinished = true,
                     winnerName = winnerNames,

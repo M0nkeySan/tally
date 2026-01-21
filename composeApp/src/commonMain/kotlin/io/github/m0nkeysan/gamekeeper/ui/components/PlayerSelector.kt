@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.core.model.playerNamesEqual
 import io.github.m0nkeysan.gamekeeper.core.model.sanitizePlayerName
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_add
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_player
 import io.github.m0nkeysan.gamekeeper.generated.resources.player_create_format
@@ -58,7 +58,8 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.player_selector_dialog
 import io.github.m0nkeysan.gamekeeper.generated.resources.player_selector_placeholder
 import io.github.m0nkeysan.gamekeeper.generated.resources.player_selector_search_placeholder
 import io.github.m0nkeysan.gamekeeper.generated.resources.player_selector_select
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.ui.utils.parseColor
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -153,7 +154,7 @@ fun PlayerSelectorField(
                     Icon(Icons.Default.Person, contentDescription = stringResource(Res.string.cd_player), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Text(
-                    text = String.format(stringResource(Res.string.player_selector_placeholder), label), 
+                    text = stringResource(Res.string.player_selector_placeholder, label),
                     style = MaterialTheme.typography.bodyLarge, 
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(1f)
@@ -302,9 +303,9 @@ fun PlayerSelectorContent(
                             }
                             Text(
                                  text = if (deactivatedPlayer != null && onReactivate != null) {
-                                     String.format(stringResource(Res.string.player_reactivate_format), searchQuery)
+                                     stringResource(Res.string.player_reactivate_format, searchQuery)
                                  } else {
-                                     String.format(stringResource(Res.string.player_create_format), searchQuery)
+                                     stringResource(Res.string.player_create_format, searchQuery)
                                  },
                                  style = MaterialTheme.typography.bodyLarge,
                                  fontWeight = FontWeight.Bold

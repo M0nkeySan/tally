@@ -26,7 +26,7 @@ class TarotStatisticsRepositoryImpl(
     private val playerRepository: PlayerRepository
 ) : TarotStatisticsRepository {
 
-    override suspend fun getPlayerStatistics(playerId: String): PlayerStatistics? = withContext(Dispatchers.IO) {
+    override suspend fun getPlayerStatistics(playerId: String): PlayerStatistics? = withContext(Dispatchers.Default) {
         val raw = tarotDao.getPlayerStatistics(playerId) ?: return@withContext null
         val player = playerRepository.getPlayerById(playerId) ?: return@withContext null
         
@@ -48,7 +48,7 @@ class TarotStatisticsRepositoryImpl(
         )
     }
 
-    override suspend fun getBidStatistics(playerId: String): List<BidStatistic> = withContext(Dispatchers.IO) {
+    override suspend fun getBidStatistics(playerId: String): List<BidStatistic> = withContext(Dispatchers.Default) {
         tarotDao.getBidStatistics(playerId).map { raw ->
             val bid = TarotBid.entries.find { it.name == raw.bid } ?: TarotBid.PRISE
             
@@ -65,7 +65,7 @@ class TarotStatisticsRepositoryImpl(
     override suspend fun getRecentGames(
         playerId: String,
         limit: Int
-    ): List<TarotGame> = withContext(Dispatchers.IO) {
+    ): List<TarotGame> = withContext(Dispatchers.Default) {
         val gameIds = tarotDao.getRecentGamesForPlayer(playerId, limit).map { it.id }
         gameIds.mapNotNull { gameId ->
             tarotRepository.getGameById(gameId)
@@ -74,7 +74,7 @@ class TarotStatisticsRepositoryImpl(
 
     override suspend fun getCurrentGameStatistics(
         gameId: String
-    ): GameStatistics? = withContext(Dispatchers.IO) {
+    ): GameStatistics? = withContext(Dispatchers.Default) {
         val game = tarotRepository.getGameById(gameId) ?: return@withContext null
         val rankings = getPlayerRankings(gameId)
         
@@ -89,7 +89,7 @@ class TarotStatisticsRepositoryImpl(
 
     override suspend fun getRoundBreakdown(
         gameId: String
-    ): List<RoundStatistic> = withContext(Dispatchers.IO) {
+    ): List<RoundStatistic> = withContext(Dispatchers.Default) {
         val game = tarotRepository.getGameById(gameId) ?: return@withContext emptyList()
         
         game.rounds.map { round ->
@@ -113,7 +113,7 @@ class TarotStatisticsRepositoryImpl(
 
     override suspend fun getPlayerRankings(
         gameId: String
-    ): List<PlayerRanking> = withContext(Dispatchers.IO) {
+    ): List<PlayerRanking> = withContext(Dispatchers.Default) {
         val game = tarotRepository.getGameById(gameId) ?: return@withContext emptyList()
         
         // Calculate total score for each player

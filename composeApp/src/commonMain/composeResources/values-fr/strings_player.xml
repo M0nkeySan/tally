@@ -2,7 +2,7 @@
 <resources>
     <!-- Player Selection Screen -->
     <string name="players_no_players">Aucun joueur trouvé. Ajoutez-en un !</string>
-    <string name="players_count_format">Joueurs (%d/%d)</string>
+    <string name="players_count_format">Joueurs (%1$d/%2$d)</string>
 
     <!-- Player Management -->
     <string name="player_section_players">Joueurs</string>
@@ -14,20 +14,20 @@
     <string name="player_cd_edit">Modifier</string>
     <string name="player_dialog_new_title">Nouveau joueur</string>
     <string name="player_dialog_edit_title">Modifier le joueur</string>
-    <string name="player_selector_placeholder">Sélectionner %s</string>
+    <string name="player_selector_placeholder">Sélectionner %1$s</string>
     <string name="player_selector_change">MODIFIER</string>
     <string name="player_selector_select">SÉLECTIONNER</string>
     <string name="player_selector_dialog_title">Choisir un joueur</string>
     <string name="player_selector_search_placeholder">Rechercher ou ajouter...</string>
-    <string name="player_reactivate_format">Réactiver \"%s\"</string>
-    <string name="player_create_format">Créer \"%s\"</string>
+    <string name="player_reactivate_format">Réactiver \"%1$s\"</string>
+    <string name="player_create_format">Créer \"%1$s\"</string>
 
     <!-- Player Management Messages -->
-    <string name="player_reactivated_message">Le joueur \'%s\' a été réactivé</string>
+    <string name="player_reactivated_message">Le joueur \'%1$s\' a été réactivé</string>
     <string name="dialog_deactivate_title">Désactiver le joueur ?</string>
     <string name="dialog_delete_title">Supprimer le joueur ?</string>
-    <string name="dialog_deactivate_message">Lié à %d partie(s). Le joueur sera désactivé pour préserver l'historique.</string>
+    <string name="dialog_deactivate_message">Lié à %1$d partie(s). Le joueur sera désactivé pour préserver l'historique.</string>
     <string name="dialog_delete_message">Ce joueur n'a pas d'historique. Il sera définitivement supprimé.</string>
-    <string name="player_deactivated_message">Le joueur \'%s\' a été désactivé</string>
-    <string name="player_deleted_message">Le joueur \'%s\' a été supprimé</string>
+    <string name="player_deactivated_message">Le joueur \'%1$s\' a été désactivé</string>
+    <string name="player_deleted_message">Le joueur \'%1$s\' a été supprimé</string>
 </resources>

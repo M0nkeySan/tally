@@ -1,6 +1,5 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.tarot
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,7 +35,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
@@ -47,11 +48,7 @@ import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.ChelemType
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.core.model.TarotRound
-import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
-import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
-import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_announce_chelem
@@ -64,9 +61,13 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_round_ti
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_screen_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_section_history
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_section_scores
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
+import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.utils.parseColor
+import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun TarotScoringScreen(
     gameId: String,
@@ -326,7 +327,7 @@ fun RoundHistoryItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                     text = stringResource(Res.string.tarot_scoring_round_title).format(round.roundNumber, takerName),
+                     text = stringResource(Res.string.tarot_scoring_round_title, round.roundNumber, takerName),
                      style = MaterialTheme.typography.bodyMedium,
                      fontWeight = FontWeight.Bold
                  )
@@ -352,15 +353,15 @@ fun RoundHistoryItem(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                 text = stringResource(Res.string.tarot_scoring_round_details).format(round.bid.displayName, round.bouts, round.pointsScored),
+                 text = stringResource(Res.string.tarot_scoring_round_details, round.bid.displayName, round.bouts, round.pointsScored),
                  style = MaterialTheme.typography.bodySmall,
                  color = MaterialTheme.colorScheme.onSurfaceVariant
              )
 
              val announces = mutableListOf<String>()
              if (round.hasPetitAuBout) announces.add(stringResource(Res.string.tarot_scoring_announce_petit_au_bout))
-             if (round.hasPoignee) announces.add(stringResource(Res.string.tarot_scoring_announce_poignee).format(round.poigneeLevel?.displayName ?: ""))
-             if (round.chelem != ChelemType.NONE) announces.add(stringResource(Res.string.tarot_scoring_announce_chelem).format(round.chelem.displayName))
+             if (round.hasPoignee) announces.add(stringResource(Res.string.tarot_scoring_announce_poignee, round.poigneeLevel?.displayName ?: ""))
+             if (round.chelem != ChelemType.NONE) announces.add(stringResource(Res.string.tarot_scoring_announce_chelem, round.chelem.displayName))
 
             if (announces.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(4.dp))

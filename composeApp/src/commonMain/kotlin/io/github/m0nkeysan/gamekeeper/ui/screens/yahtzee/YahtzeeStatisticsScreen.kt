@@ -42,15 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.core.model.YahtzeePlayerStatistics
 import io.github.m0nkeysan.gamekeeper.core.model.getLocalizedName
-import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
-import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.CategoryHeatmap
-import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GameSummaryRow
-import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GlobalCategoryHeatmap
-import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.StatisticRow
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
-import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_format_active_player
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_format_category_avg
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_format_high_score
@@ -68,7 +61,6 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_average_
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_bonus_rate
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_finished_games
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global
-import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_average_score
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_avg_players
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_global_best_avg
@@ -100,12 +92,19 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_personal
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_recent_games
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_score_box
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_select_player
+import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_total_games
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_total_yahtzees
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_upper_section
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_wins
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_yahtzee_rate
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
+import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.CategoryHeatmap
+import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GameSummaryRow
+import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GlobalCategoryHeatmap
+import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.StatisticRow
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -375,7 +374,7 @@ private fun OverallPerformanceCard(statistics: YahtzeePlayerStatistics) {
 
             StatisticRow(
                 label = stringResource(Res.string.yahtzee_stats_wins),
-                value = String.format(stringResource(Res.string.yahtzee_format_wins), statistics.wins, formatPercentage(statistics.winRate)),
+                value = stringResource(Res.string.yahtzee_format_wins, statistics.wins, formatPercentage(statistics.winRate)),
                 valueColor = GameColors.Success
             )
 
@@ -399,7 +398,7 @@ private fun OverallPerformanceCard(statistics: YahtzeePlayerStatistics) {
 
             StatisticRow(
                 label = stringResource(Res.string.yahtzee_stats_yahtzee_rate),
-                value = String.format(stringResource(Res.string.yahtzee_format_yahtzee_rate), formatAverage(statistics.yahtzeeRate)),
+                value = stringResource(Res.string.yahtzee_format_yahtzee_rate, formatAverage(statistics.yahtzeeRate)),
                 valueColor = GameColors.TrophyGold
             )
         }
@@ -588,7 +587,7 @@ private fun GlobalOverviewCard(statistics: io.github.m0nkeysan.gamekeeper.core.m
             if (statistics.mostActivePlayer != null) {
                 StatisticRow(
                     stringResource(Res.string.yahtzee_stats_global_most_active),
-                    String.format(stringResource(Res.string.yahtzee_format_active_player), statistics.mostActivePlayer.playerName, statistics.mostActivePlayer.gamesPlayed)
+                    stringResource(Res.string.yahtzee_format_active_player, statistics.mostActivePlayer.playerName, statistics.mostActivePlayer.gamesPlayed)
                 )
             }
             
@@ -597,7 +596,7 @@ private fun GlobalOverviewCard(statistics: io.github.m0nkeysan.gamekeeper.core.m
             if (statistics.allTimeHighScore != null) {
                 StatisticRow(
                     stringResource(Res.string.yahtzee_stats_global_high_score),
-                    String.format(stringResource(Res.string.yahtzee_format_high_score), statistics.allTimeHighScore.score, statistics.allTimeHighScore.playerName),
+                    stringResource(Res.string.yahtzee_format_high_score, statistics.allTimeHighScore.score, statistics.allTimeHighScore.playerName),
                     valueColor = GameColors.TrophyGold
                 )
             }
@@ -616,13 +615,13 @@ private fun GlobalOverviewCard(statistics: io.github.m0nkeysan.gamekeeper.core.m
             
             StatisticRow(
                 stringResource(Res.string.yahtzee_stats_global_yahtzee_rate),
-                String.format(stringResource(Res.string.yahtzee_format_yahtzee_rate), formatAverage(statistics.yahtzeeRate))
+                stringResource(Res.string.yahtzee_format_yahtzee_rate, formatAverage(statistics.yahtzeeRate))
             )
             
             if (statistics.mostYahtzeesInGame != null && statistics.mostYahtzeesInGame.count > 0) {
                 StatisticRow(
                     stringResource(Res.string.yahtzee_stats_global_most_yahtzees_game),
-                    String.format(stringResource(Res.string.yahtzee_format_most_yahtzees), statistics.mostYahtzeesInGame.count, statistics.mostYahtzeesInGame.playerName),
+                    stringResource(Res.string.yahtzee_format_most_yahtzees, statistics.mostYahtzeesInGame.count, statistics.mostYahtzeesInGame.playerName),
                     valueColor = GameColors.TrophyGold
                 )
             }
@@ -645,7 +644,7 @@ private fun GlobalOverviewCard(statistics: io.github.m0nkeysan.gamekeeper.core.m
             if (statistics.luckiestPlayer != null) {
                 StatisticRow(
                     stringResource(Res.string.yahtzee_stats_global_luckiest),
-                    String.format(stringResource(Res.string.yahtzee_format_luckiest_player), statistics.luckiestPlayer.playerName, formatAverage(statistics.luckiestPlayer.metric))
+                    stringResource(Res.string.yahtzee_format_luckiest_player, statistics.luckiestPlayer.playerName, formatAverage(statistics.luckiestPlayer.metric))
                 )
             }
             
@@ -733,7 +732,7 @@ private fun GlobalLeaderboardRow(entry: io.github.m0nkeysan.gamekeeper.core.mode
                 1 -> stringResource(Res.string.yahtzee_rank_first)
                 2 -> stringResource(Res.string.yahtzee_rank_second)
                 3 -> stringResource(Res.string.yahtzee_rank_third)
-                else -> String.format(stringResource(Res.string.yahtzee_rank_format), entry.rank)
+                else -> stringResource(Res.string.yahtzee_rank_format, entry.rank)
             }
             Text(
                 text = medal,
@@ -798,7 +797,7 @@ private fun GlobalCategoryAnalysisCard(statistics: io.github.m0nkeysan.gamekeepe
             if (statistics.highestCategoryAverage != null) {
                 StatisticRow(
                     stringResource(Res.string.yahtzee_stats_global_best_avg),
-                    String.format(stringResource(Res.string.yahtzee_format_category_avg), statistics.highestCategoryAverage.category.getLocalizedName(), formatAverage(statistics.highestCategoryAverage.average))
+                    stringResource(Res.string.yahtzee_format_category_avg, statistics.highestCategoryAverage.category.getLocalizedName(), formatAverage(statistics.highestCategoryAverage.average))
                 )
             }
         }
@@ -846,12 +845,12 @@ private fun GlobalGameSummaryRow(game: io.github.m0nkeysan.gamekeeper.core.model
                 fontWeight = FontWeight.Medium
             )
             Text(
-                text = String.format(stringResource(Res.string.yahtzee_format_winner_score), game.winnerName),
+                text = stringResource(Res.string.yahtzee_format_winner_score, game.winnerName),
                 style = MaterialTheme.typography.bodySmall,
                 color = GameColors.Success
             )
             Text(
-                text = String.format(stringResource(Res.string.yahtzee_format_player_count), game.playerCount),
+                text = stringResource(Res.string.yahtzee_format_player_count, game.playerCount),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -41,7 +41,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
-import io.github.m0nkeysan.gamekeeper.core.navigation.Screen
+import io.github.m0nkeysan.gamekeeper.core.navigation.CounterRoute
+import io.github.m0nkeysan.gamekeeper.core.navigation.DiceRollerRoute
+import io.github.m0nkeysan.gamekeeper.core.navigation.FingerSelectorRoute
+import io.github.m0nkeysan.gamekeeper.core.navigation.Route
+import io.github.m0nkeysan.gamekeeper.core.navigation.TarotRoute
+import io.github.m0nkeysan.gamekeeper.core.navigation.YahtzeeRoute
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.desc_counter
 import io.github.m0nkeysan.gamekeeper.generated.resources.desc_dice
@@ -66,7 +71,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onNavigateTo: (String) -> Unit,
+    onNavigateTo: (Route) -> Unit,
     viewModel: HomeViewModel = viewModel { HomeViewModel() }
 ) {
     val cardOrder by viewModel.cardOrder.collectAsState()
@@ -240,7 +245,7 @@ data class GameFeature(
     val icon: @Composable () -> Unit,
     val title: String,
     val description: String,
-    val route: String
+    val route: Route
 )
 
 @Composable
@@ -258,21 +263,21 @@ private fun getGameFeatureMap() = mapOf(
         },
         title = stringResource(Res.string.home_title_finger_selector),
         description = stringResource(Res.string.desc_finger_selector),
-        route = Screen.FingerSelector.route
+        route = FingerSelectorRoute
     ),
     "tarot" to GameFeature(
         id = "tarot",
         icon = { TarotIcon() },
         title = stringResource(Res.string.game_tarot),
         description = stringResource(Res.string.desc_tarot),
-        route = Screen.Tarot.route
+        route = TarotRoute
     ),
     "yahtzee" to GameFeature(
         id = "yahtzee",
         icon = { YahtzeeIcon() },
         title = stringResource(Res.string.game_yahtzee),
         description = stringResource(Res.string.desc_yahtzee),
-        route = Screen.Yahtzee.route
+        route = YahtzeeRoute
     ),
     "counter" to GameFeature(
         id = "counter",
@@ -287,7 +292,7 @@ private fun getGameFeatureMap() = mapOf(
         },
         title = stringResource(Res.string.game_counter),
         description = stringResource(Res.string.desc_counter),
-        route = Screen.Counter.route
+        route = CounterRoute
     ),
     "dice_roller" to GameFeature(
         id = "dice_roller",
@@ -302,6 +307,6 @@ private fun getGameFeatureMap() = mapOf(
         },
         title = stringResource(Res.string.game_dice),
         description = stringResource(Res.string.desc_dice),
-        route = Screen.DiceRoller.route
+        route = DiceRollerRoute
     )
 )

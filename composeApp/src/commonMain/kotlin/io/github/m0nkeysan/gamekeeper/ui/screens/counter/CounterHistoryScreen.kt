@@ -1,6 +1,5 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.counter
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +28,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,11 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import org.jetbrains.compose.resources.stringResource
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
 import io.github.m0nkeysan.gamekeeper.generated.resources.counter_dialog_delete_message
@@ -52,9 +49,11 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.counter_history_empty
 import io.github.m0nkeysan.gamekeeper.generated.resources.counter_history_subtitle
 import io.github.m0nkeysan.gamekeeper.generated.resources.counter_history_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_delete_all_title
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.platform.formatTimestamp
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun CounterHistoryScreen(
     onBackPressed: () -> Unit,
@@ -251,15 +250,5 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                  )
             }
         }
-    }
-}
-
-private fun formatTimestamp(timestamp: Long): String {
-    return try {
-        val sdf = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-        val date = Date(timestamp)
-        sdf.format(date)
-    } catch (e: Exception) {
-        "N/A"
     }
 }
