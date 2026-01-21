@@ -1,16 +1,21 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.tarot
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.github.m0nkeysan.gamekeeper.ui.components.GameDisplay
-import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameSelectionTemplate
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_delete
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_deletion_dialog_tarot_message
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_deletion_dialog_tarot_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_game_title
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.ui.components.GameDisplay
+import io.github.m0nkeysan.gamekeeper.ui.screens.common.GameSelectionTemplate
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun TarotGameSelectionScreen(
@@ -52,7 +57,7 @@ fun TarotGameSelectionScreen(
             name = game.name,
             playerCount = game.playerCount,
             playerNames = game.playerNames,
-            isFinished = false, // Tarot games don't have explicit finished state like Yahtzee
+            isFinished = false,
             createdAt = game.createdAt,
             updatedAt = game.updatedAt
         )

@@ -45,6 +45,7 @@ import io.github.m0nkeysan.gamekeeper.core.navigation.Screen
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.desc_counter
 import io.github.m0nkeysan.gamekeeper.generated.resources.desc_dice
+import io.github.m0nkeysan.gamekeeper.generated.resources.desc_finger_selector
 import io.github.m0nkeysan.gamekeeper.generated.resources.desc_tarot
 import io.github.m0nkeysan.gamekeeper.generated.resources.desc_yahtzee
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_counter
@@ -54,7 +55,6 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.game_yahtzee
 import io.github.m0nkeysan.gamekeeper.generated.resources.home_cd_counter
 import io.github.m0nkeysan.gamekeeper.generated.resources.home_cd_dice
 import io.github.m0nkeysan.gamekeeper.generated.resources.home_cd_finger_selector
-import io.github.m0nkeysan.gamekeeper.generated.resources.home_desc_finger_selector
 import io.github.m0nkeysan.gamekeeper.generated.resources.home_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.home_title_finger_selector
 import io.github.m0nkeysan.gamekeeper.ui.components.GameCard
@@ -257,7 +257,7 @@ private fun getGameFeatureMap() = mapOf(
             )
         },
         title = stringResource(Res.string.home_title_finger_selector),
-        description = stringResource(Res.string.home_desc_finger_selector),
+        description = stringResource(Res.string.desc_finger_selector),
         route = Screen.FingerSelector.route
     ),
     "tarot" to GameFeature(

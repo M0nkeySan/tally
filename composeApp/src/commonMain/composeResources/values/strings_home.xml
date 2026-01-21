@@ -6,7 +6,7 @@
     <string name="home_cd_players">Players</string>
     <string name="home_cd_finger_selector">Finger Selector game</string>
     <string name="home_title_finger_selector">Finger Selector</string>
-    <string name="home_desc_finger_selector">Randomly select a starting player with multi-touch</string>
+    <string name="desc_finger_selector">Randomly select a player or group</string>
     <string name="home_cd_counter">Counter game</string>
     <string name="home_cd_dice">Dice Roller game</string>
 </resources>

@@ -8,10 +8,11 @@
     <string name="game_dice">Lanceur de dés</string>
 
     <!-- Descriptions -->
-    <string name="desc_tarot">Inscrivez les points des parties de Tarot pour 3, 4 ou 5 joueurs</string>
+    <string name="desc_tarot">Inscrivez les points des parties de Tarot</string>
     <string name="desc_yahtzee">Complétez la feuille de pointage Yahtzee avec bonus automatiques</string>
+    <string name="desc_finger_selector">Sélectionnez aléatoirement un joueur ou un groupe</string>
     <string name="desc_counter">Compteur simple pour n'importe quel jeu de société</string>
-    <string name="desc_dice">Lancez des dés personnalisés pour n'importe quel jeu de société</string>
+    <string name="desc_dice">Lancez des dés personnalisés</string>
 
     <!-- Game Operations -->
     <string name="game_delete_all_title">Supprimer toutes les parties</string>

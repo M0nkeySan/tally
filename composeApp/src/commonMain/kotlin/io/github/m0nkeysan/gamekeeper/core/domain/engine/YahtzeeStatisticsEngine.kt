@@ -299,12 +299,21 @@ object YahtzeeStatisticsEngine {
         val yahtzeeRate = if (finishedGames > 0) totalYahtzees.toDouble() / finishedGames else 0.0
         val mostYahtzeesInGame = calculateMostYahtzeesInGame(allGames, allScores, playerCache)
         
-        // Calculate averages
-        val gameScores = allGames.map { game ->
+        // Calculate average score per player across all games
+        val allPlayerScores = allGames.flatMap { game ->
             val gameScores = allScores.filter { it.gameId == game.id }
-            gameScores.sumOf { it.score }
+            game.playerIds.split(",").map { playerId ->
+                val playerScores = gameScores.filter { it.playerId == playerId }
+                val baseScore = playerScores.sumOf { it.score }
+                val upperScore = playerScores
+                    .filter { YahtzeeCategory.valueOf(it.category).isUpperSection() }
+                    .sumOf { it.score }
+                val bonus = if (upperScore >= YahtzeeStatisticsConstants.UPPER_BONUS_THRESHOLD) 
+                    YahtzeeStatisticsConstants.UPPER_BONUS_VALUE else 0
+                baseScore + bonus
+            }
         }
-        val averageScore = if (gameScores.isNotEmpty()) gameScores.average() else 0.0
+        val averageScore = if (allPlayerScores.isNotEmpty()) allPlayerScores.average() else 0.0
         
         // Calculate upper bonus rate
         val gamesWithBonus = allGames.count { game ->
@@ -343,7 +352,7 @@ object YahtzeeStatisticsEngine {
             YahtzeeStatisticsConstants.ESTIMATED_ROLLS_PER_TURN)
         val luckiestPlayer = findLuckiestPlayer(uniquePlayerIds, allGames, allScores, playerCache)
         val mostConsistentPlayer = findMostConsistentPlayer(uniquePlayerIds, allGames, allScores, playerCache)
-        val totalPointsScored = gameScores.sumOf { it.toLong() }
+        val totalPointsScored = allPlayerScores.sumOf { it.toLong() }
         val averagePlayersPerGame = if (allGames.isNotEmpty()) {
             allGames.mapNotNull { it.playerIds.split(",").size.takeIf { s -> s > 0 } }.average()
         } else {

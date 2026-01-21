@@ -6,7 +6,6 @@
     <string name="home_cd_players">Joueurs</string>
     <string name="home_cd_finger_selector">Jeu Sélecteur de doigts</string>
     <string name="home_title_finger_selector">Sélecteur de doigts</string>
-    <string name="home_desc_finger_selector">Sélectionnez aléatoirement un joueur de départ avec plusieurs doigts</string>
     <string name="home_cd_counter">Jeu Compteur</string>
     <string name="home_cd_dice">Jeu Lanceur de dés</string>
 </resources>

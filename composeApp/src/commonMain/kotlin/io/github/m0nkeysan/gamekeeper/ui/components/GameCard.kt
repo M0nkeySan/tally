@@ -25,9 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.stringResource
-import io.github.m0nkeysan.gamekeeper.generated.resources.cd_game_icon
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_game_icon
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Reusable game feature card for displaying games on home screen.
@@ -75,13 +75,13 @@ fun GameCard(
             )
             
             Spacer(modifier = Modifier.height(4.dp))
-            
+
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
-                maxLines = 2,
+                maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
         }
