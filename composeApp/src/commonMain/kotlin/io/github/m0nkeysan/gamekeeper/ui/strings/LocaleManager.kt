@@ -25,6 +25,9 @@ class LocaleManager(
         scope.launch {
             userPreferencesRepository.getLocale().collect { savedLanguage ->
                 val code = savedLanguage.code
+                
+                println("LocaleManager: Locale changed to '$code'")
+                
                 _currentLocale.value = code
                 applySystemLocale(code)
             }

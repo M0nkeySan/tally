@@ -31,13 +31,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B8E111804E5BE7E4B40A3C67 /* Exceptions for "iosApp" folder in "iosApp" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = F6B3A8EBFF74BC00A2551E14 /* iosApp */;
-		};
+	B8E111804E5BE7E4B40A3C67 /* Exceptions for "iosApp" folder in "iosApp" target */ = {
+		isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+		membershipExceptions = (
+			Info.plist,
+			PrivacyInfo.xcprivacy,
+		);
+		target = F6B3A8EBFF74BC00A2551E14 /* iosApp */;
+	};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */

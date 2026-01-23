@@ -123,7 +123,7 @@ fun DiceRollerScreen(
     rememberShakeDetector(
         onShake = {
             if (configuration.shakeEnabled && !isRolling) {
-                hapticFeedback.performHapticFeedback(HapticType.LIGHT)
+                hapticFeedback.performHapticFeedback(HapticType.SUCCESS)
                 viewModel.rollDice()
             }
         },
