@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -107,7 +106,6 @@ data class FingerData(
     val groupId: Int? = null // For group mode
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FingerSelectorScreen(onBack: () -> Unit) {
     var showSettings by remember { mutableStateOf(false) }

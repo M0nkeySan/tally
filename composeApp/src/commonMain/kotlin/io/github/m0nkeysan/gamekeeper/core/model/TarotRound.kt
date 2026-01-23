@@ -2,11 +2,10 @@ package io.github.m0nkeysan.gamekeeper.core.model
 
 import kotlinx.serialization.Serializable
 
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @Serializable
-data class TarotRound @OptIn(ExperimentalUuidApi::class) constructor(
+data class TarotRound(
     val id: String = Uuid.random().toString(),
     val roundNumber: Int,
     val takerPlayerId: String,

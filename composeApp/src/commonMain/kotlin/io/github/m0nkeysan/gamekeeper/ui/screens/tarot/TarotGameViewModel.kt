@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.uuid.ExperimentalUuidApi
 
 data class TarotGameDisplayModel(
     val id: String,
@@ -77,7 +76,6 @@ class TarotGameViewModel : ViewModel() {
         }
     }
 
-    @OptIn(ExperimentalUuidApi::class)
     fun createGame(
         name: String,
         playerCount: Int,

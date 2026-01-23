@@ -153,7 +153,7 @@ fun GameNavGraph() {
 
         // --- Counter Section ---
         composable<CounterRoute> { entry ->
-            val viewModel: CounterViewModel = viewModel()
+            val viewModel: CounterViewModel = viewModel { CounterViewModel() }
             val savedState = entry.savedStateHandle
 
             val resultType = savedState.get<String>("result_type")

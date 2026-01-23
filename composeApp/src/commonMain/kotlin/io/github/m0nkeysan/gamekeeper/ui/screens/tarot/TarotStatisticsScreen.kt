@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -90,7 +89,6 @@ import kotlin.math.roundToInt
  * 1. Current Game: Game overview, rankings, and round breakdown
  * 2. Player Stats: Player statistics across all games, bid performance, game history
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TarotStatisticsScreen(
     gameId: String,

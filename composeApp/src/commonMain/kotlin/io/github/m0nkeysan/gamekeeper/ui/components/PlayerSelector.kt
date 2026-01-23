@@ -23,7 +23,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -61,7 +60,6 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.player_selector_select
 import io.github.m0nkeysan.gamekeeper.ui.utils.parseColor
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayerSelectorField(
     label: String,
@@ -193,7 +191,6 @@ fun PlayerSelectorField(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayerSelectorContent(
     allPlayers: List<Player>,

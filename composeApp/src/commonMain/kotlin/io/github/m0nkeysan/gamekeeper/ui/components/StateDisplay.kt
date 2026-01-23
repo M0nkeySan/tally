@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_retry
@@ -27,7 +28,6 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.state_loading
 import io.github.m0nkeysan.gamekeeper.generated.resources.state_loading_games
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Loading state display with centered spinner and message.

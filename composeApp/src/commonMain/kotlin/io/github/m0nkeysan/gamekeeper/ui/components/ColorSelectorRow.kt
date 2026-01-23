@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -56,7 +57,6 @@ import io.github.m0nkeysan.gamekeeper.ui.utils.colorToHSV
 import io.github.m0nkeysan.gamekeeper.ui.utils.hsvToColor
 import io.github.m0nkeysan.gamekeeper.ui.utils.parseColor
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos

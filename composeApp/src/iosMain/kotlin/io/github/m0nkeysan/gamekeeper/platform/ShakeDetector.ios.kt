@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
-import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents
 import platform.CoreMotion.CMAccelerometerData
 import platform.CoreMotion.CMMotionManager
@@ -14,7 +13,6 @@ import kotlin.math.sqrt
 
 actual class ShakeDetector
 
-@OptIn(ExperimentalForeignApi::class)
 @Composable
 actual fun rememberShakeDetector(
     onShake: () -> Unit,

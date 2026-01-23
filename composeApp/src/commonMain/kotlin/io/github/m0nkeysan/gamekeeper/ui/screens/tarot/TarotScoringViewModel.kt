@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.gamekeeper.core.domain.engine.TarotScoringEngine
 import io.github.m0nkeysan.gamekeeper.core.model.*
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,7 +55,6 @@ class TarotScoringViewModel : ViewModel() {
         }
     }
 
-    @OptIn(ExperimentalUuidApi::class)
     fun addRoundManual(
         roundId: String? = null,
         takerPlayerId: String,

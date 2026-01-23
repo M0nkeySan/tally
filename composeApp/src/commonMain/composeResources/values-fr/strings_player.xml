@@ -19,15 +19,15 @@
     <string name="player_selector_select">SÉLECTIONNER</string>
     <string name="player_selector_dialog_title">Choisir un joueur</string>
     <string name="player_selector_search_placeholder">Rechercher ou ajouter...</string>
-    <string name="player_reactivate_format">Réactiver \"%1$s\"</string>
-    <string name="player_create_format">Créer \"%1$s\"</string>
+    <string name="player_reactivate_format">Réactiver "%1$s"</string>
+    <string name="player_create_format">Créer "%1$s"</string>
 
     <!-- Player Management Messages -->
-    <string name="player_reactivated_message">Le joueur \'%1$s\' a été réactivé</string>
+    <string name="player_reactivated_message">Le joueur '%1$s' a été réactivé</string>
     <string name="dialog_deactivate_title">Désactiver le joueur ?</string>
     <string name="dialog_delete_title">Supprimer le joueur ?</string>
     <string name="dialog_deactivate_message">Lié à %1$d partie(s). Le joueur sera désactivé pour préserver l'historique.</string>
     <string name="dialog_delete_message">Ce joueur n'a pas d'historique. Il sera définitivement supprimé.</string>
-    <string name="player_deactivated_message">Le joueur \'%1$s\' a été désactivé</string>
-    <string name="player_deleted_message">Le joueur \'%1$s\' a été supprimé</string>
+    <string name="player_deactivated_message">Le joueur '%1$s' a été désactivé</string>
+    <string name="player_deleted_message">Le joueur '%1$s' a été supprimé</string>
 </resources>

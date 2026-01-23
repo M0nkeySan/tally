@@ -2,7 +2,6 @@ package io.github.m0nkeysan.gamekeeper.core.model
 
 import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
 import kotlinx.serialization.Serializable
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 /**
@@ -18,7 +17,6 @@ data class Counter(
     val sortOrder: Int = 0
 ) {
     companion object {
-        @OptIn(ExperimentalUuidApi::class)
         fun create(
             name: String,
             count: Int = 0,

@@ -5,7 +5,6 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -26,7 +25,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.South
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -108,11 +106,11 @@ import org.jetbrains.compose.resources.stringResource
  *
  * @param onBack Callback to navigate back from this screen
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiceRollerScreen(onBack: () -> Unit) {
-    val viewModel: DiceRollerViewModel = viewModel()
-
+fun DiceRollerScreen(
+    onBack: () -> Unit,
+    viewModel: DiceRollerViewModel = viewModel { DiceRollerViewModel() }
+) {
     val configuration by viewModel.configuration.collectAsState()
     val isRolling by viewModel.isRolling.collectAsState()
     val currentRollState = viewModel.currentRoll.collectAsState()
@@ -309,7 +307,6 @@ fun DiceRollerScreen(onBack: () -> Unit) {
  * @param onTap Callback when dice box is tapped
  * @param onLongPress Callback when dice box is long-pressed
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DiceResultBox(
     currentRoll: DiceRoll?,

@@ -20,7 +20,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -106,7 +105,6 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.StatisticRow
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun YahtzeeStatisticsScreen(
     onBack: () -> Unit,

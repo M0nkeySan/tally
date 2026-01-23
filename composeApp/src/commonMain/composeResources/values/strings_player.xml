@@ -19,15 +19,15 @@
     <string name="player_selector_select">SELECT</string>
     <string name="player_selector_dialog_title">Choose Player</string>
     <string name="player_selector_search_placeholder">Search or add new...</string>
-    <string name="player_reactivate_format">Reactivate \"%1$s\"</string>
-    <string name="player_create_format">Create \"%1$s\"</string>
+    <string name="player_reactivate_format">Reactivate "%1$s"</string>
+    <string name="player_create_format">Create "%1$s"</string>
 
     <!-- Player Management Messages -->
-    <string name="player_reactivated_message">Player \'%1$s\' has been reactivated</string>
+    <string name="player_reactivated_message">Player '%1$s' has been reactivated</string>
     <string name="dialog_deactivate_title">Deactivate Player?</string>
     <string name="dialog_delete_title">Delete Player?</string>
     <string name="dialog_deactivate_message">Linked to %1$d game(s). Player will be deactivated to preserve game history.</string>
     <string name="dialog_delete_message">This player has no game history. They will be permanently deleted.</string>
-    <string name="player_deactivated_message">Player \'%1$s\' deactivated</string>
-    <string name="player_deleted_message">Player \'%1$s\' deleted</string>
+    <string name="player_deactivated_message">Player '%1$s' deactivated</string>
+    <string name="player_deleted_message">Player '%1$s' deleted</string>
 </resources>

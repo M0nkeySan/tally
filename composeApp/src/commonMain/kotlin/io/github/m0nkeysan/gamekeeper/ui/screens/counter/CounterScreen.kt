@@ -3,7 +3,6 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.counter
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -40,7 +39,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -119,7 +117,6 @@ import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CounterScreen(
     onBack: () -> Unit,
@@ -806,7 +803,6 @@ fun SettingsOption(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CounterCard(
     name: String,

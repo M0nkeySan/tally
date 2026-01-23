@@ -2,7 +2,6 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -15,7 +14,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -48,16 +46,7 @@ import org.jetbrains.compose.resources.stringResource
  * @param playerViewModel ViewModel for player selection state
  * @param modifier Optional layout modifier
  *
- * Example usage:
- * ```
- * HomeNavigationTemplate(
- *     onNavigateTo = { navController.navigate(it) },
- *     homeViewModel = viewModel(),
- *     playerViewModel = viewModel()
- * )
- * ```
  */
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun HomeNavigationTemplate(
     onNavigateTo: (Route) -> Unit,

@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
@@ -27,7 +28,6 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.cd_finished_game
 import io.github.m0nkeysan.gamekeeper.generated.resources.player_count_display
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Data class representing a game for display in selection screens.

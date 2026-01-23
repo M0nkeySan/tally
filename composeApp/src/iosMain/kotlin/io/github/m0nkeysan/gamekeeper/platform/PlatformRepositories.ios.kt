@@ -20,7 +20,6 @@ import io.github.m0nkeysan.gamekeeper.core.domain.repository.UserPreferencesRepo
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeRepository
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.YahtzeeStatisticsRepository
 import io.github.m0nkeysan.gamekeeper.ui.strings.LocaleManager
-import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import platform.Foundation.NSDocumentDirectory
@@ -42,7 +41,6 @@ actual object PlatformRepositories {
     private var historyStore: CounterHistoryStore? = null
     private var localeManager: LocaleManager? = null
 
-    @OptIn(ExperimentalForeignApi::class)
     private fun getDatabasePath(): String {
         val documentDirectory = NSFileManager.defaultManager.URLForDirectory(
             directory = NSDocumentDirectory,

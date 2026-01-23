@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
-import kotlin.uuid.ExperimentalUuidApi
 
 data class YahtzeeGameDisplayModel(
     val id: String,
@@ -82,7 +81,6 @@ class YahtzeeGameViewModel : ViewModel() {
         }
     }
 
-    @OptIn(ExperimentalUuidApi::class)
     fun createGame(
         name: String,
         playerCount: Int,

@@ -8,7 +8,7 @@
     <string name="yahtzee_scoring_total_format">Total: %1$d</string>
     <string name="yahtzee_scoring_cd_next">Next Player</string>
     <string name="yahtzee_scoring_turn_label">Your Turn</string>
-    <string name="yahtzee_scoring_viewing_label">Viewing %1$s\'s card</string>
+    <string name="yahtzee_scoring_viewing_label">Viewing %1$s's card</string>
     <string name="yahtzee_section_upper">Upper Section</string>
     <string name="yahtzee_section_lower">Lower Section</string>
     <string name="yahtzee_dialog_select_score">Select score for %1$s</string>

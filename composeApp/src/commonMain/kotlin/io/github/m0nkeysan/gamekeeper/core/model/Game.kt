@@ -2,7 +2,6 @@ package io.github.m0nkeysan.gamekeeper.core.model
 
 import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
 import kotlinx.serialization.Serializable
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @Serializable
@@ -26,7 +25,6 @@ data class TarotGame(
 ) : Game() {
 
     companion object {
-        @OptIn(ExperimentalUuidApi::class)
         fun create(players: List<Player>, playerCount: Int? = null, name: String = "Tarot Game"): TarotGame {
             val now = getCurrentTimeMillis()
 
@@ -78,7 +76,6 @@ data class YahtzeeGame(
     }
     
     companion object {
-        @OptIn(ExperimentalUuidApi::class)
         fun create(players: List<Player>, name: String = "Yahtzee Game"): YahtzeeGame {
             val now = getCurrentTimeMillis()
             val playerIds = players.joinToString(",") { it.id }

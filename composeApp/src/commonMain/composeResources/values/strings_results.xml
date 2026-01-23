@@ -2,7 +2,7 @@
 <resources>
     <!-- Results -->
     <string name="results_action_back">BACK TO HOME</string>
-    <string name="results_title_tie">IT\'S A TIE!</string>
+    <string name="results_title_tie">IT'S A TIE!</string>
     <string name="results_title_winner">WE HAVE A WINNER!</string>
     <string name="results_section_scores">FINAL SCORES</string>
 </resources>

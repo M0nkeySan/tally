@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 
 class SettingsViewModel() : ViewModel() {
 
-
     private val preferencesRepository = PlatformRepositories.getUserPreferencesRepository()
     private val localeManager = PlatformRepositories.getLocaleManager()
 
