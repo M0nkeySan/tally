@@ -25,9 +25,6 @@ class LocaleManager(
         scope.launch {
             userPreferencesRepository.getLocale().collect { savedLanguage ->
                 val code = savedLanguage.code
-                
-                println("LocaleManager: Locale changed to '$code'")
-                
                 _currentLocale.value = code
                 applySystemLocale(code)
             }
@@ -50,11 +47,6 @@ class LocaleManager(
         return if (systemLang in supportedLanguages) systemLang else "en"
     }
 
-    /**
-     * Updates the platform default Locale.
-     * This ensures that when Compose redraws (triggered by the 'key' in UI),
-     * stringResource() picks up the correct language file.
-     */
     private fun applySystemLocale(languageCode: String) {
         try {
             val locale = MultiplatformLocale.forLanguageTag(languageCode)
