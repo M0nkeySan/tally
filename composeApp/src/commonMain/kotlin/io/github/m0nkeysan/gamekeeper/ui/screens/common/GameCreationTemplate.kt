@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -14,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,10 +24,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
@@ -81,6 +85,7 @@ fun GameCreationTemplate(
     modifier: Modifier = Modifier
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val isDarkTheme = isSystemInDarkTheme()
     
     // Show error in Snackbar
     LaunchedEffect(error) {
@@ -100,6 +105,14 @@ fun GameCreationTemplate(
                     IconButton(onClick = onBack) {
                         Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
                     }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                modifier = if (!isDarkTheme) {
+                    Modifier.shadow(elevation = 2.dp)
+                } else {
+                    Modifier
                 }
             )
         },
@@ -144,13 +157,25 @@ fun GameCreationTemplate(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
-            content()
-            Spacer(modifier = Modifier.height(8.dp))
+            // Add divider only in light mode
+            if (!isDarkTheme) {
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
+            }
+            
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                Spacer(modifier = Modifier.height(8.dp))
+                content()
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
     }
 }

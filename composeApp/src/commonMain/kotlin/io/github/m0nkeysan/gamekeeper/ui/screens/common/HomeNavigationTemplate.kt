@@ -1,8 +1,11 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -55,6 +58,7 @@ fun HomeNavigationTemplate(
     playerViewModel: PlayerSelectionViewModel = viewModel { PlayerSelectionViewModel() },
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
+    val isDarkTheme = isSystemInDarkTheme()
 
     BackHandler(enabled = selectedTab == 1 || selectedTab == 2) {
         selectedTab = 0
@@ -65,10 +69,18 @@ fun HomeNavigationTemplate(
     Scaffold(
         modifier = modifier,
         bottomBar = {
-            NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface
-            ) {
+            Column {
+                // Add divider only in light mode
+                if (!isDarkTheme) {
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outlineVariant
+                    )
+                }
+                
+                NavigationBar(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                ) {
                 // Games Tab
                 NavigationBarItem(
                     selected = selectedTab == 0,
@@ -107,6 +119,7 @@ fun HomeNavigationTemplate(
                     },
                     alwaysShowLabel = false
                 )
+            }
             }
         },
         floatingActionButton = {

@@ -2,6 +2,7 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.home
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,10 +19,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -73,6 +76,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel { HomeViewModel() }
 ) {
     val cardOrder by viewModel.cardOrder.collectAsState()
+    val isDarkTheme = isSystemInDarkTheme()
 
     var localCardOrder by remember { mutableStateOf<List<String>?>(null) }
 
@@ -101,6 +105,14 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                modifier = if (!isDarkTheme) {
+                    Modifier.shadow(elevation = 2.dp)
+                } else {
+                    Modifier
                 }
             )
         }
@@ -109,9 +121,20 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp)
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            // Add divider only in light mode
+            if (!isDarkTheme) {
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
+            }
+            
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Spacer(modifier = Modifier.height(16.dp))
 
             LazyVerticalGrid(
                 state = gridState,
@@ -233,6 +256,7 @@ fun HomeScreen(
                         )
                     }
                 }
+            }
             }
         }
     }

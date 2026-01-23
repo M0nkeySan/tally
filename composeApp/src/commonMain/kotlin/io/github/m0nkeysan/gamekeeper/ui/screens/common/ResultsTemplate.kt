@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,13 +16,16 @@ import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -73,6 +77,8 @@ fun ResultsTemplate(
     onHome: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
+    
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -82,6 +88,14 @@ fun ResultsTemplate(
                         "Game Over",
                         fontWeight = FontWeight.Bold
                     )
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                modifier = if (!isDarkTheme) {
+                    Modifier.shadow(elevation = 2.dp)
+                } else {
+                    Modifier
                 }
             )
         },
@@ -103,11 +117,23 @@ fun ResultsTemplate(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp),
+                .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
+            // Add divider only in light mode
+            if (!isDarkTheme) {
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
+            }
+            
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(24.dp))
 
             // Trophy icon
             Icon(
@@ -164,6 +190,7 @@ fun ResultsTemplate(
                         isWinner = isWinner
                     )
                 }
+            }
             }
         }
     }

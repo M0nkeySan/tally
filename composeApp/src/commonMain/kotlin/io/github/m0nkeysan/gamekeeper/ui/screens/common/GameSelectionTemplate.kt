@@ -1,7 +1,9 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +19,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +29,7 @@ import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -112,6 +117,7 @@ fun GameSelectionTemplate(
     onNavigateToStatistics: (() -> Unit)? = null
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val isDarkTheme = isSystemInDarkTheme()
     var showMenu by remember { mutableStateOf(false) }
     var showDeleteAllDialog by remember { mutableStateOf(false) }
 
@@ -220,6 +226,14 @@ fun GameSelectionTemplate(
                             }
                         }
                     }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                modifier = if (!isDarkTheme) {
+                    Modifier.shadow(elevation = 2.dp)
+                } else {
+                    Modifier
                 }
             )
         },
@@ -238,31 +252,37 @@ fun GameSelectionTemplate(
             GameKeeperSnackbarHost(hostState = snackbarHostState)
         }
     ) { paddingValues ->
-        when {
-            isLoading -> {
-                LoadingState(
-                    message = stringResource(Res.string.game_selection_loading),
-                    modifier = Modifier.padding(paddingValues)
+        Column(modifier = Modifier.padding(paddingValues)) {
+            // Add divider only in light mode
+            if (!isDarkTheme) {
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.outlineVariant
                 )
             }
+            
+            when {
+                isLoading -> {
+                    LoadingState(
+                        message = stringResource(Res.string.game_selection_loading),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
 
-            games.isEmpty() -> {
-                EmptyState(
-                    message = stringResource(Res.string.game_selection_empty),
-                    actionLabel = stringResource(Res.string.game_creation_action_create),
-                    onAction = onCreateNew,
-                    modifier = Modifier.padding(paddingValues)
-                )
-            }
+                games.isEmpty() -> {
+                    EmptyState(
+                        message = stringResource(Res.string.game_selection_empty),
+                        actionLabel = stringResource(Res.string.game_creation_action_create),
+                        onAction = onCreateNew,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
 
-            else -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
                     items(games, key = { it.id }) { game ->
                         val dismissState = rememberSwipeToDismissBoxState()
                         LaunchedEffect(dismissState.currentValue) {
@@ -298,6 +318,7 @@ fun GameSelectionTemplate(
                         }
                     }
                 }
+            }
             }
         }
     }
