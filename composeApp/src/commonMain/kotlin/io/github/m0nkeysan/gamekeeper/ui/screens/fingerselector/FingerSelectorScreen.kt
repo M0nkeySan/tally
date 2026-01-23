@@ -56,8 +56,11 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
 import io.github.m0nkeysan.gamekeeper.generated.resources.error_min_fingers
 import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_cd_touch
 import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_dialog_title
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_finger_count
 import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_instruction_place
-import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_instruction_wait
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_group_count
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_group_instruction_wait
+import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_finger_instruction_wait
 import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_label_fingers
 import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_label_groups
 import io.github.m0nkeysan.gamekeeper.generated.resources.finger_selector_mode_fingers
@@ -68,6 +71,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.game_finger_selector
 import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.PI
 import kotlin.math.cos
@@ -132,8 +136,8 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
                             )
                             Text(
                                 text = when (config.mode) {
-                                    SelectionMode.FINGERS -> "${config.count} Finger${if (config.count > 1) "s" else ""}"
-                                    SelectionMode.GROUPS -> "${config.count} Groups"
+                                    SelectionMode.FINGERS -> pluralStringResource(Res.plurals.finger_selector_finger_count, config.count, config.count)
+                                    SelectionMode.GROUPS -> stringResource(Res.string.finger_selector_group_count, config.count)
                                 },
                                 style = MaterialTheme.typography.bodySmall
                             )
@@ -543,9 +547,9 @@ fun FingerSelectorGame(
                     )
                     Text(
                         text = if (config.mode == SelectionMode.GROUPS)
-                            stringResource(Res.string.finger_selector_instruction_wait)
+                            stringResource(Res.string.finger_selector_group_instruction_wait)
                         else
-                            "${config.count} finger${if (config.count > 1) "s" else ""} will be chosen",
+                            pluralStringResource(Res.plurals.finger_selector_finger_instruction_wait, config.count, config.count),
                         color = Color.White.copy(alpha = 0.5f),
                         fontSize = 14.sp,
                         textAlign = TextAlign.Center

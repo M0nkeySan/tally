@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Finger Selector -->
+    <plurals name="finger_selector_finger_count">
+        <item quantity="one">%1$d Doigt</item>
+        <item quantity="other">%1$d Doigts</item>
+    </plurals>
+
+    <string name="finger_selector_group_count">%1$d Groupes</string>
     <string name="finger_selector_dialog_title">Paramètres du sélecteur</string>
     <string name="finger_selector_section_mode">Mode</string>
     <string name="finger_selector_mode_fingers">Doigts</string>
     <string name="finger_selector_mode_groups">Groupes</string>
     <string name="finger_selector_cd_touch">Touchez ici pour placer le doigt</string>
     <string name="finger_selector_instruction_place">Placez vos doigts</string>
-    <string name="finger_selector_instruction_wait">Attendre l'attribution des groupes</string>
+    <string name="finger_selector_group_instruction_wait">Attendre l'attribution des groupes</string>
+
+    <plurals name="finger_selector_finger_instruction_wait">
+        <item quantity="one">%1$d Doigt sera choisi</item>
+        <item quantity="other">%1$d Doigts seront choisis</item>
+    </plurals>
+
     <string name="finger_selector_slider_value_format">%1$s : %2$d</string>
     <string name="finger_selector_label_fingers">Nombre de doigts</string>
     <string name="finger_selector_label_groups">Nombre de groupes</string>

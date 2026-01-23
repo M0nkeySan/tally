@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.gamekeeper.ui.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
 @Composable
 fun FieldLabel(text: String) {
@@ -47,19 +47,24 @@ fun FlatTextField(
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier),
+                .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    shape = MaterialTheme.shapes.large
+                ),
             placeholder = { Text(placeholder, color = Color.Gray) },
             singleLine = singleLine,
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = GameColors.Surface0,
-                unfocusedContainerColor = GameColors.Surface1,
-                focusedIndicatorColor = accentColor,
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = accentColor,
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                cursorColor = accentColor
             ),
             shape = MaterialTheme.shapes.large,
             textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)

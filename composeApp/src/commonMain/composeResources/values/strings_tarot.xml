@@ -14,7 +14,6 @@
     <string name="tarot_stats_label_avg_won">Avg Won</string>
     <string name="tarot_stats_label_avg_lost">Avg Lost</string>
     <string name="tarot_stats_section_called_performance">Called Performance</string>
-    <string name="tarot_stats_error_title">Oops! Something went wrong</string>
     <string name="tarot_stats_section_round_breakdown">Round Breakdown</string>
     <string name="tarot_stats_empty_rounds">No rounds played yet</string>
     <string name="tarot_stats_section_current_standings">Current Standings</string>
@@ -57,4 +56,9 @@
     <string name="tarot_round_announce_petit_au_bout">Petit au bout</string>
     <string name="tarot_round_announce_poignee">Poignée</string>
     <string name="tarot_round_label_chelem">Chelem</string>
+
+    <string name="chelem_none">None</string>
+    <string name="chelem_announced_success">Announced Made</string>
+    <string name="chelem_announced_fail">Announced Failed</string>
+    <string name="chelem_non_announced_success">Not Announced but Made</string>
 </resources>

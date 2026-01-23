@@ -74,8 +74,8 @@ fun GameSelectionCard(
                     text = game.name,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = if (game.isFinished) 
-                        GameColors.TextSecondary 
+                    color = if (game.isFinished)
+                        MaterialTheme.colorScheme.onSurfaceVariant
                     else 
                         GameColors.TextPrimary
                 )
@@ -85,7 +85,7 @@ fun GameSelectionCard(
                 Text(
                     text = stringResource(Res.string.player_count_display, game.playerCount, if (game.playerCount > 1) "s" else ""),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = GameColors.TextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -93,7 +93,7 @@ fun GameSelectionCard(
                 Text(
                     text = game.playerNames,
                     style = MaterialTheme.typography.bodySmall,
-                    color = GameColors.TextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             

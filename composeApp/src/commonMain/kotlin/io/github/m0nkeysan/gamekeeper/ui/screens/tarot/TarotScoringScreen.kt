@@ -358,7 +358,7 @@ fun RoundHistoryItem(
              val announces = mutableListOf<String>()
              if (round.hasPetitAuBout) announces.add(stringResource(Res.string.tarot_scoring_announce_petit_au_bout))
              if (round.hasPoignee) announces.add(stringResource(Res.string.tarot_scoring_announce_poignee, round.poigneeLevel?.displayName ?: ""))
-             if (round.chelem != ChelemType.NONE) announces.add(stringResource(Res.string.tarot_scoring_announce_chelem, round.chelem.displayName))
+             if (round.chelem != ChelemType.NONE) announces.add(stringResource(Res.string.tarot_scoring_announce_chelem, stringResource(round.chelem.titleRes)))
 
             if (announces.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(4.dp))

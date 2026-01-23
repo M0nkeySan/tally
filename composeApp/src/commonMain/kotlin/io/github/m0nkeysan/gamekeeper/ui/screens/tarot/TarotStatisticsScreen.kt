@@ -54,7 +54,6 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.cd_toggle_expand
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_contract_lost
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_contract_won
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_empty_rounds
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_error_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_format_as_taker
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_as_taker
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_avg_bouts
@@ -77,6 +76,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_tab_curren
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_tab_player_stats
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_title
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
+import io.github.m0nkeysan.gamekeeper.ui.components.ErrorState
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -156,8 +156,8 @@ fun TarotStatisticsScreen(
 
             // Error state
             if (state.error != null) {
-                ErrorStateCard(
-                    error = state.error!!,
+                ErrorState(
+                    message = state.error!!,
                     onRetry = { viewModel.retryLoading() }
                 )
                 return@Column
@@ -976,48 +976,5 @@ private fun BidBadge(bidName: String) {
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontWeight = FontWeight.Bold
         )
-    }
-}
-
-/**
- * Error state card with retry button
- */
-@Composable
-private fun ErrorStateCard(
-    error: String,
-    onRetry: () -> Unit
-) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Card(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(0.8f)
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text(
-                    stringResource(Res.string.tarot_stats_error_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    error,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                androidx.compose.material3.Button(
-                    onClick = onRetry
-                ) {
-                    Text(stringResource(Res.string.action_retry))
-                }
-            }
-        }
     }
 }

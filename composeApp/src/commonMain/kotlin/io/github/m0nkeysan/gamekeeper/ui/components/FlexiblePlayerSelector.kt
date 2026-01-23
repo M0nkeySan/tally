@@ -88,7 +88,7 @@ fun FlexiblePlayerSelector(
                         tint = if (selectedPlayers.size > minPlayers) 
                             GameColors.Error 
                         else 
-                            GameColors.TextSecondary
+                            MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 
@@ -110,8 +110,8 @@ fun FlexiblePlayerSelector(
                             Res.string.cd_add_player),
                         tint = if (selectedPlayers.size < maxPlayers) 
                             GameColors.Success 
-                        else 
-                            GameColors.TextSecondary
+                        else
+                            MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

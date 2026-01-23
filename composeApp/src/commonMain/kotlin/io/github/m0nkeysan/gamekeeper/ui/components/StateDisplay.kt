@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Folder
@@ -19,11 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_retry
+import io.github.m0nkeysan.gamekeeper.generated.resources.state_error_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.state_loading
 import io.github.m0nkeysan.gamekeeper.generated.resources.state_loading_games
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
@@ -60,7 +63,7 @@ fun LoadingState(
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodyMedium,
-                color = GameColors.TextSecondary
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -108,12 +111,12 @@ fun EmptyState(
                 imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier.size(64.dp),
-                tint = GameColors.TextSecondary
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodyLarge,
-                color = GameColors.TextSecondary,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
             if (actionLabel != null && onAction != null) {
@@ -159,31 +162,50 @@ fun ErrorState(
         contentAlignment = Alignment.Center
     ) {
         Column(
+            modifier = Modifier
+                .widthIn(max = 400.dp)
+                .padding(32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(32.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Error,
                 contentDescription = null,
                 modifier = Modifier.size(64.dp),
-                tint = GameColors.Error
+                tint = MaterialTheme.colorScheme.error
             )
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = stringResource(Res.string.state_error_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center
+                )
+            }
+
             Text(
                 text = message,
-                style = MaterialTheme.typography.bodyLarge,
-                color = GameColors.TextPrimary,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
-            if (onRetry != null) {
-                Button(
-                    onClick = onRetry,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = GameColors.Error
-                    )
-                ) {
-                    Text(stringResource(Res.string.action_retry))
-                }
+        }
+
+        if (onRetry != null) {
+            Button(
+                onClick = onRetry,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text(stringResource(Res.string.action_retry))
             }
         }
     }

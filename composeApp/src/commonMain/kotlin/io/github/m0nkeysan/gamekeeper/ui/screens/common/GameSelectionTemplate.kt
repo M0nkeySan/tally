@@ -53,6 +53,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_cd_dele
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_cd_statistics
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_empty
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_loading
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_creation_action_create
 import io.github.m0nkeysan.gamekeeper.ui.components.EmptyState
 import io.github.m0nkeysan.gamekeeper.ui.components.GameDisplay
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
@@ -249,7 +250,7 @@ fun GameSelectionTemplate(
             games.isEmpty() -> {
                 EmptyState(
                     message = stringResource(Res.string.game_selection_empty),
-                    actionLabel = "Create Game",
+                    actionLabel = stringResource(Res.string.game_creation_action_create),
                     onAction = onCreateNew,
                     modifier = Modifier.padding(paddingValues)
                 )

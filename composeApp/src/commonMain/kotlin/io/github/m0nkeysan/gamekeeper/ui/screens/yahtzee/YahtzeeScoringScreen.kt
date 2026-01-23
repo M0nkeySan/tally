@@ -347,7 +347,7 @@ fun SectionHeader(title: String) {
         text = title.uppercase(),
         style = MaterialTheme.typography.labelLarge,
         fontWeight = FontWeight.Black,
-        color = GameColors.TextSecondary,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         letterSpacing = 1.2.sp,
         modifier = Modifier.padding(vertical = 8.dp)
     )
@@ -515,7 +515,7 @@ fun UpperBonusRow(score: Int) {
              Text(
                  text = if (score >= 63) stringResource(Res.string.yahtzee_label_bonus_earned) else "0",
                  fontWeight = FontWeight.Bold,
-                 color = if (score >= 63) GameColors.Success else GameColors.TextSecondary
+                 color = if (score >= 63) GameColors.Success else MaterialTheme.colorScheme.onSurfaceVariant
              )
          }
     }

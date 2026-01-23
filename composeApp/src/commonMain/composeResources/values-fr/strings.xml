@@ -14,6 +14,7 @@
     <!-- Loading and States -->
     <string name="state_loading">Chargement...</string>
     <string name="state_loading_games">Chargement des jeux...</string>
+    <string name="state_error_title">Oups ! Quelque chose s'est mal passé</string>
 
     <!-- Common Content Descriptions (Accessibility) -->
     <string name="cd_back">Retour</string>

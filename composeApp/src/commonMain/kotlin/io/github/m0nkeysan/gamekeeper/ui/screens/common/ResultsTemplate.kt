@@ -144,7 +144,7 @@ fun ResultsTemplate(
                 text = stringResource(Res.string.results_section_scores),
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
-                color = GameColors.TextSecondary,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 letterSpacing = 1.5.sp
             )
 

@@ -1,6 +1,14 @@
 package io.github.m0nkeysan.gamekeeper.core.model
 
+import androidx.compose.runtime.Composable
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.generated.resources.chelem_announced_fail
+import io.github.m0nkeysan.gamekeeper.generated.resources.chelem_announced_success
+import io.github.m0nkeysan.gamekeeper.generated.resources.chelem_non_announced_success
+import io.github.m0nkeysan.gamekeeper.generated.resources.chelem_none
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 import kotlin.uuid.Uuid
 
@@ -36,9 +44,26 @@ enum class PoigneeLevel(val displayName: String, val bonus: Int) {
 }
 
 @Serializable
-enum class ChelemType(val displayName: String, val bonus: Int) {
-    NONE("None", 0),
-    ANNOUNCED_SUCCESS("Announced & Made", 400),
-    ANNOUNCED_FAIL("Announced & Failed", -200),
-    NON_ANNOUNCED_SUCCESS("Not Announced but Made", 200)
+enum class ChelemType(val titleRes: StringResource, val bonus: Int) {
+    NONE(
+        titleRes = Res.string.chelem_none,
+        bonus = 0
+    ),
+    ANNOUNCED_SUCCESS(
+        titleRes = Res.string.chelem_announced_success,
+        bonus = 400
+    ),
+    ANNOUNCED_FAIL(
+        titleRes = Res.string.chelem_announced_fail,
+        bonus = -200
+    ),
+    NON_ANNOUNCED_SUCCESS(
+        titleRes = Res.string.chelem_non_announced_success,
+        bonus = 200
+    )
+}
+
+@Composable
+fun ChelemType.localizedName(): String {
+    return stringResource(this.titleRes)
 }

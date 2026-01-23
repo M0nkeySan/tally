@@ -49,6 +49,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.core.model.ChelemType
 import io.github.m0nkeysan.gamekeeper.core.model.PoigneeLevel
 import io.github.m0nkeysan.gamekeeper.core.model.TarotBid
+import io.github.m0nkeysan.gamekeeper.core.model.localizedName
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_action_save
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_announce_petit_au_bout
@@ -268,13 +269,19 @@ fun TarotRoundAdditionScreen(
                 Section(title = stringResource(Res.string.tarot_round_section_bouts)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         (0..3).forEach { b ->
                              FilterChip(
                                  selected = bouts == b,
                                  onClick = { bouts = b },
-                                 label = { Text(stringResource(Res.string.tarot_round_label_bouts, b)) },
+                                 label = {
+                                     Text(
+                                         text = b.toString(),
+                                         textAlign = TextAlign.Center,
+                                         modifier = Modifier.fillMaxWidth()
+                                     )
+                                 },
                                  modifier = Modifier.weight(1f)
                              )
                          }
@@ -378,7 +385,7 @@ fun TarotRoundAdditionScreen(
                                     FilterChip(
                                         selected = chelem == type,
                                         onClick = { chelem = type },
-                                        label = { Text(type.displayName) }
+                                        label = { Text(type.localizedName()) }
                                     )
                                 }
                             }

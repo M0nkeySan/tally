@@ -36,7 +36,7 @@
     <string name="counter_history_deleted_text">Supprimé</string>
     <string name="counter_edit_title">Modifier le compteur</string>
     <string name="counter_edit_cd_delete">Supprimer</string>
-    <string name="counter_edit_action_save">ENREGISTRER LES MODIFICATIONS</string>
+    <string name="counter_edit_action_save">ENREGISTRER</string>
     <string name="counter_edit_label_color">COULEUR D'ACCENTUATION</string>
     <string name="counter_edit_field_name">NOM</string>
     <string name="counter_edit_placeholder_name">Nom du joueur</string>

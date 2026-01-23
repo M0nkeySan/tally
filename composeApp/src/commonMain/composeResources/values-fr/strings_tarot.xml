@@ -14,7 +14,6 @@
     <string name="tarot_stats_label_avg_won">Moy. Remportée</string>
     <string name="tarot_stats_label_avg_lost">Moy. Perdue</string>
     <string name="tarot_stats_section_called_performance">Performance appelée</string>
-    <string name="tarot_stats_error_title">Oups ! Quelque chose s'est mal passé</string>
     <string name="tarot_stats_section_round_breakdown">Détail des manches</string>
     <string name="tarot_stats_empty_rounds">Aucune manche jouée pour le moment</string>
     <string name="tarot_stats_section_current_standings">Classement actuel</string>
@@ -57,4 +56,9 @@
     <string name="tarot_round_announce_petit_au_bout">Petit au bout</string>
     <string name="tarot_round_announce_poignee">Poignée</string>
     <string name="tarot_round_label_chelem">Chelem</string>
+
+    <string name="chelem_none">Aucun</string>
+    <string name="chelem_announced_success">Annoncé et réalisé</string>
+    <string name="chelem_announced_fail">Annoncé et chuté</string>
+    <string name="chelem_non_announced_success">Non annoncé mais réalisé</string>
 </resources>
