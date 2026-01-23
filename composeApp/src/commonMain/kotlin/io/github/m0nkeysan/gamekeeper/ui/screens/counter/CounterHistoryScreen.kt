@@ -48,7 +48,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.counter_history_subtit
 import io.github.m0nkeysan.gamekeeper.generated.resources.counter_history_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_delete_all_title
 import io.github.m0nkeysan.gamekeeper.platform.formatTimestamp
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.theme.LocalCustomColors
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -172,7 +172,7 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                 modifier = Modifier
                     .size(40.dp)
                     .background(
-                        color = GameColors.Divider,
+                        color = MaterialTheme.colorScheme.outline,
                         shape = RoundedCornerShape(8.dp)
                     ),
                 contentAlignment = Alignment.Center
@@ -228,7 +228,7 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     ),
-                    color = GameColors.Divider
+                    color = MaterialTheme.colorScheme.outline
                 )
             } else {
                  Text(
@@ -238,9 +238,9 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                          fontSize = 18.sp
                      ),
                      color = if (mergedChange.totalDelta > 0) {
-                         GameColors.Success
+                         LocalCustomColors.current.success
                      } else if (mergedChange.totalDelta < 0) {
-                         GameColors.Error
+                         MaterialTheme.colorScheme.error
                      } else {
                          MaterialTheme.colorScheme.onSurfaceVariant
                      }

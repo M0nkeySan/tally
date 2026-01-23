@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.GameSummary
 import io.github.m0nkeysan.gamekeeper.core.utils.format
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.theme.LocalCustomColors
 import org.jetbrains.compose.resources.stringResource
 import io.github.m0nkeysan.gamekeeper.generated.resources.counter_format_player_count
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_rank_first_place
@@ -36,7 +36,7 @@ fun GameSummaryRow(
     val date = formatGameDate(game.completedAt)
     
     val cardColor = if (game.isWinner) {
-        GameColors.Secondary.copy(alpha = 0.1f)
+        MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f)
     } else {
         MaterialTheme.colorScheme.surface
     }
@@ -84,8 +84,8 @@ fun GameSummaryRow(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 val rankColor = when (game.rank) {
-                    1 -> GameColors.Success
-                    2 -> GameColors.Warning
+                    1 -> LocalCustomColors.current.success
+                    2 -> LocalCustomColors.current.warning
                     else -> MaterialTheme.colorScheme.onSurfaceVariant
                 }
                 

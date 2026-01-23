@@ -77,7 +77,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_section_lower
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_section_upper
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.theme.LocalCustomColors
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -512,11 +512,11 @@ fun UpperBonusRow(score: Int) {
                  Text(stringResource(Res.string.yahtzee_label_bonus_needed, needed), style = MaterialTheme.typography.labelSmall, color = Color.Gray)
                  Spacer(modifier = Modifier.width(8.dp))
              }
-             Text(
-                 text = if (score >= 63) stringResource(Res.string.yahtzee_label_bonus_earned) else "0",
-                 fontWeight = FontWeight.Bold,
-                 color = if (score >= 63) GameColors.Success else MaterialTheme.colorScheme.onSurfaceVariant
-             )
+              Text(
+                  text = if (score >= 63) stringResource(Res.string.yahtzee_label_bonus_earned) else "0",
+                  fontWeight = FontWeight.Bold,
+                  color = if (score >= 63) LocalCustomColors.current.success else MaterialTheme.colorScheme.onSurfaceVariant
+              )
          }
     }
 }

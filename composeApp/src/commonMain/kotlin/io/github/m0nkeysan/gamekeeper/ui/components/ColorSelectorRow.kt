@@ -52,7 +52,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_save
 import io.github.m0nkeysan.gamekeeper.generated.resources.color_picker_cd
 import io.github.m0nkeysan.gamekeeper.generated.resources.color_picker_dialog_title
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.theme.LocalCustomColors
 import io.github.m0nkeysan.gamekeeper.ui.utils.colorToHSV
 import io.github.m0nkeysan.gamekeeper.ui.utils.hsvToColor
 import io.github.m0nkeysan.gamekeeper.ui.utils.parseColor
@@ -117,7 +117,7 @@ fun ColorSelectorRow(
         Spacer(modifier = Modifier.width(12.dp)) // Slightly reduced spacer to fit more
 
         val isCustomSelected = presets.none { it.equals(selectedColorHex, ignoreCase = true) }
-        val customColor = if (isCustomSelected) parseColor(selectedColorHex) else GameColors.Success
+        val customColor = if (isCustomSelected) parseColor(selectedColorHex) else LocalCustomColors.current.success
 
         CustomPickerSwatch(
             color = customColor,

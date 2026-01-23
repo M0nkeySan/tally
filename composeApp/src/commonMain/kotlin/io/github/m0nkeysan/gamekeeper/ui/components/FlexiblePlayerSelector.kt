@@ -27,7 +27,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.cd_add_player
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_remove_player
 import io.github.m0nkeysan.gamekeeper.generated.resources.error_player_count_range
 import io.github.m0nkeysan.gamekeeper.generated.resources.players_count_format
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.theme.LocalCustomColors
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -86,7 +86,7 @@ fun FlexiblePlayerSelector(
                         Icons.Default.Remove,
                         contentDescription = stringResource(Res.string.cd_remove_player),
                         tint = if (selectedPlayers.size > minPlayers) 
-                            GameColors.Error 
+                            MaterialTheme.colorScheme.error 
                         else 
                             MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -109,7 +109,7 @@ fun FlexiblePlayerSelector(
                         contentDescription = stringResource(
                             Res.string.cd_add_player),
                         tint = if (selectedPlayers.size < maxPlayers) 
-                            GameColors.Success 
+                            LocalCustomColors.current.success 
                         else
                             MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -122,7 +122,7 @@ fun FlexiblePlayerSelector(
             Text(
                 text = stringResource(Res.string.error_player_count_range, minPlayers, maxPlayers),
                 style = MaterialTheme.typography.bodySmall,
-                color = GameColors.Error
+                color = MaterialTheme.colorScheme.error
             )
         }
         

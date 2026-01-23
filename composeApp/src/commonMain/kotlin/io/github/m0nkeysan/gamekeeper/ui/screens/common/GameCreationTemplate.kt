@@ -34,7 +34,6 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_creation_action_create
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -130,7 +129,7 @@ fun GameCreationTemplate(
                         enabled = canCreate,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = GameColors.Primary,
+                            containerColor = MaterialTheme.colorScheme.primary,
                             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )

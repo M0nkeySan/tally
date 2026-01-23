@@ -61,7 +61,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_section_
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_scoring_section_scores
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.theme.LocalCustomColors
 import io.github.m0nkeysan.gamekeeper.ui.utils.parseColor
 import org.jetbrains.compose.resources.stringResource
 
@@ -119,7 +119,7 @@ fun TarotScoringScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { onAddNewRound(null) },
-                containerColor = GameColors.Primary
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(GameIcons.Add, contentDescription = stringResource(Res.string.tarot_scoring_cd_add_round))
             }
@@ -338,7 +338,7 @@ fun RoundHistoryItem(
                     else -> round.score * (playerCount - 1)
                 }
                 val scoreColor =
-                    if (displayScore >= 0) GameColors.Success else GameColors.Error
+                    if (displayScore >= 0) LocalCustomColors.current.success else MaterialTheme.colorScheme.error
                 Text(
                     text = if (displayScore >= 0) "+$displayScore" else "-${kotlin.math.abs(displayScore)}",
                     style = MaterialTheme.typography.bodyLarge,

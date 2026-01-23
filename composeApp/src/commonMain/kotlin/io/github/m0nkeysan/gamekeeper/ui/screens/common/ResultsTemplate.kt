@@ -32,7 +32,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.results_section_scores
 import io.github.m0nkeysan.gamekeeper.generated.resources.results_title_tie
 import io.github.m0nkeysan.gamekeeper.generated.resources.results_title_winner
 import io.github.m0nkeysan.gamekeeper.ui.components.ResultsCard
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.theme.LocalCustomColors
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -93,7 +93,7 @@ fun ResultsTemplate(
                     .padding(16.dp)
                     .height(56.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = GameColors.Primary
+                    containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
                 Text(stringResource(Res.string.results_action_back), fontWeight = FontWeight.Bold)
@@ -114,7 +114,7 @@ fun ResultsTemplate(
                 imageVector = Icons.Default.EmojiEvents,
                 contentDescription = null,
                 modifier = Modifier.size(100.dp),
-                tint = GameColors.TrophyGold
+                tint = LocalCustomColors.current.trophyGold
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -126,7 +126,7 @@ fun ResultsTemplate(
                 ),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Black,
-                color = GameColors.Primary
+                color = MaterialTheme.colorScheme.primary
             )
 
             Text(

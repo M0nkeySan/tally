@@ -3,7 +3,6 @@ package io.github.m0nkeysan.gamekeeper.ui.components
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
 /**
  * Standard Snackbar host configuration for GameKeeper.
@@ -22,9 +21,9 @@ fun GameKeeperSnackbarHost(
     ) { data ->
         Snackbar(
             snackbarData = data,
-            containerColor = GameColors.Error,
-            contentColor = GameColors.Surface0,
-            actionColor = GameColors.Surface0
+            containerColor = MaterialTheme.colorScheme.error,
+            contentColor = MaterialTheme.colorScheme.surface,
+            actionColor = MaterialTheme.colorScheme.surface
         )
     }
 }

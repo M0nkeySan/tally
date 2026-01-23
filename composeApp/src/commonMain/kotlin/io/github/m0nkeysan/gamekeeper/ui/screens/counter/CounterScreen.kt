@@ -114,7 +114,6 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.counter_title
 import io.github.m0nkeysan.gamekeeper.platform.HapticType
 import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -785,7 +784,7 @@ fun SettingsOption(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = MaterialTheme.shapes.large,
-        color = if (isSelected) GameColors.Surface0 else GameColors.Surface1,
+        color = if (isSelected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant,
         border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null
     ) {
         Row(

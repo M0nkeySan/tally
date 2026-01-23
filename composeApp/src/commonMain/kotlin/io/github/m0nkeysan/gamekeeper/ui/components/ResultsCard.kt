@@ -11,7 +11,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 
 /**
  * Card displaying a player's rank and score in game results.
@@ -29,9 +28,9 @@ fun ResultsCard(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = if (isWinner) 
-                GameColors.PrimaryLight 
+                MaterialTheme.colorScheme.primaryContainer 
             else 
-                GameColors.Surface1
+                MaterialTheme.colorScheme.surfaceVariant
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isWinner) 2.dp else 0.dp
@@ -48,13 +47,13 @@ fun ResultsCard(
                     .size(32.dp)
                     .clip(CircleShape)
                     .background(
-                        if (isWinner) GameColors.Primary else GameColors.Surface2
+                        if (isWinner) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainer
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = rank.toString(),
-                    color = if (isWinner) Color.White else GameColors.TextPrimary,
+                    color = if (isWinner) Color.White else MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -66,7 +65,7 @@ fun ResultsCard(
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = if (isWinner) FontWeight.Bold else FontWeight.Normal,
                 modifier = Modifier.weight(1f),
-                color = GameColors.TextPrimary
+                color = MaterialTheme.colorScheme.onSurface
             )
             
             // Score
@@ -74,7 +73,7 @@ fun ResultsCard(
                 text = score.toString(),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Black,
-                color = if (isWinner) GameColors.Primary else GameColors.TextPrimary
+                color = if (isWinner) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
             )
         }
     }

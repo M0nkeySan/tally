@@ -29,7 +29,6 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.action_retry
 import io.github.m0nkeysan.gamekeeper.generated.resources.state_error_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.state_loading
 import io.github.m0nkeysan.gamekeeper.generated.resources.state_loading_games
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -59,7 +58,7 @@ fun LoadingState(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            CircularProgressIndicator(color = GameColors.Primary)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodyMedium,
@@ -123,7 +122,7 @@ fun EmptyState(
                 Button(
                     onClick = onAction,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = GameColors.Primary
+                        containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
                     Text(actionLabel)

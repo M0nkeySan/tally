@@ -102,7 +102,7 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.CategoryHeat
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GameSummaryRow
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.GlobalCategoryHeatmap
 import io.github.m0nkeysan.gamekeeper.ui.screens.yahtzee.components.StatisticRow
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.theme.LocalCustomColors
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -373,31 +373,31 @@ private fun OverallPerformanceCard(statistics: YahtzeePlayerStatistics) {
             StatisticRow(
                 label = stringResource(Res.string.yahtzee_stats_wins),
                 value = stringResource(Res.string.yahtzee_format_wins, statistics.wins, formatPercentage(statistics.winRate)),
-                valueColor = GameColors.Success
+                valueColor = LocalCustomColors.current.success
             )
 
             StatisticRow(
                 label = stringResource(Res.string.yahtzee_stats_average_score),
                 value = formatAverage(statistics.averageScore),
-                valueColor = GameColors.Primary
+                valueColor = MaterialTheme.colorScheme.primary
             )
 
             StatisticRow(
                 label = stringResource(Res.string.yahtzee_stats_personal_best),
                 value = statistics.highScore.toString(),
-                valueColor = GameColors.Success
+                valueColor = LocalCustomColors.current.success
             )
 
             StatisticRow(
                 label = stringResource(Res.string.yahtzee_stats_total_yahtzees),
                 value = statistics.totalYahtzees.toString(),
-                valueColor = GameColors.TrophyGold
+                valueColor = LocalCustomColors.current.trophyGold
             )
 
             StatisticRow(
                 label = stringResource(Res.string.yahtzee_stats_yahtzee_rate),
                 value = stringResource(Res.string.yahtzee_format_yahtzee_rate, formatAverage(statistics.yahtzeeRate)),
-                valueColor = GameColors.TrophyGold
+                valueColor = LocalCustomColors.current.trophyGold
             )
         }
     }
@@ -446,7 +446,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                         text = formatAverage(statistics.upperSectionAverage),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = GameColors.Primary
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
 
@@ -463,7 +463,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                         text = formatAverage(statistics.lowerSectionAverage),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = GameColors.Primary
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
 
@@ -480,7 +480,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                         text = formatPercentage(statistics.upperBonusRate),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = GameColors.Success
+                        color = LocalCustomColors.current.success
                     )
                 }
             }
@@ -595,20 +595,20 @@ private fun GlobalOverviewCard(statistics: io.github.m0nkeysan.gamekeeper.core.m
                 StatisticRow(
                     stringResource(Res.string.yahtzee_stats_global_high_score),
                     stringResource(Res.string.yahtzee_format_high_score, statistics.allTimeHighScore.score, statistics.allTimeHighScore.playerName),
-                    valueColor = GameColors.TrophyGold
+                    valueColor = LocalCustomColors.current.trophyGold
                 )
             }
             
             StatisticRow(
                 stringResource(Res.string.yahtzee_stats_global_average_score),
                 formatAverage(statistics.averageScore),
-                valueColor = GameColors.Primary
+                valueColor = MaterialTheme.colorScheme.primary
             )
             
             StatisticRow(
                 stringResource(Res.string.yahtzee_stats_global_total_yahtzees),
                 statistics.totalYahtzees.toString(),
-                valueColor = GameColors.Success
+                valueColor = LocalCustomColors.current.success
             )
             
             StatisticRow(
@@ -620,7 +620,7 @@ private fun GlobalOverviewCard(statistics: io.github.m0nkeysan.gamekeeper.core.m
                 StatisticRow(
                     stringResource(Res.string.yahtzee_stats_global_most_yahtzees_game),
                     stringResource(Res.string.yahtzee_format_most_yahtzees, statistics.mostYahtzeesInGame.count, statistics.mostYahtzeesInGame.playerName),
-                    valueColor = GameColors.TrophyGold
+                    valueColor = LocalCustomColors.current.trophyGold
                 )
             }
             
@@ -750,7 +750,7 @@ private fun GlobalLeaderboardRow(entry: io.github.m0nkeysan.gamekeeper.core.mode
             text = entry.value.toString(),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = GameColors.Primary
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -845,7 +845,7 @@ private fun GlobalGameSummaryRow(game: io.github.m0nkeysan.gamekeeper.core.model
             Text(
                 text = stringResource(Res.string.yahtzee_format_winner_score, game.winnerName),
                 style = MaterialTheme.typography.bodySmall,
-                color = GameColors.Success
+                color = LocalCustomColors.current.success
             )
             Text(
                 text = stringResource(Res.string.yahtzee_format_player_count, game.playerCount),
@@ -858,7 +858,7 @@ private fun GlobalGameSummaryRow(game: io.github.m0nkeysan.gamekeeper.core.model
             text = game.winnerScore.toString(),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = GameColors.Primary
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }

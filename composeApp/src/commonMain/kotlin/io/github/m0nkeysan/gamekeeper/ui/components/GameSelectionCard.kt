@@ -26,7 +26,7 @@ import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_finished_game
 import io.github.m0nkeysan.gamekeeper.generated.resources.player_count_display
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.theme.LocalCustomColors
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -59,9 +59,9 @@ fun GameSelectionCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (game.isFinished) 
-                GameColors.Surface2 
+                MaterialTheme.colorScheme.surfaceContainer 
             else 
-                GameColors.Surface1
+                MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Row(
@@ -77,7 +77,7 @@ fun GameSelectionCard(
                     color = if (game.isFinished)
                         MaterialTheme.colorScheme.onSurfaceVariant
                     else 
-                        GameColors.TextPrimary
+                        MaterialTheme.colorScheme.onSurface
                 )
                 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -101,7 +101,7 @@ fun GameSelectionCard(
                 Icon(
                     imageVector = Icons.Default.EmojiEvents,
                     contentDescription = stringResource(Res.string.cd_finished_game),
-                    tint = GameColors.TrophyGold,
+                    tint = LocalCustomColors.current.trophyGold,
                     modifier = Modifier.size(32.dp)
                 )
             }

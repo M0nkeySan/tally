@@ -67,7 +67,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_section_bi
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_section_bouts
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_section_players
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_section_points
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.theme.LocalCustomColors
 import io.github.m0nkeysan.gamekeeper.ui.utils.parseColor
 import org.jetbrains.compose.resources.stringResource
 
@@ -131,7 +131,7 @@ fun TarotRoundAdditionScreen(
         else -> 56f
     }
     val isWinner = pAtqFloat >= targetPoints
-    val statusColor = if (isWinner) GameColors.Success else GameColors.Error
+    val statusColor = if (isWinner) LocalCustomColors.current.success else MaterialTheme.colorScheme.error
 
     Scaffold(
         bottomBar = {

@@ -60,7 +60,6 @@ import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
 import io.github.m0nkeysan.gamekeeper.ui.components.GameSelectionCard
 import io.github.m0nkeysan.gamekeeper.ui.components.LoadingState
 import io.github.m0nkeysan.gamekeeper.ui.components.showErrorSnackbar
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -227,7 +226,7 @@ fun GameSelectionTemplate(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onCreateNew,
-                containerColor = GameColors.Primary
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
                     Icons.Default.Add,
@@ -286,7 +285,7 @@ fun GameSelectionTemplate(
                                     Icon(
                                         imageVector = GameIcons.Delete,
                                         contentDescription = stringResource(Res.string.game_selection_cd_delete_game),
-                                        tint = GameColors.Error,
+                                        tint = MaterialTheme.colorScheme.error,
                                         modifier = Modifier.size(32.dp)
                                     )
                                 }
