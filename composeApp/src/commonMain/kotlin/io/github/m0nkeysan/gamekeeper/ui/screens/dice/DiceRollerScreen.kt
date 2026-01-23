@@ -5,7 +5,6 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -26,7 +25,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.South
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -63,12 +61,11 @@ import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.DiceConfiguration
 import io.github.m0nkeysan.gamekeeper.core.model.DiceRoll
 import io.github.m0nkeysan.gamekeeper.core.model.DiceType
-import io.github.m0nkeysan.gamekeeper.platform.HapticType
-import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
-import io.github.m0nkeysan.gamekeeper.platform.rememberShakeDetector
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_save
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_back
+import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
 import io.github.m0nkeysan.gamekeeper.generated.resources.dice_dialog_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.dice_display_format
 import io.github.m0nkeysan.gamekeeper.generated.resources.dice_error_max_sides
@@ -84,9 +81,10 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.dice_screen_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.dice_setting_animation
 import io.github.m0nkeysan.gamekeeper.generated.resources.dice_setting_shake
 import io.github.m0nkeysan.gamekeeper.generated.resources.dice_total_format
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
-import io.github.m0nkeysan.gamekeeper.generated.resources.cd_back
-import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
+import io.github.m0nkeysan.gamekeeper.platform.HapticType
+import io.github.m0nkeysan.gamekeeper.platform.rememberHapticFeedbackController
+import io.github.m0nkeysan.gamekeeper.platform.rememberShakeDetector
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Main Dice Roller Screen
@@ -108,11 +106,11 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
  *
  * @param onBack Callback to navigate back from this screen
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiceRollerScreen(onBack: () -> Unit) {
-    val viewModel: DiceRollerViewModel = viewModel()
-
+fun DiceRollerScreen(
+    onBack: () -> Unit,
+    viewModel: DiceRollerViewModel = viewModel { DiceRollerViewModel() }
+) {
     val configuration by viewModel.configuration.collectAsState()
     val isRolling by viewModel.isRolling.collectAsState()
     val currentRollState = viewModel.currentRoll.collectAsState()
@@ -125,7 +123,7 @@ fun DiceRollerScreen(onBack: () -> Unit) {
     rememberShakeDetector(
         onShake = {
             if (configuration.shakeEnabled && !isRolling) {
-                hapticFeedback.performHapticFeedback(HapticType.LIGHT)
+                hapticFeedback.performHapticFeedback(HapticType.SUCCESS)
                 viewModel.rollDice()
             }
         },
@@ -197,7 +195,7 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                         modifier = Modifier.padding(horizontal = 32.dp)
                     ) {
                         Text(
-                             text = stringResource(Res.string.dice_display_format).format(configuration.numberOfDice, configuration.diceType.sides),
+                             text = stringResource(Res.string.dice_display_format, configuration.numberOfDice, configuration.diceType.sides),
                              color = MaterialTheme.colorScheme.onPrimaryContainer,
                              fontWeight = FontWeight.Bold,
                              style = MaterialTheme.typography.titleSmall,
@@ -233,7 +231,7 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                  if (roll != null && roll.individualResults.isNotEmpty()) {
                      val rollsString = roll.individualResults.joinToString(" ") { "[$it]" }
                      Text(
-                         text = stringResource(Res.string.dice_rolls_format).format(rollsString),
+                         text = stringResource(Res.string.dice_rolls_format, rollsString),
                          style = MaterialTheme.typography.titleSmall,
                          color = MaterialTheme.colorScheme.onBackground,
                          fontSize = 18.sp,
@@ -252,7 +250,7 @@ fun DiceRollerScreen(onBack: () -> Unit) {
                 }
 
                  Text(
-                     text = stringResource(Res.string.dice_total_format).format(roll?.total ?: 0),
+                     text = stringResource(Res.string.dice_total_format, roll?.total ?: 0),
                      style = MaterialTheme.typography.headlineSmall,
                      color = MaterialTheme.colorScheme.primary,
                      fontWeight = FontWeight.Bold,
@@ -309,7 +307,6 @@ fun DiceRollerScreen(onBack: () -> Unit) {
  * @param onTap Callback when dice box is tapped
  * @param onLongPress Callback when dice box is long-pressed
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DiceResultBox(
     currentRoll: DiceRoll?,
@@ -433,77 +430,77 @@ private fun DiceSettingsBottomSheetContent(
             }
         }
 
-         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-             Text(stringResource(Res.string.dice_field_type), style = MaterialTheme.typography.labelMedium)
-             DiceTypeSelector(
-                 selectedType = diceType,
-                 onTypeSelected = { diceType = it }
-             )
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(Res.string.dice_field_type), style = MaterialTheme.typography.labelMedium)
+            DiceTypeSelector(
+                selectedType = diceType,
+                onTypeSelected = { diceType = it }
+            )
 
-             Text(stringResource(Res.string.dice_field_custom), style = MaterialTheme.typography.labelMedium)
-             var customInput by remember { mutableStateOf(if (diceType is DiceType.Custom) diceType.sides.toString() else "") }
-             var customInputError by remember { mutableStateOf<String?>(null) }
-             
-             // Extract error messages at composable level
-             val errorNotValid = stringResource(Res.string.dice_error_not_valid)
-             val errorMinSides = stringResource(Res.string.dice_error_min_sides)
-             val errorMaxSides = stringResource(Res.string.dice_error_max_sides)
-             
-             LaunchedEffect(diceType) {
-                 if (diceType is DiceType.Custom) {
-                     customInput = diceType.sides.toString()
-                     customInputError = null
-                 } else {
-                     customInput = ""
-                     customInputError = null
-                 }
-             }
-             
-              LaunchedEffect(customInput) {
-                  customInputError = when {
-                      customInput.isBlank() -> null
-                      customInput.toIntOrNull() == null -> errorNotValid
-                      customInput.toInt() < DiceConstants.MIN_CUSTOM_SIDES -> errorMinSides.format(DiceConstants.MIN_CUSTOM_SIDES)
-                      customInput.toInt() > DiceConstants.MAX_CUSTOM_SIDES -> errorMaxSides.format(DiceConstants.MAX_CUSTOM_SIDES)
-                      else -> null
-                  }
-              }
-             
-             TextField(
-                 value = customInput,
-                 onValueChange = { 
-                     customInput = it
-                     if (it.isNotBlank() && it.toIntOrNull() != null) {
-                         val sides = it.toInt()
-                         if (sides in DiceConstants.MIN_CUSTOM_SIDES..DiceConstants.MAX_CUSTOM_SIDES) {
-                             diceType = DiceType.Custom(sides)
-                         }
-                     }
-                 },
-                 modifier = Modifier.fillMaxWidth(),
-                 placeholder = { Text(stringResource(Res.string.dice_placeholder_custom), color = MaterialTheme.colorScheme.onSurfaceVariant) },
-                 singleLine = true,
-                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                 colors = TextFieldDefaults.colors(
-                     focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                     unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                     focusedIndicatorColor = if (customInputError != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-                     unfocusedIndicatorColor = if (customInputError != null) MaterialTheme.colorScheme.error else Color.Transparent,
-                     cursorColor = MaterialTheme.colorScheme.primary
-                 ),
-                 shape = MaterialTheme.shapes.medium,
-                 isError = customInputError != null
-             )
-             
-             if (customInputError != null) {
-                 Text(
-                     text = customInputError!!,
-                     color = MaterialTheme.colorScheme.error,
-                     style = MaterialTheme.typography.labelSmall,
-                     modifier = Modifier.padding(start = 4.dp, top = 4.dp)
-                 )
-             }
-         }
+            Text(stringResource(Res.string.dice_field_custom), style = MaterialTheme.typography.labelMedium)
+
+            var customInput by remember { mutableStateOf(if (diceType is DiceType.Custom) diceType.sides.toString() else "") }
+
+            LaunchedEffect(diceType) {
+                if (diceType is DiceType.Custom) {
+                    customInput = diceType.sides.toString()
+                } else {
+                    customInput = ""
+                }
+            }
+
+            val inputInt = customInput.toIntOrNull()
+
+            val customInputError = when {
+                customInput.isBlank() -> null
+                inputInt == null -> stringResource(Res.string.dice_error_not_valid)
+
+                inputInt < DiceConstants.MIN_CUSTOM_SIDES -> stringResource(
+                    Res.string.dice_error_min_sides,
+                    DiceConstants.MIN_CUSTOM_SIDES
+                )
+                inputInt > DiceConstants.MAX_CUSTOM_SIDES -> stringResource(
+                    Res.string.dice_error_max_sides,
+                    DiceConstants.MAX_CUSTOM_SIDES
+                )
+                else -> null
+            }
+
+            TextField(
+                value = customInput,
+                onValueChange = {
+                    customInput = it
+                    if (it.isNotBlank() && it.toIntOrNull() != null) {
+                        val sides = it.toInt()
+                        if (sides in DiceConstants.MIN_CUSTOM_SIDES..DiceConstants.MAX_CUSTOM_SIDES) {
+                            diceType = DiceType.Custom(sides)
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = { Text(stringResource(Res.string.dice_placeholder_custom), color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    focusedIndicatorColor = if (customInputError != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                    unfocusedIndicatorColor = if (customInputError != null) MaterialTheme.colorScheme.error else Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.primary
+                ),
+                shape = MaterialTheme.shapes.medium,
+                isError = customInputError != null
+            )
+
+            if (customInputError != null) {
+                Text(
+                    text = customInputError,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier.padding(start = 4.dp, top = 4.dp)
+                )
+            }
+        }
 
         Row(
             modifier = Modifier

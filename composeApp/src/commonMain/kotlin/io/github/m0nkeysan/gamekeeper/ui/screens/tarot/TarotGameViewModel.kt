@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.uuid.ExperimentalUuidApi
 
 data class TarotGameDisplayModel(
     val id: String,
@@ -46,7 +45,7 @@ class TarotGameViewModel : ViewModel() {
     private fun loadGames() {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     repository.getAllGames().collect { games ->
                         val displayModels = games.map { game ->
                             val names = game.playerIds.split(",").map { id ->
@@ -77,7 +76,6 @@ class TarotGameViewModel : ViewModel() {
         }
     }
 
-    @OptIn(ExperimentalUuidApi::class)
     fun createGame(
         name: String,
         playerCount: Int,
@@ -87,7 +85,7 @@ class TarotGameViewModel : ViewModel() {
     ) {
         viewModelScope.launch {
             try {
-                val gameId = withContext(Dispatchers.IO) {
+                val gameId = withContext(Dispatchers.Default) {
                     players.forEach { player ->
                         if (playerRepository.getPlayerById(player.id) == null) {
                             playerRepository.insertPlayer(player)
@@ -113,7 +111,7 @@ class TarotGameViewModel : ViewModel() {
     fun deleteGame(game: TarotGame, onError: (String) -> Unit = {}) {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     repository.deleteGame(game)
                 }
             } catch (e: Exception) {
@@ -137,7 +135,7 @@ class TarotGameViewModel : ViewModel() {
     fun savePlayer(player: Player, onError: (String) -> Unit = {}) {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     if (playerRepository.getPlayerById(player.id) == null) {
                         // Use createPlayerOrReactivate to check for deactivated players
                         playerRepository.createPlayerOrReactivate(player.name, player.avatarColor)

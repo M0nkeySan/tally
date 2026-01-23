@@ -14,11 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.gamekeeper.core.model.GameSummary
+import io.github.m0nkeysan.gamekeeper.core.utils.format
 import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
 import org.jetbrains.compose.resources.stringResource
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import io.github.m0nkeysan.gamekeeper.generated.resources.counter_format_player_count
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_rank_first_place
 import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_rank_format
@@ -34,8 +32,8 @@ fun GameSummaryRow(
     game: GameSummary,
     modifier: Modifier = Modifier
 ) {
-    val dateFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
-    val date = dateFormat.format(Date(game.completedAt))
+    // Simple date formatting: Convert timestamp to date string
+    val date = formatGameDate(game.completedAt)
     
     val cardColor = if (game.isWinner) {
         GameColors.Secondary.copy(alpha = 0.1f)
@@ -74,7 +72,7 @@ fun GameSummaryRow(
             
             // Player count
              Text(
-                 text = String.format(stringResource(Res.string.counter_format_player_count), game.playerCount),
+                 text = stringResource(Res.string.counter_format_player_count, game.playerCount),
                  style = MaterialTheme.typography.bodySmall,
                  color = MaterialTheme.colorScheme.onSurfaceVariant,
                  modifier = Modifier.padding(horizontal = 8.dp)
@@ -95,7 +93,7 @@ fun GameSummaryRow(
                     1 -> stringResource(Res.string.yahtzee_rank_first_place)
                     2 -> stringResource(Res.string.yahtzee_rank_second_place)
                     3 -> stringResource(Res.string.yahtzee_rank_third_place)
-                    else -> String.format(stringResource(Res.string.yahtzee_rank_format), game.rank)
+                    else -> stringResource(Res.string.yahtzee_rank_format, game.rank)
                 }
                 
                 Text(
@@ -113,5 +111,64 @@ fun GameSummaryRow(
                 )
             }
         }
+    }
+}
+
+/**
+ * Formats a timestamp (milliseconds) to a readable date string.
+ * Example: 1704067200000 -> "Jan 1, 2024"
+ */
+private fun formatGameDate(timestamp: Long): String {
+    val seconds = timestamp / 1000
+    val minutes = seconds / 60
+    val hours = minutes / 60
+    val days = hours / 24
+    
+    // Reference date: January 1, 1970 (Unix epoch)
+    val daysSinceEpoch = days.toInt()
+    
+    // Simple algorithm to calculate year, month, day
+    var year = 1970
+    var remainingDays = daysSinceEpoch
+    
+    // Calculate year
+    while (remainingDays >= daysInYear(year)) {
+        remainingDays -= daysInYear(year)
+        year++
+    }
+    
+    // Calculate month
+    var month = 1
+    while (remainingDays >= daysInMonth(month, year)) {
+        remainingDays -= daysInMonth(month, year)
+        month++
+    }
+    
+    val day = remainingDays + 1
+    
+    val monthName = when (month) {
+        1 -> "Jan"; 2 -> "Feb"; 3 -> "Mar"; 4 -> "Apr"
+        5 -> "May"; 6 -> "Jun"; 7 -> "Jul"; 8 -> "Aug"
+        9 -> "Sep"; 10 -> "Oct"; 11 -> "Nov"; 12 -> "Dec"
+        else -> "???"
+    }
+    
+    return "$monthName $day, $year"
+}
+
+private fun isLeapYear(year: Int): Boolean {
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+}
+
+private fun daysInYear(year: Int): Int {
+    return if (isLeapYear(year)) 366 else 365
+}
+
+private fun daysInMonth(month: Int, year: Int): Int {
+    return when (month) {
+        1, 3, 5, 7, 8, 10, 12 -> 31
+        4, 6, 9, 11 -> 30
+        2 -> if (isLeapYear(year)) 29 else 28
+        else -> 0
     }
 }

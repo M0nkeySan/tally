@@ -69,12 +69,15 @@ private fun getCategoryColorByAverage(category: YahtzeeCategory, avg: Double): C
  * Format average score for display
  */
 fun formatAverage(value: Double): String {
-    return String.format("%.1f", value)
+    val rounded = (value * 10).toInt() / 10.0
+    val intPart = rounded.toInt()
+    val decimalPart = ((rounded - intPart) * 10).toInt()
+    return "$intPart.$decimalPart"
 }
 
 /**
  * Format percentage for display
  */
 fun formatPercentage(value: Double): String {
-    return String.format("%.0f%%", value)
+    return "${value.toInt()}%"
 }

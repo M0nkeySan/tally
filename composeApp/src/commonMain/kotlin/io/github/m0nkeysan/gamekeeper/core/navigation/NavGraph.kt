@@ -2,11 +2,10 @@ package io.github.m0nkeysan.gamekeeper.core.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import io.github.m0nkeysan.gamekeeper.ui.screens.common.HomeNavigationTemplate
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterHistoryScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.counter.CounterScreen
@@ -16,6 +15,7 @@ import io.github.m0nkeysan.gamekeeper.ui.screens.dice.DiceRollerScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.fingerselector.FingerSelectorScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.player.PlayerSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.settings.SettingsScreen
+import io.github.m0nkeysan.gamekeeper.ui.screens.settings.SettingsViewModel
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameCreationScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotGameSelectionScreen
 import io.github.m0nkeysan.gamekeeper.ui.screens.tarot.TarotRoundAdditionScreen
@@ -33,158 +33,129 @@ fun GameNavGraph() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route
+        startDestination = HomeRoute
     ) {
-        composable(route = Screen.Home.route) {
-            HomeNavigationTemplate(onNavigateTo = { route -> navController.navigate(route) })
+        composable<HomeRoute> {
+            HomeNavigationTemplate(onNavigateTo = { route -> navController.navigate(route)  })
         }
 
-        composable(route = Screen.FingerSelector.route) {
+        composable<FingerSelectorRoute> {
             FingerSelectorScreen(onBack = { navController.popBackStack() })
         }
 
-        // Tarot
-        composable(route = Screen.Tarot.route) {
+        // --- Tarot Section ---
+        composable<TarotRoute> {
             TarotGameSelectionScreen(
                 onBack = { navController.popBackStack() },
-                onCreateNewGame = { navController.navigate(Screen.TarotCreation.route) },
+                onCreateNewGame = { navController.navigate(TarotCreationRoute) },
                 onSelectGame = { gameId ->
-                    navController.navigate(
-                        Screen.TarotScoring.createRoute(
-                            gameId
-                        )
-                    )
+                    navController.navigate(TarotScoringRoute(gameId))
                 }
             )
         }
 
-        composable(route = Screen.TarotCreation.route) {
+        composable<TarotCreationRoute> {
             TarotGameCreationScreen(
                 onBack = { navController.popBackStack() },
                 onGameCreated = { gameId ->
-                    navController.navigate(Screen.TarotScoring.createRoute(gameId)) {
-                        popUpTo(Screen.Tarot.route)
+                    navController.navigate(TarotScoringRoute(gameId)) {
+                        popUpTo(TarotRoute)
                     }
                 }
             )
         }
 
-        composable(
-            route = Screen.TarotScoring.route,
-            arguments = listOf(navArgument("gameId") { type = NavType.StringType })
-        ) { entry ->
-            val gameId = entry.arguments?.getString("gameId") ?: ""
+        composable<TarotScoringRoute> { entry ->
+            val route = entry.toRoute<TarotScoringRoute>()
+
             TarotScoringScreen(
-                gameId = gameId,
+                gameId = route.gameId,
                 onBack = { navController.popBackStack() },
                 onAddNewRound = { roundId ->
-                    navController.navigate(Screen.TarotRoundAddition.createRoute(gameId, roundId))
+                    navController.navigate(TarotRoundAdditionRoute(route.gameId, roundId))
                 },
                 onNavigateToStatistics = { statsGameId ->
-                    navController.navigate(Screen.TarotStatistics.createRoute(statsGameId))
+                    navController.navigate(TarotStatisticsRoute(statsGameId))
                 }
             )
         }
 
-        composable(
-            route = Screen.TarotRoundAddition.route,
-            arguments = listOf(
-                navArgument("gameId") { type = NavType.StringType },
-                navArgument("roundId") {
-                    type = NavType.StringType
-                    nullable = true
-                }
-            )
-        ) { entry ->
-            val gameId = entry.arguments?.getString("gameId") ?: ""
-            val roundId = entry.arguments?.getString("roundId")
+        composable<TarotRoundAdditionRoute> { entry ->
+            val route = entry.toRoute<TarotRoundAdditionRoute>()
 
             TarotRoundAdditionScreen(
-                gameId = gameId,
-                roundId = roundId,
+                gameId = route.gameId,
+                roundId = route.roundId,
                 onBack = { navController.popBackStack() },
                 onRoundAdded = { navController.popBackStack() }
             )
         }
 
-        composable(
-            route = Screen.TarotStatistics.route,
-            arguments = listOf(navArgument("gameId") { type = NavType.StringType })
-        ) { entry ->
-            val gameId = entry.arguments?.getString("gameId") ?: ""
+        composable<TarotStatisticsRoute> { entry ->
+            val route = entry.toRoute<TarotStatisticsRoute>()
             TarotStatisticsScreen(
-                gameId = gameId,
+                gameId = route.gameId,
                 onBack = { navController.popBackStack() }
             )
         }
 
-        // Yahtzee
-        composable(route = Screen.Yahtzee.route) {
+        // --- Yahtzee Section ---
+        composable<YahtzeeRoute> {
             YahtzeeGameSelectionScreen(
                 onBack = { navController.popBackStack() },
-                onCreateNewGame = { navController.navigate(Screen.YahtzeeCreation.route) },
+                onCreateNewGame = { navController.navigate(YahtzeeCreationRoute) },
                 onSelectGame = { gameId ->
-                    navController.navigate(
-                        Screen.YahtzeeScoring.createRoute(
-                            gameId
-                        )
-                    )
+                    navController.navigate(YahtzeeScoringRoute(gameId))
                 },
-                onNavigateToStatistics = { 
-                    navController.navigate(Screen.YahtzeeStatistics.route)
+                onNavigateToStatistics = {
+                    navController.navigate(YahtzeeStatisticsRoute)
                 }
             )
         }
 
-        composable(route = Screen.YahtzeeCreation.route) {
+        composable<YahtzeeCreationRoute> {
             YahtzeeGameCreationScreen(
                 onBack = { navController.popBackStack() },
                 onGameCreated = { gameId ->
-                    navController.navigate(Screen.YahtzeeScoring.createRoute(gameId)) {
-                        popUpTo(Screen.Yahtzee.route)
+                    navController.navigate(YahtzeeScoringRoute(gameId)) {
+                        popUpTo(YahtzeeRoute)
                     }
                 }
             )
         }
 
-        composable(
-            route = Screen.YahtzeeScoring.route,
-            arguments = listOf(navArgument("gameId") { type = NavType.StringType })
-        ) { entry ->
-            val gameId = entry.arguments?.getString("gameId") ?: ""
+        composable<YahtzeeScoringRoute> { entry ->
+            val route = entry.toRoute<YahtzeeScoringRoute>()
             YahtzeeScoringScreen(
-                gameId = gameId,
+                gameId = route.gameId,
                 onBack = { navController.popBackStack() },
                 onGameFinished = {
-                    navController.navigate(Screen.YahtzeeSummary.createRoute(gameId)) {
-                        popUpTo(Screen.Yahtzee.route)
+                    navController.navigate(YahtzeeSummaryRoute(route.gameId)) {
+                        popUpTo(YahtzeeRoute)
                     }
                 }
             )
         }
 
-        composable(
-            route = Screen.YahtzeeSummary.route,
-            arguments = listOf(navArgument("gameId") { type = NavType.StringType })
-        ) { entry ->
-            val gameId = entry.arguments?.getString("gameId") ?: ""
+        composable<YahtzeeSummaryRoute> { entry ->
+            val route = entry.toRoute<YahtzeeSummaryRoute>()
             YahtzeeSummaryScreen(
-                gameId = gameId,
-                onHome = { navController.popBackStack(Screen.Yahtzee.route, inclusive = false) }
+                gameId = route.gameId,
+                onHome = { navController.popBackStack(YahtzeeRoute, inclusive = false) }
             )
         }
 
-        composable(route = Screen.YahtzeeStatistics.route) {
+        composable<YahtzeeStatisticsRoute> {
             YahtzeeStatisticsScreen(
                 onBack = { navController.popBackStack() }
             )
         }
 
-        // Counter
-        composable(route = Screen.Counter.route) { entry ->
-            val viewModel: CounterViewModel = viewModel()
-
+        // --- Counter Section ---
+        composable<CounterRoute> { entry ->
+            val viewModel: CounterViewModel = viewModel { CounterViewModel() }
             val savedState = entry.savedStateHandle
+
             val resultType = savedState.get<String>("result_type")
 
             if (resultType != null) {
@@ -204,32 +175,21 @@ fun GameNavGraph() {
             CounterScreen(
                 onBack = { navController.popBackStack() },
                 onEditCounter = { id, name, count, color ->
-                    navController.navigate(Screen.EditCounter.createRoute(id, name, count, color))
+                    navController.navigate(EditCounterRoute(id, name, count, color))
                 },
-                onNavigateToHistory = { navController.navigate(Screen.History.route) },
+                onNavigateToHistory = { navController.navigate(HistoryRoute) },
                 viewModel = viewModel
             )
         }
 
-        composable(
-            route = Screen.EditCounter.route,
-            arguments = listOf(
-                navArgument("id") { type = NavType.StringType },
-                navArgument("name") { type = NavType.StringType },
-                navArgument("count") { type = NavType.IntType },
-                navArgument("color") { type = NavType.LongType }
-            )
-        ) { entry ->
-            val id = entry.arguments?.getString("id") ?: ""
-            val name = entry.arguments?.getString("name") ?: ""
-            val count = entry.arguments?.getInt("count") ?: 0
-            val color = entry.arguments?.getLong("color") ?: 0L
+        composable<EditCounterRoute> { entry ->
+            val route = entry.toRoute<EditCounterRoute>()
 
             EditCounterScreen(
-                id = id,
-                initialName = name,
-                initialCount = count,
-                initialColor = color,
+                id = route.id,
+                initialName = route.name,
+                initialCount = route.count,
+                initialColor = route.color,
                 onBack = { navController.popBackStack() },
                 onSave = { updatedId, updatedName, updatedCount, updatedColor ->
                     navController.previousBackStackEntry?.savedStateHandle?.apply {
@@ -251,28 +211,27 @@ fun GameNavGraph() {
             )
         }
 
-        composable(route = Screen.History.route) {
+        composable<HistoryRoute> {
             CounterHistoryScreen(
                 onBackPressed = { navController.popBackStack() }
             )
         }
 
-        composable(route = Screen.Players.route) {
+        composable<PlayersRoute> {
             PlayerSelectionScreen(
-                onBack = {
-                    navController.popBackStack()
-                }
+                onBack = { navController.popBackStack() }
             )
         }
 
-         composable(route = Screen.DiceRoller.route) {
-             DiceRollerScreen(
-                 onBack = { navController.popBackStack() }
-             )
-         }
+        composable<DiceRollerRoute> {
+            DiceRollerScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
 
-         composable(route = Screen.Settings.route) {
-             SettingsScreen()
-         }
-     }
+        composable<SettingsRoute> {
+            val viewModel: SettingsViewModel = viewModel { SettingsViewModel() }
+            SettingsScreen(viewModel = viewModel)
+        }
+    }
 }

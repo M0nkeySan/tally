@@ -1,6 +1,5 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.tarot
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
@@ -50,9 +49,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.core.model.ChelemType
 import io.github.m0nkeysan.gamekeeper.core.model.PoigneeLevel
 import io.github.m0nkeysan.gamekeeper.core.model.TarotBid
-import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_action_save
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_announce_petit_au_bout
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_announce_poignee
@@ -69,9 +66,10 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_section_bi
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_section_bouts
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_section_players
 import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_round_section_points
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.utils.parseColor
+import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TarotRoundAdditionScreen(
     gameId: String,
@@ -276,7 +274,7 @@ fun TarotRoundAdditionScreen(
                              FilterChip(
                                  selected = bouts == b,
                                  onClick = { bouts = b },
-                                 label = { Text(stringResource(Res.string.tarot_round_label_bouts).format(b)) },
+                                 label = { Text(stringResource(Res.string.tarot_round_label_bouts, b)) },
                                  modifier = Modifier.weight(1f)
                              )
                          }
@@ -330,8 +328,8 @@ fun TarotRoundAdditionScreen(
                         )
                         
                         Text(
-                             text = if (isWinner) stringResource(Res.string.tarot_round_contract_won).format((pAtqFloat - targetPoints).toInt())
-                                    else stringResource(Res.string.tarot_round_contract_lost).format((pAtqFloat - targetPoints).toInt()),
+                             text = if (isWinner) stringResource(Res.string.tarot_round_contract_won, (pAtqFloat - targetPoints).toInt())
+                                    else stringResource(Res.string.tarot_round_contract_lost, (pAtqFloat - targetPoints).toInt()),
                              style = MaterialTheme.typography.labelMedium,
                              fontWeight = FontWeight.Bold,
                              color = statusColor,

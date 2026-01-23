@@ -1,7 +1,7 @@
 package io.github.m0nkeysan.gamekeeper.core.model
 
+import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
 import kotlinx.serialization.Serializable
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @Serializable
@@ -14,7 +14,6 @@ data class Player(
     val deactivatedAt: Long? = null
 ) {
     companion object {
-        @OptIn(ExperimentalUuidApi::class)
         fun create(
             name: String,
             avatarColor: String = "#FF6200"
@@ -30,8 +29,6 @@ data class Player(
         }
     }
 }
-
-expect fun getCurrentTimeMillis(): Long
 
 /**
  * Sanitizes a player name by:

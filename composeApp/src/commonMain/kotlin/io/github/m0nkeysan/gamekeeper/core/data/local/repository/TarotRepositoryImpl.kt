@@ -1,6 +1,7 @@
 package io.github.m0nkeysan.gamekeeper.core.data.local.repository
 
-import androidx.room.withTransaction
+import androidx.room.immediateTransaction
+import androidx.room.useWriterConnection
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.GameDatabase
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.TarotDao
 import io.github.m0nkeysan.gamekeeper.core.data.local.database.TarotGameEntity
@@ -39,10 +40,11 @@ class TarotRepositoryImpl(
     
     override suspend fun deleteGame(game: TarotGame) {
         try {
-            // Use transaction for atomic delete operation
-            database.withTransaction {
-                dao.deleteRoundsForGame(game.id)
-                dao.deleteGame(game.toEntity())
+            database.useWriterConnection { transactor ->
+                transactor.immediateTransaction<Unit> {
+                    dao.deleteRoundsForGame(game.id)
+                    dao.deleteGame(game.toEntity())
+                }
             }
         } catch (e: Exception) {
             throw Exception("Failed to delete Tarot game: ${e.message}", e)

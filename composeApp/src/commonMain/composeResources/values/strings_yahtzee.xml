@@ -5,18 +5,18 @@
     <string name="yahtzee_scoring_turn_indicator">●</string>
     <string name="yahtzee_scoring_fallback_name">Unknown</string>
     <string name="yahtzee_scoring_cd_dropdown">Select player dropdown</string>
-    <string name="yahtzee_scoring_total_format">Total: %d</string>
+    <string name="yahtzee_scoring_total_format">Total: %1$d</string>
     <string name="yahtzee_scoring_cd_next">Next Player</string>
     <string name="yahtzee_scoring_turn_label">Your Turn</string>
-    <string name="yahtzee_scoring_viewing_label">Viewing %s\'s card</string>
+    <string name="yahtzee_scoring_viewing_label">Viewing %1$s's card</string>
     <string name="yahtzee_section_upper">Upper Section</string>
     <string name="yahtzee_section_lower">Lower Section</string>
-    <string name="yahtzee_dialog_select_score">Select score for %s</string>
-    <string name="yahtzee_dialog_enter_score">Enter score for %s</string>
+    <string name="yahtzee_dialog_select_score">Select score for %1$s</string>
+    <string name="yahtzee_dialog_enter_score">Enter score for %1$s</string>
     <string name="yahtzee_placeholder_dice_sum">Sum of dice</string>
     <string name="yahtzee_error_score_too_high">Score cannot be higher than 30</string>
     <string name="yahtzee_label_upper_bonus">Upper Bonus (63+)</string>
-    <string name="yahtzee_label_bonus_needed">-%d</string>
+    <string name="yahtzee_label_bonus_needed">-%1$d</string>
     <string name="yahtzee_label_bonus_earned">+35</string>
     <string name="yahtzee_label_total_score">TOTAL SCORE</string>
     <string name="yahtzee_game_title">Yahtzee Games</string>
@@ -97,26 +97,26 @@
 
     <!-- Format Strings -->
     <string name="yahtzee_format_wins">%1$s (%2$s)</string>
-    <string name="yahtzee_format_yahtzee_rate">%s per game</string>
+    <string name="yahtzee_format_yahtzee_rate">%1$s per game</string>
     <string name="yahtzee_format_active_player">%1$s (%2$d games)</string>
     <string name="yahtzee_format_high_score">%1$d by %2$s</string>
     <string name="yahtzee_format_most_yahtzees">%1$d by %2$s</string>
-    <string name="yahtzee_format_player_count">%d players</string>
+    <string name="yahtzee_format_player_count">%1$d players</string>
     <string name="yahtzee_format_luckiest_player">%1$s (%2$s/game)</string>
     <string name="yahtzee_format_category_avg">%1$s (%2$s)</string>
-    <string name="yahtzee_format_winner_score">Winner: %s</string>
+    <string name="yahtzee_format_winner_score">Winner: %1$s</string>
 
     <!-- Rank Indicators -->
     <string name="yahtzee_rank_first">🥇</string>
     <string name="yahtzee_rank_second">🥈</string>
     <string name="yahtzee_rank_third">🥉</string>
-    <string name="yahtzee_rank_format">#%d</string>
+    <string name="yahtzee_rank_format">#%1$d</string>
     <string name="yahtzee_rank_first_place">🏆 1st</string>
     <string name="yahtzee_rank_second_place">🥈 2nd</string>
     <string name="yahtzee_rank_third_place">🥉 3rd</string>
 
     <!-- Error Messages -->
-    <string name="yahtzee_error_load_failed">Failed to load: %s</string>
-    <string name="yahtzee_error_stats_failed">Failed to load statistics: %s</string>
-    <string name="yahtzee_error_global_failed">Failed to load global statistics: %s</string>
+    <string name="yahtzee_error_load_failed">Failed to load: %1$s</string>
+    <string name="yahtzee_error_stats_failed">Failed to load statistics: %1$s</string>
+    <string name="yahtzee_error_global_failed">Failed to load global statistics: %1$s</string>
 </resources>

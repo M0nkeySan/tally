@@ -16,7 +16,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -98,7 +97,6 @@ import org.jetbrains.compose.resources.stringResource
  * )
  * ```
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameSelectionTemplate(
     title: String,

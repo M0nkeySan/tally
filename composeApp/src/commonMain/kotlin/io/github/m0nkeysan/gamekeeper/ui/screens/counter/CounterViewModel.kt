@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.gamekeeper.core.model.Counter
-import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
+import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-import kotlin.uuid.ExperimentalUuidApi
 
 data class CounterItem(
     val id: String,
@@ -104,7 +103,6 @@ class CounterViewModel : ViewModel() {
         }
     }
 
-    @OptIn(ExperimentalUuidApi::class)
     fun addRandomCounter() {
         val randomName = "${funnyNames.random()} ${Random.nextInt(1, 99)}"
         val color = generateRandomPastelColor()
@@ -168,10 +166,20 @@ class CounterViewModel : ViewModel() {
 
     private fun generateRandomPastelColor(): Long {
         val hue = Random.nextFloat() * 360f
-        val saturation = 0.4f + Random.nextFloat() * 0.2f 
-        val value = 0.9f + Random.nextFloat() * 0.1f 
+        val saturation = 0.4f + Random.nextFloat() * 0.2f
+        val value = 0.9f + Random.nextFloat() * 0.1f
+
+        // Ensure you are using the Compose Color class correctly
         val color = Color.hsv(hue, saturation, value)
-        return (0xFF000000 or (color.red * 255).toLong().shl(16) or (color.green * 255).toLong().shl(8) or (color.blue * 255).toLong())
+
+        // Safely convert to Long (ARGB format)
+        // Note: 0xFF000000L ensures we are working with Longs
+        val alpha = 0xFF000000L
+        val red = (color.red * 255).toLong().shl(16)
+        val green = (color.green * 255).toLong().shl(8)
+        val blue = (color.blue * 255).toLong()
+
+        return alpha or red or green or blue
     }
 
     fun incrementCount(playerId: String) {

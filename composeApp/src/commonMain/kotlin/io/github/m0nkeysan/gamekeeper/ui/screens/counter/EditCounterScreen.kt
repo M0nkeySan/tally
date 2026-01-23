@@ -14,7 +14,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,11 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.gamekeeper.GameIcons
 import io.github.m0nkeysan.gamekeeper.core.model.sanitizeCounterName
-import io.github.m0nkeysan.gamekeeper.ui.components.ColorSelectorRow
-import io.github.m0nkeysan.gamekeeper.ui.components.FieldLabel
-import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
-import io.github.m0nkeysan.gamekeeper.ui.components.parseColor
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_back
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_delete
@@ -55,9 +50,12 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.counter_edit_placehold
 import io.github.m0nkeysan.gamekeeper.generated.resources.counter_edit_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_delete_counter_message
 import io.github.m0nkeysan.gamekeeper.generated.resources.dialog_delete_counter_title
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.ui.components.ColorSelectorRow
+import io.github.m0nkeysan.gamekeeper.ui.components.FieldLabel
+import io.github.m0nkeysan.gamekeeper.ui.components.FlatTextField
+import io.github.m0nkeysan.gamekeeper.ui.utils.parseColor
+import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditCounterScreen(
     id: String,
@@ -75,7 +73,8 @@ fun EditCounterScreen(
 
     val selectedColorHex = remember(selectedColor) {
         val argb = selectedColor.toArgb()
-        String.format("#%06X", (0xFFFFFF and argb))
+        val hex = (0xFFFFFF and argb).toString(16).padStart(6, '0').uppercase()
+        "#$hex"
     }
 
     if (showDeleteDialog) {

@@ -47,19 +47,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
-import io.github.m0nkeysan.gamekeeper.ui.utils.colorToHSV
-import io.github.m0nkeysan.gamekeeper.ui.utils.hsvToColor
-import org.jetbrains.compose.resources.stringResource
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_save
 import io.github.m0nkeysan.gamekeeper.generated.resources.color_picker_cd
 import io.github.m0nkeysan.gamekeeper.generated.resources.color_picker_dialog_title
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
+import io.github.m0nkeysan.gamekeeper.ui.theme.GameColors
+import io.github.m0nkeysan.gamekeeper.ui.utils.colorToHSV
+import io.github.m0nkeysan.gamekeeper.ui.utils.hsvToColor
+import io.github.m0nkeysan.gamekeeper.ui.utils.parseColor
+import org.jetbrains.compose.resources.stringResource
+import kotlin.math.PI
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 val DEFAULT_COLOR_PRESETS = listOf(
     "#F44336", // Red
@@ -248,7 +250,7 @@ fun ColorPickerDialog(
          confirmButton = {
              TextButton(onClick = {
                  val argb = currentColor.toArgb()
-                 val hex = String.format("#%06X", (0xFFFFFF and argb))
+                 val hex = (0xFFFFFF and argb).toString(16).padStart(6, '0').uppercase()
                  onColorSelected(hex)
              }) { Text(stringResource(Res.string.action_save)) }
          },
@@ -279,7 +281,8 @@ fun ColorWheel(
                     val dy = position.y - centerY
 
                     // Calculate Angle (Hue)
-                    val angle = (Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())) + 360) % 360
+                    val angleRad = atan2(dy.toDouble(), dx.toDouble())
+                    val angle = (angleRad * (180.0 / PI) + 360) % 360
 
                     // Calculate Distance (Saturation)
                     val maxRadius = size.width / 2f
@@ -295,7 +298,8 @@ fun ColorWheel(
                     val centerY = size.height / 2f
                     val dx = offset.x - centerX
                     val dy = offset.y - centerY
-                    val angle = (Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())) + 360) % 360
+                    val angleRad = atan2(dy.toDouble(), dx.toDouble())
+                    val angle = (angleRad * (180.0 / PI) + 360) % 360
                     val maxRadius = size.width / 2f
                     val distance = sqrt(dx * dx + dy * dy)
                     val sat = (distance / maxRadius).coerceIn(0f, 1f)
@@ -330,7 +334,7 @@ fun ColorWheel(
             drawCircle(brush = radialGradient, radius = radius, center = center)
 
             // 3. Selection Indicator
-            val angleRad = Math.toRadians(hue.toDouble())
+            val angleRad = hue.toDouble() * (PI / 180.0)
             val satRadius = saturation * radius
             val selectorX = center.x + satRadius * cos(angleRad).toFloat()
             val selectorY = center.y + satRadius * sin(angleRad).toFloat()
@@ -364,8 +368,6 @@ fun BrightnessSlider(
     }
 
     BoxWithConstraints(modifier = modifier) {
-        val width = maxWidth
-
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -403,14 +405,6 @@ fun BrightnessSlider(
     }
 }
 
-// Helper (Reused from your code)
-fun parseColor(colorHex: String): Color {
-    return try {
-        Color(0xFF000000 or colorHex.removePrefix("#").toLong(16))
-    } catch (e: Exception) {
-        Color.Gray
-    }
-}
 @Preview(showBackground = true)
 @Composable
 private fun ColorSelectorRowPreview() {

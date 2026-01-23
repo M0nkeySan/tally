@@ -1,7 +1,7 @@
 package io.github.m0nkeysan.gamekeeper.ui.utils
 
 import androidx.compose.ui.graphics.Color
-import kotlin.math.*
+import kotlin.math.abs
 import kotlin.random.Random
 
 /**
@@ -77,4 +77,12 @@ fun hsvToColor(hsv: FloatArray): Color {
 fun generateRandomHexColor(): String {
     val color = Random.nextInt(0xFFFFFF)
     return "#${color.toString(16).padStart(6, '0')}"
+}
+
+fun parseColor(colorHex: String): Color {
+    return try {
+        Color(0xFF000000 or colorHex.removePrefix("#").toLong(16))
+    } catch (e: Exception) {
+        Color.Gray
+    }
 }

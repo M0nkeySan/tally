@@ -4,11 +4,10 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @Entity(tableName = "yahtzee_games")
-data class YahtzeeGameEntity @OptIn(ExperimentalUuidApi::class) constructor(
+data class YahtzeeGameEntity(
     @PrimaryKey
     val id: String = Uuid.random().toString(),
     val name: String,
@@ -30,7 +29,7 @@ data class YahtzeeGameEntity @OptIn(ExperimentalUuidApi::class) constructor(
         Index(value = ["gameId", "playerId"])
     ]
 )
-data class YahtzeeScoreEntity @OptIn(ExperimentalUuidApi::class) constructor(
+data class YahtzeeScoreEntity(
     @PrimaryKey
     val id: String = Uuid.random().toString(),
     val gameId: String,

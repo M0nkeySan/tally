@@ -32,7 +32,7 @@
     <string name="game_creation_tarot_name_default">Partie de Tarot</string>
     <string name="game_creation_field_game_name">Nom de la partie</string>
     <string name="game_deletion_dialog_tarot_title">Supprimer la partie</string>
-    <string name="game_deletion_dialog_tarot_message">Êtes-vous sûr de vouloir supprimer la partie '%s' ? Toutes les manches seront également supprimées.</string>
+    <string name="game_deletion_dialog_tarot_message">Êtes-vous sûr de vouloir supprimer la partie '%1$s' ? Toutes les manches seront également supprimées.</string>
     <string name="game_deletion_dialog_yahtzee_title">Supprimer la partie</string>
-    <string name="game_deletion_dialog_yahtzee_message">Êtes-vous sûr de vouloir supprimer '%s' ? Tous les scores seront perdus.</string>
+    <string name="game_deletion_dialog_yahtzee_message">Êtes-vous sûr de vouloir supprimer '%1$s' ? Tous les scores seront perdus.</string>
 </resources>

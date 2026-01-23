@@ -19,7 +19,7 @@
     <string name="tarot_stats_empty_rounds">No rounds played yet</string>
     <string name="tarot_stats_section_current_standings">Current Standings</string>
     <string name="tarot_stats_format_as_taker">%1$d/%2$d as taker</string>
-    <string name="tarot_stats_label_round">Round %d</string>
+    <string name="tarot_stats_label_round">Round %1$d</string>
     <string name="tarot_stats_contract_won">✓ Won</string>
     <string name="tarot_stats_contract_lost">✗ Lost</string>
     <string name="tarot_stats_section_taker_performance">Taker Performance 📊</string>
@@ -36,8 +36,8 @@
     <string name="tarot_scoring_round_title">Round %1$d - %2$s</string>
     <string name="tarot_scoring_round_details">%1$s • %2$d bouts • %3$d pts</string>
     <string name="tarot_scoring_announce_petit_au_bout">Petit au bout</string>
-    <string name="tarot_scoring_announce_poignee">Poignée %s</string>
-    <string name="tarot_scoring_announce_chelem">Chelem: %s</string>
+    <string name="tarot_scoring_announce_poignee">Poignée %1$s</string>
+    <string name="tarot_scoring_announce_chelem">Chelem: %1$s</string>
     <string name="tarot_scoring_game_title">Tarot Games</string>
 
     <!-- Tarot - Round Addition -->
@@ -47,12 +47,12 @@
     <string name="tarot_round_label_called_player">CALLED PLAYER</string>
     <string name="tarot_round_section_bid">BID</string>
     <string name="tarot_round_section_bouts">BOUTS</string>
-    <string name="tarot_round_label_bouts">%d Bouts</string>
+    <string name="tarot_round_label_bouts">%1$d Bouts</string>
     <string name="tarot_round_section_points">POINTS</string>
     <string name="tarot_round_field_attacker_score">Attacker</string>
     <string name="tarot_round_label_defense">DEFENSE</string>
-    <string name="tarot_round_contract_won">CONTRACT WON (+%d pts)</string>
-    <string name="tarot_round_contract_lost">CONTRACT LOST (%d pts)</string>
+    <string name="tarot_round_contract_won">CONTRACT WON (+%1$d pts)</string>
+    <string name="tarot_round_contract_lost">CONTRACT LOST (%1$d pts)</string>
     <string name="tarot_round_section_announces">ANNOUNCES</string>
     <string name="tarot_round_announce_petit_au_bout">Petit au bout</string>
     <string name="tarot_round_announce_poignee">Poignée</string>

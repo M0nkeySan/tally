@@ -1,9 +1,9 @@
 package io.github.m0nkeysan.gamekeeper.core.domain.engine
 
+import io.github.m0nkeysan.gamekeeper.core.model.ChelemType
 import io.github.m0nkeysan.gamekeeper.core.model.Player
 import io.github.m0nkeysan.gamekeeper.core.model.PoigneeLevel
 import io.github.m0nkeysan.gamekeeper.core.model.TarotBid
-import io.github.m0nkeysan.gamekeeper.core.model.ChelemType
 import io.github.m0nkeysan.gamekeeper.core.model.TarotRound
 import kotlin.math.absoluteValue
 
@@ -92,7 +92,7 @@ class TarotScoringEngine {
                         }
                     } else {
                         // With partner: taker gets 2x, partner gets 1x, others lose 1x
-                        val partnerUuid = calledPlayerId ?: takerPlayerId
+                        val partnerUuid = calledPlayerId
                         scores[takerPlayerId] = (scores[takerPlayerId] ?: 0) + (s * 2)
                         scores[partnerUuid] = (scores[partnerUuid] ?: 0) + s
                         players.forEach { p ->

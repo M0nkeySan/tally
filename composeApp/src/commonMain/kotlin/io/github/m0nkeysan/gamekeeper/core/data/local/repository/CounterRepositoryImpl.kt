@@ -6,11 +6,11 @@ import io.github.m0nkeysan.gamekeeper.core.domain.CounterHistoryStore
 import io.github.m0nkeysan.gamekeeper.core.domain.repository.CounterRepository
 import io.github.m0nkeysan.gamekeeper.core.model.Counter
 import io.github.m0nkeysan.gamekeeper.core.model.CounterChange
-import io.github.m0nkeysan.gamekeeper.core.model.getCurrentTimeMillis
+import io.github.m0nkeysan.gamekeeper.core.utils.getCurrentTimeMillis
 import io.github.m0nkeysan.gamekeeper.core.model.MergedCounterChange
+import io.github.m0nkeysan.gamekeeper.core.utils.UuidGenerator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.UUID
 
 class CounterRepositoryImpl(
     private val dao: PersistentCounterDao,
@@ -57,7 +57,7 @@ class CounterRepositoryImpl(
         newValue: Int
     ) {
         val change = CounterChange(
-            id = UUID.randomUUID().toString(),
+            id = UuidGenerator.randomUUID(),
             counterId = counterId,
             counterName = counterName,
             counterColor = counterColor,
@@ -77,7 +77,7 @@ class CounterRepositoryImpl(
         counterColor: Long
     ) {
         val change = CounterChange(
-            id = UUID.randomUUID().toString(),
+            id = UuidGenerator.randomUUID(),
             counterId = counterId,
             counterName = counterName,
             counterColor = counterColor,

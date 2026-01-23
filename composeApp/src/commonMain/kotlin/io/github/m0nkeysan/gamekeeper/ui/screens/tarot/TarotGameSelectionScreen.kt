@@ -31,7 +31,7 @@ fun TarotGameSelectionScreen(
          androidx.compose.material3.AlertDialog(
              onDismissRequest = { gameToDelete = null },
              title = { androidx.compose.material3.Text(stringResource(Res.string.game_deletion_dialog_tarot_title)) },
-             text = { androidx.compose.material3.Text(stringResource(Res.string.game_deletion_dialog_tarot_message).format(gameToDelete?.name ?: "")) },
+             text = { androidx.compose.material3.Text(stringResource(Res.string.game_deletion_dialog_tarot_message, gameToDelete?.name ?: "")) },
              confirmButton = {
                  androidx.compose.material3.TextButton(
                      onClick = {

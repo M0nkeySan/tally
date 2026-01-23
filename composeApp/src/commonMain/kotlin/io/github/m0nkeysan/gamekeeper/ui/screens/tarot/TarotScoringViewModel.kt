@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.gamekeeper.core.domain.engine.TarotScoringEngine
 import io.github.m0nkeysan.gamekeeper.core.model.*
 import io.github.m0nkeysan.gamekeeper.platform.PlatformRepositories
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +25,7 @@ class TarotScoringViewModel : ViewModel() {
     fun loadGame(gameId: String) {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     val game = repository.getGameById(gameId)
                     if (game == null) {
                         _state.update { it.copy(error = "Game not found") }
@@ -56,7 +55,6 @@ class TarotScoringViewModel : ViewModel() {
         }
     }
 
-    @OptIn(ExperimentalUuidApi::class)
     fun addRoundManual(
         roundId: String? = null,
         takerPlayerId: String,
@@ -103,7 +101,7 @@ class TarotScoringViewModel : ViewModel() {
                     score = result.totalScore
                 )
 
-                withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Default) {
                     repository.addRound(round, gameId)
                 }
                 _state.update { it.copy(error = null) }

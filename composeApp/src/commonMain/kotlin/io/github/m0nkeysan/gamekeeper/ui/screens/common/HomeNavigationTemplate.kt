@@ -1,9 +1,7 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -17,8 +15,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.gamekeeper.GameIcons
+import io.github.m0nkeysan.gamekeeper.core.navigation.Route
 import io.github.m0nkeysan.gamekeeper.generated.resources.Res
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_add_player
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
@@ -46,26 +46,16 @@ import org.jetbrains.compose.resources.stringResource
  * @param playerViewModel ViewModel for player selection state
  * @param modifier Optional layout modifier
  *
- * Example usage:
- * ```
- * HomeNavigationTemplate(
- *     onNavigateTo = { navController.navigate(it) },
- *     homeViewModel = viewModel(),
- *     playerViewModel = viewModel()
- * )
- * ```
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavigationTemplate(
-    onNavigateTo: (String) -> Unit,
+    onNavigateTo: (Route) -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = viewModel { HomeViewModel() },
     playerViewModel: PlayerSelectionViewModel = viewModel { PlayerSelectionViewModel() },
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
 
-    // Handle system back gesture - go to home screen when on players or settings tab
     BackHandler(enabled = selectedTab == 1 || selectedTab == 2) {
         selectedTab = 0
     }
