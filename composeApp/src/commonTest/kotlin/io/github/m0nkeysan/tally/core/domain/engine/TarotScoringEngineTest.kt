@@ -6,7 +6,6 @@ import io.github.m0nkeysan.tally.core.model.ChelemType
 import io.github.m0nkeysan.tally.core.model.Player
 import io.github.m0nkeysan.tally.core.model.TarotRound
 import kotlin.test.*
-import org.junit.jupiter.api.Nested
 
 /**
  * Comprehensive test suite for TarotScoringEngine
@@ -17,15 +16,14 @@ import org.junit.jupiter.api.Nested
  * - Multi-player score distribution (3, 4, and 5 players)
  * - Edge cases and boundary conditions
  * 
- * Uses BDD-style naming and nested classes for organization.
+ * Uses BDD-style naming with flat class structure for Kotlin Multiplatform compatibility.
  */
-class TarotScoringEngineTest {
-    
-    private val engine = TarotScoringEngine()
-    
-    // ============ Test Fixtures & Builders ============
-    
-    private fun createTestPlayer(
+
+private val engine = TarotScoringEngine()
+
+// ============ Test Fixtures & Builders ============
+
+private fun createTestPlayer(
         id: String = "player1",
         name: String = "Player 1"
     ): Player {
@@ -66,8 +64,10 @@ class TarotScoringEngineTest {
             score = score
         )
     }
-    
-    // ============ Original Tests (Preserved) ============
+
+// ============ Original Tests (Preserved) ============
+
+class TarotScoringEngineTest {
     
     @Test
     fun `calculate simple Prise win with 1 bout`() {
@@ -164,8 +164,8 @@ class TarotScoringEngineTest {
     
     // ============ New Comprehensive Tests ============
     
-    @Nested
-    inner class CalculateScore_BoundaryConditions {
+
+class CalculateScore_BoundaryConditions {
         
         @Test
         fun `wins contract with exactly required points for 0 bouts`() {
@@ -300,8 +300,8 @@ class TarotScoringEngineTest {
         }
     }
     
-    @Nested
-    inner class CalculateScore_AllBidTypes {
+
+class CalculateScore_AllBidTypes {
         
         @Test
         fun `calculates Prise with multiplier 1`() {
@@ -384,8 +384,8 @@ class TarotScoringEngineTest {
         }
     }
     
-    @Nested
-    inner class CalculateScore_BonusCombinations {
+
+class CalculateScore_BonusCombinations {
         
         @Test
         fun `combines Petit au bout with Poignee Simple`() {
@@ -500,8 +500,8 @@ class TarotScoringEngineTest {
         }
     }
     
-    @Nested
-    inner class CalculateScore_ChelemScenarios {
+
+class CalculateScore_ChelemScenarios {
         
         @Test
         fun `calculates announced chelem success bonus`() {
@@ -591,8 +591,8 @@ class TarotScoringEngineTest {
         }
     }
     
-    @Nested
-    inner class CalculateScore_PoigneeLevels {
+
+class CalculateScore_PoigneeLevels {
         
         @Test
         fun `applies Poignee Simple bonus of 20 points`() {
@@ -689,8 +689,8 @@ class TarotScoringEngineTest {
         }
     }
     
-    @Nested
-    inner class CalculateTotalScores_ThreePlayerGame {
+
+class CalculateTotalScores_ThreePlayerGame {
         
         @Test
         fun `distributes scores correctly for taker win`() {
@@ -761,8 +761,8 @@ class TarotScoringEngineTest {
         }
     }
     
-    @Nested
-    inner class CalculateTotalScores_FourPlayerGame {
+
+class CalculateTotalScores_FourPlayerGame {
         
         @Test
         fun `distributes scores correctly for taker win`() {
@@ -811,8 +811,8 @@ class TarotScoringEngineTest {
         }
     }
     
-    @Nested
-    inner class CalculateTotalScores_FivePlayerGame_Solo {
+
+class CalculateTotalScores_FivePlayerGame_Solo {
         
         @Test
         fun `distributes scores when taker plays solo with null partner`() {
@@ -890,8 +890,8 @@ class TarotScoringEngineTest {
         }
     }
     
-    @Nested
-    inner class CalculateTotalScores_FivePlayerGame_WithPartner {
+
+class CalculateTotalScores_FivePlayerGame_WithPartner {
         
         @Test
         fun `distributes scores when taker calls a partner`() {
@@ -969,8 +969,8 @@ class TarotScoringEngineTest {
         }
     }
     
-    @Nested
-    inner class CalculateTotalScores_EdgeCases {
+
+class CalculateTotalScores_EdgeCases {
         
         @Test
         fun `handles empty rounds list`() {

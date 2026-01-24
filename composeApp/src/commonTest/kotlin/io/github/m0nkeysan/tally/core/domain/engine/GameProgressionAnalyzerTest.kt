@@ -6,27 +6,12 @@ import io.github.m0nkeysan.tally.core.model.TarotRound
 import io.github.m0nkeysan.tally.core.model.ChelemType
 import io.github.m0nkeysan.tally.core.model.PoigneeLevel
 import kotlin.test.*
-import org.junit.jupiter.api.Nested
 
-/**
- * Comprehensive test suite for GameProgressionAnalyzer
- * 
- * Tests taker performance analysis including:
- * - Win/loss calculations
- * - Bid preferences and distributions
- * - Score averages
- * - Partner statistics (5-player games)
- * - Edge cases and thresholds
- * 
- * Uses BDD-style naming and nested classes for organization.
- */
-class GameProgressionAnalyzerTest {
-    
-    private val analyzer = GameProgressionAnalyzer()
-    
-    // ============ Test Fixtures & Builders ============
-    
-    private fun createTestPlayer(
+private val analyzer = GameProgressionAnalyzer()
+
+// ============ Test Fixtures & Builders ============
+
+private fun createTestPlayer(
         id: String = "player1",
         name: String = "Player 1"
     ): Player {
@@ -67,11 +52,10 @@ class GameProgressionAnalyzerTest {
             score = score
         )
     }
-    
-    // ============ CalculateTakerPerformance - Basic Metrics ============
-    
-    @Nested
-    inner class CalculateTakerPerformance_BasicMetrics {
+
+// ============ CalculateTakerPerformance - Basic Metrics ============
+
+class CalculateTakerPerformance_BasicMetrics {
         
         @Test
         fun `returns empty map when fewer than 3 rounds`() {
@@ -216,8 +200,8 @@ class GameProgressionAnalyzerTest {
     
     // ============ CalculateTakerPerformance - Bid Statistics ============
     
-    @Nested
-    inner class CalculateTakerPerformance_BidStatistics {
+
+class CalculateTakerPerformance_BidStatistics {
         
         @Test
         fun `identifies preferred bid as most frequently used`() {
@@ -305,8 +289,8 @@ class GameProgressionAnalyzerTest {
     
     // ============ CalculateTakerPerformance - Score Averages ============
     
-    @Nested
-    inner class CalculateTakerPerformance_ScoreAverages {
+
+class CalculateTakerPerformance_ScoreAverages {
         
         @Test
         fun `calculates average win points correctly`() {
@@ -423,8 +407,8 @@ class GameProgressionAnalyzerTest {
     
     // ============ CalculatePartnerStats Tests ============
     
-    @Nested
-    inner class CalculatePartnerStats {
+
+class CalculatePartnerStats {
         
         @Test
         fun `returns null when not 5 player game`() {
@@ -616,8 +600,8 @@ class GameProgressionAnalyzerTest {
     
     // ============ Edge Cases ============
     
-    @Nested
-    inner class EdgeCases {
+
+class GameProgressionAnalyzer_EdgeCases {
         
         @Test
         fun `handles empty player list`() {
@@ -691,4 +675,3 @@ class GameProgressionAnalyzerTest {
             assertEquals(3, result["p1"]?.takerRounds)
         }
     }
-}

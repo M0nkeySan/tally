@@ -6,7 +6,6 @@ import io.github.m0nkeysan.tally.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.tally.core.model.Player
 import io.github.m0nkeysan.tally.core.model.YahtzeeCategory
 import kotlin.test.*
-import org.junit.jupiter.api.Nested
 
 /**
  * Comprehensive test suite for YahtzeeStatisticsEngine
@@ -14,16 +13,15 @@ import org.junit.jupiter.api.Nested
  * Tests critical game logic for calculating player and global statistics,
  * including edge cases, boundary conditions, and integration scenarios.
  * 
- * Uses BDD-style naming and nested classes for organization.
+ * Uses BDD-style naming with flat class structure for Kotlin Multiplatform compatibility.
  */
-class YahtzeeStatisticsEngineTest {
 
-    // ============ Test Fixtures & Builders ============
+// ============ Test Fixtures & Builders ============
 
-    /**
-     * Creates a test Player with sensible defaults
-     */
-    private fun createTestPlayer(
+/**
+ * Creates a test Player with sensible defaults
+ */
+private fun createTestPlayer(
         id: String = "player1",
         name: String = "Player 1",
         avatarColor: String = "#FF6200",
@@ -85,59 +83,58 @@ class YahtzeeStatisticsEngineTest {
         )
     }
 
-    /**
-     * Creates a complete set of upper section scores
-     */
-    private fun createUpperSectionScores(
-        gameId: String = "game1",
-        playerId: String = "player1",
-        acesScore: Int = 3,
-        twosScore: Int = 6,
-        threesScore: Int = 9,
-        foursScore: Int = 12,
-        fivesScore: Int = 15,
-        sixesScore: Int = 18
-    ): List<YahtzeeScoreEntity> {
-        return listOf(
-            createTestScore(gameId = gameId, playerId = playerId, category = YahtzeeCategory.ACES, score = acesScore),
-            createTestScore(gameId = gameId, playerId = playerId, category = YahtzeeCategory.TWOS, score = twosScore),
-            createTestScore(gameId = gameId, playerId = playerId, category = YahtzeeCategory.THREES, score = threesScore),
-            createTestScore(gameId = gameId, playerId = playerId, category = YahtzeeCategory.FOURS, score = foursScore),
-            createTestScore(gameId = gameId, playerId = playerId, category = YahtzeeCategory.FIVES, score = fivesScore),
-            createTestScore(gameId = gameId, playerId = playerId, category = YahtzeeCategory.SIXES, score = sixesScore)
-        )
-    }
+/**
+ * Creates a complete set of upper section scores
+ */
+private fun createUpperSectionScores(
+    gameId: String = "game1",
+    playerId: String = "player1",
+    acesScore: Int = 3,
+    twosScore: Int = 6,
+    threesScore: Int = 9,
+    foursScore: Int = 12,
+    fivesScore: Int = 15,
+    sixesScore: Int = 18
+): List<YahtzeeScoreEntity> {
+    return listOf(
+        createTestScore(gameId = gameId, playerId = playerId, category = YahtzeeCategory.ACES, score = acesScore),
+        createTestScore(gameId = gameId, playerId = playerId, category = YahtzeeCategory.TWOS, score = twosScore),
+        createTestScore(gameId = gameId, playerId = playerId, category = YahtzeeCategory.THREES, score = threesScore),
+        createTestScore(gameId = gameId, playerId = playerId, category = YahtzeeCategory.FOURS, score = foursScore),
+        createTestScore(gameId = gameId, playerId = playerId, category = YahtzeeCategory.FIVES, score = fivesScore),
+        createTestScore(gameId = gameId, playerId = playerId, category = YahtzeeCategory.SIXES, score = sixesScore)
+    )
+}
 
-    /**
-     * Fake in-memory PlayerRepository for testing
-     * 
-     * NOTE: Currently commented out as it doesn't implement all required methods
-     * from PlayerRepository interface. Tests don't currently use this, but it's
-     * preserved for future expansion.
-     */
-    /*
-    private class FakePlayerRepository(
-        private val players: Map<String, Player> = emptyMap()
-    ) : PlayerRepository {
-        override suspend fun getAllPlayers(): List<Player> = players.values.toList()
-        override suspend fun getPlayerById(id: String): Player? = players[id]
-        override suspend fun getPlayersByIds(ids: List<String>): List<Player> = 
-            ids.mapNotNull { players[it] }
-        override suspend fun insertPlayer(player: Player) = Unit
-        override suspend fun updatePlayer(player: Player) = Unit
-        override suspend fun deletePlayer(id: String) = Unit
-        override suspend fun getActivePlayers(): List<Player> = 
-            players.values.filter { it.isActive }
-        override suspend fun deactivatePlayer(id: String) = Unit
-        override suspend fun reactivatePlayer(id: String) = Unit
-        override suspend fun searchPlayers(query: String): List<Player> = emptyList()
-    }
-    */
+/**
+ * Fake in-memory PlayerRepository for testing
+ * 
+ * NOTE: Currently commented out as it doesn't implement all required methods
+ * from PlayerRepository interface. Tests don't currently use this, but it's
+ * preserved for future expansion.
+ */
+/*
+private class FakePlayerRepository(
+    private val players: Map<String, Player> = emptyMap()
+) : PlayerRepository {
+    override suspend fun getAllPlayers(): List<Player> = players.values.toList()
+    override suspend fun getPlayerById(id: String): Player? = players[id]
+    override suspend fun getPlayersByIds(ids: List<String>): List<Player> = 
+        ids.mapNotNull { players[it] }
+    override suspend fun insertPlayer(player: Player) = Unit
+    override suspend fun updatePlayer(player: Player) = Unit
+    override suspend fun deletePlayer(id: String) = Unit
+    override suspend fun getActivePlayers(): List<Player> = 
+        players.values.filter { it.isActive }
+    override suspend fun deactivatePlayer(id: String) = Unit
+    override suspend fun reactivatePlayer(id: String) = Unit
+    override suspend fun searchPlayers(query: String): List<Player> = emptyList()
+}
+*/
 
-    // ============ CountYahtzees Tests ============
+// ============ CountYahtzees Tests ============
 
-    @Nested
-    inner class CountYahtzees {
+class CountYahtzees {
 
         @Test
         fun `returns 0 when no yahtzee scores exist`() {
@@ -284,9 +281,7 @@ class YahtzeeStatisticsEngineTest {
     }
 
     // ============ CalculateGameTotals Tests ============
-
-    @Nested
-    inner class CalculateGameTotals {
+class CalculateGameTotals {
 
         @Test
         fun `calculates base score without upper bonus`() {
@@ -428,9 +423,7 @@ class YahtzeeStatisticsEngineTest {
     }
 
     // ============ CalculateCategoryStats Tests ============
-
-    @Nested
-    inner class CalculateCategoryStats {
+class CalculateCategoryStats {
 
         @Test
         fun `calculates correct average for single category`() {
@@ -569,9 +562,7 @@ class YahtzeeStatisticsEngineTest {
     }
 
     // ============ CalculateUpperBonusRate Tests ============
-
-    @Nested
-    inner class CalculateUpperBonusRate {
+class CalculateUpperBonusRate {
 
         @Test
         fun `returns 0 percent when no games are finished`() {
@@ -691,9 +682,7 @@ class YahtzeeStatisticsEngineTest {
     }
 
     // ============ CalculateUpperSectionAverage and CalculateLowerSectionAverage Tests ============
-
-    @Nested
-    inner class SectionAverages {
+class SectionAverages {
 
         @Test
         fun `calculates correct average for upper section`() {
@@ -788,9 +777,7 @@ class YahtzeeStatisticsEngineTest {
     }
 
     // ============ CalculatePlayerStatistics Tests ============
-
-    @Nested
-    inner class CalculatePlayerStatistics {
+class CalculatePlayerStatistics {
 
         @Test
         fun `calculates total games correctly`() {
@@ -981,9 +968,7 @@ class YahtzeeStatisticsEngineTest {
     }
 
     // ============ Edge Cases & Integration Tests ============
-
-    @Nested
-    inner class EdgeCases {
+class YahtzeeStatisticsEngine_EdgeCases {
 
         @Test
         fun `handles empty player list`() {
@@ -1039,4 +1024,3 @@ class YahtzeeStatisticsEngineTest {
             assertEquals(0, result["game1"]) // player1 has no scores in game1
         }
     }
-}
