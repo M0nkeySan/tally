@@ -4,8 +4,8 @@
 
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue.svg)]()
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.0-purple.svg)]()
-[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.7.0-blue.svg)]()
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.3.0-purple.svg)]()
+[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.10.0-blue.svg)]()
 
 Tally is a Kotlin Multiplatform mobile application that brings together essential tools for game nights: scoring systems for popular games, dice rolling, player selection, and more. Built with Compose Multiplatform for a native experience on both Android and iOS.
 
@@ -116,7 +116,7 @@ Before building Tally, ensure you have the following installed:
 
 - **Android Studio:** Ladybug 2024.2.1 or newer ([Download](https://developer.android.com/studio))
 - **JDK:** 17 or higher ([Download](https://adoptium.net/))
-- **Kotlin:** 2.0.0+ (bundled with Android Studio)
+- **Kotlin:** 2.3.0+ (bundled with Android Studio)
 - **Gradle:** 8.14+ (included via Gradle wrapper)
 - **Xcode:** 15.0+ (macOS only, for iOS development) ([Download](https://developer.apple.com/xcode/))
 
