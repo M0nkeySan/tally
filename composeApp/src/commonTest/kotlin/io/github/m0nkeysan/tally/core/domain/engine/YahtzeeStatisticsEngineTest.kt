@@ -110,7 +110,12 @@ class YahtzeeStatisticsEngineTest {
 
     /**
      * Fake in-memory PlayerRepository for testing
+     * 
+     * NOTE: Currently commented out as it doesn't implement all required methods
+     * from PlayerRepository interface. Tests don't currently use this, but it's
+     * preserved for future expansion.
      */
+    /*
     private class FakePlayerRepository(
         private val players: Map<String, Player> = emptyMap()
     ) : PlayerRepository {
@@ -127,6 +132,7 @@ class YahtzeeStatisticsEngineTest {
         override suspend fun reactivatePlayer(id: String) = Unit
         override suspend fun searchPlayers(query: String): List<Player> = emptyList()
     }
+    */
 
     // ============ CountYahtzees Tests ============
 

@@ -112,7 +112,7 @@ object YahtzeeStatisticsEngine {
     /**
      * Calculate total score for each game a player participated in
      */
-    private fun calculateGameTotals(
+    internal fun calculateGameTotals(
         games: List<YahtzeeGameEntity>,
         allScores: List<YahtzeeScoreEntity>,
         playerId: String
@@ -133,7 +133,7 @@ object YahtzeeStatisticsEngine {
     /**
      * Calculate statistics for each scoring category
      */
-    private fun calculateCategoryStats(
+    internal fun calculateCategoryStats(
         playerScores: List<YahtzeeScoreEntity>,
         totalGames: Int
     ): Map<YahtzeeCategory, CategoryStat> {
@@ -173,7 +173,7 @@ object YahtzeeStatisticsEngine {
      * Score progression: 50 (1st), 150 (2nd), 250 (3rd), 350 (4th), 450 (5th)
      * Formula: (score - 50) / 100 + 1 for scores >= 50
      */
-    private fun countYahtzees(playerScores: List<YahtzeeScoreEntity>): Int {
+    internal fun countYahtzees(playerScores: List<YahtzeeScoreEntity>): Int {
         return playerScores
             .filter { it.category == YahtzeeCategory.YAHTZEE.name && it.score >= 50 }
             .sumOf { 
@@ -185,7 +185,7 @@ object YahtzeeStatisticsEngine {
     /**
      * Calculate percentage of games where upper bonus was achieved
      */
-    private fun calculateUpperBonusRate(
+    internal fun calculateUpperBonusRate(
         games: List<YahtzeeGameEntity>,
         allScores: List<YahtzeeScoreEntity>,
         playerId: String
@@ -209,7 +209,7 @@ object YahtzeeStatisticsEngine {
     /**
      * Calculate average upper section score
      */
-    private fun calculateUpperSectionAverage(playerScores: List<YahtzeeScoreEntity>): Double {
+    internal fun calculateUpperSectionAverage(playerScores: List<YahtzeeScoreEntity>): Double {
         val upperScores = playerScores.filter { 
             YahtzeeCategory.valueOf(it.category).isUpperSection()
         }
@@ -223,7 +223,7 @@ object YahtzeeStatisticsEngine {
     /**
      * Calculate average lower section score
      */
-    private fun calculateLowerSectionAverage(playerScores: List<YahtzeeScoreEntity>): Double {
+    internal fun calculateLowerSectionAverage(playerScores: List<YahtzeeScoreEntity>): Double {
         val lowerScores = playerScores.filter { 
             YahtzeeCategory.valueOf(it.category).isLowerSection()
         }
