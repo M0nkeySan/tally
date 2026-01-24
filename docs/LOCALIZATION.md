@@ -1,6 +1,6 @@
-# 🌍 GameKeeper Localization Guide
+# 🌍 Tally Localization Guide
 
-> Comprehensive guide to internationalization (i18n) implementation in GameKeeper
+> Comprehensive guide to internationalization (i18n) implementation in Tally
 
 ---
 
@@ -20,7 +20,7 @@
 
 ## 🌍 Overview
 
-GameKeeper implements a comprehensive internationalization (i18n) system that allows users to switch
+Tally implements a comprehensive internationalization (i18n) system that allows users to switch
 between languages at runtime without restarting the app.
 
 ### Supported Languages
@@ -361,9 +361,9 @@ content**.
 #### **Step 4: Import in Kotlin File**
 
 ```kotlin
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
-import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_new_feature_title
-import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_new_feature_description
+import io.github.m0nkeysan.tally.generated.resources.Res
+import io.github.m0nkeysan.tally.generated.resources.yahtzee_new_feature_title
+import io.github.m0nkeysan.tally.generated.resources.yahtzee_new_feature_description
 import org.jetbrains.compose.resources.stringResource
 ```
 
@@ -371,11 +371,11 @@ import org.jetbrains.compose.resources.stringResource
 
 ```kotlin
 // ✅ CORRECT - Individual imports
-import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_new_feature_title
-import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_new_feature_description
+import io.github.m0nkeysan.tally.generated.resources.yahtzee_new_feature_title
+import io.github.m0nkeysan.tally.generated.resources.yahtzee_new_feature_description
 
 // ❌ WRONG - Cannot import multiple at once
-import io.github.m0nkeysan.gamekeeper.generated.resources.{ yahtzee_new_feature_title, yahtzee_new_feature_description }
+import io.github.m0nkeysan.tally.generated.resources.{ yahtzee_new_feature_title, yahtzee_new_feature_description }
 ```
 
 #### **Step 5: Use in Composable**
@@ -592,7 +592,7 @@ private fun applySystemLocale(languageCode: String) {
 ```kotlin
 // In App.kt or root composable
 @Composable
-fun GameKeeperApp() {
+fun TallyApp() {
     val currentLocale by LocaleManager.instance.currentLocale.collectAsState()
 
     // Force full recomposition when locale changes
@@ -863,7 +863,7 @@ Text("Round Breakdown")
 **Step 2: Import and use**
 
 ```kotlin
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_section_round_breakdown
+import io.github.m0nkeysan.tally.generated.resources.tarot_stats_section_round_breakdown
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -902,7 +902,7 @@ Text("Round ${round.roundNumber}")
 **Step 2: Import and use**
 
 ```kotlin
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_label_round
+import io.github.m0nkeysan.tally.generated.resources.tarot_stats_label_round
 
 @Composable
 fun RoundHeader(round: TarotRound) {
@@ -940,7 +940,7 @@ Text("${ranking.roundsWonAsTaker}/${ranking.roundsPlayedAsTaker} as taker")
 **Step 2: Import and use**
 
 ```kotlin
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_format_as_taker
+import io.github.m0nkeysan.tally.generated.resources.tarot_stats_format_as_taker
 
 @Composable
 fun PlayerRanking(ranking: PlayerRanking) {
@@ -988,8 +988,8 @@ Perdu
 **Step 2: Import and use**
 
 ```kotlin
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_contract_won
-import io.github.m0nkeysan.gamekeeper.generated.resources.tarot_stats_contract_lost
+import io.github.m0nkeysan.tally.generated.resources.tarot_stats_contract_won
+import io.github.m0nkeysan.tally.generated.resources.tarot_stats_contract_lost
 
 @Composable
 fun RoundResult(round: TarotRound) {
@@ -1097,9 +1097,9 @@ name="yahtzee_category_large_straight">Grande suite
 // In YahtzeeScore.kt
 import androidx.compose.runtime.Composable
 import org.jetbrains.compose.resources.stringResource
-import io.github.m0nkeysan.gamekeeper.generated.resources.Res
-import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_category_aces
-import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_category_twos
+import io.github.m0nkeysan.tally.generated.resources.Res
+import io.github.m0nkeysan.tally.generated.resources.yahtzee_category_aces
+import io.github.m0nkeysan.tally.generated.resources.yahtzee_category_twos
 // ... import all category strings
 
 @Composable
@@ -1160,8 +1160,8 @@ name="cd_add_player">Ajouter un joueur
 ```
 
 ```kotlin
-import io.github.m0nkeysan.gamekeeper.generated.resources.cd_back
-import io.github.m0nkeysan.gamekeeper.generated.resources.cd_settings
+import io.github.m0nkeysan.tally.generated.resources.cd_back
+import io.github.m0nkeysan.tally.generated.resources.cd_settings
 
 @Composable
 fun TopBar(onBackClick: () -> Unit, onSettingsClick: () -> Unit) {
@@ -1206,7 +1206,7 @@ The UI needs to recompose when locale changes.
 ```kotlin
 // In App.kt or root composable
 @Composable
-fun GameKeeperApp() {
+fun TallyApp() {
     val currentLocale by LocaleManager.instance.currentLocale.collectAsState()
 
     // ✅ This should exist
@@ -1323,7 +1323,7 @@ Unresolved reference: yahtzee_stats_title
 **Solution:** Add the import:
 
 ```kotlin
-import io.github.m0nkeysan.gamekeeper.generated.resources.yahtzee_stats_title
+import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_title
 ```
 
 Remember: **Each string resource needs its own import line!**
@@ -1555,7 +1555,7 @@ Text(pluralStringResource(Res.plurals.player_count, count, count))  // ✅
 
 ## 🎓 Summary
 
-You now have a complete understanding of GameKeeper's localization system:
+You now have a complete understanding of Tally's localization system:
 
 ### ✅ Key Takeaways
 
@@ -1600,5 +1600,5 @@ You now have a complete understanding of GameKeeper's localization system:
 ---
 
 **Last Updated:** January 2026  
-**Project:** GameKeeper - Kotlin Multiplatform Compose  
+**Project:** Tally - Kotlin Multiplatform Compose  
 **Supported Languages:** English, French

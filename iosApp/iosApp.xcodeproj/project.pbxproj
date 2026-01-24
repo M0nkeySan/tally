@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9D115FFC2F2237EB009B4015 /* ComposeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D115FFB2F2237EB009B4015 /* ComposeApp.framework */; };
 		9D115FFD2F2237EB009B4015 /* ComposeApp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9D115FFB2F2237EB009B4015 /* ComposeApp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9DC793432F250F4D00A91926 /* ComposeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D115FFB2F2237EB009B4015 /* ComposeApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -62,6 +63,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D115FFC2F2237EB009B4015 /* ComposeApp.framework in Frameworks */,
+				9DC793432F250F4D00A91926 /* ComposeApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

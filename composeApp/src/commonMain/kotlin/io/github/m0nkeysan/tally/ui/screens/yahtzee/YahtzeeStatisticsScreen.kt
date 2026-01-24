@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.m0nkeysan.tally.core.model.YahtzeeGlobalStatistics
 import io.github.m0nkeysan.tally.core.model.YahtzeePlayerStatistics
 import io.github.m0nkeysan.tally.core.model.getLocalizedName
 import io.github.m0nkeysan.tally.generated.resources.Res
@@ -525,7 +526,7 @@ private fun RecentGamesCard(games: List<io.github.m0nkeysan.tally.core.model.Gam
 
 @Composable
 private fun GlobalStatisticsContent(
-    statistics: io.github.m0nkeysan.tally.core.model.YahtzeeGlobalStatistics
+    statistics: YahtzeeGlobalStatistics
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -562,7 +563,7 @@ private fun GlobalStatisticsContent(
 }
 
 @Composable
-private fun GlobalOverviewCard(statistics: io.github.m0nkeysan.tally.core.model.YahtzeeGlobalStatistics) {
+private fun GlobalOverviewCard(statistics: YahtzeeGlobalStatistics) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -656,7 +657,7 @@ private fun GlobalOverviewCard(statistics: io.github.m0nkeysan.tally.core.model.
 }
 
 @Composable
-private fun GlobalLeaderboardCard(statistics: io.github.m0nkeysan.tally.core.model.YahtzeeGlobalStatistics) {
+private fun GlobalLeaderboardCard(statistics: YahtzeeGlobalStatistics) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -758,7 +759,7 @@ private fun GlobalLeaderboardRow(entry: io.github.m0nkeysan.tally.core.model.Lea
 }
 
 @Composable
-private fun GlobalCategoryAnalysisCard(statistics: io.github.m0nkeysan.tally.core.model.YahtzeeGlobalStatistics) {
+private fun GlobalCategoryAnalysisCard(statistics: YahtzeeGlobalStatistics) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
