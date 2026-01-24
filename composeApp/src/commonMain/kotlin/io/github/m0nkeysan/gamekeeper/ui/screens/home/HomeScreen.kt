@@ -2,7 +2,6 @@ package io.github.m0nkeysan.gamekeeper.ui.screens.home
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,7 +18,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -76,7 +74,6 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel { HomeViewModel() }
 ) {
     val cardOrder by viewModel.cardOrder.collectAsState()
-    val isDarkTheme = isSystemInDarkTheme()
 
     var localCardOrder by remember { mutableStateOf<List<String>?>(null) }
 
@@ -109,11 +106,7 @@ fun HomeScreen(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
-                modifier = if (!isDarkTheme) {
-                    Modifier.shadow(elevation = 2.dp)
-                } else {
-                    Modifier
-                }
+                modifier = Modifier.shadow(elevation = 2.dp)
             )
         }
     ) { paddingValues ->
@@ -122,13 +115,6 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Add divider only in light mode
-            if (!isDarkTheme) {
-                HorizontalDivider(
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-            }
-            
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -136,127 +122,128 @@ fun HomeScreen(
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
 
-            LazyVerticalGrid(
-                state = gridState,
-                columns = GridCells.Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(bottom = 16.dp),
-                // Disable scrolling while dragging
-                userScrollEnabled = draggedItemId == null
-            ) {
-                itemsIndexed(
-                    items = features,
-                    key = { _, feature -> feature.id }
-                ) { _, feature ->
-                    val isDragging = draggedItemId == feature.id
-                    val scale by animateFloatAsState(if (isDragging) 1.05f else 1f)
-                    val elevation by animateDpAsState(if (isDragging) 8.dp else 0.dp)
-                    val zIndex = if (isDragging) 1f else 0f
+                LazyVerticalGrid(
+                    state = gridState,
+                    columns = GridCells.Fixed(2),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(bottom = 16.dp),
+                    // Disable scrolling while dragging
+                    userScrollEnabled = draggedItemId == null
+                ) {
+                    itemsIndexed(
+                        items = features,
+                        key = { _, feature -> feature.id }
+                    ) { _, feature ->
+                        val isDragging = draggedItemId == feature.id
+                        val scale by animateFloatAsState(if (isDragging) 1.05f else 1f)
+                        val elevation by animateDpAsState(if (isDragging) 8.dp else 0.dp)
+                        val zIndex = if (isDragging) 1f else 0f
 
-                    Box(
-                        modifier = Modifier
-                            .zIndex(zIndex)
-                            .graphicsLayer {
-                                if (isDragging) {
-                                    translationX = dragOffset.x
-                                    translationY = dragOffset.y
-                                }
-                            }
-                            .scale(scale)
-                            .shadow(elevation, shape = MaterialTheme.shapes.medium)
-                            .pointerInput(feature.id) {
-                                detectDragGesturesAfterLongPress(
-                                    onDragStart = {
-                                        draggedItemId = feature.id
-                                        localCardOrder = cardOrder.toList()
-                                        dragOffset = Offset.Zero
-                                    },
-                                    onDrag = { change, dragAmount ->
-                                        change.consume()
-                                        dragOffset += dragAmount
-
-                                        val currentList = localCardOrder
-                                            ?: return@detectDragGesturesAfterLongPress
-                                        val activeId =
-                                            draggedItemId ?: return@detectDragGesturesAfterLongPress
-
-                                        // 1. Find the current index of the item being dragged
-                                        val currentIdx = currentList.indexOf(activeId)
-                                        if (currentIdx == -1) return@detectDragGesturesAfterLongPress
-
-                                        // 2. Get layout info for all visible items
-                                        val visibleItems = gridState.layoutInfo.visibleItemsInfo
-                                        val currentItemInfo =
-                                            visibleItems.find { it.index == currentIdx }
-                                                ?: return@detectDragGesturesAfterLongPress
-
-                                        // 3. Calculate absolute center of the dragged item
-                                        // (Item Offset + Drag Offset + Size/2)
-                                        val currentItemCenter = Offset(
-                                            x = currentItemInfo.offset.x + dragOffset.x + (currentItemInfo.size.width / 2f),
-                                            y = currentItemInfo.offset.y + dragOffset.y + (currentItemInfo.size.height / 2f)
-                                        )
-
-                                        // 4. Check for overlap with other items
-                                        val targetItem = visibleItems.find { item ->
-                                            item.index != currentIdx &&
-                                                    currentItemCenter.x > item.offset.x &&
-                                                    currentItemCenter.x < (item.offset.x + item.size.width) &&
-                                                    currentItemCenter.y > item.offset.y &&
-                                                    currentItemCenter.y < (item.offset.y + item.size.height)
-                                        }
-
-                                        if (targetItem != null) {
-                                            val targetIdx = targetItem.index
-
-                                            // 5. Swap data
-                                            val newOrder = currentList.toMutableList()
-                                            val idToMove = newOrder.removeAt(currentIdx)
-                                            newOrder.add(targetIdx, idToMove)
-
-                                            localCardOrder = newOrder
-
-                                            // 6. Compensate Offset
-                                            // Calculate the physical distance between the two slots
-                                            val offsetDiff =
-                                                targetItem.offset - currentItemInfo.offset
-                                            dragOffset -= Offset(
-                                                offsetDiff.x.toFloat(),
-                                                offsetDiff.y.toFloat()
-                                            )
-                                        }
-                                    },
-                                    onDragEnd = {
-                                        // Commit changes to ViewModel
-                                        localCardOrder?.let { finalOrder ->
-                                            viewModel.updateCardOrder(finalOrder)
-                                        }
-                                        draggedItemId = null
-                                        localCardOrder = null
-                                        dragOffset = Offset.Zero
-                                    },
-                                    onDragCancel = {
-                                        draggedItemId = null
-                                        localCardOrder = null
-                                        dragOffset = Offset.Zero
+                        Box(
+                            modifier = Modifier
+                                .zIndex(zIndex)
+                                .graphicsLayer {
+                                    if (isDragging) {
+                                        translationX = dragOffset.x
+                                        translationY = dragOffset.y
                                     }
-                                )
-                            }
-                    ) {
-                        GameCard(
-                            icon = feature.icon,
-                            title = feature.title,
-                            description = feature.description,
-                            onClick = {
-                                if (draggedItemId == null) {
-                                    onNavigateTo(feature.route)
                                 }
-                            }
-                        )
+                                .scale(scale)
+                                .shadow(elevation, shape = MaterialTheme.shapes.medium)
+                                .pointerInput(feature.id) {
+                                    detectDragGesturesAfterLongPress(
+                                        onDragStart = {
+                                            draggedItemId = feature.id
+                                            localCardOrder = cardOrder.toList()
+                                            dragOffset = Offset.Zero
+                                        },
+                                        onDrag = { change, dragAmount ->
+                                            change.consume()
+                                            dragOffset += dragAmount
+
+                                            val currentList = localCardOrder
+                                                ?: return@detectDragGesturesAfterLongPress
+                                            val activeId =
+                                                draggedItemId
+                                                    ?: return@detectDragGesturesAfterLongPress
+
+                                            // 1. Find the current index of the item being dragged
+                                            val currentIdx = currentList.indexOf(activeId)
+                                            if (currentIdx == -1) return@detectDragGesturesAfterLongPress
+
+                                            // 2. Get layout info for all visible items
+                                            val visibleItems = gridState.layoutInfo.visibleItemsInfo
+                                            val currentItemInfo =
+                                                visibleItems.find { it.index == currentIdx }
+                                                    ?: return@detectDragGesturesAfterLongPress
+
+                                            // 3. Calculate absolute center of the dragged item
+                                            // (Item Offset + Drag Offset + Size/2)
+                                            val currentItemCenter = Offset(
+                                                x = currentItemInfo.offset.x + dragOffset.x + (currentItemInfo.size.width / 2f),
+                                                y = currentItemInfo.offset.y + dragOffset.y + (currentItemInfo.size.height / 2f)
+                                            )
+
+                                            // 4. Check for overlap with other items
+                                            val targetItem = visibleItems.find { item ->
+                                                item.index != currentIdx &&
+                                                        currentItemCenter.x > item.offset.x &&
+                                                        currentItemCenter.x < (item.offset.x + item.size.width) &&
+                                                        currentItemCenter.y > item.offset.y &&
+                                                        currentItemCenter.y < (item.offset.y + item.size.height)
+                                            }
+
+                                            if (targetItem != null) {
+                                                val targetIdx = targetItem.index
+
+                                                // 5. Swap data
+                                                val newOrder = currentList.toMutableList()
+                                                val idToMove = newOrder.removeAt(currentIdx)
+                                                newOrder.add(targetIdx, idToMove)
+
+                                                localCardOrder = newOrder
+
+                                                // 6. Compensate Offset
+                                                // Calculate the physical distance between the two slots
+                                                val offsetDiff =
+                                                    targetItem.offset - currentItemInfo.offset
+                                                dragOffset -= Offset(
+                                                    offsetDiff.x.toFloat(),
+                                                    offsetDiff.y.toFloat()
+                                                )
+                                            }
+                                        },
+                                        onDragEnd = {
+                                            // Commit changes to ViewModel
+                                            localCardOrder?.let { finalOrder ->
+                                                viewModel.updateCardOrder(finalOrder)
+                                            }
+                                            draggedItemId = null
+                                            localCardOrder = null
+                                            dragOffset = Offset.Zero
+                                        },
+                                        onDragCancel = {
+                                            draggedItemId = null
+                                            localCardOrder = null
+                                            dragOffset = Offset.Zero
+                                        }
+                                    )
+                                }
+                        ) {
+                            GameCard(
+                                icon = feature.icon,
+                                title = feature.title,
+                                description = feature.description,
+                                onClick = {
+                                    if (draggedItemId == null) {
+                                        onNavigateTo(feature.route)
+                                    }
+                                }
+                            )
+                        }
                     }
                 }
-            }
             }
         }
     }

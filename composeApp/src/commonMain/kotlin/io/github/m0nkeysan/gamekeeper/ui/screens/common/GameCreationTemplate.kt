@@ -1,6 +1,5 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -15,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -85,15 +83,14 @@ fun GameCreationTemplate(
     modifier: Modifier = Modifier
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val isDarkTheme = isSystemInDarkTheme()
-    
+
     // Show error in Snackbar
     LaunchedEffect(error) {
         if (error != null) {
             showErrorSnackbar(snackbarHostState, error)
         }
     }
-    
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -103,17 +100,16 @@ fun GameCreationTemplate(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
+                        Icon(
+                            GameIcons.ArrowBack,
+                            contentDescription = stringResource(Res.string.action_back)
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
-                modifier = if (!isDarkTheme) {
-                    Modifier.shadow(elevation = 2.dp)
-                } else {
-                    Modifier
-                }
+                modifier = Modifier.shadow(elevation = 2.dp)
             )
         },
         snackbarHost = {
@@ -136,7 +132,7 @@ fun GameCreationTemplate(
                     ) {
                         Text(stringResource(Res.string.action_cancel))
                     }
-                    
+
                     Button(
                         onClick = onCreate,
                         enabled = canCreate,
@@ -158,13 +154,6 @@ fun GameCreationTemplate(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Add divider only in light mode
-            if (!isDarkTheme) {
-                HorizontalDivider(
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-            }
-            
             Column(
                 modifier = Modifier
                     .fillMaxSize()

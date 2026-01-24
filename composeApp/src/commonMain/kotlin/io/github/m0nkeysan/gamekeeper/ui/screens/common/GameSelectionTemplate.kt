@@ -1,6 +1,5 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +18,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -50,6 +48,7 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.action_cancel
 import io.github.m0nkeysan.gamekeeper.generated.resources.action_delete_all
 import io.github.m0nkeysan.gamekeeper.generated.resources.cd_menu
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_create
+import io.github.m0nkeysan.gamekeeper.generated.resources.game_creation_action_create
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_delete_all_confirm
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_delete_all_title
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_cd_create
@@ -58,7 +57,6 @@ import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_cd_dele
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_cd_statistics
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_empty
 import io.github.m0nkeysan.gamekeeper.generated.resources.game_selection_loading
-import io.github.m0nkeysan.gamekeeper.generated.resources.game_creation_action_create
 import io.github.m0nkeysan.gamekeeper.ui.components.EmptyState
 import io.github.m0nkeysan.gamekeeper.ui.components.GameDisplay
 import io.github.m0nkeysan.gamekeeper.ui.components.GameKeeperSnackbarHost
@@ -117,7 +115,6 @@ fun GameSelectionTemplate(
     onNavigateToStatistics: (() -> Unit)? = null
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val isDarkTheme = isSystemInDarkTheme()
     var showMenu by remember { mutableStateOf(false) }
     var showDeleteAllDialog by remember { mutableStateOf(false) }
 
@@ -230,11 +227,7 @@ fun GameSelectionTemplate(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
-                modifier = if (!isDarkTheme) {
-                    Modifier.shadow(elevation = 2.dp)
-                } else {
-                    Modifier
-                }
+                modifier = Modifier.shadow(elevation = 2.dp)
             )
         },
         floatingActionButton = {
@@ -253,13 +246,6 @@ fun GameSelectionTemplate(
         }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
-            // Add divider only in light mode
-            if (!isDarkTheme) {
-                HorizontalDivider(
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-            }
-            
             when {
                 isLoading -> {
                     LoadingState(
@@ -283,42 +269,42 @@ fun GameSelectionTemplate(
                         contentPadding = PaddingValues(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                    items(games, key = { it.id }) { game ->
-                        val dismissState = rememberSwipeToDismissBoxState()
-                        LaunchedEffect(dismissState.currentValue) {
-                            if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
-                                onDeleteGame(game)
-                                dismissState.snapTo(SwipeToDismissBoxValue.Settled)
-                            }
-                        }
-
-                        SwipeToDismissBox(
-                            state = dismissState,
-                            enableDismissFromStartToEnd = false,
-                            backgroundContent = {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(horizontal = 20.dp),
-                                    contentAlignment = Alignment.CenterEnd
-                                ) {
-                                    Icon(
-                                        imageVector = GameIcons.Delete,
-                                        contentDescription = stringResource(Res.string.game_selection_cd_delete_game),
-                                        tint = MaterialTheme.colorScheme.error,
-                                        modifier = Modifier.size(32.dp)
-                                    )
+                        items(games, key = { it.id }) { game ->
+                            val dismissState = rememberSwipeToDismissBoxState()
+                            LaunchedEffect(dismissState.currentValue) {
+                                if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+                                    onDeleteGame(game)
+                                    dismissState.snapTo(SwipeToDismissBoxValue.Settled)
                                 }
                             }
-                        ) {
-                            GameSelectionCard(
-                                game = game,
-                                onClick = { onGameSelect(game.id) }
-                            )
+
+                            SwipeToDismissBox(
+                                state = dismissState,
+                                enableDismissFromStartToEnd = false,
+                                backgroundContent = {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(horizontal = 20.dp),
+                                        contentAlignment = Alignment.CenterEnd
+                                    ) {
+                                        Icon(
+                                            imageVector = GameIcons.Delete,
+                                            contentDescription = stringResource(Res.string.game_selection_cd_delete_game),
+                                            tint = MaterialTheme.colorScheme.error,
+                                            modifier = Modifier.size(32.dp)
+                                        )
+                                    }
+                                }
+                            ) {
+                                GameSelectionCard(
+                                    game = game,
+                                    onClick = { onGameSelect(game.id) }
+                                )
+                            }
                         }
                     }
                 }
-            }
             }
         }
     }

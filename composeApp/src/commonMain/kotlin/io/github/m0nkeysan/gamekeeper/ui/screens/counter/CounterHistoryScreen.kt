@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,8 +29,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -58,7 +60,7 @@ fun CounterHistoryScreen(
 ) {
     val mergedHistory by viewModel.mergedHistory.collectAsState()
     var showDeleteAllDialog by remember { mutableStateOf(false) }
-    
+
     // Delete all confirmation dialog
     if (showDeleteAllDialog) {
         AlertDialog(
@@ -83,11 +85,11 @@ fun CounterHistoryScreen(
             }
         )
     }
-    
+
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { 
+            CenterAlignedTopAppBar(
+                title = {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
@@ -95,7 +97,13 @@ fun CounterHistoryScreen(
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(stringResource(Res.string.counter_history_title))
+                            Text(
+                                text = stringResource(Res.string.counter_history_title),
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center
+                            )
                             Text(
                                 stringResource(Res.string.counter_history_subtitle),
                                 style = MaterialTheme.typography.labelSmall,
@@ -106,16 +114,23 @@ fun CounterHistoryScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackPressed) {
-                        Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
+                        Icon(
+                            GameIcons.ArrowBack,
+                            contentDescription = stringResource(Res.string.action_back)
+                        )
                     }
                 },
                 actions = {
                     if (mergedHistory.isNotEmpty()) {
                         IconButton(onClick = { showDeleteAllDialog = true }) {
-                            Icon(GameIcons.Delete, contentDescription = stringResource(Res.string.counter_history_cd_delete))
+                            Icon(
+                                GameIcons.Delete,
+                                contentDescription = stringResource(Res.string.counter_history_cd_delete)
+                            )
                         }
                     }
-                }
+                },
+                modifier = Modifier.shadow(elevation = 2.dp)
             )
         }
     ) { paddingValues ->
@@ -154,7 +169,7 @@ fun CounterHistoryScreen(
             }
         }
     }
-    
+
     BackHandler { onBackPressed() }
 }
 
@@ -192,7 +207,7 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                     )
             )
         }
-        
+
         // Counter name and info
         Column(
             modifier = Modifier
@@ -209,14 +224,14 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                     MaterialTheme.colorScheme.onSurface
                 }
             )
-            
+
             Text(
                 text = formatTimestamp(mergedChange.lastTimestamp),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        
+
         // Total delta display or stringResource(Res.string.counter_history_deleted_text) text
         Column(
             horizontalAlignment = Alignment.End
@@ -231,20 +246,20 @@ fun CounterHistoryItem(mergedChange: MergedCounterChange) {
                     color = MaterialTheme.colorScheme.outline
                 )
             } else {
-                 Text(
-                     text = "${if (mergedChange.totalDelta > 0) "+" else ""}${mergedChange.totalDelta}",
-                     style = MaterialTheme.typography.titleMedium.copy(
-                         fontWeight = FontWeight.Bold,
-                         fontSize = 18.sp
-                     ),
-                     color = if (mergedChange.totalDelta > 0) {
-                         LocalCustomColors.current.success
-                     } else if (mergedChange.totalDelta < 0) {
-                         MaterialTheme.colorScheme.error
-                     } else {
-                         MaterialTheme.colorScheme.onSurfaceVariant
-                     }
-                 )
+                Text(
+                    text = "${if (mergedChange.totalDelta > 0) "+" else ""}${mergedChange.totalDelta}",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    ),
+                    color = if (mergedChange.totalDelta > 0) {
+                        LocalCustomColors.current.success
+                    } else if (mergedChange.totalDelta < 0) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    }
+                )
             }
         }
     }

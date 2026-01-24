@@ -1,6 +1,5 @@
 package io.github.m0nkeysan.gamekeeper.ui.screens.common
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +15,6 @@ import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -77,8 +75,6 @@ fun ResultsTemplate(
     onHome: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isDarkTheme = isSystemInDarkTheme()
-    
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -92,11 +88,7 @@ fun ResultsTemplate(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
-                modifier = if (!isDarkTheme) {
-                    Modifier.shadow(elevation = 2.dp)
-                } else {
-                    Modifier
-                }
+                modifier = Modifier.shadow(elevation = 2.dp)
             )
         },
         bottomBar = {
@@ -120,13 +112,6 @@ fun ResultsTemplate(
                 .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Add divider only in light mode
-            if (!isDarkTheme) {
-                HorizontalDivider(
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-            }
-            
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -135,62 +120,62 @@ fun ResultsTemplate(
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
 
-            // Trophy icon
-            Icon(
-                imageVector = Icons.Default.EmojiEvents,
-                contentDescription = null,
-                modifier = Modifier.size(100.dp),
-                tint = LocalCustomColors.current.trophyGold
-            )
+                // Trophy icon
+                Icon(
+                    imageVector = Icons.Default.EmojiEvents,
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp),
+                    tint = LocalCustomColors.current.trophyGold
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            // Winner announcement
-            Text(
-                text = if (winners.size > 1) stringResource(Res.string.results_title_tie) else stringResource(
-                    Res.string.results_title_winner
-                ),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Black,
-                color = MaterialTheme.colorScheme.primary
-            )
+                // Winner announcement
+                Text(
+                    text = if (winners.size > 1) stringResource(Res.string.results_title_tie) else stringResource(
+                        Res.string.results_title_winner
+                    ),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Black,
+                    color = MaterialTheme.colorScheme.primary
+                )
 
-            Text(
-                text = winners.joinToString(" & ") { it.first }.uppercase(),
-                style = MaterialTheme.typography.displaySmall,
-                fontWeight = FontWeight.Black,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+                Text(
+                    text = winners.joinToString(" & ") { it.first }.uppercase(),
+                    style = MaterialTheme.typography.displaySmall,
+                    fontWeight = FontWeight.Black,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
 
-            Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(48.dp))
 
-            // Final scores header
-            Text(
-                text = stringResource(Res.string.results_section_scores),
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                letterSpacing = 1.5.sp
-            )
+                // Final scores header
+                Text(
+                    text = stringResource(Res.string.results_section_scores),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    letterSpacing = 1.5.sp
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            // Results list
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                itemsIndexed(allResults) { index, (name, score) ->
-                    val isWinner = winners.any { it.first == name }
-                    ResultsCard(
-                        rank = index + 1,
-                        playerName = name,
-                        score = score,
-                        isWinner = isWinner
-                    )
+                // Results list
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    itemsIndexed(allResults) { index, (name, score) ->
+                        val isWinner = winners.any { it.first == name }
+                        ResultsCard(
+                            rank = index + 1,
+                            playerName = name,
+                            score = score,
+                            isWinner = isWinner
+                        )
+                    }
                 }
-            }
             }
         }
     }

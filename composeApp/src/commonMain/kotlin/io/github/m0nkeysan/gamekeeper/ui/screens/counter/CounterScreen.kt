@@ -243,7 +243,8 @@ fun CounterScreen(
                             )
                         }
                     }
-                }
+                },
+                modifier = Modifier.shadow(elevation = 2.dp)
             )
         }
     ) { paddingValues ->

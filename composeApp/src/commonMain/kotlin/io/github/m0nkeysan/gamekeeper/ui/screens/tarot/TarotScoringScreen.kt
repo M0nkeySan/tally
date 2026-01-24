@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
@@ -113,7 +114,8 @@ fun TarotScoringScreen(
                     IconButton(onClick = { onNavigateToStatistics(gameId) }) {
                         Icon(GameIcons.BarChart, contentDescription = stringResource(Res.string.cd_settings))
                     }
-                }
+                },
+                 modifier = Modifier.shadow(elevation = 2.dp)
             )
         },
         floatingActionButton = {

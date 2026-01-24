@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -132,7 +133,8 @@ fun TarotStatisticsScreen(
                     IconButton(onClick = onBack) {
                         Icon(GameIcons.ArrowBack, stringResource(Res.string.action_back))
                     }
-                }
+                },
+                modifier = Modifier.shadow(elevation = 2.dp)
             )
         },
         containerColor = MaterialTheme.colorScheme.background
