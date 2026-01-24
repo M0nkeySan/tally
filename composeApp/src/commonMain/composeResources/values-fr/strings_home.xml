@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Home Screen -->
-    <string name="home_title">GameKeeper</string>
+    <string name="home_title">Tally</string>
     <string name="home_cd_games">Jeux</string>
     <string name="home_cd_players">Joueurs</string>
     <string name="home_cd_finger_selector">Jeu Sélecteur de doigts</string>

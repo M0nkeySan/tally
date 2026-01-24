@@ -5,6 +5,6 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>NSMotionUsageDescription</key>
-	<string>GameKeeper uses the device's motion sensors to detect shake gestures, allowing you to roll dice by shaking your device in the Dice Roller feature.</string>
+	<string>Tally uses the device's motion sensors to detect shake gestures, allowing you to roll dice by shaking your device in the Dice Roller feature.</string>
 </dict>
 </plist>

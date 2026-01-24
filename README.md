@@ -1,5 +1,5 @@
 ## Purpose
-GameKeeper is a Kotlin Multiplatform mobile application for tracking and scoring various games.
+Tally is a Kotlin Multiplatform mobile application for tracking and scoring various games.
 
 ## Tech Stack
 - **Kotlin Multiplatform** targeting Android
@@ -11,7 +11,7 @@ GameKeeper is a Kotlin Multiplatform mobile application for tracking and scoring
 ```
 composeApp/
 ├── src/
-│   ├── commonMain/kotlin/io/github/m0nkeysan/gamekeeper/
+│   ├── commonMain/kotlin/io/github/m0nkeysan/tally/
 │   │   ├── ui/
 │   │   │   ├── screens/ - Feature screens (home, tarot, yahtzee, counter, fingerselector, etc.)
 │   │   │   ├── components/ - Reusable UI components

@@ -1,4 +1,4 @@
-rootProject.name = "GameKeeper"
+rootProject.name = "Tally"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

@@ -26,26 +26,25 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5830C2B8AE713AE8FF5181DC /* GameKeeper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameKeeper.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5830C2B8AE713AE8FF5181DC /* Tally.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tally.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D115FFB2F2237EB009B4015 /* ComposeApp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ComposeApp.framework; path = ../composeApp/build/bin/iosX64/releaseFramework/ComposeApp.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-	B8E111804E5BE7E4B40A3C67 /* Exceptions for "iosApp" folder in "iosApp" target */ = {
-		isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-		membershipExceptions = (
-			Info.plist,
-			PrivacyInfo.xcprivacy,
-		);
-		target = F6B3A8EBFF74BC00A2551E14 /* iosApp */;
-	};
+		9D5FDFFE2F238A9600E48889 /* Exceptions for "iosApp" folder in "iosApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = F6B3A8EBFF74BC00A2551E14 /* iosApp */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0CE8EBFB80C8CF9401A82697 /* iosApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				B8E111804E5BE7E4B40A3C67 /* Exceptions for "iosApp" folder in "iosApp" target */,
+				9D5FDFFE2F238A9600E48889 /* Exceptions for "iosApp" folder in "iosApp" target */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -72,7 +71,7 @@
 		2C2B3745290B2B85C9B38C21 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5830C2B8AE713AE8FF5181DC /* GameKeeper.app */,
+				5830C2B8AE713AE8FF5181DC /* Tally.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,7 +118,7 @@
 			packageProductDependencies = (
 			);
 			productName = iosApp;
-			productReference = 5830C2B8AE713AE8FF5181DC /* GameKeeper.app */;
+			productReference = 5830C2B8AE713AE8FF5181DC /* Tally.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

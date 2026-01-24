@@ -72,11 +72,11 @@ kotlin {
 }
 
 android {
-    namespace = "io.github.m0nkeysan.gamekeeper"
+    namespace = "io.github.m0nkeysan.tally"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "io.github.m0nkeysan.gamekeeper"
+        applicationId = "io.github.m0nkeysan.tally"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -109,7 +109,7 @@ dependencies {
 
 compose.resources {
     publicResClass = true
-    packageOfResClass = "io.github.m0nkeysan.gamekeeper.generated.resources"
+    packageOfResClass = "io.github.m0nkeysan.tally.generated.resources"
     generateResClass = always
 }
 
