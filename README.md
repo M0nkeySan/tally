@@ -13,16 +13,19 @@ Tally is a Kotlin Multiplatform mobile application that brings together essentia
 
 ## 📸 Screenshots
 
-> 📝 **Note:** Screenshots coming soon! See [screenshots/README.md](screenshots/README.md) for guidelines on capturing and adding screenshots.
-
-<!-- Placeholder for screenshots - will be added in the format:
 <p align="center">
   <img src="screenshots/home-screen.png" width="200" alt="Home Screen"/>
-  <img src="screenshots/yahtzee-scoring.png" width="200" alt="Yahtzee Scoring"/>
+  <img src="screenshots/game-creation.png" width="200" alt="Game Creation"/>
+  <img src="screenshots/yahtzee-statistics.png" width="200" alt="Yahtzee Statistics"/>
   <img src="screenshots/tarot-scoring.png" width="200" alt="Tarot Scoring"/>
-  <img src="screenshots/dice-roller.png" width="200" alt="Dice Roller"/>
 </p>
--->
+
+<p align="center">
+  <img src="screenshots/tarot-statistics.png" width="200" alt="Tarot Statistics"/>
+  <img src="screenshots/dice-roller.png" width="200" alt="Dice Roller"/>
+  <img src="screenshots/counter.png" width="200" alt="Counter"/>
+  <img src="screenshots/settings.png" width="200" alt="Settings"/>
+</p>
 
 ---
 
