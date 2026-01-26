@@ -6,9 +6,9 @@ import io.github.m0nkeysan.tally.core.domain.CounterHistoryStore
 import io.github.m0nkeysan.tally.core.domain.repository.CounterRepository
 import io.github.m0nkeysan.tally.core.model.Counter
 import io.github.m0nkeysan.tally.core.model.CounterChange
-import io.github.m0nkeysan.tally.core.utils.getCurrentTimeMillis
 import io.github.m0nkeysan.tally.core.model.MergedCounterChange
 import io.github.m0nkeysan.tally.core.utils.UuidGenerator
+import io.github.m0nkeysan.tally.core.utils.getCurrentTimeMillis
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -94,7 +94,7 @@ class CounterRepositoryImpl(
     override fun getCounterHistory(): Flow<List<CounterChange>> = historyStore.history
 
     override fun getMergedCounterHistory(): Flow<List<MergedCounterChange>> =
-        historyStore.history.map { changes ->
+        historyStore.history.map { _ ->
             historyStore.getMergedHistory()
         }
 

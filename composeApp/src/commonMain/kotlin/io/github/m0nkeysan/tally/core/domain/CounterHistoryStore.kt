@@ -34,9 +34,9 @@ class CounterHistoryStore {
 
     /**
      * Get the current list of all changes.
-     * @return Unmodifiable list of all changes in reverse chronological order
+     * @return Unmodifiable list of all changes in reverse chronological order (newest first)
      */
-    fun getHistory(): List<CounterChange> = _history.value
+    fun getHistory(): List<CounterChange> = _history.value.reversed()
 
     /**
      * Get the merged and grouped history.
