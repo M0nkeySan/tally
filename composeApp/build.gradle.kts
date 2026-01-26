@@ -19,6 +19,16 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+    wasmJs {
+        browser {
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+            }
+        }
+        binaries.executable()
+    }
+
     compilerOptions {
         optIn.add("kotlin.uuid.ExperimentalUuidApi")
         optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
@@ -33,6 +43,17 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
+            implementation(libs.androidx.navigationevent)
+        }
+        iosMain.dependencies {
+            implementation(libs.androidx.navigationevent)
+        }
+        wasmJsMain.dependencies {
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.ui)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
         }
         commonMain.dependencies {
             api(libs.compose.runtime)
@@ -47,7 +68,6 @@ kotlin {
             implementation(libs.jetbrains.lifecycle.runtimeCompose)
             implementation(libs.jetbrains.navigation.compose)
             implementation(libs.jetbrains.compose.uiBackhandler)
-            implementation(libs.androidx.navigationevent)
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
             implementation(libs.kotlinx.serialization.json)
@@ -128,6 +148,7 @@ dependencies {
     add("kspIosX64", libs.room.compiler)
     add("kspIosArm64", libs.room.compiler)
     add("kspIosSimulatorArm64", libs.room.compiler)
+    add("kspWasmJs", libs.room.compiler)
 
     debugImplementation(libs.compose.uiToolingPreview)
 }
