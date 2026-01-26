@@ -43,7 +43,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -59,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.tally.GameIcons
+import io.github.m0nkeysan.tally.ui.components.NumberSlider
 import io.github.m0nkeysan.tally.core.model.DiceConfiguration
 import io.github.m0nkeysan.tally.core.model.DiceRoll
 import io.github.m0nkeysan.tally.core.model.DiceType
@@ -386,7 +386,7 @@ private fun DiceSettingsBottomSheetContent(
     onConfirm: (DiceConfiguration) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var numberOfDice by remember { mutableFloatStateOf(configuration.numberOfDice.toFloat()) }
+    var numberOfDice by remember { mutableStateOf(configuration.numberOfDice) }
     var diceType by remember { mutableStateOf(configuration.diceType) }
     var animationEnabled by remember { mutableStateOf(configuration.animationEnabled) }
     var shakeEnabled by remember { mutableStateOf(configuration.shakeEnabled) }
@@ -404,33 +404,12 @@ private fun DiceSettingsBottomSheetContent(
             color = MaterialTheme.colorScheme.primary
         )
 
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(stringResource(Res.string.dice_field_number), style = MaterialTheme.typography.labelMedium)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Slider(
-                    value = numberOfDice,
-                    onValueChange = { numberOfDice = it },
-                    valueRange = DiceConstants.MIN_NUMBER_OF_DICE.toFloat()..DiceConstants.MAX_NUMBER_OF_DICE.toFloat(),
-                    steps = DiceConstants.DICE_SLIDER_STEPS,
-                    modifier = Modifier.weight(1f)
-                )
-                Text(
-                    text = numberOfDice.toInt().toString(),
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier
-                        .background(
-                            MaterialTheme.colorScheme.primaryContainer,
-                            MaterialTheme.shapes.small
-                        )
-                        .padding(horizontal = 12.dp, vertical = 6.dp)
-                )
-            }
-        }
+        NumberSlider(
+            label = stringResource(Res.string.dice_field_number),
+            value = numberOfDice,
+            onValueChange = { numberOfDice = it },
+            valueRange = DiceConstants.MIN_NUMBER_OF_DICE..DiceConstants.MAX_NUMBER_OF_DICE
+        )
 
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(stringResource(Res.string.dice_field_type), style = MaterialTheme.typography.labelMedium)
@@ -547,7 +526,7 @@ private fun DiceSettingsBottomSheetContent(
                 onClick = {
                     onConfirm(
                         DiceConfiguration(
-                            numberOfDice = numberOfDice.toInt(),
+                            numberOfDice = numberOfDice,
                             diceType = diceType,
                             animationEnabled = animationEnabled,
                             shakeEnabled = shakeEnabled

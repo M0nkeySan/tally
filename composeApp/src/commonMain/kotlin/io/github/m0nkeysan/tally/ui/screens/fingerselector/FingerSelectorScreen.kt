@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.tally.GameIcons
 import io.github.m0nkeysan.tally.core.utils.getCurrentTimeMillis
+import io.github.m0nkeysan.tally.ui.components.NumberSlider
 import io.github.m0nkeysan.tally.generated.resources.Res
 import io.github.m0nkeysan.tally.generated.resources.action_back
 import io.github.m0nkeysan.tally.generated.resources.cd_settings
@@ -67,7 +68,6 @@ import io.github.m0nkeysan.tally.generated.resources.finger_selector_label_group
 import io.github.m0nkeysan.tally.generated.resources.finger_selector_mode_fingers
 import io.github.m0nkeysan.tally.generated.resources.finger_selector_mode_groups
 import io.github.m0nkeysan.tally.generated.resources.finger_selector_section_mode
-import io.github.m0nkeysan.tally.generated.resources.finger_selector_slider_value_format
 import io.github.m0nkeysan.tally.generated.resources.game_finger_selector
 import io.github.m0nkeysan.tally.platform.HapticType
 import io.github.m0nkeysan.tally.platform.rememberHapticFeedbackController
@@ -238,41 +238,15 @@ fun SelectionSettingsSheet(
         }
 
         // Count Selection
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            val title =
-                if (config.mode == SelectionMode.FINGERS) stringResource(Res.string.finger_selector_label_fingers) else stringResource(
-                    Res.string.finger_selector_label_groups
-                )
-            val min = 1
-            val max = 5
-
-            Text(
-                stringResource(
-                    Res.string.finger_selector_slider_value_format,
-                    title,
-                    config.count
-                ), style = MaterialTheme.typography.titleMedium
-            )
-
-            Slider(
-                value = config.count.toFloat(),
-                onValueChange = { onConfigChange(config.copy(count = it.toInt())) },
-                valueRange = min.toFloat()..max.toFloat(),
-                steps = max - min - 1
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                (min..max).forEach { i ->
-                    Text(
-                        text = i.toString(),
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-            }
-        }
+        NumberSlider(
+            label = if (config.mode == SelectionMode.FINGERS) 
+                stringResource(Res.string.finger_selector_label_fingers)
+            else 
+                stringResource(Res.string.finger_selector_label_groups),
+            value = config.count,
+            onValueChange = { onConfigChange(config.copy(count = it)) },
+            valueRange = 1..5
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
     }
