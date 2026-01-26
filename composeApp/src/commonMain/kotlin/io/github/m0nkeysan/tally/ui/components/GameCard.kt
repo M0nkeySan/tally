@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.tally.ui.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,12 +16,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,20 +40,43 @@ import org.jetbrains.compose.resources.stringResource
  * @param title Game title text
  * @param description Game description text
  * @param onClick Callback when card is clicked
+ * @param modifier Optional modifier for the card
+ * @param borderColor Optional border color (null = no border)
+ * @param backgroundColor Optional background color (null = default surface color)
  */
 @Composable
 fun GameCard(
     icon: @Composable () -> Unit,
     title: String,
     description: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    borderColor: Color? = null,
+    backgroundColor: Color? = null,
+    elevation : CardElevation = CardDefaults.cardElevation()
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1f)
+            .then(
+                if (borderColor != null) {
+                    Modifier.border(
+                        width = 2.dp,
+                        color = borderColor,
+                        shape = MaterialTheme.shapes.medium
+                    )
+                } else Modifier
+            )
             .clickable(onClick = onClick),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = elevation,
+        colors = if (backgroundColor != null) {
+            CardDefaults.cardColors(
+                containerColor = backgroundColor
+            )
+        } else {
+            CardDefaults.cardColors()
+        }
     ) {
         Column(
             modifier = Modifier

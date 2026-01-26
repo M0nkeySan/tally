@@ -2,10 +2,13 @@ package io.github.m0nkeysan.tally.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.m0nkeysan.tally.core.domain.model.AppTheme
 import io.github.m0nkeysan.tally.platform.PlatformRepositories
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
@@ -14,6 +17,13 @@ class HomeViewModel : ViewModel() {
 
     private val _cardOrder = MutableStateFlow(defaultCardOrder)
     val cardOrder: StateFlow<List<String>> = _cardOrder.asStateFlow()
+
+    val themePreference: StateFlow<AppTheme> = userPreferencesRepository.getTheme()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = AppTheme.SYSTEM_DEFAULT
+        )
 
     init {
         loadCardOrder()
