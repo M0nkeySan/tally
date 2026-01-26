@@ -3,7 +3,6 @@ package io.github.m0nkeysan.tally.ui.screens.home
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -68,8 +67,8 @@ import io.github.m0nkeysan.tally.generated.resources.home_title_finger_selector
 import io.github.m0nkeysan.tally.ui.components.GameCard
 import io.github.m0nkeysan.tally.ui.components.TarotIcon
 import io.github.m0nkeysan.tally.ui.components.YahtzeeIcon
+import io.github.m0nkeysan.tally.ui.theme.resolveIsDarkTheme
 import org.jetbrains.compose.resources.stringResource
-import io.github.m0nkeysan.tally.core.domain.model.AppTheme as AppThemeModel
 
 @Composable
 fun HomeScreen(
@@ -79,12 +78,7 @@ fun HomeScreen(
 ) {
     val cardOrder by viewModel.cardOrder.collectAsState()
     val themePreference by viewModel.themePreference.collectAsState()
-    
-    val isDarkTheme = when (themePreference) {
-        AppThemeModel.DARK -> true
-        AppThemeModel.LIGHT -> false
-        AppThemeModel.SYSTEM_DEFAULT -> isSystemInDarkTheme()
-    }
+    val isDarkTheme = resolveIsDarkTheme(themePreference)
 
     var localCardOrder by remember { mutableStateOf<List<String>?>(null) }
 
