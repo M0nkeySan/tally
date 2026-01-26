@@ -1,8 +1,12 @@
 package io.github.m0nkeysan.tally.ui.components
 
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 
 /**
  * Standard Snackbar host configuration for the app.
@@ -13,20 +17,31 @@ import androidx.compose.ui.Modifier
 @Composable
 fun AppSnackbarHost(
     hostState: SnackbarHostState,
-    modifier: Modifier = Modifier
 ) {
-    SnackbarHost(
-        hostState = hostState,
-        modifier = modifier
-    ) { data ->
+    SnackbarHost(hostState) { data ->
+        val customVisuals = data.visuals as? AppSnackbarVisuals
+        val isError = customVisuals?.type == SnackbarType.Error
+
+        val bgColor =
+            if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+
         Snackbar(
             snackbarData = data,
-            containerColor = MaterialTheme.colorScheme.error,
-            contentColor = MaterialTheme.colorScheme.surface,
-            actionColor = MaterialTheme.colorScheme.surface
+            containerColor = bgColor,
+            contentColor = MaterialTheme.colorScheme.surface
         )
     }
 }
+
+enum class SnackbarType { Error, Success }
+
+class AppSnackbarVisuals(
+    override val message: String,
+    val type: SnackbarType,
+    override val actionLabel: String? = null,
+    override val withDismissAction: Boolean = false,
+    override val duration: SnackbarDuration = SnackbarDuration.Short
+) : SnackbarVisuals
 
 /**
  * Helper function to show error message in Snackbar.
@@ -37,9 +52,12 @@ suspend fun showErrorSnackbar(
     message: String
 ) {
     hostState.showSnackbar(
-        message = message,
-        duration = SnackbarDuration.Long, // 5 seconds
-        withDismissAction = true
+        AppSnackbarVisuals(
+            message = message,
+            type = SnackbarType.Error,
+            withDismissAction = true,
+            duration = SnackbarDuration.Long
+        )
     )
 }
 
@@ -52,8 +70,11 @@ suspend fun showSuccessSnackbar(
     message: String
 ) {
     hostState.showSnackbar(
-        message = message,
-        duration = SnackbarDuration.Short, // 3 seconds
-        withDismissAction = false
+        AppSnackbarVisuals(
+            message = message,
+            type = SnackbarType.Success,
+            withDismissAction = false,
+            duration = SnackbarDuration.Short
+        )
     )
 }

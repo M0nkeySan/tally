@@ -1,6 +1,7 @@
 package io.github.m0nkeysan.tally.ui.screens.common
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -9,11 +10,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
@@ -27,11 +30,15 @@ import io.github.m0nkeysan.tally.generated.resources.cd_add_player
 import io.github.m0nkeysan.tally.generated.resources.cd_settings
 import io.github.m0nkeysan.tally.generated.resources.home_cd_games
 import io.github.m0nkeysan.tally.generated.resources.home_cd_players
+import io.github.m0nkeysan.tally.ui.components.AppSnackbarHost
+import io.github.m0nkeysan.tally.ui.components.showErrorSnackbar
+import io.github.m0nkeysan.tally.ui.components.showSuccessSnackbar
 import io.github.m0nkeysan.tally.ui.screens.home.HomeScreen
 import io.github.m0nkeysan.tally.ui.screens.home.HomeViewModel
-import io.github.m0nkeysan.tally.ui.screens.player.PlayerSelectionScreen
+import io.github.m0nkeysan.tally.ui.screens.player.PlayerManagementScreen
 import io.github.m0nkeysan.tally.ui.screens.player.PlayerSelectionViewModel
 import io.github.m0nkeysan.tally.ui.screens.settings.SettingsScreen
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -59,6 +66,19 @@ fun HomeNavigationTemplate(
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    val onShowSnackbar: (String, Boolean) -> Unit = { message, isError ->
+        scope.launch {
+            if (isError) {
+                showErrorSnackbar(snackbarHostState, message)
+            } else {
+                showSuccessSnackbar(snackbarHostState, message)
+            }
+        }
+    }
+
     BackHandler(enabled = selectedTab == 1 || selectedTab == 2) {
         selectedTab = 0
     }
@@ -67,6 +87,7 @@ fun HomeNavigationTemplate(
 
     Scaffold(
         modifier = modifier,
+        snackbarHost = { AppSnackbarHost(hostState = snackbarHostState) },
         bottomBar = {
             Column {
                 NavigationBar(
@@ -130,20 +151,25 @@ fun HomeNavigationTemplate(
             }
         }
     ) { paddingValues ->
+
+        val childModifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
+
         when (selectedTab) {
             0 -> {
                 HomeScreen(
                     onNavigateTo = onNavigateTo,
                     viewModel = homeViewModel,
-                    modifier = Modifier
+                    modifier = childModifier
                 )
             }
 
             1 -> {
-                PlayerSelectionScreen(
+                PlayerManagementScreen(
                     viewModel = playerViewModel,
                     triggerAddDialog = showAddPlayerDialog,
-                    onAddDialogHandled = { showAddPlayerDialog = false }
+                    onAddDialogHandled = { showAddPlayerDialog = false },
+                    modifier = childModifier,
+                    onShowSnackbar = onShowSnackbar
                 )
             }
 

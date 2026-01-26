@@ -3,9 +3,12 @@ package io.github.m0nkeysan.tally.ui.screens.tarot
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.tally.core.domain.engine.TarotScoringEngine
-import io.github.m0nkeysan.tally.core.model.*
+import io.github.m0nkeysan.tally.core.model.ChelemType
+import io.github.m0nkeysan.tally.core.model.Player
+import io.github.m0nkeysan.tally.core.model.PoigneeLevel
+import io.github.m0nkeysan.tally.core.model.TarotBid
+import io.github.m0nkeysan.tally.core.model.TarotRound
 import io.github.m0nkeysan.tally.platform.PlatformRepositories
-import kotlin.uuid.Uuid
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.uuid.Uuid
 
 class TarotScoringViewModel : ViewModel() {
     private val repository = PlatformRepositories.getTarotRepository()
@@ -116,5 +120,9 @@ class TarotScoringViewModel : ViewModel() {
         val players = currentState.players
         val playerCount = currentState.game?.playerCount ?: players.size
         return scoringEngine.calculateTotalScores(players, currentState.rounds, playerCount)
+    }
+
+    fun onErrorConsumed() {
+        _state.update { it.copy(error = null) }
     }
 }

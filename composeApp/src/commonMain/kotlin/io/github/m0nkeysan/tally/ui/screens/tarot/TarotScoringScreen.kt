@@ -90,6 +90,7 @@ fun TarotScoringScreen(
     LaunchedEffect(state.error) {
         state.error?.let { errorMessage ->
             showErrorSnackbar(snackbarHostState, errorMessage)
+            viewModel.onErrorConsumed()
         }
     }
 

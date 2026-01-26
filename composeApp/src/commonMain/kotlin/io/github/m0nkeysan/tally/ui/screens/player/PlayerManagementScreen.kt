@@ -27,7 +27,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
@@ -68,19 +67,18 @@ import io.github.m0nkeysan.tally.generated.resources.player_reactivated_message
 import io.github.m0nkeysan.tally.generated.resources.player_section_deactivated
 import io.github.m0nkeysan.tally.generated.resources.player_section_players
 import io.github.m0nkeysan.tally.generated.resources.players_no_players
-import io.github.m0nkeysan.tally.ui.components.AppSnackbarHost
-import io.github.m0nkeysan.tally.ui.components.showSuccessSnackbar
 import io.github.m0nkeysan.tally.ui.utils.parseColor
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun PlayerSelectionScreen(
+fun PlayerManagementScreen(
     viewModel: PlayerSelectionViewModel = viewModel { PlayerSelectionViewModel() },
     triggerAddDialog: Boolean = false,
-    onAddDialogHandled: () -> Unit = {}
+    onAddDialogHandled: () -> Unit = {},
+    modifier: Modifier = Modifier,
+    onShowSnackbar: (String, Boolean) -> Unit
 ) {
     val allPlayers by viewModel.allPlayersIncludingInactive.collectAsState(emptyList())
-    val snackbarHostState = remember { SnackbarHostState() }
 
     // State to manage dialogs
     var showAddDialog by remember { mutableStateOf(false) }
@@ -105,10 +103,7 @@ fun PlayerSelectionScreen(
 
     LaunchedEffect(playerToReactivate) {
         if (playerToReactivate != null) {
-            showSuccessSnackbar(
-                snackbarHostState,
-                reactivateMsg // Use the pre-calculated string
-            )
+            onShowSnackbar(reactivateMsg, false)
             playerToReactivate = null
         }
     }
@@ -116,7 +111,7 @@ fun PlayerSelectionScreen(
     // Show generic snackbar for deletion/deactivation (set by dialog)
     LaunchedEffect(snackbarMessage) {
         if (snackbarMessage.isNotEmpty()) {
-            showSuccessSnackbar(snackbarHostState, snackbarMessage)
+            onShowSnackbar(snackbarMessage, false)
             snackbarMessage = ""
         }
     }
@@ -206,6 +201,7 @@ fun PlayerSelectionScreen(
     }
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -228,8 +224,6 @@ fun PlayerSelectionScreen(
                 modifier = Modifier.shadow(elevation = 2.dp)
             )
         },
-
-        snackbarHost = { AppSnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
         val activePlayers = allPlayers.filter { it.isActive }
         val deactivatedPlayers = allPlayers.filter { !it.isActive }

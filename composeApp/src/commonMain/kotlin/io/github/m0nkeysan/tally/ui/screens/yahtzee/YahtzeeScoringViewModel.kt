@@ -2,14 +2,17 @@ package io.github.m0nkeysan.tally.ui.screens.yahtzee
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.m0nkeysan.tally.core.model.Player
 import io.github.m0nkeysan.tally.core.model.YahtzeeCategory
 import io.github.m0nkeysan.tally.core.model.YahtzeeGame
 import io.github.m0nkeysan.tally.core.model.YahtzeeScore
-import io.github.m0nkeysan.tally.core.model.Player
 import io.github.m0nkeysan.tally.core.utils.getCurrentTimeMillis
 import io.github.m0nkeysan.tally.platform.PlatformRepositories
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -165,5 +168,9 @@ class YahtzeeScoringViewModel : ViewModel() {
     fun calculateUpperScore(playerId: String): Int {
         val playerScores = _state.value.scores[playerId] ?: return 0
         return playerScores.filter { it.key.isUpperSection() }.values.sum()
+    }
+
+    fun onErrorConsumed() {
+        _state.update { it.copy(error = null) }
     }
 }
