@@ -2,11 +2,12 @@
 
 > Your all-in-one companion for board game nights
 
-[![Download](https://img.shields.io/badge/Download-Latest_Release-success?style=for-the-badge&logo=android)](https://github.com/m0nkeysan/tally/releases/latest)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue.svg)]()
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.3.0-purple.svg)]()
 [![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.10.0-blue.svg)]()
+
+[![Download](https://img.shields.io/badge/Download-Latest_Release-success?style=for-the-badge&logo=android)](https://github.com/m0nkeysan/tally/releases/latest)
 
 Tally is a Kotlin Multiplatform mobile application that brings together essential tools for game nights: scoring systems for popular games, dice rolling, player selection, and more. Built with Compose Multiplatform for a native experience on both Android and iOS.
 
