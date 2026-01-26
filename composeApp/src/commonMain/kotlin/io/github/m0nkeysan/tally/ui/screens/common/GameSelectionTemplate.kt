@@ -57,9 +57,9 @@ import io.github.m0nkeysan.tally.generated.resources.game_selection_cd_delete_ga
 import io.github.m0nkeysan.tally.generated.resources.game_selection_cd_statistics
 import io.github.m0nkeysan.tally.generated.resources.game_selection_empty
 import io.github.m0nkeysan.tally.generated.resources.game_selection_loading
+import io.github.m0nkeysan.tally.ui.components.AppSnackbarHost
 import io.github.m0nkeysan.tally.ui.components.EmptyState
 import io.github.m0nkeysan.tally.ui.components.GameDisplay
-import io.github.m0nkeysan.tally.ui.components.AppSnackbarHost
 import io.github.m0nkeysan.tally.ui.components.GameSelectionCard
 import io.github.m0nkeysan.tally.ui.components.LoadingState
 import io.github.m0nkeysan.tally.ui.components.showErrorSnackbar
@@ -94,7 +94,11 @@ import org.jetbrains.compose.resources.stringResource
  *     onGameSelect = { viewModel.selectGame(it) },
  *     onCreateNew = { navController.navigate("create") },
  *     onDeleteGame = { viewModel.deleteGame(it) },
- *     onBack = { navController.popBackStack() },
+ *     onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                },
  *     isLoading = state.isLoading,
  *     error = state.error
  * )

@@ -61,7 +61,11 @@ import org.jetbrains.compose.resources.stringResource
  * ```
  * GameCreationTemplate(
  *     title = "New Tarot Game",
- *     onBack = { navController.popBackStack() },
+ *     onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                },
  *     onCreate = { viewModel.createGame() },
  *     canCreate = gameName.isNotBlank() && players.size == playerCount,
  *     error = state.error,

@@ -1,6 +1,7 @@
 package io.github.m0nkeysan.tally.core.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,17 +36,25 @@ fun GameNavGraph() {
         startDestination = HomeRoute
     ) {
         composable<HomeRoute> {
-            HomeNavigationTemplate(onNavigateTo = { route -> navController.navigate(route)  })
+            HomeNavigationTemplate(onNavigateTo = { route -> navController.navigate(route) })
         }
 
         composable<FingerSelectorRoute> {
-            FingerSelectorScreen(onBack = { navController.popBackStack() })
+            FingerSelectorScreen(onBack = {
+                if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                    navController.popBackStack()
+                }
+            })
         }
 
         // --- Tarot Section ---
         composable<TarotRoute> {
             TarotGameSelectionScreen(
-                onBack = { navController.popBackStack() },
+                onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                },
                 onCreateNewGame = { navController.navigate(TarotCreationRoute) },
                 onSelectGame = { gameId ->
                     navController.navigate(TarotScoringRoute(gameId))
@@ -55,7 +64,11 @@ fun GameNavGraph() {
 
         composable<TarotCreationRoute> {
             TarotGameCreationScreen(
-                onBack = { navController.popBackStack() },
+                onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                },
                 onGameCreated = { gameId ->
                     navController.navigate(TarotScoringRoute(gameId)) {
                         popUpTo(TarotRoute)
@@ -69,7 +82,11 @@ fun GameNavGraph() {
 
             TarotScoringScreen(
                 gameId = route.gameId,
-                onBack = { navController.popBackStack() },
+                onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                },
                 onAddNewRound = { roundId ->
                     navController.navigate(TarotRoundAdditionRoute(route.gameId, roundId))
                 },
@@ -85,8 +102,16 @@ fun GameNavGraph() {
             TarotRoundAdditionScreen(
                 gameId = route.gameId,
                 roundId = route.roundId,
-                onBack = { navController.popBackStack() },
-                onRoundAdded = { navController.popBackStack() }
+                onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                },
+                onRoundAdded = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                }
             )
         }
 
@@ -94,14 +119,22 @@ fun GameNavGraph() {
             val route = entry.toRoute<TarotStatisticsRoute>()
             TarotStatisticsScreen(
                 gameId = route.gameId,
-                onBack = { navController.popBackStack() }
+                onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                }
             )
         }
 
         // --- Yahtzee Section ---
         composable<YahtzeeRoute> {
             YahtzeeGameSelectionScreen(
-                onBack = { navController.popBackStack() },
+                onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                },
                 onCreateNewGame = { navController.navigate(YahtzeeCreationRoute) },
                 onSelectGame = { gameId ->
                     navController.navigate(YahtzeeScoringRoute(gameId))
@@ -114,7 +147,11 @@ fun GameNavGraph() {
 
         composable<YahtzeeCreationRoute> {
             YahtzeeGameCreationScreen(
-                onBack = { navController.popBackStack() },
+                onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                },
                 onGameCreated = { gameId ->
                     navController.navigate(YahtzeeScoringRoute(gameId)) {
                         popUpTo(YahtzeeRoute)
@@ -127,7 +164,11 @@ fun GameNavGraph() {
             val route = entry.toRoute<YahtzeeScoringRoute>()
             YahtzeeScoringScreen(
                 gameId = route.gameId,
-                onBack = { navController.popBackStack() },
+                onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                },
                 onGameFinished = {
                     navController.navigate(YahtzeeSummaryRoute(route.gameId)) {
                         popUpTo(YahtzeeRoute)
@@ -146,7 +187,11 @@ fun GameNavGraph() {
 
         composable<YahtzeeStatisticsRoute> {
             YahtzeeStatisticsScreen(
-                onBack = { navController.popBackStack() }
+                onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                }
             )
         }
 
@@ -172,7 +217,11 @@ fun GameNavGraph() {
             }
 
             CounterScreen(
-                onBack = { navController.popBackStack() },
+                onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                },
                 onEditCounter = { id, name, count, color ->
                     navController.navigate(EditCounterRoute(id, name, count, color))
                 },
@@ -189,7 +238,11 @@ fun GameNavGraph() {
                 initialName = route.name,
                 initialCount = route.count,
                 initialColor = route.color,
-                onBack = { navController.popBackStack() },
+                onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                },
                 onSave = { updatedId, updatedName, updatedCount, updatedColor ->
                     navController.previousBackStackEntry?.savedStateHandle?.apply {
                         set("result_type", "update")
@@ -198,27 +251,39 @@ fun GameNavGraph() {
                         set("count", updatedCount)
                         set("color", updatedColor)
                     }
-                    navController.popBackStack()
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
                 },
                 onDelete = { deletedId ->
                     navController.previousBackStackEntry?.savedStateHandle?.apply {
                         set("result_type", "delete")
                         set("id", deletedId)
                     }
-                    navController.popBackStack()
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
                 }
             )
         }
 
         composable<HistoryRoute> {
             CounterHistoryScreen(
-                onBackPressed = { navController.popBackStack() }
+                onBackPressed = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                }
             )
         }
 
         composable<DiceRollerRoute> {
             DiceRollerScreen(
-                onBack = { navController.popBackStack() }
+                onBack = {
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        navController.popBackStack()
+                    }
+                }
             )
         }
 
