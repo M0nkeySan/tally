@@ -57,7 +57,6 @@ import io.github.m0nkeysan.tally.generated.resources.tarot_round_announce_poigne
 import io.github.m0nkeysan.tally.generated.resources.tarot_round_contract_lost
 import io.github.m0nkeysan.tally.generated.resources.tarot_round_contract_won
 import io.github.m0nkeysan.tally.generated.resources.tarot_round_field_attacker_score
-import io.github.m0nkeysan.tally.generated.resources.tarot_round_label_bouts
 import io.github.m0nkeysan.tally.generated.resources.tarot_round_label_called_player
 import io.github.m0nkeysan.tally.generated.resources.tarot_round_label_chelem
 import io.github.m0nkeysan.tally.generated.resources.tarot_round_label_defense

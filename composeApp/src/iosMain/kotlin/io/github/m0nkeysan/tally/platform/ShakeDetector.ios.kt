@@ -31,8 +31,7 @@ actual fun rememberShakeDetector(
             motionManager.startAccelerometerUpdatesToQueue(
                 queue = NSOperationQueue.mainQueue,
                 withHandler = { data: CMAccelerometerData?, error: NSError? ->
-                    if (error != null) {
-                    } else {
+                    if (error == null) {
                         data?.acceleration?.useContents {
                             val x = this.x
                             val y = this.y

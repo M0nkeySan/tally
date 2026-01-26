@@ -106,7 +106,7 @@ fun GameCreationTemplate(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
                 modifier = Modifier.shadow(elevation = 2.dp)

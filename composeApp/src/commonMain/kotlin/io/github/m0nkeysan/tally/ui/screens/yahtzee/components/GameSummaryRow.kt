@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.tally.core.model.GameSummary
-import io.github.m0nkeysan.tally.core.utils.format
 import io.github.m0nkeysan.tally.ui.theme.LocalCustomColors
 import org.jetbrains.compose.resources.stringResource
 import io.github.m0nkeysan.tally.generated.resources.counter_format_player_count

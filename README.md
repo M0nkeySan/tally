@@ -13,13 +13,13 @@ Tally is a Kotlin Multiplatform mobile application that brings together essentia
 
 ## 📸 Screenshots
 
-<p align="center">
+<p>
   <img src="screenshots/home-screen.png" width="200" alt="Home Screen"/>
   <img src="screenshots/dice-roller.png" width="200" alt="Dice Roller"/>
   <img src="screenshots/counter.png" width="200" alt="Counter"/>
 </p>
 
-<p align="center">
+<p>
   <img src="screenshots/tarot-scoring.png" width="200" alt="Tarot Scoring"/>
   <img src="screenshots/tarot-statistics.png" width="200" alt="Tarot Statistics"/>
   <img src="screenshots/yahtzee-statistics.png" width="200" alt="Yahtzee Statistics"/>
@@ -332,6 +332,6 @@ See [LICENSE](LICENSE) for the full license text.
 
 ---
 
-<p align="center">
+<p>
   <sub>Built with ❤️ using Kotlin Multiplatform</sub>
 </p>

@@ -49,7 +49,6 @@ import io.github.m0nkeysan.tally.core.model.TarotRound
 import io.github.m0nkeysan.tally.core.utils.format
 import io.github.m0nkeysan.tally.generated.resources.Res
 import io.github.m0nkeysan.tally.generated.resources.action_back
-import io.github.m0nkeysan.tally.generated.resources.action_retry
 import io.github.m0nkeysan.tally.generated.resources.cd_toggle_collapse
 import io.github.m0nkeysan.tally.generated.resources.cd_toggle_expand
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_contract_lost

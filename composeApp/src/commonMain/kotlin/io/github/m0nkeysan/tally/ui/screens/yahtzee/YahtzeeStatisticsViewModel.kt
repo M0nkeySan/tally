@@ -13,12 +13,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.compose.resources.stringResource
-import io.github.m0nkeysan.tally.generated.resources.error_unknown
-import io.github.m0nkeysan.tally.generated.resources.yahtzee_error_global_failed
-import io.github.m0nkeysan.tally.generated.resources.yahtzee_error_load_failed
-import io.github.m0nkeysan.tally.generated.resources.yahtzee_error_stats_failed
-import io.github.m0nkeysan.tally.generated.resources.Res
 
 data class YahtzeeStatisticsUiState(
     val isLoading: Boolean = true,

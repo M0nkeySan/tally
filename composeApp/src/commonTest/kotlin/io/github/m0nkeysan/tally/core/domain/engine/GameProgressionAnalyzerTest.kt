@@ -1,11 +1,16 @@
 package io.github.m0nkeysan.tally.core.domain.engine
 
+import io.github.m0nkeysan.tally.core.model.ChelemType
 import io.github.m0nkeysan.tally.core.model.Player
+import io.github.m0nkeysan.tally.core.model.PoigneeLevel
 import io.github.m0nkeysan.tally.core.model.TarotBid
 import io.github.m0nkeysan.tally.core.model.TarotRound
-import io.github.m0nkeysan.tally.core.model.ChelemType
-import io.github.m0nkeysan.tally.core.model.PoigneeLevel
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 private val analyzer = GameProgressionAnalyzer()
 
@@ -476,7 +481,7 @@ class CalculatePartnerStats {
             // Then
             val p1Stats = result["p1"]!!
             assertNotNull(p1Stats.partnerStats)
-            assertTrue(p1Stats.partnerStats!!.containsKey("p2"))
+            assertTrue(p1Stats.partnerStats.containsKey("p2"))
             assertTrue(p1Stats.partnerStats.containsKey("p3"))
         }
         

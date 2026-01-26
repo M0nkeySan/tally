@@ -7,10 +7,10 @@ import io.github.m0nkeysan.tally.core.domain.repository.CounterRepository
 import io.github.m0nkeysan.tally.core.model.Counter
 import io.github.m0nkeysan.tally.core.model.CounterChange
 import io.github.m0nkeysan.tally.core.model.MergedCounterChange
-import io.github.m0nkeysan.tally.core.utils.UuidGenerator
 import io.github.m0nkeysan.tally.core.utils.getCurrentTimeMillis
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlin.uuid.Uuid
 
 class CounterRepositoryImpl(
     private val dao: PersistentCounterDao,
@@ -57,7 +57,7 @@ class CounterRepositoryImpl(
         newValue: Int
     ) {
         val change = CounterChange(
-            id = UuidGenerator.randomUUID(),
+            id = Uuid.random().toString(),
             counterId = counterId,
             counterName = counterName,
             counterColor = counterColor,
@@ -77,7 +77,7 @@ class CounterRepositoryImpl(
         counterColor: Long
     ) {
         val change = CounterChange(
-            id = UuidGenerator.randomUUID(),
+            id = Uuid.random().toString(),
             counterId = counterId,
             counterName = counterName,
             counterColor = counterColor,
