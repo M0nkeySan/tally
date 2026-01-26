@@ -37,7 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
@@ -74,12 +73,11 @@ import org.jetbrains.compose.resources.stringResource
 fun TarotRoundAdditionScreen(
     gameId: String,
     roundId: String? = null,
-    onBack: () -> Unit,
     onRoundAdded: () -> Unit,
     viewModel: TarotScoringViewModel = viewModel { TarotScoringViewModel() }
 ) {
     val state by viewModel.state.collectAsState()
-    
+
     var takerPlayerId by remember { mutableStateOf<String?>(null) }
     var bid by remember { mutableStateOf(TarotBid.PRISE) }
     var bouts by remember { mutableIntStateOf(0) }
@@ -92,11 +90,6 @@ fun TarotRoundAdditionScreen(
 
     val isEditMode = roundId != null
     var isDataLoaded by remember { mutableStateOf(false) }
-
-    // Handle system back gesture
-    BackHandler {
-        onBack()
-    }
 
     // Pre-fill data if in edit mode
     LaunchedEffect(state.rounds) {
@@ -130,7 +123,8 @@ fun TarotRoundAdditionScreen(
         else -> 56f
     }
     val isWinner = pAtqFloat >= targetPoints
-    val statusColor = if (isWinner) LocalCustomColors.current.success else MaterialTheme.colorScheme.error
+    val statusColor =
+        if (isWinner) LocalCustomColors.current.success else MaterialTheme.colorScheme.error
 
     Scaffold(
         bottomBar = {
@@ -158,11 +152,15 @@ fun TarotRoundAdditionScreen(
                         .padding(16.dp)
                         .height(56.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = statusColor),
-                    enabled = takerPlayerId != null && 
-                             (state.game?.playerCount != 5 || calledPlayerId != null) &&
-                             pointsAtq.toFloatOrNull() != null
+                    enabled = takerPlayerId != null &&
+                            (state.game?.playerCount != 5 || calledPlayerId != null) &&
+                            pointsAtq.toFloatOrNull() != null
                 ) {
-                    Text(stringResource(Res.string.tarot_round_action_save), fontWeight = FontWeight.Bold, color = Color.White)
+                    Text(
+                        stringResource(Res.string.tarot_round_action_save),
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
                 }
             }
         }
@@ -187,15 +185,21 @@ fun TarotRoundAdditionScreen(
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         // Taker
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(stringResource(Res.string.tarot_round_label_taker), style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+                            Text(
+                                stringResource(Res.string.tarot_round_label_taker),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Color.Gray
+                            )
                             FlowRow(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 state.players.forEach { player ->
                                     val isSelected = takerPlayerId == player.id
-                                    val playerColor = remember(player.avatarColor) { parseColor(player.avatarColor) }
-                                    val contentColor = if (playerColor.luminance() > 0.5f) Color.Black else Color.White
+                                    val playerColor =
+                                        remember(player.avatarColor) { parseColor(player.avatarColor) }
+                                    val contentColor =
+                                        if (playerColor.luminance() > 0.5f) Color.Black else Color.White
 
                                     FilterChip(
                                         selected = isSelected,
@@ -213,15 +217,21 @@ fun TarotRoundAdditionScreen(
                         // Called Player (5 players only)
                         if (state.game?.playerCount == 5) {
                             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Text(stringResource(Res.string.tarot_round_label_called_player), style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+                                Text(
+                                    stringResource(Res.string.tarot_round_label_called_player),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = Color.Gray
+                                )
                                 FlowRow(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
                                     state.players.forEach { player ->
                                         val isSelected = calledPlayerId == player.id
-                                        val playerColor = remember(player.avatarColor) { parseColor(player.avatarColor) }
-                                        val contentColor = if (playerColor.luminance() > 0.5f) Color.Black else Color.White
+                                        val playerColor =
+                                            remember(player.avatarColor) { parseColor(player.avatarColor) }
+                                        val contentColor =
+                                            if (playerColor.luminance() > 0.5f) Color.Black else Color.White
 
                                         FilterChip(
                                             selected = isSelected,
@@ -249,14 +259,14 @@ fun TarotRoundAdditionScreen(
                             FilterChip(
                                 selected = bid == b,
                                 onClick = { bid = b },
-                                label = { 
+                                label = {
                                     Text(
                                         text = b.displayName.replace(" ", "\n"),
                                         textAlign = TextAlign.Center,
                                         modifier = Modifier.fillMaxWidth(),
                                         lineHeight = 14.sp,
                                         style = MaterialTheme.typography.labelSmall
-                                    ) 
+                                    )
                                 },
                                 modifier = Modifier.weight(1f)
                             )
@@ -271,19 +281,19 @@ fun TarotRoundAdditionScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         (0..3).forEach { b ->
-                             FilterChip(
-                                 selected = bouts == b,
-                                 onClick = { bouts = b },
-                                 label = {
-                                     Text(
-                                         text = b.toString(),
-                                         textAlign = TextAlign.Center,
-                                         modifier = Modifier.fillMaxWidth()
-                                     )
-                                 },
-                                 modifier = Modifier.weight(1f)
-                             )
-                         }
+                            FilterChip(
+                                selected = bouts == b,
+                                onClick = { bouts = b },
+                                label = {
+                                    Text(
+                                        text = b.toString(),
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                },
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
                     }
                 }
 
@@ -297,7 +307,9 @@ fun TarotRoundAdditionScreen(
                         ) {
                             OutlinedTextField(
                                 value = pointsAtq,
-                                onValueChange = { if (it.isEmpty() || it.all { c -> c.isDigit() }) pointsAtq = it },
+                                onValueChange = {
+                                    if (it.isEmpty() || it.all { c -> c.isDigit() }) pointsAtq = it
+                                },
                                 label = { Text(stringResource(Res.string.tarot_round_field_attacker_score)) },
                                 modifier = Modifier.weight(1f),
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -307,12 +319,16 @@ fun TarotRoundAdditionScreen(
                                     focusedLabelColor = statusColor
                                 )
                             )
-                            
+
                             val pAtq = pointsAtq.toIntOrNull() ?: 0
                             val pDef = (91 - pAtq).coerceAtLeast(0)
-                            
+
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(stringResource(Res.string.tarot_round_label_defense), style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+                                Text(
+                                    stringResource(Res.string.tarot_round_label_defense),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = Color.Gray
+                                )
                                 Text(
                                     text = pDef.toString(),
                                     style = MaterialTheme.typography.titleLarge,
@@ -321,7 +337,7 @@ fun TarotRoundAdditionScreen(
                                 )
                             }
                         }
-                        
+
                         Slider(
                             value = pointsAtq.toFloatOrNull() ?: 0f,
                             onValueChange = { pointsAtq = it.toInt().toString() },
@@ -332,16 +348,22 @@ fun TarotRoundAdditionScreen(
                                 activeTrackColor = statusColor
                             )
                         )
-                        
+
                         Text(
-                             text = if (isWinner) stringResource(Res.string.tarot_round_contract_won, (pAtqFloat - targetPoints).toInt())
-                                    else stringResource(Res.string.tarot_round_contract_lost, (pAtqFloat - targetPoints).toInt()),
-                             style = MaterialTheme.typography.labelMedium,
-                             fontWeight = FontWeight.Bold,
-                             color = statusColor,
-                             modifier = Modifier.fillMaxWidth(),
-                             textAlign = TextAlign.Center
-                         )
+                            text = if (isWinner) stringResource(
+                                Res.string.tarot_round_contract_won,
+                                (pAtqFloat - targetPoints).toInt()
+                            )
+                            else stringResource(
+                                Res.string.tarot_round_contract_lost,
+                                (pAtqFloat - targetPoints).toInt()
+                            ),
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = statusColor,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
 
@@ -350,14 +372,18 @@ fun TarotRoundAdditionScreen(
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         // Petit au bout
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Checkbox(checked = hasPetitAuBout, onCheckedChange = { hasPetitAuBout = it })
+                            Checkbox(
+                                checked = hasPetitAuBout,
+                                onCheckedChange = { hasPetitAuBout = it })
                             Text(stringResource(Res.string.tarot_round_announce_petit_au_bout))
                         }
-                        
+
                         // Poignée
                         Column {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Checkbox(checked = hasPoignee, onCheckedChange = { hasPoignee = it })
+                                Checkbox(
+                                    checked = hasPoignee,
+                                    onCheckedChange = { hasPoignee = it })
                                 Text(stringResource(Res.string.tarot_round_announce_poignee))
                             }
                             if (hasPoignee) {
@@ -375,10 +401,13 @@ fun TarotRoundAdditionScreen(
                                 }
                             }
                         }
-                        
+
                         // Chelem
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(stringResource(Res.string.tarot_round_label_chelem), style = MaterialTheme.typography.bodyMedium)
+                            Text(
+                                stringResource(Res.string.tarot_round_label_chelem),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
                             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 ChelemType.entries.forEach { type ->
                                     FilterChip(
@@ -391,7 +420,7 @@ fun TarotRoundAdditionScreen(
                         }
                     }
                 }
-                
+
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }

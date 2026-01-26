@@ -26,7 +26,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -51,7 +50,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.m0nkeysan.tally.GameIcons
 import io.github.m0nkeysan.tally.core.utils.getCurrentTimeMillis
-import io.github.m0nkeysan.tally.ui.components.NumberSlider
 import io.github.m0nkeysan.tally.generated.resources.Res
 import io.github.m0nkeysan.tally.generated.resources.action_back
 import io.github.m0nkeysan.tally.generated.resources.cd_settings
@@ -59,10 +57,10 @@ import io.github.m0nkeysan.tally.generated.resources.error_min_fingers
 import io.github.m0nkeysan.tally.generated.resources.finger_selector_cd_touch
 import io.github.m0nkeysan.tally.generated.resources.finger_selector_dialog_title
 import io.github.m0nkeysan.tally.generated.resources.finger_selector_finger_count
-import io.github.m0nkeysan.tally.generated.resources.finger_selector_instruction_place
+import io.github.m0nkeysan.tally.generated.resources.finger_selector_finger_instruction_wait
 import io.github.m0nkeysan.tally.generated.resources.finger_selector_group_count
 import io.github.m0nkeysan.tally.generated.resources.finger_selector_group_instruction_wait
-import io.github.m0nkeysan.tally.generated.resources.finger_selector_finger_instruction_wait
+import io.github.m0nkeysan.tally.generated.resources.finger_selector_instruction_place
 import io.github.m0nkeysan.tally.generated.resources.finger_selector_label_fingers
 import io.github.m0nkeysan.tally.generated.resources.finger_selector_label_groups
 import io.github.m0nkeysan.tally.generated.resources.finger_selector_mode_fingers
@@ -71,6 +69,7 @@ import io.github.m0nkeysan.tally.generated.resources.finger_selector_section_mod
 import io.github.m0nkeysan.tally.generated.resources.game_finger_selector
 import io.github.m0nkeysan.tally.platform.HapticType
 import io.github.m0nkeysan.tally.platform.rememberHapticFeedbackController
+import io.github.m0nkeysan.tally.ui.components.NumberSlider
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
@@ -137,8 +136,16 @@ fun FingerSelectorScreen(onBack: () -> Unit) {
                             )
                             Text(
                                 text = when (config.mode) {
-                                    SelectionMode.FINGERS -> pluralStringResource(Res.plurals.finger_selector_finger_count, config.count, config.count)
-                                    SelectionMode.GROUPS -> stringResource(Res.string.finger_selector_group_count, config.count)
+                                    SelectionMode.FINGERS -> pluralStringResource(
+                                        Res.plurals.finger_selector_finger_count,
+                                        config.count,
+                                        config.count
+                                    )
+
+                                    SelectionMode.GROUPS -> stringResource(
+                                        Res.string.finger_selector_group_count,
+                                        config.count
+                                    )
                                 },
                                 style = MaterialTheme.typography.bodySmall
                             )
@@ -239,9 +246,9 @@ fun SelectionSettingsSheet(
 
         // Count Selection
         NumberSlider(
-            label = if (config.mode == SelectionMode.FINGERS) 
+            label = if (config.mode == SelectionMode.FINGERS)
                 stringResource(Res.string.finger_selector_label_fingers)
-            else 
+            else
                 stringResource(Res.string.finger_selector_label_groups),
             value = config.count,
             onValueChange = { onConfigChange(config.copy(count = it)) },
@@ -525,7 +532,11 @@ fun FingerSelectorGame(
                         text = if (config.mode == SelectionMode.GROUPS)
                             stringResource(Res.string.finger_selector_group_instruction_wait)
                         else
-                            pluralStringResource(Res.plurals.finger_selector_finger_instruction_wait, config.count, config.count),
+                            pluralStringResource(
+                                Res.plurals.finger_selector_finger_instruction_wait,
+                                config.count,
+                                config.count
+                            ),
                         color = Color.White.copy(alpha = 0.5f),
                         fontSize = 14.sp,
                         textAlign = TextAlign.Center

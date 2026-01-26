@@ -96,7 +96,7 @@ import org.jetbrains.compose.resources.stringResource
  *     onDeleteGame = { viewModel.deleteGame(it) },
  *     onBack = {
                     if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
-                        navController.popBackStack()
+                        navController.popSafe()
                     }
                 },
  *     isLoading = state.isLoading,

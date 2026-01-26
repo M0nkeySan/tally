@@ -44,7 +44,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -83,17 +82,11 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun YahtzeeScoringScreen(
     gameId: String,
-    onBack: () -> Unit,
     onGameFinished: () -> Unit,
     viewModel: YahtzeeScoringViewModel = viewModel { YahtzeeScoringViewModel() }
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    
-    // Handle system back gesture
-    BackHandler {
-        onBack()
-    }
     
     LaunchedEffect(gameId) {
         viewModel.loadGame(gameId)

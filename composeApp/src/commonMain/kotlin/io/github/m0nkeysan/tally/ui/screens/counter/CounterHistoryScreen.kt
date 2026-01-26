@@ -28,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -55,7 +54,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CounterHistoryScreen(
-    onBackPressed: () -> Unit,
+    onBack: () -> Unit,
     viewModel: CounterViewModel = viewModel { CounterViewModel() }
 ) {
     val mergedHistory by viewModel.mergedHistory.collectAsState()
@@ -113,7 +112,7 @@ fun CounterHistoryScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
+                    IconButton(onClick = onBack) {
                         Icon(
                             GameIcons.ArrowBack,
                             contentDescription = stringResource(Res.string.action_back)
@@ -169,8 +168,6 @@ fun CounterHistoryScreen(
             }
         }
     }
-
-    BackHandler { onBackPressed() }
 }
 
 @Composable
