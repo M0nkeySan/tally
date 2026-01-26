@@ -20,3 +20,5 @@ node_modules/
 /iosApp/iosApp.xcodeproj/
 project.pbxproj
 /.serena/
+*.jks
+keystore.properties

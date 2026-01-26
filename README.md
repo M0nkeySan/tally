@@ -2,6 +2,7 @@
 
 > Your all-in-one companion for board game nights
 
+[![Download](https://img.shields.io/badge/Download-Latest_Release-success?style=for-the-badge&logo=android)](https://github.com/m0nkeysan/tally/releases/latest)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue.svg)]()
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.3.0-purple.svg)]()
@@ -13,13 +14,13 @@ Tally is a Kotlin Multiplatform mobile application that brings together essentia
 
 ## 📸 Screenshots
 
-<p>
+<p align="center">
   <img src="screenshots/home-screen.png" width="200" alt="Home Screen"/>
   <img src="screenshots/dice-roller.png" width="200" alt="Dice Roller"/>
   <img src="screenshots/counter.png" width="200" alt="Counter"/>
 </p>
 
-<p>
+<p align="center">
   <img src="screenshots/tarot-scoring.png" width="200" alt="Tarot Scoring"/>
   <img src="screenshots/tarot-statistics.png" width="200" alt="Tarot Statistics"/>
   <img src="screenshots/yahtzee-statistics.png" width="200" alt="Yahtzee Statistics"/>
@@ -332,6 +333,6 @@ See [LICENSE](LICENSE) for the full license text.
 
 ---
 
-<p>
+<p align="center">
   <sub>Built with ❤️ using Kotlin Multiplatform</sub>
 </p>

@@ -25,7 +25,13 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew assembleDebug
+        env:
+          VERSION_TAG: "debug-${{ github.sha }}"
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          export VERSION_TAG="debug-$SHORT_SHA"
+          ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
