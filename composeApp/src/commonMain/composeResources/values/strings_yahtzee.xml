@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Yahtzee - Scoring -->
+    <string name="yahtzee_scoring_screen_title">Yahtzee Scoring</string>
     <string name="yahtzee_scoring_cd_previous">Previous Player</string>
     <string name="yahtzee_scoring_turn_indicator">●</string>
     <string name="yahtzee_scoring_fallback_name">Unknown</string>

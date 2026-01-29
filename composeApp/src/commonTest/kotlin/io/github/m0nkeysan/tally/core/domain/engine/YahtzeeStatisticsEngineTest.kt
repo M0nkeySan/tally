@@ -1,11 +1,12 @@
 package io.github.m0nkeysan.tally.core.domain.engine
 
-import io.github.m0nkeysan.tally.core.data.local.database.YahtzeeGameEntity
-import io.github.m0nkeysan.tally.core.data.local.database.YahtzeeScoreEntity
+import io.github.m0nkeysan.tally.core.domain.data.YahtzeeGameData
+import io.github.m0nkeysan.tally.core.domain.data.YahtzeeScoreData
 import io.github.m0nkeysan.tally.core.model.YahtzeeCategory
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
 
 /**
  * Comprehensive test suite for YahtzeeStatisticsEngine
@@ -20,7 +21,7 @@ import kotlin.test.assertTrue
 
 
 /**
- * Creates a test YahtzeeGameEntity with sensible defaults
+ * Creates a test TestYahtzeeGameData with sensible defaults
  */
 private fun createTestGame(
     id: String = "game1",
@@ -30,8 +31,8 @@ private fun createTestGame(
     winnerName: String? = null,
     createdAt: Long = 1000L,
     updatedAt: Long = 2000L
-): YahtzeeGameEntity {
-    return YahtzeeGameEntity(
+): TestYahtzeeGameData {
+    return TestYahtzeeGameData(
         id = id,
         name = name,
         playerCount = playerIds.size,
@@ -46,7 +47,7 @@ private fun createTestGame(
 }
 
 /**
- * Creates a test YahtzeeScoreEntity with sensible defaults
+ * Creates a test TestYahtzeeScoreData with sensible defaults
  */
 private fun createTestScore(
     id: String = "score1",
@@ -54,8 +55,8 @@ private fun createTestScore(
     playerId: String = "player1",
     category: YahtzeeCategory = YahtzeeCategory.ACES,
     score: Int = 0
-): YahtzeeScoreEntity {
-    return YahtzeeScoreEntity(
+): TestYahtzeeScoreData {
+    return TestYahtzeeScoreData(
         id = id,
         gameId = gameId,
         playerId = playerId,
@@ -76,7 +77,7 @@ private fun createUpperSectionScores(
     foursScore: Int = 12,
     fivesScore: Int = 15,
     sixesScore: Int = 18
-): List<YahtzeeScoreEntity> {
+): List<TestYahtzeeScoreData> {
     return listOf(
         createTestScore(
             gameId = gameId,
@@ -289,7 +290,7 @@ class CountYahtzees {
     @Test
     fun `handles empty score list`() {
         // Given
-        val scores = emptyList<YahtzeeScoreEntity>()
+        val scores = emptyList<TestYahtzeeScoreData>()
 
         // When
         val result = YahtzeeStatisticsEngine.countYahtzees(scores)
@@ -429,8 +430,8 @@ class CalculateGameTotals {
     @Test
     fun `returns empty map when no games exist`() {
         // Given
-        val games = emptyList<YahtzeeGameEntity>()
-        val scores = emptyList<YahtzeeScoreEntity>()
+        val games = emptyList<TestYahtzeeGameData>()
+        val scores = emptyList<TestYahtzeeScoreData>()
 
         // When
         val result = YahtzeeStatisticsEngine.calculateGameTotals(games, scores, "player1")
@@ -602,7 +603,7 @@ class CalculateCategoryStats {
     @Test
     fun `handles all 13 categories correctly`() {
         // Given
-        val scores = emptyList<YahtzeeScoreEntity>()
+        val scores = emptyList<TestYahtzeeScoreData>()
 
         // When
         val result = YahtzeeStatisticsEngine.calculateCategoryStats(scores, totalGames = 0)
@@ -846,7 +847,7 @@ class SectionAverages {
     @Test
     fun `returns 0 when no scores exist for upper section`() {
         // Given
-        val scores = emptyList<YahtzeeScoreEntity>()
+        val scores = emptyList<TestYahtzeeScoreData>()
 
         // When
         val result = YahtzeeStatisticsEngine.calculateUpperSectionAverage(scores)
@@ -858,7 +859,7 @@ class SectionAverages {
     @Test
     fun `returns 0 when no scores exist for lower section`() {
         // Given
-        val scores = emptyList<YahtzeeScoreEntity>()
+        val scores = emptyList<TestYahtzeeScoreData>()
 
         // When
         val result = YahtzeeStatisticsEngine.calculateLowerSectionAverage(scores)
@@ -1050,7 +1051,7 @@ class CalculatePlayerStatistics {
     @Test
     fun `handles player with no games gracefully`() {
         // Given
-        val games = emptyList<YahtzeeGameEntity>()
+        val games = emptyList<TestYahtzeeGameData>()
 
         // When
         val result = YahtzeeStatisticsEngine.calculatePlayerStatistics(
@@ -1077,7 +1078,7 @@ class YahtzeeStatisticsEngine_EdgeCases {
     @Test
     fun `handles empty player list`() {
         // Given
-        val games = emptyList<YahtzeeGameEntity>()
+        val games = emptyList<TestYahtzeeGameData>()
 
         // When
         val result = YahtzeeStatisticsEngine.calculateGameTotals(games, emptyList(), "player1")
@@ -1089,7 +1090,7 @@ class YahtzeeStatisticsEngine_EdgeCases {
     @Test
     fun `handles empty game list`() {
         // Given
-        val games = emptyList<YahtzeeGameEntity>()
+        val games = emptyList<TestYahtzeeGameData>()
         val scores = listOf(createTestScore())
 
         // When
@@ -1103,7 +1104,7 @@ class YahtzeeStatisticsEngine_EdgeCases {
     fun `handles empty score list`() {
         // Given
         val games = listOf(createTestGame())
-        val scores = emptyList<YahtzeeScoreEntity>()
+        val scores = emptyList<TestYahtzeeScoreData>()
 
         // When
         val result = YahtzeeStatisticsEngine.calculateGameTotals(games, scores, "player1")
@@ -1132,3 +1133,24 @@ class YahtzeeStatisticsEngine_EdgeCases {
         assertEquals(0, result["game1"]) // player1 has no scores in game1
     }
 }
+
+private data class TestYahtzeeGameData(
+    override val id: String = Uuid.random().toString(),
+    override val name: String,
+    override val playerCount: Int,
+    override val playerIds: String,
+    override val firstPlayerId: String,
+    override val currentPlayerId: String,
+    override val isFinished: Boolean = false,
+    override val winnerName: String? = null,
+    override val createdAt: Long,
+    override val updatedAt: Long
+) : YahtzeeGameData
+
+private data class TestYahtzeeScoreData(
+    override val id: String = Uuid.random().toString(),
+    override val gameId: String,
+    override val playerId: String,
+    override val category: String,
+    override val score: Int
+) : YahtzeeScoreData

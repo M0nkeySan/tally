@@ -1,27 +1,17 @@
 package io.github.m0nkeysan.tally.platform
 
-import io.github.m0nkeysan.tally.core.data.local.database.AppDatabase
-import io.github.m0nkeysan.tally.core.data.local.database.getDatabaseBuilder
-import io.github.m0nkeysan.tally.core.data.local.repository.CounterRepositoryImpl
-import io.github.m0nkeysan.tally.core.data.local.repository.GameQueryHelper
-import io.github.m0nkeysan.tally.core.data.local.repository.PlayerRepositoryImpl
-import io.github.m0nkeysan.tally.core.data.local.repository.TarotRepositoryImpl
-import io.github.m0nkeysan.tally.core.data.local.repository.TarotStatisticsRepositoryImpl
-import io.github.m0nkeysan.tally.core.data.local.repository.UserPreferencesRepositoryImpl
-import io.github.m0nkeysan.tally.core.data.local.repository.YahtzeeRepositoryImpl
-import io.github.m0nkeysan.tally.core.data.local.repository.YahtzeeStatisticsRepositoryImpl
+import io.github.m0nkeysan.tally.core.data.local.DatabaseModule
+import io.github.m0nkeysan.tally.core.data.local.driver.DatabaseDriverFactory
+import io.github.m0nkeysan.tally.core.data.repository.*
 import io.github.m0nkeysan.tally.core.domain.CounterHistoryStore
-import io.github.m0nkeysan.tally.core.domain.repository.CounterRepository
-import io.github.m0nkeysan.tally.core.domain.repository.PlayerRepository
-import io.github.m0nkeysan.tally.core.domain.repository.TarotRepository
-import io.github.m0nkeysan.tally.core.domain.repository.TarotStatisticsRepository
-import io.github.m0nkeysan.tally.core.domain.repository.UserPreferencesRepository
-import io.github.m0nkeysan.tally.core.domain.repository.YahtzeeRepository
-import io.github.m0nkeysan.tally.core.domain.repository.YahtzeeStatisticsRepository
+import io.github.m0nkeysan.tally.core.domain.repository.*
+import io.github.m0nkeysan.tally.database.TallyDatabase
 import io.github.m0nkeysan.tally.ui.strings.LocaleManager
+import kotlinx.coroutines.*
 
 actual object PlatformRepositories {
-    private var database: AppDatabase? = null
+    private var database: TallyDatabase? = null
+    private val driverFactory = DatabaseDriverFactory()
     
     // Singleton instances for repositories
     private var playerRepository: PlayerRepository? = null
@@ -35,11 +25,19 @@ actual object PlatformRepositories {
     private var historyStore: CounterHistoryStore? = null
     private var localeManager: LocaleManager? = null
 
-    private fun getDatabase(): AppDatabase {
-        if (database == null) {
-            database = getDatabaseBuilder().build()
-        }
-        return database!!
+    private var initJob: Job? = null
+
+    /**
+     * Wasm specific initialization.
+     * Must be called and awaited before accessing repositories.
+     */
+    suspend fun init() {
+        if (database != null) return
+        database = DatabaseModule.getDatabase(driverFactory)
+    }
+
+    private fun getDatabase(): TallyDatabase {
+        return database ?: throw IllegalStateException("Database not yet initialized. Wasm initialization is asynchronous. Call PlatformRepositories.init() first.")
     }
 
     private fun getHistoryStore(): CounterHistoryStore {
@@ -50,7 +48,7 @@ actual object PlatformRepositories {
 
     actual fun getPlayerRepository(): PlayerRepository {
         return playerRepository ?: PlayerRepositoryImpl(
-            getDatabase().playerDao(),
+            getDatabase().playerQueries,
             getGameQueryHelper()
         ).also {
             playerRepository = it
@@ -58,14 +56,14 @@ actual object PlatformRepositories {
     }
 
     actual fun getUserPreferencesRepository(): UserPreferencesRepository {
-        return userPreferencesRepository ?: UserPreferencesRepositoryImpl(getDatabase().userPreferencesDao()).also {
+        return userPreferencesRepository ?: UserPreferencesRepositoryImpl(getDatabase().preferencesQueries).also {
             userPreferencesRepository = it
         }
     }
 
     actual fun getCounterRepository(): CounterRepository {
         return counterRepository ?: CounterRepositoryImpl(
-            getDatabase().persistentCounterDao(),
+            getDatabase().counterQueries,
             getHistoryStore()
         ).also {
             counterRepository = it
@@ -73,14 +71,14 @@ actual object PlatformRepositories {
     }
 
     actual fun getTarotRepository(): TarotRepository {
-        return tarotRepository ?: TarotRepositoryImpl(getDatabase().tarotDao(), getDatabase()).also {
+        return tarotRepository ?: TarotRepositoryImpl(getDatabase().tarotQueries).also {
             tarotRepository = it
         }
     }
 
     actual fun getTarotStatisticsRepository(): TarotStatisticsRepository {
         return tarotStatisticsRepository ?: TarotStatisticsRepositoryImpl(
-            getDatabase().tarotDao(),
+            getDatabase().tarotQueries,
             getTarotRepository(),
             getPlayerRepository()
         ).also {
@@ -89,14 +87,14 @@ actual object PlatformRepositories {
     }
 
     actual fun getYahtzeeRepository(): YahtzeeRepository {
-        return yahtzeeRepository ?: YahtzeeRepositoryImpl(getDatabase().yahtzeeDao(), getDatabase()).also {
+        return yahtzeeRepository ?: YahtzeeRepositoryImpl(getDatabase().yahtzeeQueries).also {
             yahtzeeRepository = it
         }
     }
 
     actual fun getYahtzeeStatisticsRepository(): YahtzeeStatisticsRepository {
         return yahtzeeStatisticsRepository ?: YahtzeeStatisticsRepositoryImpl(
-            getDatabase().yahtzeeDao(),
+            getDatabase().yahtzeeQueries,
             getPlayerRepository()
         ).also {
             yahtzeeStatisticsRepository = it
@@ -104,7 +102,7 @@ actual object PlatformRepositories {
     }
 
     actual fun getGameQueryHelper(): GameQueryHelper {
-        return gameQueryHelper ?: GameQueryHelper(getDatabase().tarotDao(), getDatabase().yahtzeeDao()).also {
+        return gameQueryHelper ?: GameQueryHelperImpl(getDatabase().tarotQueries, getDatabase().yahtzeeQueries).also {
             gameQueryHelper = it
         }
     }

@@ -30,8 +30,12 @@ class PlayerSelectionViewModel : ViewModel() {
     fun addPlayer(name: String, color: String) {
         viewModelScope.launch {
             try {
-                playerRepository.createPlayerOrReactivate(name, color)
+                println("PlayerSelectionViewModel: addPlayer called with name='$name', color='$color'")
+                val result = playerRepository.createPlayerOrReactivate(name, color)
+                println("PlayerSelectionViewModel: createPlayerOrReactivate returned: $result")
             } catch (e: Exception) {
+                println("PlayerSelectionViewModel: ERROR in addPlayer: ${e.message}")
+                e.printStackTrace()
             }
         }
     }

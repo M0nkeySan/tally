@@ -11,7 +11,6 @@ class WebHapticFeedbackController : HapticFeedbackController {
     override fun performHapticFeedback(type: HapticType) {
         // Haptic feedback not supported on web platform
         // Silently fail - no user-facing error message
-        console.log("Haptic feedback not supported on web platform (type: $type)")
     }
 }
 

@@ -50,9 +50,10 @@ Tally is a Kotlin Multiplatform mobile application that brings together essentia
 - **Material Design 3** - Modern, clean interface following Material Design guidelines
 - **Dark Mode** - Automatic theme switching based on system preference
 - **Multi-language** - Full support for English and French
-- **Offline-First** - All data stored locally with Room database, no internet required
-
----
+- **Offline-First** - All data stored locally with SQLDelight database, no internet required
+- **Modern Tech Stack** - Kotlin Multiplatform, Compose Multiplatform, Coroutines, and SQLDelight
+- **Beautiful UI** - Material 3 design with dark mode support
+- **Cross-Platform** - Runs on Android, iOS, and Web (WASM)
 
 ## 🛠 Tech Stack
 
@@ -60,11 +61,11 @@ Tally is built with modern technologies and follows best practices for Kotlin Mu
 
 ### Core Technologies
 - **[Kotlin Multiplatform (KMP)](https://kotlinlang.org/docs/multiplatform.html)** - Share business logic across platforms
-- **[Compose Multiplatform](https://www.jetbrains.com/compose-multiplatform/)** - Declarative UI framework for Android and iOS
+- **[Compose Multiplatform](https://www.jetbrains.com/compose-multiplatform/)** - Declarative UI framework for Android, iOS, and Web
 - **[Material Design 3](https://m3.material.io/)** - Latest Material Design components and theming
 
 ### Architecture & Data
-- **[Room Database](https://developer.android.com/jetpack/androidx/releases/room)** - Local data persistence with SQLite
+- **[SQLDelight](https://cashapp.github.io/sqldelight/)** - Multiplatform local data persistence with SQLite
 - **[Koin](https://insert-koin.io/)** - Dependency injection framework
 - **[Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)** - Asynchronous programming
 - **[Kotlin Serialization](https://kotlinlang.org/docs/serialization.html)** - Data serialization
@@ -88,16 +89,16 @@ Tally follows **Clean Architecture** principles with clear separation of concern
    └─ Models, Repository Interfaces, Business Logic Engines
       ↓
 💾 Data Layer
-   └─ Room Database, Repository Implementations, DAOs
+   └─ SQLDelight Database, Shared Repository Implementations
       ↓
 ⚙️ Platform Layer
-   └─ Android/iOS specific implementations (haptics, sensors, etc.)
+   └─ Driver initialization & Platform specific integrations
 ```
 
 ### Architecture Patterns
 - **MVVM (Model-View-ViewModel)** - Separation of UI and business logic
 - **Repository Pattern** - Abstract data sources from business logic
-- **Single Source of Truth** - Room database as the single source of truth
+- **Single Source of Truth** - SQLDelight database as the single source of truth across all platforms (Android, iOS, and Web via OPFS)
 - **Unidirectional Data Flow** - Predictable state management with ViewModels
 
 ### Key Components
@@ -218,7 +219,7 @@ tally/
 │   │   │   │   ├── core/
 │   │   │   │   │   ├── navigation/ # Navigation graph & routes
 │   │   │   │   │   ├── model/    # Domain models (Player, Game, etc.)
-│   │   │   │   │   ├── data/     # Room database & repositories
+│   │   │   │   │   ├── data/     # SQLDelight database & repositories
 │   │   │   │   │   └── domain/   # Business logic engines
 │   │   │   │   └── platform/     # Platform abstractions (expect)
 │   │   │   └── composeResources/ # Shared resources (strings, images)

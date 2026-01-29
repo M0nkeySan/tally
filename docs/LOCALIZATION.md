@@ -41,7 +41,7 @@ between languages at runtime without restarting the app.
 - **Compose Multiplatform Resources** - XML-based string resources
 - **Kotlin StateFlow** - Reactive locale state management
 - **Java Locale API** - System-level locale updates
-- **Room Database** - Persistent user preferences
+- **SQLDelight Database** - Persistent user preferences
 
 ---
 
@@ -91,8 +91,10 @@ Standard Android-style XML resource files organized by locale:
 
 #### **4. UserPreferencesRepository**
 
-Persists the user's language choice using Room database, ensuring the preference survives app
+Persists the user's language choice using SQLDelight database, ensuring the preference survives app
 restarts.
+
+On Web, the database is stored in the Origin Private File System (OPFS) for persistence.
 
 ### Language Switching Flow
 

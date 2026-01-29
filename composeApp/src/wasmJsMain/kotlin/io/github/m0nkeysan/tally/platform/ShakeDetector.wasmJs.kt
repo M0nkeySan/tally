@@ -10,7 +10,6 @@ import androidx.compose.runtime.remember
 actual class ShakeDetector {
     fun start() {
         // Shake detection not supported on web platform
-        console.log("Shake detection not supported on web platform")
     }
     
     fun stop() {

@@ -16,7 +16,7 @@ actual class MultiplatformLocale(
         
         actual fun getDefault(): MultiplatformLocale {
             return defaultLocale ?: run {
-                val browserLocale = js("navigator.language || navigator.userLanguage").toString()
+                val browserLocale = window.navigator.language
                 forLanguageTag(browserLocale)
             }
         }

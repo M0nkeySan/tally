@@ -1,5 +1,7 @@
 package io.github.m0nkeysan.tally.core.utils
 
+private fun jsDateNow(): Double = js("Date.now()")
+
 actual fun getCurrentTimeMillis(): Long {
-    return js("Date.now()").unsafeCast<Double>().toLong()
+    return jsDateNow().toLong()
 }

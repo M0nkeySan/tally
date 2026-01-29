@@ -19,8 +19,8 @@
     <string name="tarot_stats_section_current_standings">Current Standings</string>
     <string name="tarot_stats_format_as_taker">%1$d/%2$d as taker</string>
     <string name="tarot_stats_label_round">Round %1$d</string>
-    <string name="tarot_stats_contract_won">✓ Won</string>
-    <string name="tarot_stats_contract_lost">✗ Lost</string>
+    <string name="tarot_stats_contract_won">Won</string>
+    <string name="tarot_stats_contract_lost">Lost</string>
     <string name="tarot_stats_section_taker_performance">Taker Performance 📊</string>
     <string name="tarot_stats_label_bids_used">Bids Used:</string>
     <string name="tarot_stats_label_with_partners">With Partners:</string>
@@ -40,6 +40,8 @@
     <string name="tarot_scoring_game_title">Tarot Games</string>
 
     <!-- Tarot - Round Addition -->
+    <string name="tarot_round_screen_title_add">Add Round</string>
+    <string name="tarot_round_screen_title_edit">Edit Round</string>
     <string name="tarot_round_action_save">SAVE ROUND</string>
     <string name="tarot_round_section_players">PLAYERS</string>
     <string name="tarot_round_label_taker">TAKER</string>

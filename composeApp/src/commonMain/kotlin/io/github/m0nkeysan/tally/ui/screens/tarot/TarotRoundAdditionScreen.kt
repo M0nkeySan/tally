@@ -25,8 +25,13 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,20 +42,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.m0nkeysan.tally.GameIcons
 import io.github.m0nkeysan.tally.core.model.ChelemType
 import io.github.m0nkeysan.tally.core.model.PoigneeLevel
 import io.github.m0nkeysan.tally.core.model.TarotBid
 import io.github.m0nkeysan.tally.core.model.localizedName
 import io.github.m0nkeysan.tally.generated.resources.Res
+import io.github.m0nkeysan.tally.generated.resources.action_back
 import io.github.m0nkeysan.tally.generated.resources.tarot_round_action_save
+import io.github.m0nkeysan.tally.generated.resources.tarot_round_screen_title_add
+import io.github.m0nkeysan.tally.generated.resources.tarot_round_screen_title_edit
 import io.github.m0nkeysan.tally.generated.resources.tarot_round_announce_petit_au_bout
 import io.github.m0nkeysan.tally.generated.resources.tarot_round_announce_poignee
 import io.github.m0nkeysan.tally.generated.resources.tarot_round_contract_lost
@@ -73,6 +84,7 @@ import org.jetbrains.compose.resources.stringResource
 fun TarotRoundAdditionScreen(
     gameId: String,
     roundId: String? = null,
+    onBack: () -> Unit,
     onRoundAdded: () -> Unit,
     viewModel: TarotScoringViewModel = viewModel { TarotScoringViewModel() }
 ) {
@@ -90,6 +102,9 @@ fun TarotRoundAdditionScreen(
 
     val isEditMode = roundId != null
     var isDataLoaded by remember { mutableStateOf(false) }
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(
+        state = rememberTopAppBarState()
+    )
 
     // Pre-fill data if in edit mode
     LaunchedEffect(state.rounds) {
@@ -127,6 +142,33 @@ fun TarotRoundAdditionScreen(
         if (isWinner) LocalCustomColors.current.success else MaterialTheme.colorScheme.error
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(
+                            if (isEditMode) Res.string.tarot_round_screen_title_edit
+                            else Res.string.tarot_round_screen_title_add
+                        ),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            imageVector = GameIcons.ArrowBack,
+                            contentDescription = stringResource(Res.string.action_back)
+                        )
+                    }
+                },
+                scrollBehavior = scrollBehavior,
+                modifier = Modifier.shadow(elevation = 2.dp)
+            )
+        },
         bottomBar = {
             Surface(shadowElevation = 8.dp) {
                 Button(

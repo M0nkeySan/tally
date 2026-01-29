@@ -2,61 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Tally - Your all-in-one companion for board game nights. Track scores for Yahtzee, Tarot, and more!">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description"
+          content="Tally - Your all-in-one companion for board game nights. Track scores for Yahtzee, Tarot, and more!">
     <meta name="theme-color" content="#000000">
+    <!-- CSP: Development-friendly policy. Production builds will inject a stricter policy via webpack. -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob:; worker-src 'self' blob:; base-uri 'self'; form-action 'self';">
     <title>Tally - Game Scoring Companion</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: #000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        }
-
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #loading {
-            color: #fff;
-            text-align: center;
-            font-size: 18px;
-        }
-
-        #loading .spinner {
-            width: 50px;
-            height: 50px;
-            margin: 20px auto;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        canvas {
-            display: block;
-        }
-    </style>
+    <link type="text/css" rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="loading">
+<div id="composeApplication">
+    <div class="spinner-container">
         <div class="spinner"></div>
-        <p>Loading Tally...</p>
+        <p style="color: white; font-family: sans-serif;">Loading Tally...</p>
     </div>
-    <script src="composeApp.js"></script>
+</div>
+<script src="composeApp.js"></script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 package io.github.m0nkeysan.tally.core.model
 
+import io.github.m0nkeysan.tally.core.domain.data.TarotGameData
+import io.github.m0nkeysan.tally.core.domain.data.YahtzeeGameData
 import io.github.m0nkeysan.tally.core.utils.getCurrentTimeMillis
 import kotlinx.serialization.Serializable
 import kotlin.uuid.Uuid
@@ -19,10 +21,10 @@ data class TarotGame(
     override val createdAt: Long = 0L,
     override val updatedAt: Long = 0L,
     val rounds: List<TarotRound> = emptyList(),
-    val playerCount: Int,
-    val name: String = "Tarot Game",
-    val playerIds: String = ""
-) : Game() {
+    override val playerCount: Int,
+    override val name: String = "Tarot Game",
+    override val playerIds: String = ""
+) : Game(), TarotGameData {
 
     companion object {
         fun create(players: List<Player>, playerCount: Int? = null, name: String = "Tarot Game"): TarotGame {
@@ -54,15 +56,15 @@ data class YahtzeeGame(
     override val players: List<Player>,
     override val createdAt: Long = 0L,
     override val updatedAt: Long = 0L,
-    val name: String = "Yahtzee Game",
-    val playerIds: String = "",
-    val firstPlayerId: String = "",
-    val currentPlayerId: String = "",
-    val isFinished: Boolean = false,
-    val winnerName: String? = null
-) : Game() {
+    override val name: String = "Yahtzee Game",
+    override val playerIds: String = "",
+    override val firstPlayerId: String = "",
+    override val currentPlayerId: String = "",
+    override val isFinished: Boolean = false,
+    override val winnerName: String? = null
+) : Game(), YahtzeeGameData {
     
-    val playerCount: Int get() = if (playerIds.isNotEmpty()) playerIds.split(",").size else players.size
+    override val playerCount: Int get() = if (playerIds.isNotEmpty()) playerIds.split(",").size else players.size
     
     fun getPlayerById(playerId: String): Player? = players.find { it.id == playerId }
     

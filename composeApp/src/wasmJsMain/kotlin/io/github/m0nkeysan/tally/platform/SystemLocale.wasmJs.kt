@@ -5,7 +5,7 @@ package io.github.m0nkeysan.tally.platform
  * Examples: "en", "fr", "es", "de", etc.
  */
 actual fun getSystemLocaleCode(): String {
-    val browserLocale = js("navigator.language || navigator.userLanguage").toString()
+    val browserLocale = window.navigator.language
     // Extract just the language code (e.g., "en" from "en-US")
     return browserLocale.split("-", "_")[0]
 }

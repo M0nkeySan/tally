@@ -1,0 +1,67 @@
+CREATE TABLE tarotGameEntity (
+  id TEXT NOT NULL PRIMARY KEY,
+  name TEXT NOT NULL,
+  playerCount INTEGER NOT NULL,
+  playerIds TEXT NOT NULL,
+  createdAt INTEGER NOT NULL,
+  updatedAt INTEGER NOT NULL
+);
+
+CREATE TABLE tarotRoundEntity (
+  id TEXT NOT NULL PRIMARY KEY,
+  gameId TEXT NOT NULL,
+  roundNumber INTEGER NOT NULL,
+  takerPlayerId TEXT NOT NULL,
+  bid TEXT NOT NULL,
+  bouts INTEGER NOT NULL,
+  pointsScored INTEGER NOT NULL,
+  hasPetitAuBout INTEGER NOT NULL,
+  hasPoignee INTEGER NOT NULL,
+  poigneeLevel TEXT,
+  chelem TEXT NOT NULL,
+  calledPlayerId TEXT,
+  score INTEGER NOT NULL,
+  FOREIGN KEY(gameId) REFERENCES tarotGameEntity(id) ON DELETE CASCADE
+);
+
+selectAllGames:
+SELECT * FROM tarotGameEntity ORDER BY updatedAt DESC;
+
+selectGameById:
+SELECT * FROM tarotGameEntity WHERE id = ?;
+
+selectGamesByPlayer:
+SELECT * FROM tarotGameEntity 
+WHERE (',' || playerIds || ',') LIKE ('%,' || ? || ',%') 
+ORDER BY updatedAt DESC;
+
+insertGame:
+INSERT OR REPLACE INTO tarotGameEntity(id, name, playerCount, playerIds, createdAt, updatedAt)
+VALUES ?;
+
+deleteGame:
+DELETE FROM tarotGameEntity WHERE id = ?;
+
+selectRoundsForGame:
+SELECT * FROM tarotRoundEntity WHERE gameId = ? ORDER BY roundNumber ASC;
+
+selectRoundsByPlayer:
+SELECT * FROM tarotRoundEntity 
+WHERE gameId IN (
+    SELECT id FROM tarotGameEntity 
+    WHERE (',' || playerIds || ',') LIKE ('%,' || ? || ',%')
+)
+ORDER BY roundNumber ASC;
+
+selectRoundsForGames:
+SELECT * FROM tarotRoundEntity WHERE gameId IN ? ORDER BY gameId ASC, roundNumber ASC;
+
+insertRound:
+INSERT OR REPLACE INTO tarotRoundEntity(id, gameId, roundNumber, takerPlayerId, bid, bouts, pointsScored, hasPetitAuBout, hasPoignee, poigneeLevel, chelem, calledPlayerId, score)
+VALUES ?;
+
+deleteRoundsForGame:
+DELETE FROM tarotRoundEntity WHERE gameId = ?;
+
+countGamesWithPlayer:
+SELECT COUNT(*) FROM tarotGameEntity WHERE playerIds LIKE '%' || ? || '%';

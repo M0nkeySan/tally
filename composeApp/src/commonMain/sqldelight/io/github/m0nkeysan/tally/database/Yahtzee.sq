@@ -1,0 +1,68 @@
+CREATE TABLE yahtzeeGameEntity (
+  id TEXT NOT NULL PRIMARY KEY,
+  name TEXT NOT NULL,
+  playerCount INTEGER NOT NULL,
+  playerIds TEXT NOT NULL,
+  firstPlayerId TEXT NOT NULL,
+  currentPlayerId TEXT NOT NULL,
+  isFinished INTEGER NOT NULL DEFAULT 0,
+  winnerName TEXT,
+  createdAt INTEGER NOT NULL,
+  updatedAt INTEGER NOT NULL
+);
+
+CREATE TABLE yahtzeeScoreEntity (
+  id TEXT NOT NULL PRIMARY KEY,
+  gameId TEXT NOT NULL,
+  playerId TEXT NOT NULL,
+  category TEXT NOT NULL,
+  score INTEGER NOT NULL,
+  FOREIGN KEY(gameId) REFERENCES yahtzeeGameEntity(id) ON DELETE CASCADE
+);
+
+selectAllGames:
+SELECT * FROM yahtzeeGameEntity ORDER BY updatedAt DESC;
+
+selectFinishedGames:
+SELECT * FROM yahtzeeGameEntity WHERE isFinished = 1 ORDER BY updatedAt DESC;
+
+selectGameById:
+SELECT * FROM yahtzeeGameEntity WHERE id = ?;
+
+selectGamesByPlayer:
+SELECT * FROM yahtzeeGameEntity 
+WHERE (',' || playerIds || ',') LIKE ('%,' || ? || ',%') 
+ORDER BY updatedAt DESC;
+
+insertGame:
+INSERT OR REPLACE INTO yahtzeeGameEntity(id, name, playerCount, playerIds, firstPlayerId, currentPlayerId, isFinished, winnerName, createdAt, updatedAt)
+VALUES ?;
+
+deleteGame:
+DELETE FROM yahtzeeGameEntity WHERE id = ?;
+
+selectScoresForGame:
+SELECT * FROM yahtzeeScoreEntity WHERE gameId = ?;
+
+selectScoresForPlayer:
+SELECT * FROM yahtzeeScoreEntity WHERE playerId = ?;
+
+selectScoresForGames:
+SELECT * FROM yahtzeeScoreEntity WHERE gameId IN ?;
+
+insertScore:
+INSERT OR REPLACE INTO yahtzeeScoreEntity(id, gameId, playerId, category, score)
+VALUES ?;
+
+deleteScoresForGame:
+DELETE FROM yahtzeeScoreEntity WHERE gameId = ?;
+
+getDistinctPlayerIds:
+SELECT DISTINCT playerIds FROM yahtzeeGameEntity WHERE isFinished = 1;
+
+selectAllFinishedScores:
+SELECT * FROM yahtzeeScoreEntity 
+WHERE gameId IN (SELECT id FROM yahtzeeGameEntity WHERE isFinished = 1);
+
+countGamesWithPlayer:
+SELECT COUNT(*) FROM yahtzeeGameEntity WHERE playerIds LIKE '%' || ? || '%';

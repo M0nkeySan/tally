@@ -1,0 +1,14 @@
+CREATE TABLE userPreferencesEntity (
+  key TEXT NOT NULL PRIMARY KEY,
+  prefValue TEXT NOT NULL
+);
+
+selectPreference:
+SELECT prefValue FROM userPreferencesEntity WHERE key = ?;
+
+insertPreference:
+INSERT OR REPLACE INTO userPreferencesEntity(key, prefValue)
+VALUES (?, ?);
+
+deletePreference:
+DELETE FROM userPreferencesEntity WHERE key = ?;
