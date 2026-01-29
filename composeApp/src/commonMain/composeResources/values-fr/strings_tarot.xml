@@ -19,8 +19,8 @@
     <string name="tarot_stats_section_current_standings">Classement actuel</string>
     <string name="tarot_stats_format_as_taker">%1$d/%2$d en preneur</string>
     <string name="tarot_stats_label_round">Manche %1$d</string>
-    <string name="tarot_stats_contract_won">✓ Gagné</string>
-    <string name="tarot_stats_contract_lost">✗ Perdu</string>
+    <string name="tarot_stats_contract_won">Gagné</string>
+    <string name="tarot_stats_contract_lost">Perdu</string>
     <string name="tarot_stats_section_taker_performance">Performance des preneurs 📊</string>
     <string name="tarot_stats_label_bids_used">Enchères utilisées :</string>
     <string name="tarot_stats_label_with_partners">Avec partenaires :</string>
@@ -40,6 +40,8 @@
     <string name="tarot_scoring_game_title">Parties de Tarot</string>
 
     <!-- Tarot - Round Addition -->
+    <string name="tarot_round_screen_title_add">Ajouter une manche</string>
+    <string name="tarot_round_screen_title_edit">Modifier la manche</string>
     <string name="tarot_round_action_save">ENREGISTRER LA MANCHE</string>
     <string name="tarot_round_section_players">JOUEURS</string>
     <string name="tarot_round_label_taker">PRENEUR</string>

@@ -1,7 +1,7 @@
 package io.github.m0nkeysan.tally.core.domain.engine
 
-import io.github.m0nkeysan.tally.core.data.local.database.YahtzeeGameEntity
-import io.github.m0nkeysan.tally.core.data.local.database.YahtzeeScoreEntity
+import io.github.m0nkeysan.tally.core.domain.data.YahtzeeGameData
+import io.github.m0nkeysan.tally.core.domain.data.YahtzeeScoreData
 import io.github.m0nkeysan.tally.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.tally.core.model.CategoryRecord
 import io.github.m0nkeysan.tally.core.model.CategoryStat
@@ -52,30 +52,30 @@ object YahtzeeStatisticsEngine {
     fun calculatePlayerStatistics(
         playerId: String,
         playerName: String,
-        games: List<YahtzeeGameEntity>,
-        playerScores: List<YahtzeeScoreEntity>,
-        allScores: List<YahtzeeScoreEntity>
+        games: List<YahtzeeGameData>,
+        playerScores: List<YahtzeeScoreData>,
+        allScores: List<YahtzeeScoreData>
     ): YahtzeePlayerStatistics {
         val totalGames = games.size
         val finishedGames = games.count { it.isFinished }
-        
+
         val wins = games.count { game ->
             game.isFinished && game.winnerName?.contains(playerName) == true
         }
-        
+
         val winRate = if (finishedGames > 0) {
             (wins.toDouble() / finishedGames) * 100
         } else {
             0.0
         }
-        
+
         val gameScoresMap = calculateGameTotals(games, allScores, playerId)
         val averageScore = if (gameScoresMap.isNotEmpty()) {
             gameScoresMap.values.average()
         } else {
             0.0
         }
-        
+
         val highScore = gameScoresMap.values.maxOrNull() ?: 0
         val totalYahtzees = countYahtzees(playerScores)
         val yahtzeeRate = if (totalGames > 0) {
@@ -83,13 +83,13 @@ object YahtzeeStatisticsEngine {
         } else {
             0.0
         }
-        
+
         val categoryStats = calculateCategoryStats(playerScores, finishedGames)
         val upperBonusRate = calculateUpperBonusRate(games, allScores, playerId)
         val upperSectionAverage = calculateUpperSectionAverage(playerScores)
         val lowerSectionAverage = calculateLowerSectionAverage(playerScores)
         val recentGames = calculateGameSummaries(playerId, games, allScores)
-        
+
         return YahtzeePlayerStatistics(
             playerId = playerId,
             playerName = playerName,
@@ -113,8 +113,8 @@ object YahtzeeStatisticsEngine {
      * Calculate total score for each game a player participated in
      */
     internal fun calculateGameTotals(
-        games: List<YahtzeeGameEntity>,
-        allScores: List<YahtzeeScoreEntity>,
+        games: List<YahtzeeGameData>,
+        allScores: List<YahtzeeScoreData>,
         playerId: String
     ): Map<String, Int> {
         return games.associate { game ->
@@ -125,7 +125,7 @@ object YahtzeeStatisticsEngine {
                 .sumOf { it.score }
             val bonus = if (upperScore >= 63) 35 else 0
             val totalScore = baseScore + bonus
-            
+
             game.id to totalScore
         }
     }
@@ -134,7 +134,7 @@ object YahtzeeStatisticsEngine {
      * Calculate statistics for each scoring category
      */
     internal fun calculateCategoryStats(
-        playerScores: List<YahtzeeScoreEntity>,
+        playerScores: List<YahtzeeScoreData>,
         totalGames: Int
     ): Map<YahtzeeCategory, CategoryStat> {
         return YahtzeeCategory.entries.associateWith { category ->
@@ -173,10 +173,10 @@ object YahtzeeStatisticsEngine {
      * Score progression: 50 (1st), 150 (2nd), 250 (3rd), 350 (4th), 450 (5th)
      * Formula: (score - 50) / 100 + 1 for scores >= 50
      */
-    internal fun countYahtzees(playerScores: List<YahtzeeScoreEntity>): Int {
+    internal fun countYahtzees(playerScores: List<YahtzeeScoreData>): Int {
         return playerScores
             .filter { it.category == YahtzeeCategory.YAHTZEE.name && it.score >= 50 }
-            .sumOf { 
+            .sumOf {
                 // Convert score to yahtzee count: 50→1, 150→2, 250→3, 350→4, 450→5
                 (it.score - 50) / 100 + 1
             }
@@ -186,15 +186,15 @@ object YahtzeeStatisticsEngine {
      * Calculate percentage of games where upper bonus was achieved
      */
     internal fun calculateUpperBonusRate(
-        games: List<YahtzeeGameEntity>,
-        allScores: List<YahtzeeScoreEntity>,
+        games: List<YahtzeeGameData>,
+        allScores: List<YahtzeeScoreData>,
         playerId: String
     ): Double {
         val finishedGames = games.filter { it.isFinished }
         if (finishedGames.isEmpty()) return 0.0
-        
+
         val gamesWithBonus = finishedGames.count { game ->
-            val gameScores = allScores.filter { 
+            val gameScores = allScores.filter {
                 it.gameId == game.id && it.playerId == playerId
             }
             val upperScore = gameScores
@@ -202,15 +202,15 @@ object YahtzeeStatisticsEngine {
                 .sumOf { it.score }
             upperScore >= 63
         }
-        
+
         return (gamesWithBonus.toDouble() / finishedGames.size) * 100
     }
 
     /**
      * Calculate average upper section score
      */
-    internal fun calculateUpperSectionAverage(playerScores: List<YahtzeeScoreEntity>): Double {
-        val upperScores = playerScores.filter { 
+    internal fun calculateUpperSectionAverage(playerScores: List<YahtzeeScoreData>): Double {
+        val upperScores = playerScores.filter {
             YahtzeeCategory.valueOf(it.category).isUpperSection()
         }
         return if (upperScores.isNotEmpty()) {
@@ -223,8 +223,8 @@ object YahtzeeStatisticsEngine {
     /**
      * Calculate average lower section score
      */
-    internal fun calculateLowerSectionAverage(playerScores: List<YahtzeeScoreEntity>): Double {
-        val lowerScores = playerScores.filter { 
+    internal fun calculateLowerSectionAverage(playerScores: List<YahtzeeScoreData>): Double {
+        val lowerScores = playerScores.filter {
             YahtzeeCategory.valueOf(it.category).isLowerSection()
         }
         return if (lowerScores.isNotEmpty()) {
@@ -239,8 +239,8 @@ object YahtzeeStatisticsEngine {
      */
     private fun calculateGameSummaries(
         playerId: String,
-        games: List<YahtzeeGameEntity>,
-        allScores: List<YahtzeeScoreEntity>
+        games: List<YahtzeeGameData>,
+        allScores: List<YahtzeeScoreData>
     ): List<GameSummary> {
         return games
             .filter { it.isFinished }
@@ -257,10 +257,10 @@ object YahtzeeStatisticsEngine {
                     val bonus = if (upperScore >= 63) 35 else 0
                     (baseScore + bonus)
                 }
-                
+
                 val playerScore = totalScoresMap[playerId] ?: 0
                 val rank = totalScoresMap.count { it.value > playerScore } + 1
-                
+
                 GameSummary(
                     gameId = game.id,
                     gameName = game.name,
@@ -277,13 +277,13 @@ object YahtzeeStatisticsEngine {
      * Calculate comprehensive global statistics across all games and players
      */
     suspend fun calculateGlobalStatistics(
-        allGames: List<YahtzeeGameEntity>,
-        allScores: List<YahtzeeScoreEntity>,
+        allGames: List<YahtzeeGameData>,
+        allScores: List<YahtzeeScoreData>,
         playerRepository: PlayerRepository
     ): YahtzeeGlobalStatistics {
         val totalGames = allGames.size
         val finishedGames = allGames.count { it.isFinished }
-        
+
         // Get unique players
         val uniquePlayerIds = allGames
             .flatMap { it.playerIds.split(",") }
@@ -298,7 +298,7 @@ object YahtzeeStatisticsEngine {
         val totalYahtzees = countYahtzees(allScores)
         val yahtzeeRate = if (finishedGames > 0) totalYahtzees.toDouble() / finishedGames else 0.0
         val mostYahtzeesInGame = calculateMostYahtzeesInGame(allGames, allScores, playerCache)
-        
+
         // Calculate average score per player across all games
         val allPlayerScores = allGames.flatMap { game ->
             val gameScores = allScores.filter { it.gameId == game.id }
@@ -308,13 +308,13 @@ object YahtzeeStatisticsEngine {
                 val upperScore = playerScores
                     .filter { YahtzeeCategory.valueOf(it.category).isUpperSection() }
                     .sumOf { it.score }
-                val bonus = if (upperScore >= YahtzeeStatisticsConstants.UPPER_BONUS_THRESHOLD) 
+                val bonus = if (upperScore >= YahtzeeStatisticsConstants.UPPER_BONUS_THRESHOLD)
                     YahtzeeStatisticsConstants.UPPER_BONUS_VALUE else 0
                 baseScore + bonus
             }
         }
         val averageScore = if (allPlayerScores.isNotEmpty()) allPlayerScores.average() else 0.0
-        
+
         // Calculate upper bonus rate
         val gamesWithBonus = allGames.count { game ->
             val gameScores = allScores.filter { it.gameId == game.id }
@@ -328,7 +328,7 @@ object YahtzeeStatisticsEngine {
         } else {
             0.0
         }
-        
+
         // Category stats
         val categoryStats = calculateGlobalCategoryStats(allScores, finishedGames)
         val mostScoredCategory = categoryStats.entries.maxByOrNull { it.value.totalTimesScored }?.key
@@ -337,18 +337,18 @@ object YahtzeeStatisticsEngine {
             .filter { it.key != YahtzeeCategory.YAHTZEE }
             .maxByOrNull { it.value.average }
             ?.let { CategoryRecord(it.key, it.value.average) }
-        
+
         // Leaderboards
         val topPlayersByWins = buildWinsLeaderboard(allGames, playerCache)
         val topPlayersByScore = buildScoreLeaderboard(allGames, allScores, playerCache)
         val topPlayersByYahtzees = buildYahtzeesLeaderboard(allScores, playerCache)
-        
+
         // Recent games
         val recentGames = calculateGlobalRecentGames(allGames, allScores, playerCache)
-        
+
         // Fun stats
-        val estimatedDiceRolls = (finishedGames.toLong() * 
-            YahtzeeStatisticsConstants.ESTIMATED_TURNS_PER_GAME * 
+        val estimatedDiceRolls = (finishedGames.toLong() *
+            YahtzeeStatisticsConstants.ESTIMATED_TURNS_PER_GAME *
             YahtzeeStatisticsConstants.ESTIMATED_ROLLS_PER_TURN)
         val luckiestPlayer = findLuckiestPlayer(uniquePlayerIds, allGames, allScores, playerCache)
         val mostConsistentPlayer = findMostConsistentPlayer(uniquePlayerIds, allGames, allScores, playerCache)
@@ -358,9 +358,9 @@ object YahtzeeStatisticsEngine {
         } else {
             0.0
         }
-        
+
         val mostActivePlayer = findMostActivePlayer(allGames, playerCache)
-        
+
         return YahtzeeGlobalStatistics(
             totalGames = totalGames,
             finishedGames = finishedGames,
@@ -389,13 +389,13 @@ object YahtzeeStatisticsEngine {
     }
 
     private fun calculateAllTimeHighScore(
-        games: List<YahtzeeGameEntity>,
-        allScores: List<YahtzeeScoreEntity>,
+        games: List<YahtzeeGameData>,
+        allScores: List<YahtzeeScoreData>,
         playerCache: Map<String, String>
     ): ScoreRecord? {
         var maxScore = 0
         var result: ScoreRecord? = null
-        
+
         games.forEach { game ->
             val gameScores = allScores.filter { it.gameId == game.id }
             game.playerIds.split(",").forEach { playerId ->
@@ -404,10 +404,10 @@ object YahtzeeStatisticsEngine {
                 val upperScore = playerScores
                     .filter { YahtzeeCategory.valueOf(it.category).isUpperSection() }
                     .sumOf { it.score }
-                val bonus = if (upperScore >= YahtzeeStatisticsConstants.UPPER_BONUS_THRESHOLD) 
+                val bonus = if (upperScore >= YahtzeeStatisticsConstants.UPPER_BONUS_THRESHOLD)
                     YahtzeeStatisticsConstants.UPPER_BONUS_VALUE else 0
                 val totalScore = baseScore + bonus
-                
+
                 if (totalScore > maxScore) {
                     maxScore = totalScore
                     result = ScoreRecord(
@@ -420,28 +420,28 @@ object YahtzeeStatisticsEngine {
                 }
             }
         }
-        
+
         return result
     }
 
     private fun calculateMostYahtzeesInGame(
-        games: List<YahtzeeGameEntity>,
-        allScores: List<YahtzeeScoreEntity>,
+        games: List<YahtzeeGameData>,
+        allScores: List<YahtzeeScoreData>,
         playerCache: Map<String, String>
     ): YahtzeeRecord? {
         var maxYahtzees = 0
         var result: YahtzeeRecord? = null
-        
+
         games.forEach { game ->
             val gameScores = allScores.filter { it.gameId == game.id }
             game.playerIds.split(",").forEach { playerId ->
-                val playerYahtzeeScores = gameScores.filter { 
-                    it.playerId == playerId && 
-                    it.category == YahtzeeCategory.YAHTZEE.name && 
+                val playerYahtzeeScores = gameScores.filter {
+                    it.playerId == playerId &&
+                    it.category == YahtzeeCategory.YAHTZEE.name &&
                     it.score >= 50
                 }
                 val yahtzeeCount = playerYahtzeeScores.sumOf { (it.score - 50) / 100 + 1 }
-                
+
                 if (yahtzeeCount > maxYahtzees) {
                     maxYahtzees = yahtzeeCount
                     result = YahtzeeRecord(
@@ -454,28 +454,28 @@ object YahtzeeStatisticsEngine {
                 }
             }
         }
-        
+
         return result.takeIf { it != null && it.count > 0 }
     }
 
     private fun buildWinsLeaderboard(
-        games: List<YahtzeeGameEntity>,
+        games: List<YahtzeeGameData>,
         playerCache: Map<String, String>
     ): List<LeaderboardEntry> {
         val playerWins = mutableMapOf<String, Int>()
-        
+
         games.forEach { game ->
             game.winnerName?.let { winner ->
                 game.playerIds.split(",").forEach { playerId ->
                     val playerName = playerCache[playerId] ?: "Unknown"
-                    
+
                     if (playerName == winner) {
                         playerWins[playerId] = (playerWins[playerId] ?: 0) + 1
                     }
                 }
             }
         }
-        
+
         return playerWins
             .toList()
             .sortedByDescending { it.second }
@@ -492,12 +492,12 @@ object YahtzeeStatisticsEngine {
     }
 
     private fun buildScoreLeaderboard(
-        games: List<YahtzeeGameEntity>,
-        allScores: List<YahtzeeScoreEntity>,
+        games: List<YahtzeeGameData>,
+        allScores: List<YahtzeeScoreData>,
         playerCache: Map<String, String>
     ): List<LeaderboardEntry> {
         val playerHighScores = mutableMapOf<String, Int>()
-        
+
         games.forEach { game ->
             val gameScores = allScores.filter { it.gameId == game.id }
             game.playerIds.split(",").forEach { playerId ->
@@ -509,14 +509,14 @@ object YahtzeeStatisticsEngine {
                 val bonus = if (upperScore >= YahtzeeStatisticsConstants.UPPER_BONUS_THRESHOLD)
                     YahtzeeStatisticsConstants.UPPER_BONUS_VALUE else 0
                 val totalScore = baseScore + bonus
-                
+
                 val currentHighScore = playerHighScores[playerId] ?: 0
                 if (totalScore > currentHighScore) {
                     playerHighScores[playerId] = totalScore
                 }
             }
         }
-        
+
         return playerHighScores
             .toList()
             .sortedByDescending { it.second }
@@ -533,18 +533,18 @@ object YahtzeeStatisticsEngine {
     }
 
     private fun buildYahtzeesLeaderboard(
-        allScores: List<YahtzeeScoreEntity>,
+        allScores: List<YahtzeeScoreData>,
         playerCache: Map<String, String>
     ): List<LeaderboardEntry> {
         val playerYahtzees = mutableMapOf<String, Int>()
-        
+
         allScores
             .filter { it.category == YahtzeeCategory.YAHTZEE.name && it.score >= 50 }
             .forEach { score ->
                 val yahtzeeCount = (score.score - 50) / 100 + 1
                 playerYahtzees[score.playerId] = (playerYahtzees[score.playerId] ?: 0) + yahtzeeCount
             }
-        
+
         return playerYahtzees
             .toList()
             .sortedByDescending { it.second }
@@ -561,7 +561,7 @@ object YahtzeeStatisticsEngine {
     }
 
     private fun calculateGlobalCategoryStats(
-        allScores: List<YahtzeeScoreEntity>,
+        allScores: List<YahtzeeScoreData>,
         totalGames: Int
     ): Map<YahtzeeCategory, GlobalCategoryStat> {
         return YahtzeeCategory.entries.associateWith { category ->
@@ -598,19 +598,19 @@ object YahtzeeStatisticsEngine {
     }
 
     private fun findMostActivePlayer(
-        games: List<YahtzeeGameEntity>,
+        games: List<YahtzeeGameData>,
         playerCache: Map<String, String>
     ): PlayerSummary? {
         val playerGames = mutableMapOf<String, Int>()
-        
+
         games.forEach { game ->
             game.playerIds.split(",").forEach { playerId ->
                 playerGames[playerId] = (playerGames[playerId] ?: 0) + 1
             }
         }
-        
+
         val mostActive = playerGames.maxByOrNull { it.value } ?: return null
-        
+
         return PlayerSummary(
             playerId = mostActive.key,
             playerName = playerCache[mostActive.key] ?: "Unknown",
@@ -621,25 +621,25 @@ object YahtzeeStatisticsEngine {
 
     private fun findLuckiestPlayer(
         playerIds: List<String>,
-        games: List<YahtzeeGameEntity>,
-        allScores: List<YahtzeeScoreEntity>,
+        games: List<YahtzeeGameData>,
+        allScores: List<YahtzeeScoreData>,
         playerCache: Map<String, String>
     ): PlayerSummary? {
         var maxRate = 0.0
         var luckiestId = ""
-        
+
         playerIds.forEach { playerId ->
             val playerScores = allScores.filter { it.playerId == playerId }
             val totalYahtzees = countYahtzees(playerScores)
             val playerGames = games.count { it.playerIds.contains(playerId) }
             val rate = if (playerGames > 0) totalYahtzees.toDouble() / playerGames else 0.0
-            
+
             if (rate > maxRate) {
                 maxRate = rate
                 luckiestId = playerId
             }
         }
-        
+
         return if (luckiestId.isNotEmpty() && maxRate > 0) {
             PlayerSummary(
                 playerId = luckiestId,
@@ -654,20 +654,20 @@ object YahtzeeStatisticsEngine {
 
     private fun findMostConsistentPlayer(
         playerIds: List<String>,
-        games: List<YahtzeeGameEntity>,
-        allScores: List<YahtzeeScoreEntity>,
+        games: List<YahtzeeGameData>,
+        allScores: List<YahtzeeScoreData>,
         playerCache: Map<String, String>
     ): PlayerSummary? {
         var minVariance = Double.MAX_VALUE
         var consistentId = ""
-        
+
         playerIds.forEach { playerId ->
             val gameScores = mutableListOf<Int>()
-            
+
             games.forEach { game ->
                 if (game.playerIds.contains(playerId)) {
-                    val playerScores = allScores.filter { 
-                        it.gameId == game.id && it.playerId == playerId 
+                    val playerScores = allScores.filter {
+                        it.gameId == game.id && it.playerId == playerId
                     }
                     val baseScore = playerScores.sumOf { it.score }
                     val upperScore = playerScores
@@ -678,18 +678,18 @@ object YahtzeeStatisticsEngine {
                     gameScores.add(baseScore + bonus)
                 }
             }
-            
+
             if (gameScores.size > 1) {
                 val average = gameScores.average()
                 val variance = gameScores.map { (it - average) * (it - average) }.average()
-                
+
                 if (variance < minVariance) {
                     minVariance = variance
                     consistentId = playerId
                 }
             }
         }
-        
+
         return if (consistentId.isNotEmpty() && minVariance < Double.MAX_VALUE) {
             PlayerSummary(
                 playerId = consistentId,
@@ -703,8 +703,8 @@ object YahtzeeStatisticsEngine {
     }
 
     private fun calculateGlobalRecentGames(
-        games: List<YahtzeeGameEntity>,
-        allScores: List<YahtzeeScoreEntity>,
+        games: List<YahtzeeGameData>,
+        allScores: List<YahtzeeScoreData>,
         playerCache: Map<String, String>
     ): List<GlobalGameSummary> {
         return games
@@ -722,9 +722,9 @@ object YahtzeeStatisticsEngine {
                         YahtzeeStatisticsConstants.UPPER_BONUS_VALUE else 0
                     (baseScore + bonus)
                 }
-                
+
                 val winner = totalScoresMap.maxByOrNull { it.value }
-                
+
                 if (winner != null) {
                     GlobalGameSummary(
                         gameId = game.id,

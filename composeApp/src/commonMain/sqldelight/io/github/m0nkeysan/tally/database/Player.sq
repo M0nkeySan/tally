@@ -1,0 +1,33 @@
+CREATE TABLE IF NOT EXISTS playerEntity (
+  id TEXT NOT NULL PRIMARY KEY,
+  name TEXT NOT NULL,
+  avatarColor TEXT NOT NULL,
+  createdAt INTEGER NOT NULL,
+  isActive INTEGER NOT NULL DEFAULT 1,
+  deactivatedAt INTEGER
+);
+
+selectAllPlayers:
+SELECT * FROM playerEntity ORDER BY name ASC;
+
+selectActivePlayers:
+SELECT * FROM playerEntity WHERE isActive = 1 ORDER BY name ASC;
+
+selectPlayerById:
+SELECT * FROM playerEntity WHERE id = ?;
+
+selectPlayersByIds:
+SELECT * FROM playerEntity WHERE id IN ?;
+
+selectPlayerByName:
+SELECT * FROM playerEntity WHERE name = ?;
+
+insertPlayer:
+INSERT OR REPLACE INTO playerEntity(id, name, avatarColor, createdAt, isActive, deactivatedAt)
+VALUES (?, ?, ?, ?, ?, ?);
+
+deletePlayer:
+DELETE FROM playerEntity WHERE id = ?;
+
+getDistinctPlayerIds:
+SELECT DISTINCT id FROM playerEntity;

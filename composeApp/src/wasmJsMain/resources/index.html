@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description"
+          content="Tally - Your all-in-one companion for board game nights. Track scores for Yahtzee, Tarot, and more!">
+    <meta name="theme-color" content="#000000">
+    <!-- CSP: Development-friendly policy. Production builds will inject a stricter policy via webpack. -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob:; worker-src 'self' blob:; base-uri 'self'; form-action 'self';">
+    <title>Tally - Game Scoring Companion</title>
+    <link type="text/css" rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="composeApplication">
+    <div class="spinner-container">
+        <div class="spinner"></div>
+        <p style="color: white; font-family: sans-serif;">Loading Tally...</p>
+    </div>
+</div>
+<script src="composeApp.js"></script>
+</body>
+</html>

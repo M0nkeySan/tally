@@ -1,6 +1,7 @@
 package io.github.m0nkeysan.tally.ui.theme
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -137,7 +138,7 @@ fun AppTheme(
     CompositionLocalProvider(LocalCustomColors provides customColors) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = MaterialTheme.typography,
+            typography = Typography(),
             shapes = MaterialTheme.shapes,
             content = content
         )

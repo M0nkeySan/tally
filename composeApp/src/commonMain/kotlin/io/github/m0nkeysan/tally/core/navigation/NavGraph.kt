@@ -96,6 +96,9 @@ fun GameNavGraph() {
             TarotRoundAdditionScreen(
                 gameId = route.gameId,
                 roundId = route.roundId,
+                onBack = {
+                    navController.popSafe()
+                },
                 onRoundAdded = {
                     navController.popSafe()
                 }
@@ -115,9 +118,7 @@ fun GameNavGraph() {
         // --- Yahtzee Section ---
         composable<YahtzeeRoute> {
             YahtzeeGameSelectionScreen(
-                onBack = {
-                    navController.popSafe()
-                },
+                onBack = { navController.navigateSafe(HomeRoute) },
                 onCreateNewGame = { navController.navigateSafe(YahtzeeCreationRoute) },
                 onSelectGame = { gameId ->
                     navController.navigateSafe(YahtzeeScoringRoute(gameId))
@@ -145,6 +146,9 @@ fun GameNavGraph() {
             val route = entry.toRoute<YahtzeeScoringRoute>()
             YahtzeeScoringScreen(
                 gameId = route.gameId,
+                onBack = {
+                    navController.navigateSafe(YahtzeeRoute)
+                },
                 onGameFinished = {
                     navController.navigateSafe(YahtzeeSummaryRoute(route.gameId)) {
                         popUpTo(YahtzeeRoute)
@@ -257,8 +261,13 @@ fun GameNavGraph() {
 }
 
 fun <T : Any> NavHostController.navigateSafe(route: T, builder: NavOptionsBuilder.() -> Unit = {}) {
-    if (this.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+    val currentState = this.currentBackStackEntry?.lifecycle?.currentState
+    println("NavigateSafe: current state = $currentState, route = $route")
+    if (currentState == Lifecycle.State.RESUMED) {
+        println("NavigateSafe: navigating to $route")
         this.navigate(route, builder)
+    } else {
+        println("NavigateSafe: BLOCKED - lifecycle state is $currentState, expected RESUMED")
     }
 }
 

@@ -8,8 +8,16 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinx.serialization)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.room)
+    alias(libs.plugins.sqldelight)
+}
+
+sqldelight {
+    databases {
+        create("TallyDatabase") {
+            packageName.set("io.github.m0nkeysan.tally.database")
+            generateAsync = true
+        }
+    }
 }
 
 kotlin {
@@ -19,21 +27,48 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+    wasmJs {
+        browser {
+            commonWebpackConfig {
+                cssSupport {
+                    enabled.set(true)
+                }
+            }
+        }
+        binaries.executable()
+    }
+
     compilerOptions {
         optIn.add("kotlin.uuid.ExperimentalUuidApi")
         optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
         optIn.add("androidx.compose.foundation.ExperimentalFoundationApi")
         optIn.add("androidx.compose.ui.ExperimentalComposeUiApi")
         optIn.add("kotlinx.cinterop.ExperimentalForeignApi")
+        optIn.add("kotlin.js.ExperimentalWasmJsInterop")
 
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 
     sourceSets {
         androidMain.dependencies {
+            implementation(libs.androidx.navigationevent)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
+            implementation(libs.sqldelight.android)
         }
+
+        iosMain.dependencies {
+            implementation(libs.androidx.navigationevent)
+            implementation(libs.sqldelight.native)
+        }
+
+        wasmJsMain.dependencies {
+            implementation(libs.sqldelight.webworker)
+            implementation(npm("@sqlite.org/sqlite-wasm", libs.versions.sqlite.wasm.get()))
+            implementation(devNpm("copy-webpack-plugin", libs.versions.copy.webpack.plugin.get()))
+        }
+
         commonMain.dependencies {
             api(libs.compose.runtime)
             api(libs.compose.foundation)
@@ -47,14 +82,15 @@ kotlin {
             implementation(libs.jetbrains.lifecycle.runtimeCompose)
             implementation(libs.jetbrains.navigation.compose)
             implementation(libs.jetbrains.compose.uiBackhandler)
-            implementation(libs.androidx.navigationevent)
-            implementation(libs.room.runtime)
-            implementation(libs.sqlite.bundled)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines)
         }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
@@ -124,11 +160,6 @@ android {
 }
 
 dependencies {
-    add("kspAndroid", libs.room.compiler)
-    add("kspIosX64", libs.room.compiler)
-    add("kspIosArm64", libs.room.compiler)
-    add("kspIosSimulatorArm64", libs.room.compiler)
-
     debugImplementation(libs.compose.uiToolingPreview)
 }
 
@@ -136,8 +167,4 @@ compose.resources {
     publicResClass = true
     packageOfResClass = "io.github.m0nkeysan.tally.generated.resources"
     generateResClass = always
-}
-
-room {
-    schemaDirectory("$projectDir/schemas")
 }

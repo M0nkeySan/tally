@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.South
@@ -31,7 +32,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -51,14 +51,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.tally.GameIcons
-import io.github.m0nkeysan.tally.ui.components.NumberSlider
 import io.github.m0nkeysan.tally.core.model.DiceConfiguration
 import io.github.m0nkeysan.tally.core.model.DiceRoll
 import io.github.m0nkeysan.tally.core.model.DiceType
@@ -85,6 +86,7 @@ import io.github.m0nkeysan.tally.generated.resources.dice_total_format
 import io.github.m0nkeysan.tally.platform.HapticType
 import io.github.m0nkeysan.tally.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.tally.platform.rememberShakeDetector
+import io.github.m0nkeysan.tally.ui.components.NumberSlider
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -140,16 +142,21 @@ fun DiceRollerScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                             Text(
-                                 stringResource(Res.string.dice_screen_title),
-                                 style = MaterialTheme.typography.titleLarge,
-                                 fontWeight = FontWeight.Bold
-                             )
-                         }
+                            Text(
+                                stringResource(Res.string.dice_screen_title),
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = onBack) { Icon(GameIcons.ArrowBack, stringResource(Res.string.cd_back)) }
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            GameIcons.ArrowBack,
+                            stringResource(Res.string.cd_back)
+                        )
+                    }
                 },
                 actions = {
                     IconButton(onClick = { showSettingsDialog = true }) {
@@ -197,12 +204,16 @@ fun DiceRollerScreen(
                         modifier = Modifier.padding(horizontal = 32.dp)
                     ) {
                         Text(
-                             text = stringResource(Res.string.dice_display_format, configuration.numberOfDice, configuration.diceType.sides),
-                             color = MaterialTheme.colorScheme.onPrimaryContainer,
-                             fontWeight = FontWeight.Bold,
-                             style = MaterialTheme.typography.titleSmall,
-                             fontSize = 16.sp
-                         )
+                            text = stringResource(
+                                Res.string.dice_display_format,
+                                configuration.numberOfDice,
+                                configuration.diceType.sides
+                            ),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.titleSmall,
+                            fontSize = 16.sp
+                        )
                     }
                 }
             }
@@ -230,15 +241,15 @@ fun DiceRollerScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(bottom = 40.dp, start = 16.dp, end = 16.dp)
             ) {
-                 if (roll != null && roll.individualResults.isNotEmpty()) {
-                     val rollsString = roll.individualResults.joinToString(" ") { "[$it]" }
-                     Text(
-                         text = stringResource(Res.string.dice_rolls_format, rollsString),
-                         style = MaterialTheme.typography.titleSmall,
-                         color = MaterialTheme.colorScheme.onBackground,
-                         fontSize = 18.sp,
-                         fontWeight = FontWeight.Bold
-                     )
+                if (roll != null && roll.individualResults.isNotEmpty()) {
+                    val rollsString = roll.individualResults.joinToString(" ") { "[$it]" }
+                    Text(
+                        text = stringResource(Res.string.dice_rolls_format, rollsString),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Icon(
                         Icons.Default.South,
@@ -251,13 +262,13 @@ fun DiceRollerScreen(
                     Spacer(modifier = Modifier.height(60.dp))
                 }
 
-                 Text(
-                     text = stringResource(Res.string.dice_total_format, roll?.total ?: 0),
-                     style = MaterialTheme.typography.headlineSmall,
-                     color = MaterialTheme.colorScheme.primary,
-                     fontWeight = FontWeight.Bold,
-                     fontSize = 28.sp
-                 )
+                Text(
+                    text = stringResource(Res.string.dice_total_format, roll?.total ?: 0),
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 28.sp
+                )
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -320,7 +331,10 @@ private fun DiceResultBox(
     val boxScale by animateFloatAsState(
         targetValue = if (isRolling) DiceConstants.BOX_SCALE_RATIO else 1f,
         animationSpec = if (isRolling && animationEnabled) {
-            tween(durationMillis = DiceConstants.BOX_SCALE_ANIMATION_DURATION_MS, easing = FastOutSlowInEasing)
+            tween(
+                durationMillis = DiceConstants.BOX_SCALE_ANIMATION_DURATION_MS,
+                easing = FastOutSlowInEasing
+            )
         } else {
             spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow)
         },
@@ -391,6 +405,8 @@ private fun DiceSettingsBottomSheetContent(
     var animationEnabled by remember { mutableStateOf(configuration.animationEnabled) }
     var shakeEnabled by remember { mutableStateOf(configuration.shakeEnabled) }
 
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -412,13 +428,19 @@ private fun DiceSettingsBottomSheetContent(
         )
 
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(stringResource(Res.string.dice_field_type), style = MaterialTheme.typography.labelMedium)
+            Text(
+                stringResource(Res.string.dice_field_type),
+                style = MaterialTheme.typography.labelMedium
+            )
             DiceTypeSelector(
                 selectedType = diceType,
                 onTypeSelected = { diceType = it }
             )
 
-            Text(stringResource(Res.string.dice_field_custom), style = MaterialTheme.typography.labelMedium)
+            Text(
+                stringResource(Res.string.dice_field_custom),
+                style = MaterialTheme.typography.labelMedium
+            )
 
             var customInput by remember { mutableStateOf(if (diceType is DiceType.Custom) diceType.sides.toString() else "") }
 
@@ -440,10 +462,12 @@ private fun DiceSettingsBottomSheetContent(
                     Res.string.dice_error_min_sides,
                     DiceConstants.MIN_CUSTOM_SIDES
                 )
+
                 inputInt > DiceConstants.MAX_CUSTOM_SIDES -> stringResource(
                     Res.string.dice_error_max_sides,
                     DiceConstants.MAX_CUSTOM_SIDES
                 )
+
                 else -> null
             }
 
@@ -459,9 +483,23 @@ private fun DiceSettingsBottomSheetContent(
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text(stringResource(Res.string.dice_placeholder_custom), color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                placeholder = {
+                    Text(
+                        stringResource(Res.string.dice_placeholder_custom),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                },
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    autoCorrectEnabled = false,
+                    keyboardType = KeyboardType.Number
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                    }
+                ),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                     unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -491,7 +529,10 @@ private fun DiceSettingsBottomSheetContent(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(stringResource(Res.string.dice_setting_animation), style = MaterialTheme.typography.bodyMedium)
+            Text(
+                stringResource(Res.string.dice_setting_animation),
+                style = MaterialTheme.typography.bodyMedium
+            )
             Switch(checked = animationEnabled, onCheckedChange = { animationEnabled = it })
         }
 
@@ -503,7 +544,10 @@ private fun DiceSettingsBottomSheetContent(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(stringResource(Res.string.dice_setting_shake), style = MaterialTheme.typography.bodyMedium)
+            Text(
+                stringResource(Res.string.dice_setting_shake),
+                style = MaterialTheme.typography.bodyMedium
+            )
             Switch(checked = shakeEnabled, onCheckedChange = { shakeEnabled = it })
         }
 

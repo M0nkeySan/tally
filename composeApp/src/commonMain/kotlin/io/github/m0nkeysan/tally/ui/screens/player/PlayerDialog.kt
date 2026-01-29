@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -25,7 +27,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.github.m0nkeysan.tally.core.model.Player
@@ -56,8 +61,14 @@ fun PlayerDialog(
     onConfirm: (name: String, color: String) -> Unit
 ) {
     var name by remember { mutableStateOf(initialPlayer?.name ?: "") }
-    var selectedColor by remember { mutableStateOf(initialPlayer?.avatarColor ?: DIALOG_COLOR_PRESETS.random()) }
+    var selectedColor by remember {
+        mutableStateOf(
+            initialPlayer?.avatarColor ?: DIALOG_COLOR_PRESETS.random()
+        )
+    }
     val focusRequester = remember { FocusRequester() }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val composeColor = remember(selectedColor) { parseColor(selectedColor) }
     val contentColor = if (composeColor.luminance() > 0.5f) Color.Black else Color.White
@@ -70,12 +81,12 @@ fun PlayerDialog(
 
     val isNameTaken = remember(name, existingPlayers, initialPlayer) {
         val sanitized = sanitizePlayerName(name)
-        sanitized != null && 
-        (initialPlayer == null || !playerNamesEqual(sanitized, initialPlayer.name)) &&
-        existingPlayers.any { existingPlayer ->
-            // Check both active and inactive players
-            playerNamesEqual(sanitized, existingPlayer.name)
-        }
+        sanitized != null &&
+                (initialPlayer == null || !playerNamesEqual(sanitized, initialPlayer.name)) &&
+                existingPlayers.any { existingPlayer ->
+                    // Check both active and inactive players
+                    playerNamesEqual(sanitized, existingPlayer.name)
+                }
     }
 
     // Simple validation
@@ -98,7 +109,9 @@ fun PlayerDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = if (initialPlayer == null) stringResource(Res.string.player_dialog_new_title) else stringResource(Res.string.player_dialog_edit_title),
+                        text = if (initialPlayer == null) stringResource(Res.string.player_dialog_new_title) else stringResource(
+                            Res.string.player_dialog_edit_title
+                        ),
                         modifier = Modifier.padding(24.dp),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Black
@@ -112,22 +125,32 @@ fun PlayerDialog(
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
                     FlatTextField(
-                         value = name,
-                         onValueChange = { name = it },
-                         label = stringResource(Res.string.player_field_name),
-                         placeholder = stringResource(Res.string.player_placeholder_name),
-                         accentColor = composeColor,
-                         modifier = Modifier.focusRequester(focusRequester)
-                     )
-                    
+                        value = name,
+                        onValueChange = { name = it },
+                        label = stringResource(Res.string.player_field_name),
+                        placeholder = stringResource(Res.string.player_placeholder_name),
+                        accentColor = composeColor,
+                        modifier = Modifier.focusRequester(focusRequester),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done,
+                            autoCorrectEnabled = false,
+                            keyboardType = KeyboardType.Text
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                keyboardController?.hide()
+                            }
+                        ),
+                    )
+
                     if (isNameTaken) {
-                         Text(
-                             text = stringResource(Res.string.player_error_name_taken), 
-                             color = MaterialTheme.colorScheme.error,
-                             style = MaterialTheme.typography.bodySmall,
-                             modifier = Modifier.padding(start = 16.dp, top = 4.dp)
-                         )
-                     }
+                        Text(
+                            text = stringResource(Res.string.player_error_name_taken),
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                        )
+                    }
 
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         FieldLabel(text = stringResource(Res.string.player_label_color))
@@ -150,29 +173,34 @@ fun PlayerDialog(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextButton(onClick = onDismiss) {
-                         Text(stringResource(Res.string.action_cancel), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                     }
-                     Spacer(Modifier.width(8.dp))
-                     Button(
-                         onClick = { 
-                             sanitizePlayerName(name)?.let { sanitized ->
-                                 onConfirm(sanitized, selectedColor)
-                             }
-                         },
-                         enabled = isNameValid,
-                         colors = ButtonDefaults.buttonColors(
-                             containerColor = composeColor,
-                             contentColor = contentColor,
-                             disabledContainerColor = composeColor.copy(alpha = 0.3f),
-                             disabledContentColor = contentColor.copy(alpha = 0.5f)
-                         ),
-                         shape = MaterialTheme.shapes.medium
-                     ) {
-                         Text(
-                             if (initialPlayer == null) stringResource(Res.string.action_create) else stringResource(Res.string.action_save),
-                             fontWeight = FontWeight.Bold
-                         )
-                     }
+                        Text(
+                            stringResource(Res.string.action_cancel),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Spacer(Modifier.width(8.dp))
+                    Button(
+                        onClick = {
+                            sanitizePlayerName(name)?.let { sanitized ->
+                                onConfirm(sanitized, selectedColor)
+                            }
+                        },
+                        enabled = isNameValid,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = composeColor,
+                            contentColor = contentColor,
+                            disabledContainerColor = composeColor.copy(alpha = 0.3f),
+                            disabledContentColor = contentColor.copy(alpha = 0.5f)
+                        ),
+                        shape = MaterialTheme.shapes.medium
+                    ) {
+                        Text(
+                            if (initialPlayer == null) stringResource(Res.string.action_create) else stringResource(
+                                Res.string.action_save
+                            ),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }

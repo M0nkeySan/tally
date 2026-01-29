@@ -15,6 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -456,27 +459,34 @@ private fun RoundBreakdownItem(round: RoundStatistic) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    if (round.contractWon)
-                        stringResource(Res.string.tarot_stats_contract_won)
-                    else
-                        stringResource(Res.string.tarot_stats_contract_lost),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = if (round.contractWon)
-                        MaterialTheme.colorScheme.secondary
-                    else
-                        MaterialTheme.colorScheme.error
+                Icon(
+                    imageVector = if (round.contractWon) Icons.Default.Check else Icons.Default.Close,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                    tint = if (round.contractWon) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error
                 )
+
+                Spacer(modifier = Modifier.width(4.dp))
+
                 Text(
-                    if (round.score > 0) "+${round.score}" else "${round.score}",
+                    text = if (round.contractWon) stringResource(Res.string.tarot_stats_contract_won) else stringResource(
+                        Res.string.tarot_stats_contract_lost
+                    ),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = if (round.contractWon) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = if (round.score > 0) "+${round.score}" else "${round.score}",
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -589,7 +599,11 @@ private fun TakerPerformanceRow(performance: TakerPerformance) {
                 )
                 partners.forEach { (_, partner) ->
                     Text(
-                        "• ${partner.partnerName}: ${partner.wins}/${partner.gamesPlayed} (${partner.winRate.format(1)}%)",
+                        "• ${partner.partnerName}: ${partner.wins}/${partner.gamesPlayed} (${
+                            partner.winRate.format(
+                                1
+                            )
+                        }%)",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(start = 8.dp)
@@ -612,15 +626,15 @@ private fun CurrentGamePlayerStatsCard(
     var isExpanded by remember { mutableStateOf(true) }
 
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            // Clickable header with player name and expand/collapse icon
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -753,7 +767,11 @@ private fun CurrentGamePlayerStatsCard(
                                             fontWeight = FontWeight.Bold
                                         )
                                         Text(
-                                            "${mostSuccessfulBid.key.displayName} (${mostSuccessfulBid.value.format(0)}%",
+                                            "${mostSuccessfulBid.key.displayName} (${
+                                                mostSuccessfulBid.value.format(
+                                                    0
+                                                )
+                                            }%",
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onTertiaryContainer,
                                             fontWeight = FontWeight.Bold
