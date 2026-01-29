@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -30,7 +31,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -71,6 +74,8 @@ fun EditCounterScreen(
     var selectedColor by remember { mutableStateOf(Color(initialColor)) }
     var showDeleteDialog by remember { mutableStateOf(false) }
 
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     val selectedColorHex = remember(selectedColor) {
         val argb = selectedColor.toArgb()
         val hex = (0xFFFFFF and argb).toString(16).padStart(6, '0').uppercase()
@@ -78,28 +83,38 @@ fun EditCounterScreen(
     }
 
     if (showDeleteDialog) {
-         AlertDialog(
-             onDismissRequest = { showDeleteDialog = false },
-             containerColor = MaterialTheme.colorScheme.surface,
-             title = { Text(stringResource(Res.string.dialog_delete_counter_title), fontWeight = FontWeight.Bold) },
-             text = { Text(stringResource(Res.string.dialog_delete_counter_message)) },
-             confirmButton = {
-                 TextButton(onClick = {
-                     showDeleteDialog = false
-                     onDelete(id)
-                 }) {
-                     Text(stringResource(Res.string.action_delete), color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
-                 }
-             },
-             dismissButton = {
-                 TextButton(onClick = { showDeleteDialog = false }) {
-                     Text(stringResource(Res.string.action_cancel), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                 }
-             }
-         )
-     }
-
-
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            containerColor = MaterialTheme.colorScheme.surface,
+            title = {
+                Text(
+                    stringResource(Res.string.dialog_delete_counter_title),
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = { Text(stringResource(Res.string.dialog_delete_counter_message)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                    onDelete(id)
+                }) {
+                    Text(
+                        stringResource(Res.string.action_delete),
+                        color = MaterialTheme.colorScheme.error,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text(
+                        stringResource(Res.string.action_cancel),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        )
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -120,7 +135,10 @@ fun EditCounterScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = onBack) {
-                        Icon(GameIcons.ArrowBack, contentDescription = stringResource(Res.string.action_back))
+                        Icon(
+                            GameIcons.ArrowBack,
+                            contentDescription = stringResource(Res.string.action_back)
+                        )
                     }
                     Text(
                         text = stringResource(Res.string.counter_edit_title),
@@ -128,28 +146,31 @@ fun EditCounterScreen(
                         fontWeight = FontWeight.ExtraBold
                     )
                     IconButton(onClick = { showDeleteDialog = true }) {
-                        Icon(GameIcons.Delete, contentDescription = stringResource(Res.string.counter_edit_cd_delete))
+                        Icon(
+                            GameIcons.Delete,
+                            contentDescription = stringResource(Res.string.counter_edit_cd_delete)
+                        )
                     }
                 }
             }
         },
         bottomBar = {
-             // Prominent Flat Save Button
-             Surface(
-                 modifier = Modifier.fillMaxWidth(),
-                 color = MaterialTheme.colorScheme.surface
-             ) {
+            // Prominent Flat Save Button
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.surface
+            ) {
                 Button(
-                     onClick = {
-                         val sanitizedName = sanitizeCounterName(name) ?: return@Button
-                         val count = countText.toIntOrNull() ?: 0
-                         val colorArgb = (selectedColor.alpha * 255).toLong().shl(24) or
-                                 (selectedColor.red * 255).toLong().shl(16) or
-                                 (selectedColor.green * 255).toLong().shl(8) or
-                                 (selectedColor.blue * 255).toLong()
-                         
-                         onSave(id, sanitizedName, count, colorArgb)
-                     },
+                    onClick = {
+                        val sanitizedName = sanitizeCounterName(name) ?: return@Button
+                        val count = countText.toIntOrNull() ?: 0
+                        val colorArgb = (selectedColor.alpha * 255).toLong().shl(24) or
+                                (selectedColor.red * 255).toLong().shl(16) or
+                                (selectedColor.green * 255).toLong().shl(8) or
+                                (selectedColor.blue * 255).toLong()
+
+                        onSave(id, sanitizedName, count, colorArgb)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .navigationBarsPadding()
@@ -194,23 +215,45 @@ fun EditCounterScreen(
             }
 
             // 2. Name Field
-             FlatTextField(
-                 value = name,
-                 onValueChange = { name = it },
-                 label = stringResource(Res.string.counter_edit_field_name),
-                 placeholder = stringResource(Res.string.counter_edit_placeholder_name),
-                 accentColor = selectedColor
-             )
+            FlatTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = stringResource(Res.string.counter_edit_field_name),
+                placeholder = stringResource(Res.string.counter_edit_placeholder_name),
+                accentColor = selectedColor,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    autoCorrectEnabled = false,
+                    keyboardType = KeyboardType.Text
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                    }
+                ),
+            )
 
-             // 3. Value Field
-             FlatTextField(
-                 value = countText,
-                 onValueChange = { if (it.isEmpty() || it == "-" || it.all { char -> char.isDigit() || char == '-' }) countText = it },
-                 label = stringResource(Res.string.counter_edit_field_value),
-                 placeholder = stringResource(Res.string.counter_edit_placeholder_value),
-                 accentColor = selectedColor,
-                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-             )
+            // 3. Value Field
+            FlatTextField(
+                value = countText,
+                onValueChange = {
+                    if (it.isEmpty() || it == "-" || it.all { char -> char.isDigit() || char == '-' }) countText =
+                        it
+                },
+                label = stringResource(Res.string.counter_edit_field_value),
+                placeholder = stringResource(Res.string.counter_edit_placeholder_value),
+                accentColor = selectedColor,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    autoCorrectEnabled = false,
+                    keyboardType = KeyboardType.Number
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                    }
+                )
+            )
         }
     }
 }

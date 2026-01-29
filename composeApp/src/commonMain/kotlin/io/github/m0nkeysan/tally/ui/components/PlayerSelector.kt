@@ -11,11 +11,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
@@ -42,7 +45,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import io.github.m0nkeysan.tally.core.model.Player
 import io.github.m0nkeysan.tally.core.model.playerNamesEqual
@@ -73,7 +79,7 @@ fun PlayerSelectorField(
 ) {
     var showSheet by remember { mutableStateOf(false) }
     var lastCreatedPlayerName by remember { mutableStateOf<String?>(null) }
-    
+
     // Auto-select newly created player when it appears in allPlayers
     LaunchedEffect(lastCreatedPlayerName, allPlayers) {
         if (lastCreatedPlayerName != null) {
@@ -85,8 +91,10 @@ fun PlayerSelectorField(
             }
         }
     }
-    
-    val playerColor = selectedPlayer?.let { remember(it.avatarColor) { parseColor(it.avatarColor) } } ?: MaterialTheme.colorScheme.surface
+
+    val playerColor =
+        selectedPlayer?.let { remember(it.avatarColor) { parseColor(it.avatarColor) } }
+            ?: MaterialTheme.colorScheme.surface
     val isSelected = selectedPlayer != null
     val contentColor = if (isSelected) {
         if (playerColor.luminance() > 0.5f) Color.Black.copy(alpha = 0.8f) else Color.White
@@ -104,7 +112,10 @@ fun PlayerSelectorField(
             contentColor = contentColor
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = if (isSelected) 2.dp else 0.dp),
-        border = if (!isSelected) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null
+        border = if (!isSelected) BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant
+        ) else null
     ) {
         Row(
             modifier = Modifier
@@ -130,13 +141,13 @@ fun PlayerSelectorField(
                 }
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = label, 
-                        style = MaterialTheme.typography.labelSmall, 
+                        text = label,
+                        style = MaterialTheme.typography.labelSmall,
                         color = contentColor.copy(alpha = 0.7f)
                     )
                     Text(
-                        text = selectedPlayer.name, 
-                        style = MaterialTheme.typography.bodyLarge, 
+                        text = selectedPlayer.name,
+                        style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                         color = contentColor
                     )
@@ -149,24 +160,32 @@ fun PlayerSelectorField(
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.Person, contentDescription = stringResource(Res.string.cd_player), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Icon(
+                        Icons.Default.Person,
+                        contentDescription = stringResource(Res.string.cd_player),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
                 Text(
                     text = stringResource(Res.string.player_selector_placeholder, label),
-                    style = MaterialTheme.typography.bodyLarge, 
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(1f)
                 )
             }
-            
-             TextButton(
-                 onClick = { showSheet = true },
-                 colors = ButtonDefaults.textButtonColors(
-                     contentColor = if (isSelected) contentColor else MaterialTheme.colorScheme.primary
-                 )
-             ) {
-                 Text(if (isSelected) stringResource(Res.string.player_selector_change) else stringResource(Res.string.player_selector_select), fontWeight = FontWeight.Bold)
-             }
+
+            TextButton(
+                onClick = { showSheet = true },
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = if (isSelected) contentColor else MaterialTheme.colorScheme.primary
+                )
+            ) {
+                Text(
+                    if (isSelected) stringResource(Res.string.player_selector_change) else stringResource(
+                        Res.string.player_selector_select
+                    ), fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 
@@ -177,7 +196,7 @@ fun PlayerSelectorField(
             PlayerSelectorContent(
                 allPlayers = allPlayers,
                 excludedPlayerIds = excludedPlayerIds,
-                onSelect = { 
+                onSelect = {
                     onPlayerSelected(it)
                     showSheet = false
                 },
@@ -200,6 +219,18 @@ fun PlayerSelectorContent(
     onReactivate: ((Player) -> Unit)? = null
 ) {
     var searchQuery by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    val sanitizedQuery = remember(searchQuery) { sanitizePlayerName(searchQuery) }
+    val isNewPlayer = remember(sanitizedQuery, allPlayers) {
+        sanitizedQuery != null && !allPlayers.any {
+            it.isActive && playerNamesEqual(
+                sanitizedQuery,
+                it.name
+            )
+        }
+    }
+
     val filteredPlayers = remember(searchQuery, allPlayers, excludedPlayerIds) {
         val activeList = allPlayers.filter { it.isActive }
         val baseList = activeList.filter { it.id !in excludedPlayerIds }
@@ -214,7 +245,7 @@ fun PlayerSelectorContent(
             val deactivatedPlayer = allPlayers.find { existingPlayer ->
                 !existingPlayer.isActive && playerNamesEqual(sanitized, existingPlayer.name)
             }
-            
+
             if (deactivatedPlayer != null && onReactivate != null) {
                 // Reactivate existing player
                 onReactivate(deactivatedPlayer)
@@ -231,25 +262,42 @@ fun PlayerSelectorContent(
             .fillMaxWidth()
             .padding(16.dp)
             .heightIn(max = 500.dp)
+            .imePadding()
     ) {
-         Text(text = stringResource(
-             Res.string.player_selector_dialog_title), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text(
+            text = stringResource(
+                Res.string.player_selector_dialog_title
+            ), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold
+        )
         Spacer(Modifier.height(16.dp))
 
-         OutlinedTextField(
-             value = searchQuery,
-             onValueChange = { searchQuery = it },
-             modifier = Modifier.fillMaxWidth(),
-             placeholder = { Text(stringResource(Res.string.player_selector_search_placeholder)) },
-             leadingIcon = { Icon(Icons.Default.Search, null) },
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = { Text(stringResource(Res.string.player_selector_search_placeholder)) },
+            leadingIcon = { Icon(Icons.Default.Search, null) },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search,
+                autoCorrectEnabled = false,
+                keyboardType = KeyboardType.Text
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    keyboardController?.hide()
+                }
+            ),
             trailingIcon = {
-                val sanitized = sanitizePlayerName(searchQuery)
-                if (sanitized != null && !allPlayers.any { it.isActive && playerNamesEqual(sanitized, it.name) }) {
-                    IconButton(onClick = { 
+                if (isNewPlayer) {
+                    IconButton(onClick = {
                         handleCreateOrReactivate(searchQuery)
                         searchQuery = ""
+                        keyboardController?.hide()
                     }) {
-                        Icon(Icons.Default.Add, contentDescription = stringResource(Res.string.cd_add))
+                        Icon(
+                            Icons.Default.Add,
+                            contentDescription = stringResource(Res.string.cd_add)
+                        )
                     }
                 }
             },
@@ -263,17 +311,25 @@ fun PlayerSelectorContent(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             val sanitizedQuery = sanitizePlayerName(searchQuery)
-            if (sanitizedQuery != null && !allPlayers.any { it.isActive && playerNamesEqual(sanitizedQuery, it.name) }) {
+            if (sanitizedQuery != null && !allPlayers.any {
+                    it.isActive && playerNamesEqual(
+                        sanitizedQuery,
+                        it.name
+                    )
+                }) {
                 item {
                     // Check if there's a deactivated player with this sanitized name
                     val deactivatedPlayer = allPlayers.find { existingPlayer ->
-                        !existingPlayer.isActive && playerNamesEqual(sanitizedQuery, existingPlayer.name)
+                        !existingPlayer.isActive && playerNamesEqual(
+                            sanitizedQuery,
+                            existingPlayer.name
+                        )
                     }
-                    
+
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { 
+                            .clickable {
                                 handleCreateOrReactivate(searchQuery)
                                 searchQuery = ""
                             },
@@ -296,25 +352,31 @@ fun PlayerSelectorContent(
                                     .background(MaterialTheme.colorScheme.primary),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Icon(Icons.Default.Add, null, tint = Color.White, modifier = Modifier.size(20.dp))
+                                Icon(
+                                    Icons.Default.Add,
+                                    null,
+                                    tint = Color.White,
+                                    modifier = Modifier.size(20.dp)
+                                )
                             }
                             Text(
-                                 text = if (deactivatedPlayer != null && onReactivate != null) {
-                                     stringResource(Res.string.player_reactivate_format, searchQuery)
-                                 } else {
-                                     stringResource(Res.string.player_create_format, searchQuery)
-                                 },
-                                 style = MaterialTheme.typography.bodyLarge,
-                                 fontWeight = FontWeight.Bold
-                             )
+                                text = if (deactivatedPlayer != null && onReactivate != null) {
+                                    stringResource(Res.string.player_reactivate_format, searchQuery)
+                                } else {
+                                    stringResource(Res.string.player_create_format, searchQuery)
+                                },
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
                 }
             }
 
-            items(filteredPlayers) { player ->
+            items(items = filteredPlayers, key = { it.id }) { player ->
                 val playerColor = remember(player.avatarColor) { parseColor(player.avatarColor) }
-                val contentColor = if (playerColor.luminance() > 0.5f) Color.Black.copy(alpha = 0.8f) else Color.White
+                val contentColor =
+                    if (playerColor.luminance() > 0.5f) Color.Black.copy(alpha = 0.8f) else Color.White
 
                 Card(
                     modifier = Modifier
