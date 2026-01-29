@@ -37,7 +37,10 @@ jobs:
         run: |
           # Build with production optimizations
           # We use --no-daemon for CI environments
-          NODE_ENV=production ./gradlew wasmJsBrowserProductionWebpack --no-daemon
+          # Use -Pkotlin.js.yarn.lockfile.stacking=false to bypass the check
+          NODE_ENV=production ./gradlew wasmJsBrowserProductionWebpack \
+            -Pkotlin.js.yarn.lockfile.stacking=false \
+            --no-daemon
           
           # Ensure the CSP injection script is executable
           chmod +x ./composeApp/scripts/inject-production-csp.sh
