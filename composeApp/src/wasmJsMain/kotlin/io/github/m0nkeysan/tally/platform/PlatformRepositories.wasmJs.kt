@@ -2,17 +2,30 @@ package io.github.m0nkeysan.tally.platform
 
 import io.github.m0nkeysan.tally.core.data.local.DatabaseModule
 import io.github.m0nkeysan.tally.core.data.local.driver.DatabaseDriverFactory
-import io.github.m0nkeysan.tally.core.data.repository.*
+import io.github.m0nkeysan.tally.core.data.repository.CounterRepositoryImpl
+import io.github.m0nkeysan.tally.core.data.repository.GameQueryHelperImpl
+import io.github.m0nkeysan.tally.core.data.repository.PlayerRepositoryImpl
+import io.github.m0nkeysan.tally.core.data.repository.TarotRepositoryImpl
+import io.github.m0nkeysan.tally.core.data.repository.TarotStatisticsRepositoryImpl
+import io.github.m0nkeysan.tally.core.data.repository.UserPreferencesRepositoryImpl
+import io.github.m0nkeysan.tally.core.data.repository.YahtzeeRepositoryImpl
+import io.github.m0nkeysan.tally.core.data.repository.YahtzeeStatisticsRepositoryImpl
 import io.github.m0nkeysan.tally.core.domain.CounterHistoryStore
-import io.github.m0nkeysan.tally.core.domain.repository.*
+import io.github.m0nkeysan.tally.core.domain.repository.CounterRepository
+import io.github.m0nkeysan.tally.core.domain.repository.GameQueryHelper
+import io.github.m0nkeysan.tally.core.domain.repository.PlayerRepository
+import io.github.m0nkeysan.tally.core.domain.repository.TarotRepository
+import io.github.m0nkeysan.tally.core.domain.repository.TarotStatisticsRepository
+import io.github.m0nkeysan.tally.core.domain.repository.UserPreferencesRepository
+import io.github.m0nkeysan.tally.core.domain.repository.YahtzeeRepository
+import io.github.m0nkeysan.tally.core.domain.repository.YahtzeeStatisticsRepository
 import io.github.m0nkeysan.tally.database.TallyDatabase
 import io.github.m0nkeysan.tally.ui.strings.LocaleManager
-import kotlinx.coroutines.*
 
 actual object PlatformRepositories {
     private var database: TallyDatabase? = null
     private val driverFactory = DatabaseDriverFactory()
-    
+
     // Singleton instances for repositories
     private var playerRepository: PlayerRepository? = null
     private var userPreferencesRepository: UserPreferencesRepository? = null
@@ -24,8 +37,6 @@ actual object PlatformRepositories {
     private var gameQueryHelper: GameQueryHelper? = null
     private var historyStore: CounterHistoryStore? = null
     private var localeManager: LocaleManager? = null
-
-    private var initJob: Job? = null
 
     /**
      * Wasm specific initialization.

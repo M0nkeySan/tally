@@ -18,8 +18,12 @@ const initPromise = sqlite3InitModule({ print: log, printErr: error }).then(asyn
         if (sqlite3.opfs) {
             log('OPFS is available. Opening persistent database: /tally.db');
             db = new oo.OpfsDb('/tally.db');
+        } else if (oo.JsStorageDb) {
+            log('OPFS not available. Falling back to LocalStorage (JsStorageDb)');
+            // 'local' uses localStorage, 'session' uses sessionStorage
+            db = new oo.JsStorageDb('local');
         } else {
-            console.warn('[SQLite Worker] OPFS is NOT available. Falling back to in-memory database.');
+            console.warn('[SQLite Worker] No persistent storage (OPFS or JsStorage) available. Falling back to in-memory database.');
             db = new oo.DB();
         }
         log('Database initialized successfully.');
