@@ -1,4 +1,4 @@
-CREATE TABLE userPreferencesEntity (
+CREATE TABLE IF NOT EXISTS userPreferencesEntity (
   key TEXT NOT NULL PRIMARY KEY,
   prefValue TEXT NOT NULL
 );

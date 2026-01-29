@@ -1,4 +1,4 @@
-CREATE TABLE playerEntity (
+CREATE TABLE IF NOT EXISTS playerEntity (
   id TEXT NOT NULL PRIMARY KEY,
   name TEXT NOT NULL,
   avatarColor TEXT NOT NULL,

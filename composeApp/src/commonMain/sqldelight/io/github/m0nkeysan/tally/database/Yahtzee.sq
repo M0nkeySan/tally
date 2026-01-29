@@ -1,4 +1,4 @@
-CREATE TABLE yahtzeeGameEntity (
+CREATE TABLE IF NOT EXISTS yahtzeeGameEntity (
   id TEXT NOT NULL PRIMARY KEY,
   name TEXT NOT NULL,
   playerCount INTEGER NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE yahtzeeGameEntity (
   updatedAt INTEGER NOT NULL
 );
 
-CREATE TABLE yahtzeeScoreEntity (
+CREATE TABLE IF NOT EXISTS yahtzeeScoreEntity (
   id TEXT NOT NULL PRIMARY KEY,
   gameId TEXT NOT NULL,
   playerId TEXT NOT NULL,

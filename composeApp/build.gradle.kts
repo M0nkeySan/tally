@@ -65,10 +65,8 @@ kotlin {
 
         wasmJsMain.dependencies {
             implementation(libs.sqldelight.webworker)
-            implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.2.1"))
-            implementation(npm("sql.js", "1.13.0"))
+            implementation(npm("@sqlite.org/sqlite-wasm", "3.51.2-build5"))
             implementation(devNpm("copy-webpack-plugin", "13.0.1"))
-            //implementation(npm("@sqlite.org/sqlite-wasm", "3.51.2-build5"))
         }
 
         commonMain.dependencies {

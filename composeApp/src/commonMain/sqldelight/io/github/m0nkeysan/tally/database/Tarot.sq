@@ -1,4 +1,4 @@
-CREATE TABLE tarotGameEntity (
+CREATE TABLE IF NOT EXISTS tarotGameEntity (
   id TEXT NOT NULL PRIMARY KEY,
   name TEXT NOT NULL,
   playerCount INTEGER NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE tarotGameEntity (
   updatedAt INTEGER NOT NULL
 );
 
-CREATE TABLE tarotRoundEntity (
+CREATE TABLE IF NOT EXISTS tarotRoundEntity (
   id TEXT NOT NULL PRIMARY KEY,
   gameId TEXT NOT NULL,
   roundNumber INTEGER NOT NULL,
