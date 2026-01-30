@@ -37,9 +37,8 @@ jobs:
         run: |
           # Build with production optimizations
           # We use --no-daemon for CI environments
-          # Use -Pkotlin.js.yarn.lockfile.stacking=false to bypass the check
           NODE_ENV=production ./gradlew wasmJsBrowserProductionWebpack \
-            -Pkotlin.js.yarn.lockfile.stacking=false \
+            -Pkotlin.js.yarn.lock.check=false \
             --no-daemon
           
           # Ensure the CSP injection script is executable
