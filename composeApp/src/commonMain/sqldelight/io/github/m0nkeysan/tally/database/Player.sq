@@ -31,3 +31,6 @@ DELETE FROM playerEntity WHERE id = ?;
 
 getDistinctPlayerIds:
 SELECT DISTINCT id FROM playerEntity;
+
+deleteAllPlayers:
+DELETE FROM playerEntity;

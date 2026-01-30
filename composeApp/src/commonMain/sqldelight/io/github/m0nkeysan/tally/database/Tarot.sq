@@ -65,3 +65,12 @@ DELETE FROM tarotRoundEntity WHERE gameId = ?;
 
 countGamesWithPlayer:
 SELECT COUNT(*) FROM tarotGameEntity WHERE playerIds LIKE '%' || ? || '%';
+
+selectAllRounds:
+SELECT * FROM tarotRoundEntity ORDER BY gameId ASC, roundNumber ASC;
+
+deleteAllGames:
+DELETE FROM tarotGameEntity;
+
+deleteAllRounds:
+DELETE FROM tarotRoundEntity;

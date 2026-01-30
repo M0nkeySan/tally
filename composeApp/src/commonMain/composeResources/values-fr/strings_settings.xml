@@ -7,4 +7,23 @@
     <string name="settings_theme_dark">Sombre</string>
     <string name="settings_theme_system">Système par défaut</string>
     <string name="settings_language">Langue</string>
+    
+    <!-- Data Management -->
+    <string name="settings_section_data">Gestion des données</string>
+    <string name="settings_export_database">Exporter la base de données</string>
+    <string name="settings_export_subtitle">Sauvegarder toutes vos données de jeu</string>
+    <string name="settings_import_database">Importer la base de données</string>
+    <string name="settings_import_subtitle">Restaurer depuis une sauvegarde</string>
+    
+    <!-- Import Warning Dialog -->
+    <string name="import_warning_title">Importer la base de données ?</string>
+    <string name="import_warning_message">Cela remplacera toutes les données existantes par la sauvegarde importée. Cette action ne peut pas être annulée.</string>
+    <string name="import_confirm">Importer</string>
+    <string name="cancel">Annuler</string>
+    
+    <!-- Feedback Messages -->
+    <string name="export_success">Base de données exportée avec succès</string>
+    <string name="import_success">Base de données importée avec succès</string>
+    <string name="export_error">Échec de l\'exportation de la base de données</string>
+    <string name="import_error">Échec de l\'importation de la base de données</string>
 </resources>

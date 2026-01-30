@@ -19,6 +19,8 @@ import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.ui.graphics.vector.ImageVector
 
 actual object GameIcons {
@@ -40,4 +42,6 @@ actual object GameIcons {
     actual val ExpandLess: ImageVector = Icons.Default.ExpandLess
     actual val Brightness4: ImageVector = Icons.Default.Brightness4
     actual val Translate: ImageVector = Icons.Default.Translate
+    actual val Upload: ImageVector = Icons.Default.Upload
+    actual val Download: ImageVector = Icons.Default.Download
 }

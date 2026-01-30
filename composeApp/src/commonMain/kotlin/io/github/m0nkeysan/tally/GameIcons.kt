@@ -21,4 +21,6 @@ expect object GameIcons {
     val ExpandLess: ImageVector
     val Brightness4: ImageVector
     val Translate: ImageVector
+    val Upload: ImageVector
+    val Download: ImageVector
 }
