@@ -15,26 +15,23 @@ fi
 
 echo -e "${GREEN}[Tally CSP]${NC} Injecting strict production CSP into $INDEX_HTML..."
 
-# Strict production CSP
-PRODUCTION_CSP="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob:; worker-src 'self' blob:; base-uri 'self'; form-action 'self';"
+# Define the production CSP
+export PRODUCTION_CSP="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob:; worker-src 'self' blob:; base-uri 'self'; form-action 'self';"
 
-# ROBUST REPLACEMENT:
-# This matches any meta tag with http-equiv="Content-Security-Policy"
-# and replaces its entire content attribute.
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS
-    sed -i '' "s|<meta http-equiv=\"Content-Security-Policy\" content=\"[^\"]*\">|<meta http-equiv=\"Content-Security-Policy\" content=\"$PRODUCTION_CSP\">|g" "$INDEX_HTML"
-else
-    # Linux
-    sed -i "s|<meta http-equiv=\"Content-Security-Policy\" content=\"[^\"]*\">|<meta http-equiv=\"Content-Security-Policy\" content=\"$PRODUCTION_CSP\">|g" "$INDEX_HTML"
-fi
+# Use Perl to handle multi-line replacement
+# -0777: Slurps the whole file into memory
+# -i: Edit in-place
+# -pe: Execute the regex and print
+# The regex finds the meta tag regardless of newlines (\s+) and replaces it.
+perl -0777 -i -pe 's/<meta\s+http-equiv="Content-Security-Policy"\s+content="[^"]*">/<meta http-equiv="Content-Security-Policy" content="$ENV{PRODUCTION_CSP}">/gs' "$INDEX_HTML"
 
 # Verify the change
 if grep -q "unsafe-eval" "$INDEX_HTML"; then
     echo -e "${YELLOW}[Tally CSP]${NC} ❌ Error: 'unsafe-eval' is still present in $INDEX_HTML"
-    # Show what's actually in there to help debugging
-    grep "Content-Security-Policy" "$INDEX_HTML"
+    echo "Current Content-Security-Policy tag found:"
+    # This grep helps debug by showing the line with its context
+    grep -A 2 "Content-Security-Policy" "$INDEX_HTML"
     exit 1
 else
-    echo -e "${GREEN}[Tally CSP]${NC} ✅ Success: 'unsafe-eval' removed and production CSP injected."
+    echo -e "${GREEN}[Tally CSP]${NC} ✅ Success: 'unsafe-eval' removed from production CSP."
 fi
