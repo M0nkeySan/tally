@@ -66,7 +66,7 @@ kotlin {
         wasmJsMain.dependencies {
             implementation(libs.sqldelight.webworker)
             implementation(npm("@sqlite.org/sqlite-wasm", libs.versions.sqlite.wasm.get()))
-            implementation(devNpm("copy-webpack-plugin", libs.versions.copy.webpack.plugin.get()))
+            implementation(npm("copy-webpack-plugin", libs.versions.copy.webpack.plugin.get()))
         }
 
         commonMain.dependencies {
