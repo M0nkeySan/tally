@@ -31,6 +31,7 @@ kotlin {
     wasmJs {
         browser {
             commonWebpackConfig {
+                devtool = "source-map"
                 cssSupport {
                     enabled.set(true)
                 }
