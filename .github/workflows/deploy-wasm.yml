@@ -38,7 +38,7 @@ jobs:
           # Clean to ensure fresh build
           ./gradlew :composeApp:clean --no-daemon
           # Build with production optimizations
-          NODE_ENV=production ./gradlew wasmJsBrowserProductionWebpack \
+          NODE_ENV=production ./gradlew wasmJsBrowserDistribution \
             --no-daemon
           
           # Ensure the CSP injection script is executable
