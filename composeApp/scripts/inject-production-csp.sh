@@ -1,52 +1,40 @@
 #!/bin/bash
-#
-# Production CSP Injection Script
-# 
-# This script replaces the development CSP with a strict production CSP
-# in the built index.html file after webpack completes.
-#
-# Usage: ./scripts/inject-production-csp.sh <path-to-index.html>
-#
-
 set -e
 
 # Colors for output
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
 INDEX_HTML="${1:-build/dist/wasmJs/productionExecutable/index.html}"
 
 if [ ! -f "$INDEX_HTML" ]; then
     echo -e "${YELLOW}Warning: index.html not found at $INDEX_HTML${NC}"
-    echo "Usage: $0 <path-to-index.html>"
     exit 1
 fi
 
-echo -e "${GREEN}[Tally CSP]${NC} Injecting strict production CSP..."
+echo -e "${GREEN}[Tally CSP]${NC} Injecting strict production CSP into $INDEX_HTML..."
 
-# Strict production CSP (no unsafe-eval)
-# Added blob: to connect-src and worker-src for WASM worker support
-# Added unsafe-inline to script-src for production (some JS/Wasm glue needs it)
+# Strict production CSP
 PRODUCTION_CSP="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob:; worker-src 'self' blob:; base-uri 'self'; form-action 'self';"
 
-# Use sed to replace the entire CSP content in-place
-# We match the entire meta tag and replace the content attribute
+# ROBUST REPLACEMENT:
+# This matches any meta tag with http-equiv="Content-Security-Policy"
+# and replaces its entire content attribute.
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS
-    sed -i '' "s|content=\"default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; [^\"]*\"|content=\"$PRODUCTION_CSP\"|g" "$INDEX_HTML"
+    sed -i '' "s|<meta http-equiv=\"Content-Security-Policy\" content=\"[^\"]*\">|<meta http-equiv=\"Content-Security-Policy\" content=\"$PRODUCTION_CSP\">|g" "$INDEX_HTML"
 else
     # Linux
-    sed -i "s|content=\"default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; [^\"]*\"|content=\"$PRODUCTION_CSP\"|g" "$INDEX_HTML"
+    sed -i "s|<meta http-equiv=\"Content-Security-Policy\" content=\"[^\"]*\">|<meta http-equiv=\"Content-Security-Policy\" content=\"$PRODUCTION_CSP\">|g" "$INDEX_HTML"
 fi
-
-echo -e "${GREEN}[Tally CSP]${NC} ✅ Production CSP injected successfully"
-echo -e "${GREEN}[Tally CSP]${NC} New policy: $PRODUCTION_CSP"
 
 # Verify the change
 if grep -q "unsafe-eval" "$INDEX_HTML"; then
-    echo -e "${YELLOW}[Tally CSP]${NC} ⚠️  Warning: 'unsafe-eval' still present in CSP"
+    echo -e "${YELLOW}[Tally CSP]${NC} ❌ Error: 'unsafe-eval' is still present in $INDEX_HTML"
+    # Show what's actually in there to help debugging
+    grep "Content-Security-Policy" "$INDEX_HTML"
     exit 1
 else
-    echo -e "${GREEN}[Tally CSP]${NC} ✅ Verified: 'unsafe-eval' removed from production CSP"
+    echo -e "${GREEN}[Tally CSP]${NC} ✅ Success: 'unsafe-eval' removed and production CSP injected."
 fi
