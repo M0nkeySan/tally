@@ -99,7 +99,7 @@ Tally follows **Clean Architecture** principles with clear separation of concern
 ### Architecture Patterns
 - **MVVM (Model-View-ViewModel)** - Separation of UI and business logic
 - **Repository Pattern** - Abstract data sources from business logic
-- **Single Source of Truth** - SQLDelight database as the single source of truth across all platforms (Android, iOS, and Web via OPFS)
+- **Single Source of Truth** - SQLDelight database as the single source of truth across all platforms (Android, iOS, and Web via LocalStorage)
 - **Unidirectional Data Flow** - Predictable state management with ViewModels
 
 ### Key Components

@@ -40,12 +40,6 @@ jobs:
           # Build with production optimizations
           NODE_ENV=production ./gradlew wasmJsBrowserDistribution \
             --no-daemon
-          
-          # Ensure the CSP injection script is executable
-          chmod +x ./composeApp/scripts/inject-production-csp.sh
-          
-          # Inject strict CSP into the production index.html
-          ./composeApp/scripts/inject-production-csp.sh ./composeApp/build/dist/wasmJs/productionExecutable/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

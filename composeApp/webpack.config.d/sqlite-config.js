@@ -15,10 +15,6 @@ config.plugins.push(
                 to: 'sqlite3.wasm'
             },
             {
-                from: '../../node_modules/@sqlite.org/sqlite-wasm/dist/sqlite3-opfs-async-proxy.js',
-                to: 'sqlite3-opfs-async-proxy.js'
-            },
-            {
                 from: '../../node_modules/@sqlite.org/sqlite-wasm/dist/index.mjs',
                 to: 'sqlite3.mjs'
             }
