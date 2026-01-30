@@ -86,6 +86,7 @@ import io.github.m0nkeysan.tally.generated.resources.dice_total_format
 import io.github.m0nkeysan.tally.platform.HapticType
 import io.github.m0nkeysan.tally.platform.rememberHapticFeedbackController
 import io.github.m0nkeysan.tally.platform.rememberShakeDetector
+import io.github.m0nkeysan.tally.platform.supportsShakeDetection
 import io.github.m0nkeysan.tally.ui.components.NumberSlider
 import org.jetbrains.compose.resources.stringResource
 
@@ -536,19 +537,21 @@ private fun DiceSettingsBottomSheetContent(
             Switch(checked = animationEnabled, onCheckedChange = { animationEnabled = it })
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.shapes.medium)
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                stringResource(Res.string.dice_setting_shake),
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Switch(checked = shakeEnabled, onCheckedChange = { shakeEnabled = it })
+        if (supportsShakeDetection) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.shapes.medium)
+                    .padding(12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    stringResource(Res.string.dice_setting_shake),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Switch(checked = shakeEnabled, onCheckedChange = { shakeEnabled = it })
+            }
         }
 
         Row(
