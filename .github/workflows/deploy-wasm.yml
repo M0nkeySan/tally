@@ -35,8 +35,9 @@ jobs:
 
       - name: Build WASM Production
         run: |
+          # Clean to ensure fresh build
+          ./gradlew :composeApp:clean --no-daemon
           # Build with production optimizations
-          # We use --no-daemon for CI environments
           NODE_ENV=production ./gradlew wasmJsBrowserProductionWebpack \
             --no-daemon
           
