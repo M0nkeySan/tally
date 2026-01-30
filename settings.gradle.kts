@@ -27,7 +27,7 @@ dependencyResolutionManagement {
         }
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        
+
         // Node.js distributions for Kotlin/Wasm
         ivy {
             url = uri("https://nodejs.org/dist")
@@ -41,7 +41,7 @@ dependencyResolutionManagement {
                 includeModule("org.nodejs", "node")
             }
         }
-        
+
         // Yarn distributions for Kotlin/Wasm
         ivy {
             url = uri("https://github.com/yarnpkg/yarn/releases/download")
@@ -57,18 +57,18 @@ dependencyResolutionManagement {
         }
 
         // Binaryen distributions for Kotlin/Wasm
-        ivy {
-            url = uri("https://github.com/WebAssembly/binaryen/releases/download")
-            patternLayout {
-                artifact("version_[revision]/[artifact](-version_[revision])-node.[ext]")
-            }
-            metadataSources {
-                artifact()
-            }
-            content {
-                includeModule("com.github.webassembly", "binaryen")
-            }
-        }
+//        ivy {
+//            url = uri("https://github.com/WebAssembly/binaryen/releases/download")
+//            patternLayout {
+//                artifact("version_[revision]/[artifact](-version_[revision])-node.[ext]")
+//            }
+//            metadataSources {
+//                artifact()
+//            }
+//            content {
+//                includeModule("com.github.webassembly", "binaryen")
+//            }
+//        }
     }
 }
 
