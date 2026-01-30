@@ -39,7 +39,7 @@ jobs:
           # We use --no-daemon for CI environments
           NODE_ENV=production ./gradlew wasmJsBrowserProductionWebpack \
             -Pkotlin.js.yarn.lock.check=false \
-            -Pkotlin.wasm.yarn.lock.check=false \ 
+            -Pkotlin.wasm.yarn.lock.check=false \
             --no-daemon
           
           # Ensure the CSP injection script is executable
