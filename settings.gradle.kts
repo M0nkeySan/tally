@@ -57,18 +57,18 @@ dependencyResolutionManagement {
         }
 
         // Binaryen distributions for Kotlin/Wasm
-//        ivy {
-//            url = uri("https://github.com/WebAssembly/binaryen/releases/download")
-//            patternLayout {
-//                artifact("version_[revision]/[artifact](-version_[revision])-node.[ext]")
-//            }
-//            metadataSources {
-//                artifact()
-//            }
-//            content {
-//                includeModule("com.github.webassembly", "binaryen")
-//            }
-//        }
+        ivy {
+            url = uri("https://github.com/WebAssembly/binaryen/releases/download")
+            patternLayout {
+                artifact("version_[revision]/[artifact](-version_[revision])-[classifier].[ext]")
+            }
+            metadataSources {
+                artifact()
+            }
+            content {
+                includeModule("com.github.webassembly", "binaryen")
+            }
+        }
     }
 }
 
