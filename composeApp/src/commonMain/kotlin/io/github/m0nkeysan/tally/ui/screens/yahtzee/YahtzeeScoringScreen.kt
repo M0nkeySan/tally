@@ -208,7 +208,7 @@ fun YahtzeeGameView(
                     }
                 ) {
                     Icon(
-                        imageVector = androidx.compose.material.icons.Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                         contentDescription = stringResource(Res.string.yahtzee_scoring_cd_previous)
                     )
                 }
@@ -316,7 +316,7 @@ fun YahtzeeGameView(
                     }
                 ) {
                     Icon(
-                        imageVector = androidx.compose.material.icons.Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = stringResource(Res.string.yahtzee_scoring_cd_next)
                     )
                 }
@@ -357,8 +357,9 @@ fun YahtzeeGameView(
                     score = currentScore,
                     onScoreSet = { score ->
                         // Move turn if the CURRENT player (not just selected) is scoring for the first time
-                        val isMoveTurn =
-                            game.currentPlayerId == selectedPlayerId && currentScore == null
+                        // OR if they are increasing an existing score (e.g. adding a Yahtzee bonus)
+                        val isMoveTurn = game.currentPlayerId == selectedPlayerId && 
+                            (currentScore == null || score > currentScore)
                         viewModel.submitScore(selectedPlayerId, category, score, isMoveTurn)
                     }
                 )
@@ -378,8 +379,9 @@ fun YahtzeeGameView(
                     score = currentScore,
                     onScoreSet = { score ->
                         // Move turn if the CURRENT player (not just selected) is scoring for the first time
-                        val isMoveTurn =
-                            game.currentPlayerId == selectedPlayerId && currentScore == null
+                        // OR if they are increasing an existing score (e.g. adding a Yahtzee bonus)
+                        val isMoveTurn = game.currentPlayerId == selectedPlayerId && 
+                            (currentScore == null || score > currentScore)
                         viewModel.submitScore(selectedPlayerId, category, score, isMoveTurn)
                     }
                 )
