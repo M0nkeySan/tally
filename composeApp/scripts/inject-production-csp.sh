@@ -13,25 +13,20 @@ if [ ! -f "$INDEX_HTML" ]; then
     exit 1
 fi
 
-echo -e "${GREEN}[Tally CSP]${NC} Injecting strict production CSP into $INDEX_HTML..."
+echo -e "${GREEN}[Tally CSP]${NC} Injecting strict production CSP..."
 
 # Define the production CSP
 export PRODUCTION_CSP="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob:; worker-src 'self' blob:; base-uri 'self'; form-action 'self';"
 
-# Use Perl to handle multi-line replacement
-# -0777: Slurps the whole file into memory
-# -i: Edit in-place
-# -pe: Execute the regex and print
-# The regex finds the meta tag regardless of newlines (\s+) and replaces it.
-perl -0777 -i -pe 's/<meta\s+http-equiv="Content-Security-Policy"\s+content="[^"]*">/<meta http-equiv="Content-Security-Policy" content="$ENV{PRODUCTION_CSP}">/gs' "$INDEX_HTML"
+# Use Perl with a more relaxed regex for your specific HTML structure
+# This matches: <meta http-equiv="Content-Security-Policy" (any whitespace) content="...">
+perl -0777 -i -pe 's/<meta\s+http-equiv="Content-Security-Policy"[\s\n]+content="[^"]*">/<meta http-equiv="Content-Security-Policy" content="$ENV{PRODUCTION_CSP}">/gs' "$INDEX_HTML"
 
-# Verify the change
-if grep -q "unsafe-eval" "$INDEX_HTML"; then
-    echo -e "${YELLOW}[Tally CSP]${NC} ❌ Error: 'unsafe-eval' is still present in $INDEX_HTML"
-    echo "Current Content-Security-Policy tag found:"
-    # This grep helps debug by showing the line with its context
-    grep -A 2 "Content-Security-Policy" "$INDEX_HTML"
+# VERIFICATION
+# We check for 'unsafe-eval' (with quotes) to ensure the OLD one is gone
+if grep -q "'unsafe-eval'" "$INDEX_HTML"; then
+    echo -e "${YELLOW}[Tally CSP]${NC} ❌ Error: Original 'unsafe-eval' is still present."
     exit 1
 else
-    echo -e "${GREEN}[Tally CSP]${NC} ✅ Success: 'unsafe-eval' removed from production CSP."
+    echo -e "${GREEN}[Tally CSP]${NC} ✅ Success: Production CSP injected and verified."
 fi
