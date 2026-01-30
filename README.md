@@ -2,14 +2,15 @@
 
 > Your all-in-one companion for board game nights
 
-[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue.svg)]()
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20Web-blue.svg)]()
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.3.0-purple.svg)]()
 [![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.10.0-blue.svg)]()
 
 [![Download](https://img.shields.io/badge/Download-Latest_Release-success?style=for-the-badge&logo=android)](https://github.com/m0nkeysan/tally/releases/latest)
+[![Try Online](https://img.shields.io/badge/Try_Online-WASM-orange?style=for-the-badge&logo=webassembly)](https://m0nkeysan.github.io/tally/)
 
-Tally is a Kotlin Multiplatform mobile application that brings together essential tools for game nights: scoring systems for popular games, dice rolling, player selection, and more. Built with Compose Multiplatform for a native experience on both Android and iOS.
+Tally is a Kotlin Multiplatform application that brings together essential tools for game nights: scoring systems for popular games, dice rolling, player selection, and more. Built with Compose Multiplatform for a native experience on Android, iOS, and Web (WASM).
 
 ---
 
@@ -183,6 +184,20 @@ adb install composeApp/build/outputs/apk/debug/composeApp-debug.apk
 # Build for physical iOS device
 ./gradlew :composeApp:linkDebugFrameworkIosArm64
 ```
+
+---
+
+### Running on Web (WASM)
+
+#### Try it Online
+The application is automatically deployed and hosted at:
+👉 **[m0nkeysan.github.io/tally/](https://m0nkeysan.github.io/tally/)**
+
+#### Running Locally
+```bash
+./gradlew wasmJsBrowserDevelopmentRun
+```
+This will start a local development server with hot reload enabled at `http://localhost:8080`.
 
 ---
 
