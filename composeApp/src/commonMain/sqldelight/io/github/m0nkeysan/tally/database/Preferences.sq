@@ -10,5 +10,11 @@ insertPreference:
 INSERT OR REPLACE INTO userPreferencesEntity(key, prefValue)
 VALUES (?, ?);
 
+selectAllPreferences:
+SELECT * FROM userPreferencesEntity;
+
 deletePreference:
 DELETE FROM userPreferencesEntity WHERE key = ?;
+
+deleteAllPreferences:
+DELETE FROM userPreferencesEntity;

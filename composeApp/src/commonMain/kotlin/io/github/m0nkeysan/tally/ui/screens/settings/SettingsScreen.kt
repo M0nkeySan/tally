@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -22,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -41,23 +44,68 @@ import io.github.m0nkeysan.tally.core.domain.model.AppLocale
 import io.github.m0nkeysan.tally.core.domain.model.AppTheme
 import io.github.m0nkeysan.tally.generated.resources.Res
 import io.github.m0nkeysan.tally.generated.resources.action_cancel
+import io.github.m0nkeysan.tally.generated.resources.cancel
+import io.github.m0nkeysan.tally.generated.resources.export_error
+import io.github.m0nkeysan.tally.generated.resources.export_success
+import io.github.m0nkeysan.tally.generated.resources.import_confirm
+import io.github.m0nkeysan.tally.generated.resources.import_error
+import io.github.m0nkeysan.tally.generated.resources.import_success
+import io.github.m0nkeysan.tally.generated.resources.import_warning_message
+import io.github.m0nkeysan.tally.generated.resources.import_warning_title
+import io.github.m0nkeysan.tally.generated.resources.settings_export_database
+import io.github.m0nkeysan.tally.generated.resources.settings_export_subtitle
+import io.github.m0nkeysan.tally.generated.resources.settings_import_database
+import io.github.m0nkeysan.tally.generated.resources.settings_import_subtitle
 import io.github.m0nkeysan.tally.generated.resources.settings_language
+import io.github.m0nkeysan.tally.generated.resources.settings_section_data
 import io.github.m0nkeysan.tally.generated.resources.settings_theme
 import io.github.m0nkeysan.tally.generated.resources.settings_theme_dark
 import io.github.m0nkeysan.tally.generated.resources.settings_theme_light
 import io.github.m0nkeysan.tally.generated.resources.settings_theme_system
 import io.github.m0nkeysan.tally.generated.resources.settings_title
+import io.github.m0nkeysan.tally.platform.rememberFileSaver
 import org.jetbrains.compose.resources.stringResource
 
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel = viewModel { SettingsViewModel() }
+    viewModel: SettingsViewModel = viewModel { SettingsViewModel() },
+    onShowSnackbar: (String, Boolean) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val feedbackMessage by viewModel.feedbackMessage.collectAsState()
+    val fileSaver = rememberFileSaver()
 
     var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
+    var showImportWarningDialog by remember { mutableStateOf(false) }
+
+    // Resolve string resources in composable context
+    val exportSuccessMessage = stringResource(Res.string.export_success)
+    val exportErrorMessage = stringResource(Res.string.export_error)
+    val importSuccessMessage = stringResource(Res.string.import_success)
+    val importErrorMessage = stringResource(Res.string.import_error)
+
+    // Observe feedback messages and show snackbar
+    LaunchedEffect(feedbackMessage) {
+        feedbackMessage?.let { feedback ->
+            // Resolve message based on message key
+            val message = when (feedback.messageKey) {
+                "export_success" -> exportSuccessMessage
+                "export_error" -> exportErrorMessage
+                "import_success" -> importSuccessMessage
+                "import_error" -> importErrorMessage
+                else -> feedback.messageKey
+            }
+
+            // Show appropriate snackbar based on type
+            when (feedback.type) {
+                FeedbackType.SUCCESS -> onShowSnackbar(message, false)
+                FeedbackType.ERROR -> onShowSnackbar(message, true)
+            }
+            viewModel.clearFeedbackMessage()
+        }
+    }
 
     key(uiState.currentLocaleCode) {
         Scaffold(
@@ -97,6 +145,32 @@ fun SettingsScreen(
                     subtitle = AppLocale.fromCode(uiState.currentLocaleCode).displayName,
                     onClick = { showLanguageDialog = true }
                 )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Data Management Section
+                Text(
+                    text = stringResource(Res.string.settings_section_data),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+
+                // Export Database Card
+                SettingsCard(
+                    icon = GameIcons.Upload,
+                    title = stringResource(Res.string.settings_export_database),
+                    subtitle = stringResource(Res.string.settings_export_subtitle),
+                    onClick = { viewModel.exportDatabase(fileSaver) }
+                )
+
+                // Import Database Card
+                SettingsCard(
+                    icon = GameIcons.Download,
+                    title = stringResource(Res.string.settings_import_database),
+                    subtitle = stringResource(Res.string.settings_import_subtitle),
+                    onClick = { showImportWarningDialog = true }
+                )
             }
         }
     }
@@ -126,6 +200,36 @@ fun SettingsScreen(
                 showLanguageDialog = false
             },
             labelProvider = { it.displayName }
+        )
+    }
+
+    if (showImportWarningDialog) {
+        AlertDialog(
+            onDismissRequest = { showImportWarningDialog = false },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Warning,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.error
+                )
+            },
+            title = { Text(stringResource(Res.string.import_warning_title)) },
+            text = { Text(stringResource(Res.string.import_warning_message)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.importDatabase(fileSaver)
+                        showImportWarningDialog = false
+                    }
+                ) {
+                    Text(stringResource(Res.string.import_confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showImportWarningDialog = false }) {
+                    Text(stringResource(Res.string.cancel))
+                }
+            }
         )
     }
 }

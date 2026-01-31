@@ -1,10 +1,12 @@
 package io.github.m0nkeysan.tally.platform
 
 import android.content.Context
+import io.github.m0nkeysan.tally.core.data.backup.DatabaseExporterImpl
 import io.github.m0nkeysan.tally.core.data.local.DatabaseModule
 import io.github.m0nkeysan.tally.core.data.local.driver.DatabaseDriverFactory
 import io.github.m0nkeysan.tally.core.data.repository.*
 import io.github.m0nkeysan.tally.core.domain.CounterHistoryStore
+import io.github.m0nkeysan.tally.core.domain.backup.DatabaseExporter
 import io.github.m0nkeysan.tally.core.domain.repository.*
 import io.github.m0nkeysan.tally.database.TallyDatabase
 import io.github.m0nkeysan.tally.ui.strings.LocaleManager
@@ -25,6 +27,7 @@ actual object PlatformRepositories {
     private var gameQueryHelper: GameQueryHelper? = null
     private var historyStore: CounterHistoryStore? = null
     private var localeManager: LocaleManager? = null
+    private var databaseExporter: DatabaseExporter? = null
 
     fun init(context: Context) {
         if (driverFactory == null) {
@@ -113,6 +116,12 @@ actual object PlatformRepositories {
     actual fun getLocaleManager(): LocaleManager {
         return localeManager ?: LocaleManager(getUserPreferencesRepository()).also {
             localeManager = it
+        }
+    }
+
+    actual fun getDatabaseExporter(): DatabaseExporter {
+        return databaseExporter ?: DatabaseExporterImpl(getDatabase()).also {
+            databaseExporter = it
         }
     }
 }

@@ -7,4 +7,23 @@
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_theme_system">System Default</string>
     <string name="settings_language">Language</string>
+    
+    <!-- Data Management -->
+    <string name="settings_section_data">Data Management</string>
+    <string name="settings_export_database">Export Database</string>
+    <string name="settings_export_subtitle">Save all your game data</string>
+    <string name="settings_import_database">Import Database</string>
+    <string name="settings_import_subtitle">Restore from backup</string>
+    
+    <!-- Import Warning Dialog -->
+    <string name="import_warning_title">Import Database?</string>
+    <string name="import_warning_message">This will replace all existing data with the imported backup. This action cannot be undone.</string>
+    <string name="import_confirm">Import</string>
+    <string name="cancel">Cancel</string>
+    
+    <!-- Feedback Messages -->
+    <string name="export_success">Database exported successfully</string>
+    <string name="import_success">Database imported successfully</string>
+    <string name="export_error">Failed to export database</string>
+    <string name="import_error">Failed to import database</string>
 </resources>

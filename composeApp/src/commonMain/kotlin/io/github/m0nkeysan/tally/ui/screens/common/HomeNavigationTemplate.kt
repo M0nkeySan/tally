@@ -174,7 +174,9 @@ fun HomeNavigationTemplate(
             }
 
             2 -> {
-                SettingsScreen()
+                SettingsScreen(
+                    onShowSnackbar = onShowSnackbar
+                )
             }
         }
     }

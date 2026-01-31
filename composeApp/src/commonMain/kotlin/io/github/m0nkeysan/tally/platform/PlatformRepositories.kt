@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.tally.platform
 
+import io.github.m0nkeysan.tally.core.domain.backup.DatabaseExporter
 import io.github.m0nkeysan.tally.core.domain.repository.GameQueryHelper
 import io.github.m0nkeysan.tally.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.tally.core.domain.repository.UserPreferencesRepository
@@ -20,4 +21,5 @@ expect object PlatformRepositories {
     fun getYahtzeeStatisticsRepository(): YahtzeeStatisticsRepository
     fun getGameQueryHelper(): GameQueryHelper
     fun getLocaleManager(): LocaleManager
+    fun getDatabaseExporter(): DatabaseExporter
 }

@@ -19,3 +19,6 @@ VALUES ?;
 
 deleteCounter:
 DELETE FROM persistentCounterEntity WHERE id = ?;
+
+deleteAllCounters:
+DELETE FROM persistentCounterEntity;

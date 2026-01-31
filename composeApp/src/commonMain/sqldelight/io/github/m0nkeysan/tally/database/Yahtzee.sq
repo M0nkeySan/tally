@@ -66,3 +66,12 @@ WHERE gameId IN (SELECT id FROM yahtzeeGameEntity WHERE isFinished = 1);
 
 countGamesWithPlayer:
 SELECT COUNT(*) FROM yahtzeeGameEntity WHERE playerIds LIKE '%' || ? || '%';
+
+selectAllScores:
+SELECT * FROM yahtzeeScoreEntity;
+
+deleteAllGames:
+DELETE FROM yahtzeeGameEntity;
+
+deleteAllScores:
+DELETE FROM yahtzeeScoreEntity;
