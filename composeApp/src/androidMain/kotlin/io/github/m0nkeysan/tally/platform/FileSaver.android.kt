@@ -3,7 +3,8 @@ package io.github.m0nkeysan.tally.platform
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.Intent
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -116,29 +117,98 @@ fun getFileSaver(activity: AppCompatActivity): FileSaver {
 }
 
 /**
- * Remember a FileSaver instance for Android
- * Gets Activity from LocalContext and creates AndroidFileSaver
+ * Remember a FileSaver instance for Android using Compose's activity result API
+ * This properly handles lifecycle by using rememberLauncherForActivityResult
+ * which registers launchers at the correct lifecycle moment (before STARTED state)
  */
 @Composable
 actual fun rememberFileSaver(): FileSaver {
     val context = LocalContext.current
-    val activity = remember(context) {
-        context.findActivity() as? AppCompatActivity
-            ?: error("FileSaver requires AppCompatActivity context")
+    
+    // Channels for coordinating between launcher callbacks and suspend functions
+    val createDocumentChannel = remember { Channel<Result<Uri>>(Channel.CONFLATED) }
+    val openDocumentChannel = remember { Channel<Result<String>>(Channel.CONFLATED) }
+    
+    // Register create document launcher (for export)
+    // This is lifecycle-safe - Compose handles registration timing
+    val createDocumentLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/json")
+    ) { uri ->
+        if (uri != null) {
+            createDocumentChannel.trySend(Result.success(uri))
+        } else {
+            createDocumentChannel.trySend(Result.failure(IOException("File creation cancelled")))
+        }
     }
-    return remember(activity) {
-        AndroidFileSaver(activity)
+    
+    // Register open document launcher (for import)
+    val openDocumentLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri != null) {
+            try {
+                val content = context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                    inputStream.bufferedReader().use { it.readText() }
+                } ?: throw IOException("Could not read file")
+                
+                openDocumentChannel.trySend(Result.success(content))
+            } catch (e: Exception) {
+                openDocumentChannel.trySend(Result.failure(e))
+            }
+        } else {
+            openDocumentChannel.trySend(Result.failure(IOException("File selection cancelled")))
+        }
     }
-}
-
-/**
- * Helper extension to find Activity from Context
- */
-private fun Context.findActivity(): Activity {
-    var context = this
-    while (context is ContextWrapper) {
-        if (context is Activity) return context
-        context = context.baseContext
+    
+    // Return FileSaver implementation that uses the launchers
+    return remember(createDocumentLauncher, openDocumentLauncher, context) {
+        object : FileSaver {
+            override suspend fun saveJsonFile(filename: String, content: String): Result<Unit> {
+                return try {
+                    // Launch the create document intent
+                    createDocumentLauncher.launch(filename)
+                    
+                    // Wait for result with timeout
+                    val uriResult = withTimeout(60000) { // 60 second timeout
+                        createDocumentChannel.receive()
+                    }
+                    
+                    // Write content to the selected file
+                    uriResult.fold(
+                        onSuccess = { uri ->
+                            try {
+                                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                                    outputStream.bufferedWriter().use { writer ->
+                                        writer.write(content)
+                                    }
+                                } ?: throw IOException("Could not open output stream")
+                                Result.success(Unit)
+                            } catch (e: Exception) {
+                                Result.failure(e)
+                            }
+                        },
+                        onFailure = { error ->
+                            Result.failure(error)
+                        }
+                    )
+                } catch (e: Exception) {
+                    Result.failure(e)
+                }
+            }
+            
+            override suspend fun pickJsonFile(): Result<String> {
+                return try {
+                    // Launch the open document intent
+                    openDocumentLauncher.launch(arrayOf("application/json", "text/plain"))
+                    
+                    // Wait for result with timeout
+                    withTimeout(60000) { // 60 second timeout
+                        openDocumentChannel.receive()
+                    }
+                } catch (e: Exception) {
+                    Result.failure(e)
+                }
+            }
+        }
     }
-    throw IllegalStateException("No Activity found in context hierarchy")
 }
