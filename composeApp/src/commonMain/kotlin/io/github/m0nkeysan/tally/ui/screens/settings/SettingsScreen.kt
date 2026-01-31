@@ -52,17 +52,22 @@ import io.github.m0nkeysan.tally.generated.resources.import_error
 import io.github.m0nkeysan.tally.generated.resources.import_success
 import io.github.m0nkeysan.tally.generated.resources.import_warning_message
 import io.github.m0nkeysan.tally.generated.resources.import_warning_title
+import io.github.m0nkeysan.tally.generated.resources.settings_customize_home
+import io.github.m0nkeysan.tally.generated.resources.settings_customize_home_subtitle
 import io.github.m0nkeysan.tally.generated.resources.settings_export_database
 import io.github.m0nkeysan.tally.generated.resources.settings_export_subtitle
 import io.github.m0nkeysan.tally.generated.resources.settings_import_database
 import io.github.m0nkeysan.tally.generated.resources.settings_import_subtitle
 import io.github.m0nkeysan.tally.generated.resources.settings_language
 import io.github.m0nkeysan.tally.generated.resources.settings_section_data
+import io.github.m0nkeysan.tally.generated.resources.settings_section_home
 import io.github.m0nkeysan.tally.generated.resources.settings_theme
 import io.github.m0nkeysan.tally.generated.resources.settings_theme_dark
 import io.github.m0nkeysan.tally.generated.resources.settings_theme_light
 import io.github.m0nkeysan.tally.generated.resources.settings_theme_system
 import io.github.m0nkeysan.tally.generated.resources.settings_title
+import io.github.m0nkeysan.tally.core.navigation.HomeCustomizationRoute
+import io.github.m0nkeysan.tally.core.navigation.Route
 import io.github.m0nkeysan.tally.platform.rememberFileSaver
 import org.jetbrains.compose.resources.stringResource
 
@@ -70,7 +75,8 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = viewModel { SettingsViewModel() },
-    onShowSnackbar: (String, Boolean) -> Unit
+    onShowSnackbar: (String, Boolean) -> Unit,
+    onNavigateTo: ((Route) -> Unit)? = null
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val feedbackMessage by viewModel.feedbackMessage.collectAsState()
@@ -130,6 +136,24 @@ fun SettingsScreen(
                     .padding(padding)
                     .padding(top = 16.dp)
             ) {
+                // Home Section
+                Text(
+                    text = stringResource(Res.string.settings_section_home),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+
+                // Customize Home Screen Card
+                SettingsCard(
+                    icon = GameIcons.ViewModule,
+                    title = stringResource(Res.string.settings_customize_home),
+                    subtitle = stringResource(Res.string.settings_customize_home_subtitle),
+                    onClick = { onNavigateTo?.invoke(HomeCustomizationRoute) }
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
                 // Theme Card
                 SettingsCard(
                     icon = GameIcons.Brightness4,

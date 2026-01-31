@@ -20,4 +20,4 @@ sealed interface Route
 @Serializable data class EditCounterRoute(val id: String, val name: String, val count: Int, val color: Long): Route
 @Serializable object HistoryRoute : Route
 @Serializable object DiceRollerRoute : Route
-@Serializable object SettingsRoute : Route
+@Serializable object HomeCustomizationRoute : Route

@@ -21,6 +21,10 @@ import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.DragHandle
+import androidx.compose.material.icons.filled.ViewModule
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.ui.graphics.vector.ImageVector
 
 actual object GameIcons {
@@ -44,4 +48,8 @@ actual object GameIcons {
     actual val Translate: ImageVector = Icons.Default.Translate
     actual val Upload: ImageVector = Icons.Default.Upload
     actual val Download: ImageVector = Icons.Default.Download
+    actual val DragHandle: ImageVector = Icons.Default.DragHandle
+    actual val ViewModule: ImageVector = Icons.Default.ViewModule
+    actual val VisibilityOff: ImageVector = Icons.Default.VisibilityOff
+    actual val Check: ImageVector = Icons.Default.Check
 }

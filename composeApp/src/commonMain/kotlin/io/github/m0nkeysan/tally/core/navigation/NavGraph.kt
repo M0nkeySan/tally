@@ -16,6 +16,7 @@ import io.github.m0nkeysan.tally.ui.screens.counter.CounterViewModel
 import io.github.m0nkeysan.tally.ui.screens.counter.EditCounterScreen
 import io.github.m0nkeysan.tally.ui.screens.dice.DiceRollerScreen
 import io.github.m0nkeysan.tally.ui.screens.fingerselector.FingerSelectorScreen
+import io.github.m0nkeysan.tally.ui.screens.home.HomeCustomizationScreen
 import io.github.m0nkeysan.tally.ui.screens.tarot.TarotGameCreationScreen
 import io.github.m0nkeysan.tally.ui.screens.tarot.TarotGameSelectionScreen
 import io.github.m0nkeysan.tally.ui.screens.tarot.TarotRoundAdditionScreen
@@ -35,8 +36,11 @@ fun GameNavGraph() {
         navController = navController,
         startDestination = HomeRoute
     ) {
-        composable<HomeRoute> {
-            HomeNavigationTemplate(onNavigateTo = { route -> navController.navigateSafe(route) })
+        composable<HomeRoute> { backStackEntry ->
+            HomeNavigationTemplate(
+                onNavigateTo = { route -> navController.navigateSafe(route) },
+                navBackStackEntry = backStackEntry
+            )
         }
 
         composable<FingerSelectorRoute> {
@@ -247,6 +251,18 @@ fun GameNavGraph() {
             DiceRollerScreen(
                 onBack = {
                     navController.popSafe()
+                }
+            )
+        }
+
+        composable<HomeCustomizationRoute> {
+            HomeCustomizationScreen(
+                onNavigateBack = {
+                    navController.popSafe()
+                },
+                onSaveSuccess = {
+                    navController.popBackStack(HomeRoute, inclusive = false)
+                    navController.currentBackStackEntry?.savedStateHandle?.set("home_customization_success", true)
                 }
             )
         }
