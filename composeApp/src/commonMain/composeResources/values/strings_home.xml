@@ -9,4 +9,17 @@
     <string name="desc_finger_selector">Randomly select a player or group</string>
     <string name="home_cd_counter">Counter game</string>
     <string name="home_cd_dice">Dice Roller game</string>
+    
+    <!-- Home Customization -->
+    <string name="home_customize_title">Customize Home</string>
+    <string name="home_customize_success">Customization saved successfully</string>
+    <string name="home_customize_unsaved_title">Unsaved Changes</string>
+    <string name="home_customize_unsaved_message">You have unsaved changes. What would you like to do?</string>
+    <string name="home_customize_discard">Discard</string>
+    <string name="home_customize_keep_editing">Keep Editing</string>
+    
+    <!-- Empty State -->
+    <string name="home_empty_title">No Features Visible</string>
+    <string name="home_empty_message">All features are currently hidden. Customize your home screen to show features.</string>
+    <string name="home_empty_action">Customize Home</string>
 </resources>

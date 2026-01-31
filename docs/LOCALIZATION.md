@@ -1537,21 +1537,9 @@ Text(pluralStringResource(Res.plurals.player_count, count, count))  // ✅
 
 | Character | XML Escape | Example                                             |
 |-----------|------------|-----------------------------------------------------|
-| `"`       | `\"`       | `<string name="quote">He said \"Hello\"</string>`   |
-| `'`       | `\'`       | `<string name="apostrophe">Player\'s turn</string>` |
 | `&`       | `&amp;`    | `<string name="and">Rock &amp; Roll</string>`       |
 | `<`       | `&lt;`     | `<string name="less">Score &lt; 100</string>`       |
 | `>`       | `&gt;`     | `<string name="greater">Score &gt; 200</string>`    |
-
-**Example:**
-
-```xml
-<!-- ❌ Wrong - will break XML -->
-<string name="message">Player's score: 100 & won</string>
-
-    <!-- ✅ Correct - escaped -->
-<string name="message">Player\'s score: 100 &amp; won</string>
-```
 
 ---
 

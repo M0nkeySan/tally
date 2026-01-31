@@ -12,8 +12,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,6 +24,7 @@ import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import io.github.m0nkeysan.tally.GameIcons
 import io.github.m0nkeysan.tally.core.navigation.Route
 import io.github.m0nkeysan.tally.generated.resources.Res
@@ -30,6 +32,7 @@ import io.github.m0nkeysan.tally.generated.resources.cd_add_player
 import io.github.m0nkeysan.tally.generated.resources.cd_settings
 import io.github.m0nkeysan.tally.generated.resources.home_cd_games
 import io.github.m0nkeysan.tally.generated.resources.home_cd_players
+import io.github.m0nkeysan.tally.generated.resources.home_customize_success
 import io.github.m0nkeysan.tally.ui.components.AppSnackbarHost
 import io.github.m0nkeysan.tally.ui.components.showErrorSnackbar
 import io.github.m0nkeysan.tally.ui.components.showSuccessSnackbar
@@ -63,11 +66,14 @@ fun HomeNavigationTemplate(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = viewModel { HomeViewModel() },
     playerViewModel: PlayerSelectionViewModel = viewModel { PlayerSelectionViewModel() },
+    navBackStackEntry: NavBackStackEntry? = null
 ) {
-    var selectedTab by remember { mutableIntStateOf(0) }
+    val selectedTab by homeViewModel.selectedTab.collectAsState()
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
+    val successMessage = stringResource(Res.string.home_customize_success)
 
     val onShowSnackbar: (String, Boolean) -> Unit = { message, isError ->
         scope.launch {
@@ -79,8 +85,18 @@ fun HomeNavigationTemplate(
         }
     }
 
+    LaunchedEffect(navBackStackEntry?.savedStateHandle) {
+        val savedStateHandle = navBackStackEntry?.savedStateHandle ?: return@LaunchedEffect
+        val success = savedStateHandle.get<Boolean>("home_customization_success") ?: false
+        if (success) {
+            homeViewModel.selectTab(0)
+            onShowSnackbar(successMessage, false)
+            savedStateHandle.remove<Boolean>("home_customization_success")
+        }
+    }
+
     BackHandler(enabled = selectedTab == 1 || selectedTab == 2) {
-        selectedTab = 0
+        homeViewModel.selectTab(0)
     }
 
     var showAddPlayerDialog by remember { mutableStateOf(false) }
@@ -98,7 +114,7 @@ fun HomeNavigationTemplate(
                     // Games Tab
                     NavigationBarItem(
                         selected = selectedTab == 0,
-                        onClick = { selectedTab = 0 },
+                        onClick = { homeViewModel.selectTab(0) },
                         icon = {
                             Icon(
                                 imageVector = GameIcons.GridView,
@@ -111,7 +127,7 @@ fun HomeNavigationTemplate(
                     // Players Tab
                     NavigationBarItem(
                         selected = selectedTab == 1,
-                        onClick = { selectedTab = 1 },
+                        onClick = { homeViewModel.selectTab(1) },
                         icon = {
                             Icon(
                                 imageVector = GameIcons.Group,
@@ -124,7 +140,7 @@ fun HomeNavigationTemplate(
                     // Settings Tab
                     NavigationBarItem(
                         selected = selectedTab == 2,
-                        onClick = { selectedTab = 2 },
+                        onClick = { homeViewModel.selectTab(2) },
                         icon = {
                             Icon(
                                 imageVector = GameIcons.Settings,
@@ -175,7 +191,8 @@ fun HomeNavigationTemplate(
 
             2 -> {
                 SettingsScreen(
-                    onShowSnackbar = onShowSnackbar
+                    onShowSnackbar = onShowSnackbar,
+                    onNavigateTo = onNavigateTo
                 )
             }
         }

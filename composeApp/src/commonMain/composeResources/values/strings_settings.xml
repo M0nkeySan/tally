@@ -8,6 +8,11 @@
     <string name="settings_theme_system">System Default</string>
     <string name="settings_language">Language</string>
     
+    <!-- Home Customization -->
+    <string name="settings_section_home">Home Screen</string>
+    <string name="settings_customize_home">Customize Home Screen</string>
+    <string name="settings_customize_home_subtitle">Reorder and hide features</string>
+    
     <!-- Data Management -->
     <string name="settings_section_data">Data Management</string>
     <string name="settings_export_database">Export Database</string>

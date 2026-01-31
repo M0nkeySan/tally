@@ -8,6 +8,11 @@
     <string name="settings_theme_system">Système par défaut</string>
     <string name="settings_language">Langue</string>
     
+    <!-- Home Customization -->
+    <string name="settings_section_home">Écran d'accueil</string>
+    <string name="settings_customize_home">Personnaliser l'écran d'accueil</string>
+    <string name="settings_customize_home_subtitle">Réorganiser et masquer les fonctionnalités</string>
+    
     <!-- Data Management -->
     <string name="settings_section_data">Gestion des données</string>
     <string name="settings_export_database">Exporter la base de données</string>
@@ -24,6 +29,6 @@
     <!-- Feedback Messages -->
     <string name="export_success">Base de données exportée avec succès</string>
     <string name="import_success">Base de données importée avec succès</string>
-    <string name="export_error">Échec de l\'exportation de la base de données</string>
-    <string name="import_error">Échec de l\'importation de la base de données</string>
+    <string name="export_error">Échec de l'exportation de la base de données</string>
+    <string name="import_error">Échec de l'importation de la base de données</string>
 </resources>

@@ -2,12 +2,13 @@ package io.github.m0nkeysan.tally.core.domain.repository
 
 import io.github.m0nkeysan.tally.core.domain.model.AppLocale
 import io.github.m0nkeysan.tally.core.domain.model.AppTheme
+import io.github.m0nkeysan.tally.core.domain.model.HomeFeatureState
 import io.github.m0nkeysan.tally.core.model.DiceConfiguration
 import kotlinx.coroutines.flow.Flow
 
 interface UserPreferencesRepository {
-    fun getCardOrder(): Flow<List<String>?>
-    suspend fun saveCardOrder(order: List<String>)
+    fun getHomeFeatureStates(): Flow<List<HomeFeatureState>>
+    suspend fun saveHomeFeatureStates(states: List<HomeFeatureState>)
 
     fun getString(key: String, defaultValue: String): Flow<String>
     suspend fun saveString(key: String, value: String)

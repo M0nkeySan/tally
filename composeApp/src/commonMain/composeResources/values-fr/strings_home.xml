@@ -8,4 +8,17 @@
     <string name="home_title_finger_selector">Sélecteur de doigts</string>
     <string name="home_cd_counter">Jeu Compteur</string>
     <string name="home_cd_dice">Jeu Lanceur de dés</string>
+    
+    <!-- Home Customization -->
+    <string name="home_customize_title">Personnaliser l'accueil</string>
+    <string name="home_customize_success">Personnalisation enregistrée avec succès</string>
+    <string name="home_customize_unsaved_title">Modifications non enregistrées</string>
+    <string name="home_customize_unsaved_message">Vous avez des modifications non enregistrées. Que souhaitez-vous faire ?</string>
+    <string name="home_customize_discard">Annuler</string>
+    <string name="home_customize_keep_editing">Continuer les modifications</string>
+    
+    <!-- Empty State -->
+    <string name="home_empty_title">Aucune fonctionnalité visible</string>
+    <string name="home_empty_message">Toutes les fonctionnalités sont actuellement masquées. Personnalisez votre écran d'accueil pour afficher des fonctionnalités.</string>
+    <string name="home_empty_action">Personnaliser l'accueil</string>
 </resources>

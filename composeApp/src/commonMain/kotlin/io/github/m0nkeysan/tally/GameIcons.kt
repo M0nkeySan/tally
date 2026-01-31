@@ -23,4 +23,8 @@ expect object GameIcons {
     val Translate: ImageVector
     val Upload: ImageVector
     val Download: ImageVector
+    val DragHandle: ImageVector
+    val ViewModule: ImageVector
+    val VisibilityOff: ImageVector
+    val Check: ImageVector
 }
