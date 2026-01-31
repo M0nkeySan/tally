@@ -21,14 +21,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,6 +65,9 @@ import io.github.m0nkeysan.tally.generated.resources.settings_theme_dark
 import io.github.m0nkeysan.tally.generated.resources.settings_theme_light
 import io.github.m0nkeysan.tally.generated.resources.settings_theme_system
 import io.github.m0nkeysan.tally.generated.resources.settings_title
+import io.github.m0nkeysan.tally.ui.components.AppSnackbarHost
+import io.github.m0nkeysan.tally.ui.components.showErrorSnackbar
+import io.github.m0nkeysan.tally.ui.components.showSuccessSnackbar
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -70,10 +76,42 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = viewModel { SettingsViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val feedbackMessage by viewModel.feedbackMessage.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showImportWarningDialog by remember { mutableStateOf(false) }
+
+    // Resolve string resources in composable context
+    val exportSuccessMessage = stringResource(Res.string.export_success)
+    val exportErrorMessage = stringResource(Res.string.export_error)
+    val importSuccessMessage = stringResource(Res.string.import_success)
+    val importErrorMessage = stringResource(Res.string.import_error)
+
+    // Observe feedback messages and show snackbar
+    LaunchedEffect(feedbackMessage) {
+        feedbackMessage?.let { feedback ->
+            // Resolve message based on message key
+            val message = when (feedback.messageKey) {
+                "export_success" -> exportSuccessMessage
+                "export_error" -> exportErrorMessage
+                "import_success" -> importSuccessMessage
+                "import_error" -> importErrorMessage
+                else -> feedback.messageKey // Fallback to raw key
+            }
+            
+            // Show appropriate snackbar based on type
+            when (feedback.type) {
+                FeedbackType.SUCCESS -> showSuccessSnackbar(snackbarHostState, message)
+                FeedbackType.ERROR -> showErrorSnackbar(snackbarHostState, message)
+            }
+            
+            // Clear the feedback message after showing
+            viewModel.clearFeedbackMessage()
+        }
+    }
 
     key(uiState.currentLocaleCode) {
         Scaffold(
@@ -90,7 +128,8 @@ fun SettingsScreen(
                     },
                     modifier = Modifier.shadow(elevation = 2.dp)
                 )
-            }
+            },
+            snackbarHost = { AppSnackbarHost(hostState = snackbarHostState) }
         ) { padding ->
             Column(
                 modifier = Modifier

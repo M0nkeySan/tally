@@ -14,6 +14,16 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+enum class FeedbackType {
+    SUCCESS,
+    ERROR
+}
+
+data class FeedbackMessage(
+    val messageKey: String,
+    val type: FeedbackType
+)
+
 class SettingsViewModel() : ViewModel() {
 
     private val preferencesRepository = PlatformRepositories.getUserPreferencesRepository()
@@ -21,8 +31,8 @@ class SettingsViewModel() : ViewModel() {
     private val databaseExporter = PlatformRepositories.getDatabaseExporter()
     private val fileSaver = getFileSaver()
     
-    private val _feedbackMessage = MutableStateFlow<String?>(null)
-    val feedbackMessage: StateFlow<String?> = _feedbackMessage
+    private val _feedbackMessage = MutableStateFlow<FeedbackMessage?>(null)
+    val feedbackMessage: StateFlow<FeedbackMessage?> = _feedbackMessage
 
     val uiState: StateFlow<SettingsUiState> = combine(
         preferencesRepository.getTheme(),
@@ -69,13 +79,22 @@ class SettingsViewModel() : ViewModel() {
                 // Save file using platform-specific file saver
                 fileSaver.saveJsonFile(filename, jsonString)
                     .onSuccess {
-                        _feedbackMessage.value = "Database exported successfully"
+                        _feedbackMessage.value = FeedbackMessage(
+                            messageKey = "export_success",
+                            type = FeedbackType.SUCCESS
+                        )
                     }
                     .onFailure { error ->
-                        _feedbackMessage.value = "Failed to export database: ${error.message}"
+                        _feedbackMessage.value = FeedbackMessage(
+                            messageKey = "export_error",
+                            type = FeedbackType.ERROR
+                        )
                     }
             } catch (e: Exception) {
-                _feedbackMessage.value = "Failed to export database: ${e.message}"
+                _feedbackMessage.value = FeedbackMessage(
+                    messageKey = "export_error",
+                    type = FeedbackType.ERROR
+                )
             }
         }
     }
@@ -96,16 +115,28 @@ class SettingsViewModel() : ViewModel() {
                             // Import to database
                             databaseExporter.importFromBackup(backup)
                             
-                            _feedbackMessage.value = "Database imported successfully"
+                            _feedbackMessage.value = FeedbackMessage(
+                                messageKey = "import_success",
+                                type = FeedbackType.SUCCESS
+                            )
                         } catch (e: Exception) {
-                            _feedbackMessage.value = "Failed to parse backup file: ${e.message}"
+                            _feedbackMessage.value = FeedbackMessage(
+                                messageKey = "import_error",
+                                type = FeedbackType.ERROR
+                            )
                         }
                     }
                     .onFailure { error ->
-                        _feedbackMessage.value = "Failed to import database: ${error.message}"
+                        _feedbackMessage.value = FeedbackMessage(
+                            messageKey = "import_error",
+                            type = FeedbackType.ERROR
+                        )
                     }
             } catch (e: Exception) {
-                _feedbackMessage.value = "Failed to import database: ${e.message}"
+                _feedbackMessage.value = FeedbackMessage(
+                    messageKey = "import_error",
+                    type = FeedbackType.ERROR
+                )
             }
         }
     }
