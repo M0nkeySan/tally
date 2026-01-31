@@ -31,7 +31,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,7 +68,6 @@ import io.github.m0nkeysan.tally.ui.components.AppSnackbarHost
 import io.github.m0nkeysan.tally.ui.components.showErrorSnackbar
 import io.github.m0nkeysan.tally.ui.components.showSuccessSnackbar
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -80,7 +78,6 @@ fun SettingsScreen(
     val uiState by viewModel.uiState.collectAsState()
     val feedbackMessage by viewModel.feedbackMessage.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
 
     var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
@@ -101,23 +98,20 @@ fun SettingsScreen(
                 "export_error" -> exportErrorMessage
                 "import_success" -> importSuccessMessage
                 "import_error" -> importErrorMessage
-                else -> feedback.messageKey // Fallback to raw key
+                else -> feedback.messageKey
             }
             
-            // Launch in explicit scope to ensure proper coroutine context
-            scope.launch {
-                // Show appropriate snackbar based on type
-                when (feedback.type) {
-                    FeedbackType.SUCCESS -> showSuccessSnackbar(snackbarHostState, message)
-                    FeedbackType.ERROR -> showErrorSnackbar(snackbarHostState, message)
-                }
-                
-                // Delay to ensure snackbar renders before clearing (fixes WASM timing issue)
-                delay(100)
-                
-                // Clear the feedback message after showing
-                viewModel.clearFeedbackMessage()
+            // Show appropriate snackbar based on type
+            when (feedback.type) {
+                FeedbackType.SUCCESS -> showSuccessSnackbar(snackbarHostState, message)
+                FeedbackType.ERROR -> showErrorSnackbar(snackbarHostState, message)
             }
+
+            // Delay to ensure snackbar renders before clearing
+            delay(100)
+            
+            // Clear the feedback message after showing
+            viewModel.clearFeedbackMessage()
         }
     }
 
