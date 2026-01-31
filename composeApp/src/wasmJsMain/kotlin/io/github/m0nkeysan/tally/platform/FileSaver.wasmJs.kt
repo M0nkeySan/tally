@@ -5,11 +5,8 @@ import androidx.compose.runtime.remember
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-/**
- * WASM implementation of FileSaver using JavaScript File API
- */
 class WasmFileSaver : FileSaver {
-    
+
     override suspend fun saveJsonFile(filename: String, content: String): Result<Unit> {
         return try {
             downloadFileJs(filename, content)
@@ -18,7 +15,7 @@ class WasmFileSaver : FileSaver {
             Result.failure(e)
         }
     }
-    
+
     override suspend fun pickJsonFile(): Result<String> {
         return suspendCancellableCoroutine { continuation ->
             pickFileJs { success, data, error ->
@@ -32,31 +29,16 @@ class WasmFileSaver : FileSaver {
     }
 }
 
-/**
- * Provides a WasmFileSaver instance
- */
-actual fun getFileSaver(): FileSaver {
-    return WasmFileSaver()
-}
-
-/**
- * Remember a FileSaver instance for WASM
- */
 @Composable
 actual fun rememberFileSaver(): FileSaver {
     return remember { WasmFileSaver() }
 }
 
-/**
- * Download file using JavaScript Blob API
- */
 @JsFun("(filename, content) => { const blob = new Blob([content], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }")
 private external fun downloadFileJs(filename: String, content: String)
 
-/**
- * Pick and read file using JavaScript FileReader API
- */
-@JsFun("""
+@JsFun(
+    """
 (callback) => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -86,5 +68,6 @@ private external fun downloadFileJs(filename: String, content: String)
     
     input.click();
 }
-""")
+"""
+)
 private external fun pickFileJs(callback: (Boolean, String?, String?) -> Unit)

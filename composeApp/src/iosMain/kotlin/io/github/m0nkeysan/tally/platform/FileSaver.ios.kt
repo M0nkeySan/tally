@@ -4,9 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.suspendCancellableCoroutine
-import platform.Foundation.NSData
 import platform.Foundation.NSDocumentDirectory
-import platform.Foundation.NSFileManager
 import platform.Foundation.NSSearchPathForDirectoriesInDomains
 import platform.Foundation.NSString
 import platform.Foundation.NSUTF8StringEncoding
@@ -22,15 +20,11 @@ import platform.UIKit.UIDocumentPickerViewController
 import platform.darwin.NSObject
 import kotlin.coroutines.resume
 
-/**
- * iOS implementation of FileSaver using UIDocumentPicker
- */
 @OptIn(ExperimentalForeignApi::class)
 class IOSFileSaver : FileSaver {
     
     override suspend fun saveJsonFile(filename: String, content: String): Result<Unit> {
         return try {
-            // Save to temporary directory first
             val documentsPath = NSSearchPathForDirectoriesInDomains(
                 NSDocumentDirectory,
                 NSUserDomainMask,
@@ -41,14 +35,12 @@ class IOSFileSaver : FileSaver {
             val nsString = NSString.create(string = content)
             val data = nsString.dataUsingEncoding(NSUTF8StringEncoding)
                 ?: return Result.failure(Exception("Could not encode string"))
-            
-            // Write file
-            val success = (data as NSData).writeToFile(filePath, atomically = true)
+
+            val success = data.writeToFile(filePath, atomically = true)
             if (!success) {
                 return Result.failure(Exception("Could not write file"))
             }
-            
-            // Share file using UIActivityViewController
+
             suspendCancellableCoroutine { continuation ->
                 try {
                     val url = platform.Foundation.NSURL.fileURLWithPath(filePath)
@@ -124,16 +116,6 @@ class IOSFileSaver : FileSaver {
     }
 }
 
-/**
- * Provides an IOSFileSaver instance
- */
-actual fun getFileSaver(): FileSaver {
-    return IOSFileSaver()
-}
-
-/**
- * Remember a FileSaver instance for iOS
- */
 @Composable
 actual fun rememberFileSaver(): FileSaver {
     return remember { IOSFileSaver() }
