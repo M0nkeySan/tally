@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -68,6 +68,8 @@ import io.github.m0nkeysan.tally.generated.resources.settings_title
 import io.github.m0nkeysan.tally.ui.components.AppSnackbarHost
 import io.github.m0nkeysan.tally.ui.components.showErrorSnackbar
 import io.github.m0nkeysan.tally.ui.components.showSuccessSnackbar
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -102,14 +104,20 @@ fun SettingsScreen(
                 else -> feedback.messageKey // Fallback to raw key
             }
             
-            // Show appropriate snackbar based on type
-            when (feedback.type) {
-                FeedbackType.SUCCESS -> showSuccessSnackbar(snackbarHostState, message)
-                FeedbackType.ERROR -> showErrorSnackbar(snackbarHostState, message)
+            // Launch in explicit scope to ensure proper coroutine context
+            scope.launch {
+                // Show appropriate snackbar based on type
+                when (feedback.type) {
+                    FeedbackType.SUCCESS -> showSuccessSnackbar(snackbarHostState, message)
+                    FeedbackType.ERROR -> showErrorSnackbar(snackbarHostState, message)
+                }
+                
+                // Delay to ensure snackbar renders before clearing (fixes WASM timing issue)
+                delay(100)
+                
+                // Clear the feedback message after showing
+                viewModel.clearFeedbackMessage()
             }
-            
-            // Clear the feedback message after showing
-            viewModel.clearFeedbackMessage()
         }
     }
 
