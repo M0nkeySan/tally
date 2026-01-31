@@ -1,5 +1,7 @@
 package io.github.m0nkeysan.tally.platform
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
@@ -35,6 +37,14 @@ class WasmFileSaver : FileSaver {
  */
 actual fun getFileSaver(): FileSaver {
     return WasmFileSaver()
+}
+
+/**
+ * Remember a FileSaver instance for WASM
+ */
+@Composable
+actual fun rememberFileSaver(): FileSaver {
+    return remember { WasmFileSaver() }
 }
 
 /**

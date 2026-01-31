@@ -16,8 +16,6 @@ import io.github.m0nkeysan.tally.ui.screens.counter.CounterViewModel
 import io.github.m0nkeysan.tally.ui.screens.counter.EditCounterScreen
 import io.github.m0nkeysan.tally.ui.screens.dice.DiceRollerScreen
 import io.github.m0nkeysan.tally.ui.screens.fingerselector.FingerSelectorScreen
-import io.github.m0nkeysan.tally.ui.screens.settings.SettingsScreen
-import io.github.m0nkeysan.tally.ui.screens.settings.SettingsViewModel
 import io.github.m0nkeysan.tally.ui.screens.tarot.TarotGameCreationScreen
 import io.github.m0nkeysan.tally.ui.screens.tarot.TarotGameSelectionScreen
 import io.github.m0nkeysan.tally.ui.screens.tarot.TarotRoundAdditionScreen
@@ -251,11 +249,6 @@ fun GameNavGraph() {
                     navController.popSafe()
                 }
             )
-        }
-
-        composable<SettingsRoute> {
-            val viewModel: SettingsViewModel = viewModel { SettingsViewModel() }
-            SettingsScreen(viewModel = viewModel)
         }
     }
 }

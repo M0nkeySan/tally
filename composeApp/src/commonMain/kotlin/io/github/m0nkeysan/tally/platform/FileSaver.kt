@@ -1,5 +1,7 @@
 package io.github.m0nkeysan.tally.platform
 
+import androidx.compose.runtime.Composable
+
 /**
  * Platform-specific file operations for export/import
  */
@@ -22,5 +24,14 @@ interface FileSaver {
 /**
  * Composable function to get a FileSaver instance
  * Platform-specific implementations will provide the actual file saver
+ * @deprecated Use rememberFileSaver() instead
  */
+@Deprecated("Use rememberFileSaver() instead", ReplaceWith("rememberFileSaver()"))
 expect fun getFileSaver(): FileSaver
+
+/**
+ * Remember a FileSaver instance for the current composition
+ * On Android, this requires Activity context from LocalContext
+ */
+@Composable
+expect fun rememberFileSaver(): FileSaver

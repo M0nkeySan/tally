@@ -3,8 +3,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.tally.core.domain.model.AppTheme
 import io.github.m0nkeysan.tally.core.utils.getCurrentTimeMillis
+import io.github.m0nkeysan.tally.platform.FileSaver
 import io.github.m0nkeysan.tally.platform.PlatformRepositories
-import io.github.m0nkeysan.tally.platform.getFileSaver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +29,6 @@ class SettingsViewModel() : ViewModel() {
     private val preferencesRepository = PlatformRepositories.getUserPreferencesRepository()
     private val localeManager = PlatformRepositories.getLocaleManager()
     private val databaseExporter = PlatformRepositories.getDatabaseExporter()
-    private val fileSaver = getFileSaver()
     
     private val _feedbackMessage = MutableStateFlow<FeedbackMessage?>(null)
     val feedbackMessage: StateFlow<FeedbackMessage?> = _feedbackMessage
@@ -59,7 +58,7 @@ class SettingsViewModel() : ViewModel() {
         localeManager.setLocale(localeCode) 
     }
     
-    fun exportDatabase() {
+    fun exportDatabase(fileSaver: FileSaver) {
         viewModelScope.launch {
             try {
                 // Export database to backup object
@@ -99,7 +98,7 @@ class SettingsViewModel() : ViewModel() {
         }
     }
     
-    fun importDatabase() {
+    fun importDatabase(fileSaver: FileSaver) {
         viewModelScope.launch {
             try {
                 // Pick and read file using platform-specific file saver

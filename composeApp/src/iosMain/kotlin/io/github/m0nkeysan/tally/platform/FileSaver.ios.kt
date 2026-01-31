@@ -1,5 +1,7 @@
 package io.github.m0nkeysan.tally.platform
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.Foundation.NSData
@@ -127,4 +129,12 @@ class IOSFileSaver : FileSaver {
  */
 actual fun getFileSaver(): FileSaver {
     return IOSFileSaver()
+}
+
+/**
+ * Remember a FileSaver instance for iOS
+ */
+@Composable
+actual fun rememberFileSaver(): FileSaver {
+    return remember { IOSFileSaver() }
 }

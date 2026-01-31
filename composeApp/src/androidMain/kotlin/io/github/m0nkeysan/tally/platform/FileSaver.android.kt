@@ -1,10 +1,15 @@
 package io.github.m0nkeysan.tally.platform
 
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withTimeout
 import java.io.IOException
@@ -108,4 +113,32 @@ actual fun getFileSaver(): FileSaver {
  */
 fun getFileSaver(activity: AppCompatActivity): FileSaver {
     return AndroidFileSaver(activity)
+}
+
+/**
+ * Remember a FileSaver instance for Android
+ * Gets Activity from LocalContext and creates AndroidFileSaver
+ */
+@Composable
+actual fun rememberFileSaver(): FileSaver {
+    val context = LocalContext.current
+    val activity = remember(context) {
+        context.findActivity() as? AppCompatActivity
+            ?: error("FileSaver requires AppCompatActivity context")
+    }
+    return remember(activity) {
+        AndroidFileSaver(activity)
+    }
+}
+
+/**
+ * Helper extension to find Activity from Context
+ */
+private fun Context.findActivity(): Activity {
+    var context = this
+    while (context is ContextWrapper) {
+        if (context is Activity) return context
+        context = context.baseContext
+    }
+    throw IllegalStateException("No Activity found in context hierarchy")
 }

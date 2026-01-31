@@ -21,7 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -64,20 +63,18 @@ import io.github.m0nkeysan.tally.generated.resources.settings_theme_dark
 import io.github.m0nkeysan.tally.generated.resources.settings_theme_light
 import io.github.m0nkeysan.tally.generated.resources.settings_theme_system
 import io.github.m0nkeysan.tally.generated.resources.settings_title
-import io.github.m0nkeysan.tally.ui.components.AppSnackbarHost
-import io.github.m0nkeysan.tally.ui.components.showErrorSnackbar
-import io.github.m0nkeysan.tally.ui.components.showSuccessSnackbar
-import kotlinx.coroutines.delay
+import io.github.m0nkeysan.tally.platform.rememberFileSaver
 import org.jetbrains.compose.resources.stringResource
 
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel = viewModel { SettingsViewModel() }
+    viewModel: SettingsViewModel = viewModel { SettingsViewModel() },
+    onShowSnackbar: (String, Boolean) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val feedbackMessage by viewModel.feedbackMessage.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val fileSaver = rememberFileSaver()
 
     var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
@@ -100,17 +97,12 @@ fun SettingsScreen(
                 "import_error" -> importErrorMessage
                 else -> feedback.messageKey
             }
-            
+
             // Show appropriate snackbar based on type
             when (feedback.type) {
-                FeedbackType.SUCCESS -> showSuccessSnackbar(snackbarHostState, message)
-                FeedbackType.ERROR -> showErrorSnackbar(snackbarHostState, message)
+                FeedbackType.SUCCESS -> onShowSnackbar(message, false)
+                FeedbackType.ERROR -> onShowSnackbar(message, true)
             }
-
-            // Delay to ensure snackbar renders before clearing
-            delay(100)
-            
-            // Clear the feedback message after showing
             viewModel.clearFeedbackMessage()
         }
     }
@@ -130,8 +122,7 @@ fun SettingsScreen(
                     },
                     modifier = Modifier.shadow(elevation = 2.dp)
                 )
-            },
-            snackbarHost = { AppSnackbarHost(hostState = snackbarHostState) }
+            }
         ) { padding ->
             Column(
                 modifier = Modifier
@@ -170,7 +161,7 @@ fun SettingsScreen(
                     icon = GameIcons.Upload,
                     title = stringResource(Res.string.settings_export_database),
                     subtitle = stringResource(Res.string.settings_export_subtitle),
-                    onClick = { viewModel.exportDatabase() }
+                    onClick = { viewModel.exportDatabase(fileSaver) }
                 )
 
                 // Import Database Card
@@ -227,7 +218,7 @@ fun SettingsScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        viewModel.importDatabase()
+                        viewModel.importDatabase(fileSaver)
                         showImportWarningDialog = false
                     }
                 ) {
