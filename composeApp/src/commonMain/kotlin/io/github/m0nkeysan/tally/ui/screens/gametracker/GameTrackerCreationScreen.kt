@@ -1,18 +1,39 @@
 package io.github.m0nkeysan.tally.ui.screens.gametracker
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.tally.core.domain.model.DurationMode
 import io.github.m0nkeysan.tally.core.domain.model.ScoringLogic
 import io.github.m0nkeysan.tally.core.model.Player
-import io.github.m0nkeysan.tally.generated.resources.*
+import io.github.m0nkeysan.tally.generated.resources.Res
+import io.github.m0nkeysan.tally.generated.resources.game_creation_field_game_name
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_creation_duration_mode
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_creation_name_default
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_creation_round_count_hint
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_creation_scoring_logic
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_creation_target_hint
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_creation_target_score
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_creation_title
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_duration_fixed
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_duration_infinite
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_high
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_low
 import io.github.m0nkeysan.tally.platform.getCurrentDateTimeString
 import io.github.m0nkeysan.tally.ui.components.FlexiblePlayerSelector
 import io.github.m0nkeysan.tally.ui.screens.common.GameCreationTemplate
@@ -72,11 +93,9 @@ fun GameTrackerCreationScreen(
                 singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
             // Player Selection
             FlexiblePlayerSelector(
-                minPlayers = 1,
+                minPlayers = 2,
                 maxPlayers = 10,
                 allPlayers = allPlayers,
                 onPlayersChange = { players ->
@@ -88,14 +107,11 @@ fun GameTrackerCreationScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
             // Scoring Logic
             Text(
                 text = stringResource(Res.string.game_tracker_creation_scoring_logic),
                 style = MaterialTheme.typography.titleMedium
             )
-            Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -114,8 +130,6 @@ fun GameTrackerCreationScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
-
             // Target Score (Optional)
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -133,7 +147,6 @@ fun GameTrackerCreationScreen(
             }
 
             if (enableTargetScore) {
-                Spacer(modifier = Modifier.height(4.dp))
                 OutlinedTextField(
                     value = targetScoreText,
                     onValueChange = { targetScoreText = it },
@@ -145,14 +158,11 @@ fun GameTrackerCreationScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
-
             // Duration Mode
             Text(
                 text = stringResource(Res.string.game_tracker_creation_duration_mode),
                 style = MaterialTheme.typography.titleMedium
             )
-            Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -172,7 +182,6 @@ fun GameTrackerCreationScreen(
             }
 
             if (durationMode == DurationMode.FIXED_ROUNDS) {
-                Spacer(modifier = Modifier.height(4.dp))
                 OutlinedTextField(
                     value = roundCountText,
                     onValueChange = { roundCountText = it },
