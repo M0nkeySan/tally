@@ -1,6 +1,7 @@
 package io.github.m0nkeysan.tally.ui.screens.gametracker
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -38,6 +41,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -421,19 +425,45 @@ private fun RoundCard(
     onDeleteClick: (GameTrackerRound) -> Unit,
     isFinished: Boolean
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
+    val dismissState = rememberSwipeToDismissBoxState()
+    LaunchedEffect(dismissState.currentValue) {
+        if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+            rounds.firstOrNull()?.let(onDeleteClick)
+            dismissState.snapTo(SwipeToDismissBoxValue.Settled)
+        }
+    }
+
+    SwipeToDismissBox(
+        state = dismissState,
+        enableDismissFromStartToEnd = false,
+        backgroundContent = {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Icon(
+                    imageVector = GameIcons.Delete,
+                    contentDescription = "Delete round",
+                    tint = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+        }
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(enabled = !isFinished) { 
+                    rounds.firstOrNull()?.let(onEditClick) 
+                },
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier.padding(16.dp)
             ) {
                 Text(
                     text = stringResource(Res.string.game_tracker_scoring_round_title, roundNumber),
@@ -441,47 +471,28 @@ private fun RoundCard(
                     fontWeight = FontWeight.Bold
                 )
 
-                if (!isFinished) {
-                    Row {
-                        IconButton(onClick = { rounds.firstOrNull()?.let(onEditClick) }) {
-                            Icon(
-                                GameIcons.Refresh,
-                                contentDescription = "Edit round",
-                                tint = MaterialTheme.colorScheme.primary
+                Spacer(modifier = Modifier.height(8.dp))
+
+                rounds.forEach { round ->
+                    val player = players.find { it.id == round.playerId }
+                    if (player != null) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = player.name,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = if (round.score >= 0) "+${round.score}" else "${round.score}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = if (round.score >= 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
                             )
                         }
-                        IconButton(onClick = { rounds.firstOrNull()?.let(onDeleteClick) }) {
-                            Icon(
-                                GameIcons.Delete,
-                                contentDescription = "Delete round",
-                                tint = MaterialTheme.colorScheme.error
-                            )
-                        }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            rounds.forEach { round ->
-                val player = players.find { it.id == round.playerId }
-                if (player != null) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = player.name,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Text(
-                            text = if (round.score >= 0) "+${round.score}" else "${round.score}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = if (round.score >= 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
-                        )
                     }
                 }
             }
