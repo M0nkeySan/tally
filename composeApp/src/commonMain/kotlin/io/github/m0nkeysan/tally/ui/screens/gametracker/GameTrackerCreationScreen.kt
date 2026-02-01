@@ -72,7 +72,7 @@ fun GameTrackerCreationScreen(
                 singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // Player Selection
             FlexiblePlayerSelector(
@@ -88,7 +88,7 @@ fun GameTrackerCreationScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // Scoring Logic
             Text(
@@ -114,7 +114,7 @@ fun GameTrackerCreationScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // Target Score (Optional)
             Row(
@@ -145,7 +145,7 @@ fun GameTrackerCreationScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // Duration Mode
             Text(
