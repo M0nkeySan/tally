@@ -222,7 +222,7 @@ fun GameTrackerCreationScreen(
                                     label = { Text(stringResource(Res.string.game_tracker_duration_fixed)) },
                                     modifier = Modifier.weight(1f)
                                 )
-                            )
+                            }
                             
                             if (durationMode == DurationMode.FIXED_ROUNDS) {
                                 OutlinedTextField(
