@@ -94,6 +94,9 @@ WHERE id = ?;
 deleteRound:
 DELETE FROM gameTrackerRoundEntity WHERE id = ?;
 
+deleteRoundsByNumber:
+DELETE FROM gameTrackerRoundEntity WHERE gameId = ? AND roundNumber = ?;
+
 deleteRoundsForGame:
 DELETE FROM gameTrackerRoundEntity WHERE gameId = ?;
 

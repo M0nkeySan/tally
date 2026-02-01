@@ -16,5 +16,6 @@ interface GameTrackerRepository {
     suspend fun saveRounds(rounds: List<GameTrackerRound>)
     suspend fun updateRound(round: GameTrackerRound)
     suspend fun deleteRound(roundId: String)
+    suspend fun deleteRoundsByNumber(gameId: String, roundNumber: Int)
     suspend fun finishGame(gameId: String, winnerPlayerId: String?)
 }

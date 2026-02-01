@@ -126,6 +126,10 @@ class GameTrackerRepositoryImpl(
         gameTrackerQueries.deleteRound(roundId)
     }
 
+    override suspend fun deleteRoundsByNumber(gameId: String, roundNumber: Int) {
+        gameTrackerQueries.deleteRoundsByNumber(gameId, roundNumber.toLong())
+    }
+
     override suspend fun finishGame(gameId: String, winnerPlayerId: String?) {
         gameTrackerQueries.finishGame(
             winnerPlayerId = winnerPlayerId,

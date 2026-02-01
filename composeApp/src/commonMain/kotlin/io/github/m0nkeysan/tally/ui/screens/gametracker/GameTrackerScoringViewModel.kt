@@ -78,14 +78,15 @@ class GameTrackerScoringViewModel : ViewModel() {
         return scores
     }
 
-    fun deleteRound(round: GameTrackerRound, onError: (String) -> Unit = {}) {
+    fun deleteRound(roundNumber: Int) {
+        val gameId = _state.value.game?.id ?: return
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.Default) {
-                    repository.deleteRound(round.id)
+                    repository.deleteRoundsByNumber(gameId, roundNumber)
                 }
             } catch (e: Exception) {
-                onError("Failed to delete round: ${e.message}")
+                _state.update { it.copy(error = "Failed to delete round: ${e.message}") }
             }
         }
     }

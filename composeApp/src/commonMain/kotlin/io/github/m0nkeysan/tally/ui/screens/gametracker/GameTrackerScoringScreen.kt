@@ -89,7 +89,7 @@ fun GameTrackerScoringScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    var roundToDelete by remember { mutableStateOf<GameTrackerRound?>(null) }
+    var roundToDelete by remember { mutableStateOf<Int?>(null) }
 
     LaunchedEffect(gameId) {
         viewModel.loadGame(gameId)
@@ -104,15 +104,15 @@ fun GameTrackerScoringScreen(
     }
 
     // Delete round confirmation dialog
-    if (roundToDelete != null) {
+    roundToDelete?.let { roundNumber ->
         AlertDialog(
             onDismissRequest = { roundToDelete = null },
             title = { Text(stringResource(Res.string.game_tracker_round_delete_dialog_title)) },
-            text = { Text(stringResource(Res.string.game_tracker_round_delete_dialog_message, roundToDelete?.roundNumber ?: 0)) },
+            text = { Text(stringResource(Res.string.game_tracker_round_delete_dialog_message, roundNumber)) },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        roundToDelete?.let { viewModel.deleteRound(it) }
+                        viewModel.deleteRound(roundNumber)
                         roundToDelete = null
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
@@ -258,8 +258,8 @@ fun GameTrackerScoringScreen(
                                 onEditClick = { round ->
                                     onEditRound(roundNumber, round.id)
                                 },
-                                onDeleteClick = { round ->
-                                    roundToDelete = round
+                                onDeleteClick = {
+                                    roundToDelete = roundNumber
                                 },
                                 isFinished = state.game?.isFinished == true
                             )
@@ -422,13 +422,13 @@ private fun RoundCard(
     rounds: List<GameTrackerRound>,
     players: List<io.github.m0nkeysan.tally.core.model.Player>,
     onEditClick: (GameTrackerRound) -> Unit,
-    onDeleteClick: (GameTrackerRound) -> Unit,
+    onDeleteClick: () -> Unit,
     isFinished: Boolean
 ) {
     val dismissState = rememberSwipeToDismissBoxState()
     LaunchedEffect(dismissState.currentValue) {
         if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
-            rounds.firstOrNull()?.let(onDeleteClick)
+            onDeleteClick()
             dismissState.snapTo(SwipeToDismissBoxValue.Settled)
         }
     }
