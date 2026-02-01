@@ -57,6 +57,7 @@
     <string name="game_tracker_duration_infinite">Infini</string>
     <string name="game_tracker_creation_round_count">Nombre de manches</string>
     <string name="game_tracker_creation_round_count_hint">Entrez le nombre de manches</string>
+    <string name="game_tracker_creation_settings">Paramètres de la partie</string>
     
     <!-- Game Tracker Scoring -->
     <string name="game_tracker_scoring_title">Feuille de score</string>

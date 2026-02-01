@@ -54,6 +54,7 @@
     <string name="game_tracker_duration_infinite">Infinite</string>
     <string name="game_tracker_creation_round_count">Number of Rounds</string>
     <string name="game_tracker_creation_round_count_hint">Enter number of rounds</string>
+    <string name="game_tracker_creation_settings">Game Settings</string>
     
     <!-- Game Tracker Scoring -->
     <string name="game_tracker_scoring_title">Game Tracker</string>
