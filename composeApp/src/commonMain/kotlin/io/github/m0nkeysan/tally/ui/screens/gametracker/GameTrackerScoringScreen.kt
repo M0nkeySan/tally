@@ -403,7 +403,7 @@ private fun PlayerScoreCard(
             }
 
             Text(
-                text = stringResource(Res.string.game_tracker_scoring_total_score, score),
+                text = score.toString(),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = if (isLeader) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
