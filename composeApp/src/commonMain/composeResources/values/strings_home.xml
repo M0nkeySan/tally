@@ -9,6 +9,7 @@
     <string name="desc_finger_selector">Randomly select a player or group</string>
     <string name="home_cd_counter">Counter game</string>
     <string name="home_cd_dice">Dice Roller game</string>
+    <string name="home_cd_game_tracker">Game Tracker</string>
     
     <!-- Home Customization -->
     <string name="home_customize_title">Customize Home</string>

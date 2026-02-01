@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.ViewModule
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Scoreboard
 import androidx.compose.ui.graphics.vector.ImageVector
 
 actual object GameIcons {
@@ -52,4 +53,5 @@ actual object GameIcons {
     actual val ViewModule: ImageVector = Icons.Default.ViewModule
     actual val VisibilityOff: ImageVector = Icons.Default.VisibilityOff
     actual val Check: ImageVector = Icons.Default.Check
+    actual val Scoreboard: ImageVector = Icons.Default.Scoreboard
 }

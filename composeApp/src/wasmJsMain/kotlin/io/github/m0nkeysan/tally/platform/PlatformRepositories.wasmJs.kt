@@ -5,6 +5,7 @@ import io.github.m0nkeysan.tally.core.data.local.DatabaseModule
 import io.github.m0nkeysan.tally.core.data.local.driver.DatabaseDriverFactory
 import io.github.m0nkeysan.tally.core.data.repository.CounterRepositoryImpl
 import io.github.m0nkeysan.tally.core.data.repository.GameQueryHelperImpl
+import io.github.m0nkeysan.tally.core.data.repository.GameTrackerRepositoryImpl
 import io.github.m0nkeysan.tally.core.data.repository.PlayerRepositoryImpl
 import io.github.m0nkeysan.tally.core.data.repository.TarotRepositoryImpl
 import io.github.m0nkeysan.tally.core.data.repository.TarotStatisticsRepositoryImpl
@@ -15,6 +16,7 @@ import io.github.m0nkeysan.tally.core.domain.CounterHistoryStore
 import io.github.m0nkeysan.tally.core.domain.backup.DatabaseExporter
 import io.github.m0nkeysan.tally.core.domain.repository.CounterRepository
 import io.github.m0nkeysan.tally.core.domain.repository.GameQueryHelper
+import io.github.m0nkeysan.tally.core.domain.repository.GameTrackerRepository
 import io.github.m0nkeysan.tally.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.tally.core.domain.repository.TarotRepository
 import io.github.m0nkeysan.tally.core.domain.repository.TarotStatisticsRepository
@@ -36,6 +38,7 @@ actual object PlatformRepositories {
     private var tarotStatisticsRepository: TarotStatisticsRepository? = null
     private var yahtzeeRepository: YahtzeeRepository? = null
     private var yahtzeeStatisticsRepository: YahtzeeStatisticsRepository? = null
+    private var gameTrackerRepository: GameTrackerRepository? = null
     private var gameQueryHelper: GameQueryHelper? = null
     private var historyStore: CounterHistoryStore? = null
     private var localeManager: LocaleManager? = null
@@ -115,8 +118,18 @@ actual object PlatformRepositories {
         }
     }
 
+    actual fun getGameTrackerRepository(): GameTrackerRepository {
+        return gameTrackerRepository ?: GameTrackerRepositoryImpl(getDatabase().gameTrackerQueries).also {
+            gameTrackerRepository = it
+        }
+    }
+
     actual fun getGameQueryHelper(): GameQueryHelper {
-        return gameQueryHelper ?: GameQueryHelperImpl(getDatabase().tarotQueries, getDatabase().yahtzeeQueries).also {
+        return gameQueryHelper ?: GameQueryHelperImpl(
+            getDatabase().tarotQueries,
+            getDatabase().yahtzeeQueries,
+            getDatabase().gameTrackerQueries
+        ).also {
             gameQueryHelper = it
         }
     }

@@ -16,6 +16,11 @@ import io.github.m0nkeysan.tally.ui.screens.counter.CounterViewModel
 import io.github.m0nkeysan.tally.ui.screens.counter.EditCounterScreen
 import io.github.m0nkeysan.tally.ui.screens.dice.DiceRollerScreen
 import io.github.m0nkeysan.tally.ui.screens.fingerselector.FingerSelectorScreen
+import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerCreationScreen
+import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerRoundAdditionScreen
+import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerScoringScreen
+import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerSelectionScreen
+import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerSummaryScreen
 import io.github.m0nkeysan.tally.ui.screens.home.HomeCustomizationScreen
 import io.github.m0nkeysan.tally.ui.screens.tarot.TarotGameCreationScreen
 import io.github.m0nkeysan.tally.ui.screens.tarot.TarotGameSelectionScreen
@@ -175,6 +180,85 @@ fun GameNavGraph() {
             )
         }
 
+        // --- Game Tracker Section ---
+        composable<GameTrackerRoute> {
+            GameTrackerSelectionScreen(
+                onBack = {
+                    navController.popSafe()
+                },
+                onCreateNewGame = { navController.navigateSafe(GameTrackerCreationRoute) },
+                onSelectGame = { gameId ->
+                    navController.navigateSafe(GameTrackerScoringRoute(gameId))
+                }
+            )
+        }
+
+        composable<GameTrackerCreationRoute> {
+            GameTrackerCreationScreen(
+                onBack = {
+                    navController.popSafe()
+                },
+                onGameCreated = { gameId ->
+                    navController.navigateSafe(GameTrackerScoringRoute(gameId)) {
+                        popUpTo(GameTrackerRoute)
+                    }
+                }
+            )
+        }
+
+        composable<GameTrackerScoringRoute> { entry ->
+            val route = entry.toRoute<GameTrackerScoringRoute>()
+            
+            GameTrackerScoringScreen(
+                gameId = route.gameId,
+                onBack = {
+                    navController.popSafe()
+                },
+                onAddNewRound = { roundNumber ->
+                    navController.navigateSafe(GameTrackerRoundAdditionRoute(route.gameId, roundNumber, null))
+                },
+                onEditRound = { roundNumber, roundId ->
+                    navController.navigateSafe(GameTrackerRoundAdditionRoute(route.gameId, roundNumber, roundId))
+                },
+                onFinishGame = {
+                    navController.navigateSafe(GameTrackerSummaryRoute(route.gameId)) {
+                        popUpTo(GameTrackerRoute)
+                    }
+                }
+            )
+        }
+
+        composable<GameTrackerRoundAdditionRoute> { entry ->
+            val route = entry.toRoute<GameTrackerRoundAdditionRoute>()
+            
+            GameTrackerRoundAdditionScreen(
+                gameId = route.gameId,
+                roundNumber = route.roundNumber,
+                roundId = route.roundId,
+                onBack = {
+                    navController.popSafe()
+                },
+                onRoundSaved = {
+                    navController.popSafe()
+                }
+            )
+        }
+
+        composable<GameTrackerSummaryRoute> { entry ->
+            val route = entry.toRoute<GameTrackerSummaryRoute>()
+            GameTrackerSummaryScreen(
+                gameId = route.gameId,
+                onRematch = { newGameId ->
+                    navController.navigateSafe(GameTrackerScoringRoute(newGameId)) {
+                        popUpTo(GameTrackerRoute)
+                    }
+                },
+                onFinish = {
+                    navController.popBackStackSafe(GameTrackerRoute, inclusive = false)
+                }
+            )
+        }
+
         // --- Counter Section ---
         composable<CounterRoute> { entry ->
             val viewModel: CounterViewModel = viewModel { CounterViewModel() }
@@ -271,17 +355,14 @@ fun GameNavGraph() {
 
 fun <T : Any> NavHostController.navigateSafe(route: T, builder: NavOptionsBuilder.() -> Unit = {}) {
     val currentState = this.currentBackStackEntry?.lifecycle?.currentState
-    println("NavigateSafe: current state = $currentState, route = $route")
-    if (currentState == Lifecycle.State.RESUMED) {
-        println("NavigateSafe: navigating to $route")
+    if (currentState == Lifecycle.State.RESUMED || currentState == Lifecycle.State.STARTED) {
         this.navigate(route, builder)
-    } else {
-        println("NavigateSafe: BLOCKED - lifecycle state is $currentState, expected RESUMED")
     }
 }
 
 fun NavHostController.popSafe() {
-    if (this.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+    val currentState = this.currentBackStackEntry?.lifecycle?.currentState
+    if (currentState == Lifecycle.State.RESUMED || currentState == Lifecycle.State.STARTED) {
         this.popBackStack()
     }
 }
@@ -291,7 +372,8 @@ fun <T : Any> NavHostController.popBackStackSafe(
     inclusive: Boolean,
     saveState: Boolean = false
 ) {
-    if (currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+    val currentState = this.currentBackStackEntry?.lifecycle?.currentState
+    if (currentState == Lifecycle.State.RESUMED || currentState == Lifecycle.State.STARTED) {
         popBackStack(route, inclusive, saveState)
     }
 }

@@ -6,12 +6,14 @@
     <string name="game_finger_selector">Finger Selector</string>
     <string name="game_counter">Counter</string>
     <string name="game_dice">Dice Roller</string>
+    <string name="game_tracker">Game Tracker</string>
 
     <!-- Descriptions -->
     <string name="desc_tarot">Score Tarot games for 3, 4, or 5 players</string>
     <string name="desc_yahtzee">Complete Yahtzee scorecard with automatic bonuses</string>
     <string name="desc_counter">Simple counter for any board game</string>
     <string name="desc_dice">Roll customizable dice for any board game</string>
+    <string name="desc_game_tracker">Track scores and progress for custom games</string>
 
     <!-- Game Operations -->
     <string name="game_delete_all_title">Delete All Games</string>
@@ -34,4 +36,53 @@
     <string name="game_deletion_dialog_tarot_message">Are you sure you want to delete the game '%1$s'? This will also delete all rounds in this game.</string>
     <string name="game_deletion_dialog_yahtzee_title">Delete Game</string>
     <string name="game_deletion_dialog_yahtzee_message">Are you sure you want to delete '%1$s'? All scores will be lost.</string>
+    <string name="game_deletion_dialog_game_tracker_title">Delete Game</string>
+    <string name="game_deletion_dialog_game_tracker_message">Are you sure you want to delete '%1$s'? This will also delete all rounds and scores.</string>
+    <string name="game_tracker_selection_title">Game Tracker</string>
+    
+    <!-- Game Tracker Creation -->
+    <string name="game_tracker_creation_title">New Game Tracker</string>
+    <string name="game_tracker_creation_name_default">Game</string>
+    <string name="game_tracker_creation_scoring_logic">Scoring</string>
+    <string name="game_tracker_scoring_high">High Score Wins</string>
+    <string name="game_tracker_scoring_low">Low Score Wins</string>
+    <string name="game_tracker_creation_target_score">Target Score (Optional)</string>
+    <string name="game_tracker_creation_enable_target">Enable Target Score</string>
+    <string name="game_tracker_creation_target_hint">Enter target score</string>
+    <string name="game_tracker_creation_duration_mode">Game Duration</string>
+    <string name="game_tracker_duration_fixed">Fixed Rounds</string>
+    <string name="game_tracker_duration_infinite">Infinite</string>
+    <string name="game_tracker_creation_round_count">Number of Rounds</string>
+    <string name="game_tracker_creation_round_count_hint">Enter number of rounds</string>
+    
+    <!-- Game Tracker Scoring -->
+    <string name="game_tracker_scoring_title">Game Tracker</string>
+    <string name="game_tracker_scoring_cd_add_round">Add new round</string>
+    <string name="game_tracker_scoring_cd_finish_game">Finish game</string>
+    <string name="game_tracker_scoring_section_leaderboard">Leaderboard</string>
+    <string name="game_tracker_scoring_section_rounds">Round History</string>
+    <string name="game_tracker_scoring_empty_rounds">No rounds yet. Add the first round!</string>
+    <string name="game_tracker_scoring_round_title">Round %1$d</string>
+    <string name="game_tracker_scoring_total_score">Total: %1$d</string>
+    <string name="game_tracker_scoring_target_reached">🎯 Target Reached!</string>
+    <string name="game_tracker_scoring_should_finish">✓ All rounds complete</string>
+    <string name="game_tracker_scoring_winner">👑 Winner!</string>
+    <string name="game_tracker_round_delete_dialog_title">Delete Round</string>
+    <string name="game_tracker_round_delete_dialog_message">Are you sure you want to delete round %1$d?</string>
+    
+    <!-- Game Tracker Round Addition -->
+    <string name="game_tracker_round_title_add">Add Round %1$d</string>
+    <string name="game_tracker_round_title_edit">Edit Round %1$d</string>
+    <string name="game_tracker_round_action_save">Save Round</string>
+    <string name="game_tracker_round_player_score">%1$s's Score</string>
+    <string name="game_tracker_round_enter_score">Enter score</string>
+    <string name="game_tracker_round_invalid_score">Please enter a valid score for all players</string>
+
+    <!-- Game Tracker Summary -->
+    <string name="game_tracker_summary_title">Game Results</string>
+    <string name="game_tracker_summary_winner_title">Winner!</string>
+    <string name="game_tracker_summary_draw_title">It's a Draw!</string>
+    <string name="game_tracker_summary_action_rematch">Rematch</string>
+    <string name="game_tracker_summary_action_finish">Finish</string>
+    <string name="game_tracker_summary_final_scores">Final Scores</string>
 </resources>

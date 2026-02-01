@@ -35,4 +35,57 @@
     <string name="game_deletion_dialog_tarot_message">Êtes-vous sûr de vouloir supprimer la partie '%1$s' ? Toutes les manches seront également supprimées.</string>
     <string name="game_deletion_dialog_yahtzee_title">Supprimer la partie</string>
     <string name="game_deletion_dialog_yahtzee_message">Êtes-vous sûr de vouloir supprimer '%1$s' ? Tous les scores seront perdus.</string>
+    <string name="game_deletion_dialog_game_tracker_title">Supprimer la partie</string>
+    <string name="game_deletion_dialog_game_tracker_message">Êtes-vous sûr de vouloir supprimer '%1$s' ? Toutes les manches et scores seront également supprimés.</string>
+    <string name="game_tracker_selection_title">Feuille de score</string>
+    
+    <!-- Game Tracker -->
+    <string name="game_tracker">Feuille de score</string>
+    <string name="desc_game_tracker">Suivez les scores et la progression de vos jeux personnalisés</string>
+    
+    <!-- Game Tracker Creation -->
+    <string name="game_tracker_creation_title">Nouvelle feuille de score</string>
+    <string name="game_tracker_creation_name_default">Partie</string>
+    <string name="game_tracker_creation_scoring_logic">Système de score</string>
+    <string name="game_tracker_scoring_high">Score le plus élevé gagne</string>
+    <string name="game_tracker_scoring_low">Score le plus bas gagne</string>
+    <string name="game_tracker_creation_target_score">Score cible (Optionnel)</string>
+    <string name="game_tracker_creation_enable_target">Activer le score cible</string>
+    <string name="game_tracker_creation_target_hint">Entrez le score cible</string>
+    <string name="game_tracker_creation_duration_mode">Durée de la partie</string>
+    <string name="game_tracker_duration_fixed">Manches fixes</string>
+    <string name="game_tracker_duration_infinite">Infini</string>
+    <string name="game_tracker_creation_round_count">Nombre de manches</string>
+    <string name="game_tracker_creation_round_count_hint">Entrez le nombre de manches</string>
+    
+    <!-- Game Tracker Scoring -->
+    <string name="game_tracker_scoring_title">Feuille de score</string>
+    <string name="game_tracker_scoring_cd_add_round">Ajouter une nouvelle manche</string>
+    <string name="game_tracker_scoring_cd_finish_game">Terminer la partie</string>
+    <string name="game_tracker_scoring_section_leaderboard">Classement</string>
+    <string name="game_tracker_scoring_section_rounds">Historique des manches</string>
+    <string name="game_tracker_scoring_empty_rounds">Aucune manche pour le moment. Ajoutez la première !</string>
+    <string name="game_tracker_scoring_round_title">Manche %1$d</string>
+    <string name="game_tracker_scoring_total_score">Total : %1$d</string>
+    <string name="game_tracker_scoring_target_reached">🎯 Score cible atteint !</string>
+    <string name="game_tracker_scoring_should_finish">✓ Toutes les manches complétées</string>
+    <string name="game_tracker_scoring_winner">👑 Vainqueur !</string>
+    <string name="game_tracker_round_delete_dialog_title">Supprimer la manche</string>
+    <string name="game_tracker_round_delete_dialog_message">Êtes-vous sûr de vouloir supprimer la manche %1$d ?</string>
+    
+    <!-- Game Tracker Round Addition -->
+    <string name="game_tracker_round_title_add">Ajouter la manche %1$d</string>
+    <string name="game_tracker_round_title_edit">Modifier la manche %1$d</string>
+    <string name="game_tracker_round_action_save">Enregistrer la manche</string>
+    <string name="game_tracker_round_player_score">Score de %1$s</string>
+    <string name="game_tracker_round_enter_score">Entrez le score</string>
+    <string name="game_tracker_round_invalid_score">Veuillez entrer un score valide pour tous les joueurs</string>
+
+    <!-- Game Tracker Summary -->
+    <string name="game_tracker_summary_title">Résultats de la partie</string>
+    <string name="game_tracker_summary_winner_title">Vainqueur !</string>
+    <string name="game_tracker_summary_draw_title">Égalité !</string>
+    <string name="game_tracker_summary_action_rematch">Revanche</string>
+    <string name="game_tracker_summary_action_finish">Terminer</string>
+    <string name="game_tracker_summary_final_scores">Scores finaux</string>
 </resources>

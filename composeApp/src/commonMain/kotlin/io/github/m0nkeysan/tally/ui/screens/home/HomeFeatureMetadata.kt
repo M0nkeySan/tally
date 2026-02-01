@@ -62,6 +62,13 @@ private object GameCardColors {
         borderDark = Color(0xFFFCD34D),       // Amber-400 (brighter)
         backgroundDark = Color(0xFF78350F)    // Amber-900
     )
+    
+    val gameTracker = GameColors(
+        borderLight = Color(0xFF0891B2),      // Cyan-600
+        backgroundLight = Color(0xFFCFFAFE),  // Cyan-100
+        borderDark = Color(0xFF06B6D4),       // Cyan-500
+        backgroundDark = Color(0xFF164E63)    // Cyan-900
+    )
 }
 
 data class GameFeature(
@@ -138,5 +145,21 @@ fun getGameFeatureMap() = mapOf(
         description = stringResource(Res.string.desc_dice),
         route = DiceRollerRoute,
         colors = GameCardColors.diceRoller
+    ),
+    "game_tracker" to GameFeature(
+        id = "game_tracker",
+        icon = {
+            Icon(
+                GameIcons.Scoreboard,
+                contentDescription = stringResource(Res.string.home_cd_game_tracker),
+                Modifier
+                    .width(64.dp)
+                    .height(64.dp)
+            )
+        },
+        title = stringResource(Res.string.game_tracker),
+        description = stringResource(Res.string.desc_game_tracker),
+        route = GameTrackerRoute,
+        colors = GameCardColors.gameTracker
     )
 )
