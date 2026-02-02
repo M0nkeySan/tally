@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.tally.ui.screens.gametracker
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -208,7 +209,6 @@ fun GameTrackerScoringScreen(
                         LeaderboardSection(
                             game = state.game!!,
                             players = state.players,
-                            rounds = state.rounds,
                             totalScores = state.totalScores
                         )
                     }
@@ -274,7 +274,6 @@ fun GameTrackerScoringScreen(
 private fun LeaderboardSection(
     game: GameTrackerGame,
     players: List<io.github.m0nkeysan.tally.core.model.Player>,
-    rounds: List<GameTrackerRound>,
     totalScores: Map<String, Int>
 ) {
     Column {
@@ -286,7 +285,6 @@ private fun LeaderboardSection(
         
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Sort players by score based on scoring logic
         val sortedPlayers = when (game.scoringLogic) {
             ScoringLogic.HIGH_SCORE_WINS -> players.sortedByDescending { totalScores[it.id] ?: 0 }
             ScoringLogic.LOW_SCORE_WINS -> players.sortedBy { totalScores[it.id] ?: 0 }
@@ -294,7 +292,6 @@ private fun LeaderboardSection(
 
         sortedPlayers.forEachIndexed { index, player ->
             val score = totalScores[player.id] ?: 0
-            val isLeader = index == 0
             val hasReachedTarget = game.targetScore != null && 
                 ((game.scoringLogic == ScoringLogic.HIGH_SCORE_WINS && score >= game.targetScore) ||
                  (game.scoringLogic == ScoringLogic.LOW_SCORE_WINS && score <= game.targetScore))
@@ -302,7 +299,6 @@ private fun LeaderboardSection(
             PlayerScoreCard(
                 player = player,
                 score = score,
-                isLeader = isLeader,
                 hasReachedTarget = hasReachedTarget,
                 isGameFinished = game.isFinished,
                 isWinner = game.isFinished && game.winnerPlayerId == player.id
@@ -334,7 +330,6 @@ private fun LeaderboardSection(
 private fun PlayerScoreCard(
     player: io.github.m0nkeysan.tally.core.model.Player,
     score: Int,
-    isLeader: Boolean,
     hasReachedTarget: Boolean,
     isGameFinished: Boolean,
     isWinner: Boolean
@@ -349,7 +344,7 @@ private fun PlayerScoreCard(
             contentColor = contentColor
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = if (isLeader) 4.dp else 1.dp
+            defaultElevation =  1.dp
         )
     ) {
         Row(
@@ -384,7 +379,7 @@ private fun PlayerScoreCard(
                     Text(
                         text = player.name,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = if (isLeader) FontWeight.Bold else FontWeight.Normal,
+                        fontWeight = FontWeight.Normal,
                         color = contentColor
                     )
                     
@@ -463,6 +458,10 @@ private fun RoundCard(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
             ),
+            border = BorderStroke(
+                1.dp,
+                MaterialTheme.colorScheme.outlineVariant
+            )
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)
