@@ -72,6 +72,7 @@
     <string name="game_tracker_scoring_target_reached">🎯 Score cible atteint !</string>
     <string name="game_tracker_scoring_should_finish">✓ Toutes les manches complétées</string>
     <string name="game_tracker_scoring_winner">👑 Vainqueur !</string>
+    <string name="game_tracker_scoring_others">autres</string>
     <string name="game_tracker_round_delete_dialog_title">Supprimer la manche</string>
     <string name="game_tracker_round_delete_dialog_message">Êtes-vous sûr de vouloir supprimer la manche %1$d ?</string>
     

@@ -69,6 +69,7 @@
     <string name="game_tracker_scoring_target_reached">🎯 Target Reached!</string>
     <string name="game_tracker_scoring_should_finish">✓ All rounds complete</string>
     <string name="game_tracker_scoring_winner">👑 Winner!</string>
+    <string name="game_tracker_scoring_others">others</string>
     <string name="game_tracker_round_delete_dialog_title">Delete Round</string>
     <string name="game_tracker_round_delete_dialog_message">Are you sure you want to delete round %1$d?</string>
     

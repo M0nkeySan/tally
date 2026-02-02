@@ -56,6 +56,7 @@ import io.github.m0nkeysan.tally.core.domain.model.DurationMode
 import io.github.m0nkeysan.tally.core.domain.model.ScoringLogic
 import io.github.m0nkeysan.tally.core.model.GameTrackerGame
 import io.github.m0nkeysan.tally.core.model.GameTrackerRound
+import io.github.m0nkeysan.tally.core.model.Player
 import io.github.m0nkeysan.tally.generated.resources.Res
 import io.github.m0nkeysan.tally.generated.resources.action_back
 import io.github.m0nkeysan.tally.generated.resources.action_cancel
@@ -67,6 +68,7 @@ import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_fin
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_game_stats
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_history
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_empty_rounds
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_others
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_round_title
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_section_leaderboard
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_section_rounds
@@ -268,6 +270,7 @@ fun GameTrackerScoringScreen(
                             RoundCard(
                                 roundNumber = roundNumber,
                                 rounds = roundsByNumber[roundNumber] ?: emptyList(),
+                                players = state.players,
                                 onEditClick = { round ->
                                     onEditRound(roundNumber, round.id)
                                 },
@@ -432,6 +435,7 @@ private fun PlayerScoreCard(
 private fun RoundCard(
     roundNumber: Int,
     rounds: List<GameTrackerRound>,
+    players: List<Player>,
     onEditClick: (GameTrackerRound) -> Unit,
     onDeleteClick: () -> Unit,
     isFinished: Boolean
@@ -443,6 +447,23 @@ private fun RoundCard(
             dismissState.snapTo(SwipeToDismissBoxValue.Settled)
         }
     }
+    
+    // Calculate highlights
+    val highestScore = rounds.maxOfOrNull { it.score }
+    val lowestScore = rounds.minOfOrNull { it.score }
+    
+    val highestScorer = rounds.find { it.score == highestScore }
+    val lowestScorer = rounds.find { it.score == lowestScore }
+    
+    val highestPlayer = highestScorer?.let { round ->
+        players.find { it.id == round.playerId }
+    }
+    val lowestPlayer = lowestScorer?.let { round ->
+        players.find { it.id == round.playerId }
+    }
+    
+    // Count "others" (players who are neither highest nor lowest)
+    val otherCount = if (rounds.size > 2) rounds.size - 2 else 0
 
     SwipeToDismissBox(
         state = dismissState,
@@ -480,11 +501,77 @@ private fun RoundCard(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
+                // Round number
                 Text(
                     text = stringResource(Res.string.game_tracker_scoring_round_title, roundNumber),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
+                
+                // Score highlights
+                if (rounds.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Highest scorer
+                        highestPlayer?.let { player ->
+                            val scoreText = if (highestScore != null && highestScore >= 0) {
+                                "+$highestScore"
+                            } else {
+                                "$highestScore"
+                            }
+                            Text(
+                                text = "📈 ${player.name} ($scoreText)",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = io.github.m0nkeysan.tally.ui.theme.LocalCustomColors.current.success
+                            )
+                        }
+                        
+                        // Separator
+                        if (highestPlayer != null && (lowestPlayer != null || otherCount > 0)) {
+                            Text(
+                                text = " | ",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        
+                        // Lowest scorer (only if different from highest)
+                        if (lowestPlayer != null && lowestPlayer.id != highestPlayer?.id) {
+                            val scoreText = if (lowestScore != null && lowestScore >= 0) {
+                                "+$lowestScore"
+                            } else {
+                                "$lowestScore"
+                            }
+                            Text(
+                                text = "📉 ${lowestPlayer.name} ($scoreText)",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                        
+                        // Others count
+                        if (otherCount > 0) {
+                            // Add separator if we showed lowest
+                            if (lowestPlayer != null && lowestPlayer.id != highestPlayer?.id) {
+                                Text(
+                                    text = " | ",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Text(
+                                text = "+$otherCount ${stringResource(Res.string.game_tracker_scoring_others)}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
             }
         }
     }
