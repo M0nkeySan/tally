@@ -17,6 +17,7 @@ import io.github.m0nkeysan.tally.ui.screens.counter.EditCounterScreen
 import io.github.m0nkeysan.tally.ui.screens.dice.DiceRollerScreen
 import io.github.m0nkeysan.tally.ui.screens.fingerselector.FingerSelectorScreen
 import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerCreationScreen
+import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerHistoryScreen
 import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerRoundAdditionScreen
 import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerScoringScreen
 import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerSelectionScreen
@@ -224,6 +225,9 @@ fun GameNavGraph() {
                     navController.navigateSafe(GameTrackerSummaryRoute(route.gameId)) {
                         popUpTo(GameTrackerRoute)
                     }
+                },
+                onNavigateToHistory = {
+                    navController.navigateSafe(GameTrackerHistoryRoute)
                 }
             )
         }
@@ -255,6 +259,14 @@ fun GameNavGraph() {
                 },
                 onFinish = {
                     navController.popBackStackSafe(GameTrackerRoute, inclusive = false)
+                }
+            )
+        }
+
+        composable<GameTrackerHistoryRoute> {
+            GameTrackerHistoryScreen(
+                onBack = {
+                    navController.popSafe()
                 }
             )
         }

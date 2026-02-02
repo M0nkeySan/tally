@@ -63,6 +63,7 @@
     <string name="game_tracker_scoring_title">Feuille de score</string>
     <string name="game_tracker_scoring_cd_add_round">Ajouter une nouvelle manche</string>
     <string name="game_tracker_scoring_cd_finish_game">Terminer la partie</string>
+    <string name="game_tracker_scoring_cd_history">Voir l\'historique des scores</string>
     <string name="game_tracker_scoring_section_leaderboard">Classement</string>
     <string name="game_tracker_scoring_section_rounds">Historique des manches</string>
     <string name="game_tracker_scoring_empty_rounds">Aucune manche pour le moment. Ajoutez la première !</string>
@@ -73,6 +74,13 @@
     <string name="game_tracker_scoring_winner">👑 Vainqueur !</string>
     <string name="game_tracker_round_delete_dialog_title">Supprimer la manche</string>
     <string name="game_tracker_round_delete_dialog_message">Êtes-vous sûr de vouloir supprimer la manche %1$d ?</string>
+    
+    <!-- Game Tracker History -->
+    <string name="game_tracker_history_title">Historique des scores</string>
+    <string name="game_tracker_history_subtitle">Manche par manche</string>
+    <string name="game_tracker_history_empty">Aucun score. Ajoutez des manches pour voir l\'historique !</string>
+    <string name="game_tracker_history_cd_delete">Supprimer l\'historique</string>
+    <string name="game_tracker_history_round_format">Manche %1$d</string>
     
     <!-- Game Tracker Round Addition -->
     <string name="game_tracker_round_title_add">Ajouter la manche %1$d</string>

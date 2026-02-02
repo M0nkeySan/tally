@@ -124,6 +124,15 @@ class GameTrackerRoundAdditionViewModel : ViewModel() {
 
                     repository.saveRounds(rounds)
                     
+                    // Log to history
+                    if (currentState.existingRoundId != null) {
+                        // Editing existing round - replace history
+                        repository.updateRoundScores(game.id, currentState.roundNumber, rounds, currentState.players)
+                    } else {
+                        // New round - add to history
+                        repository.logRoundScores(game.id, currentState.roundNumber, rounds, currentState.players)
+                    }
+                    
                     // Update game's current round if needed
                     if (currentState.roundNumber >= game.currentRound) {
                         repository.updateGame(game.copy(currentRound = currentState.roundNumber))

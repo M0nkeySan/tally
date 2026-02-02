@@ -84,6 +84,8 @@ class GameTrackerScoringViewModel : ViewModel() {
             try {
                 withContext(Dispatchers.Default) {
                     repository.deleteRoundsByNumber(gameId, roundNumber)
+                    // Remove from history
+                    repository.removeRoundScores(gameId, roundNumber)
                 }
             } catch (e: Exception) {
                 _state.update { it.copy(error = "Failed to delete round: ${e.message}") }

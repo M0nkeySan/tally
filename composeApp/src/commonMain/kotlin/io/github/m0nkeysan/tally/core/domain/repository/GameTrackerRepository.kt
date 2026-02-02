@@ -2,6 +2,8 @@ package io.github.m0nkeysan.tally.core.domain.repository
 
 import io.github.m0nkeysan.tally.core.model.GameTrackerGame
 import io.github.m0nkeysan.tally.core.model.GameTrackerRound
+import io.github.m0nkeysan.tally.core.model.GameTrackerScoreChange
+import io.github.m0nkeysan.tally.core.model.Player
 import kotlinx.coroutines.flow.Flow
 
 interface GameTrackerRepository {
@@ -18,4 +20,11 @@ interface GameTrackerRepository {
     suspend fun deleteRound(roundId: String)
     suspend fun deleteRoundsByNumber(gameId: String, roundNumber: Int)
     suspend fun finishGame(gameId: String, winnerPlayerId: String?)
+    
+    // Score history tracking
+    fun logRoundScores(gameId: String, roundNumber: Int, rounds: List<GameTrackerRound>, players: List<Player>)
+    fun updateRoundScores(gameId: String, roundNumber: Int, rounds: List<GameTrackerRound>, players: List<Player>)
+    fun removeRoundScores(gameId: String, roundNumber: Int)
+    fun getScoreHistory(): Flow<List<GameTrackerScoreChange>>
+    suspend fun clearScoreHistory()
 }

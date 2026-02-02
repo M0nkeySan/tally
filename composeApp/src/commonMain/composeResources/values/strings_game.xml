@@ -60,6 +60,7 @@
     <string name="game_tracker_scoring_title">Game Tracker</string>
     <string name="game_tracker_scoring_cd_add_round">Add new round</string>
     <string name="game_tracker_scoring_cd_finish_game">Finish game</string>
+    <string name="game_tracker_scoring_cd_history">View score history</string>
     <string name="game_tracker_scoring_section_leaderboard">Leaderboard</string>
     <string name="game_tracker_scoring_section_rounds">Round History</string>
     <string name="game_tracker_scoring_empty_rounds">No rounds yet. Add the first round!</string>
@@ -70,6 +71,13 @@
     <string name="game_tracker_scoring_winner">👑 Winner!</string>
     <string name="game_tracker_round_delete_dialog_title">Delete Round</string>
     <string name="game_tracker_round_delete_dialog_message">Are you sure you want to delete round %1$d?</string>
+    
+    <!-- Game Tracker History -->
+    <string name="game_tracker_history_title">Score History</string>
+    <string name="game_tracker_history_subtitle">Round by Round</string>
+    <string name="game_tracker_history_empty">No scores yet. Add some rounds to see history!</string>
+    <string name="game_tracker_history_cd_delete">Delete all history</string>
+    <string name="game_tracker_history_round_format">Round %1$d</string>
     
     <!-- Game Tracker Round Addition -->
     <string name="game_tracker_round_title_add">Add Round %1$d</string>

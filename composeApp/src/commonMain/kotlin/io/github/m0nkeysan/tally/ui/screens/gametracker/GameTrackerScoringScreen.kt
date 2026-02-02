@@ -85,6 +85,7 @@ fun GameTrackerScoringScreen(
     onAddNewRound: (Int) -> Unit,
     onEditRound: (Int, String) -> Unit,
     onFinishGame: () -> Unit,
+    onNavigateToHistory: () -> Unit,
     viewModel: GameTrackerScoringViewModel = viewModel { GameTrackerScoringViewModel() }
 ) {
     val state by viewModel.state.collectAsState()
@@ -149,6 +150,12 @@ fun GameTrackerScoringScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = onNavigateToHistory) {
+                        Icon(
+                            GameIcons.History,
+                            contentDescription = stringResource(Res.string.game_tracker_scoring_cd_history)
+                        )
+                    }
                     if (state.game?.isFinished == false) {
                         IconButton(
                             onClick = {
@@ -481,17 +488,17 @@ private fun RoundCard(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 4.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
+                            Text(
+                                text = "• ",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
                             Text(
                                 text = player.name,
                                 style = MaterialTheme.typography.bodyMedium
-                            )
-                            Text(
-                                text = if (round.score >= 0) "+${round.score}" else "${round.score}",
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = if (round.score >= 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
                             )
                         }
                     }

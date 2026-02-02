@@ -3,11 +3,14 @@ package io.github.m0nkeysan.tally.core.data.repository
 import app.cash.sqldelight.async.coroutines.awaitAsOneOrNull
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import io.github.m0nkeysan.tally.core.domain.GameTrackerHistoryStore
 import io.github.m0nkeysan.tally.core.domain.model.DurationMode
 import io.github.m0nkeysan.tally.core.domain.model.ScoringLogic
 import io.github.m0nkeysan.tally.core.domain.repository.GameTrackerRepository
 import io.github.m0nkeysan.tally.core.model.GameTrackerGame
 import io.github.m0nkeysan.tally.core.model.GameTrackerRound
+import io.github.m0nkeysan.tally.core.model.GameTrackerScoreChange
+import io.github.m0nkeysan.tally.core.model.Player
 import io.github.m0nkeysan.tally.core.utils.getCurrentTimeMillis
 import io.github.m0nkeysan.tally.database.GameTrackerGameEntity
 import io.github.m0nkeysan.tally.database.GameTrackerQueries
@@ -17,7 +20,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class GameTrackerRepositoryImpl(
-    private val gameTrackerQueries: GameTrackerQueries
+    private val gameTrackerQueries: GameTrackerQueries,
+    private val historyStore: GameTrackerHistoryStore = GameTrackerHistoryStore()
 ) : GameTrackerRepository {
 
     override fun getAllGames(): Flow<List<GameTrackerGame>> =
@@ -166,4 +170,60 @@ class GameTrackerRepositoryImpl(
         notes = notes,
         createdAt = createdAt
     )
+    
+    // Score history tracking
+    override fun logRoundScores(
+        gameId: String,
+        roundNumber: Int,
+        rounds: List<GameTrackerRound>,
+        players: List<Player>
+    ) {
+        val changes = rounds.mapNotNull { round ->
+            val player = players.find { it.id == round.playerId }
+            player?.let {
+                GameTrackerScoreChange.create(
+                    gameId = gameId,
+                    playerId = player.id,
+                    playerName = player.name,
+                    playerAvatarColor = player.avatarColor,
+                    roundNumber = roundNumber,
+                    score = round.score
+                )
+            }
+        }
+        historyStore.addChanges(changes)
+    }
+    
+    override fun updateRoundScores(
+        gameId: String,
+        roundNumber: Int,
+        rounds: List<GameTrackerRound>,
+        players: List<Player>
+    ) {
+        val changes = rounds.mapNotNull { round ->
+            val player = players.find { it.id == round.playerId }
+            player?.let {
+                GameTrackerScoreChange.create(
+                    gameId = gameId,
+                    playerId = player.id,
+                    playerName = player.name,
+                    playerAvatarColor = player.avatarColor,
+                    roundNumber = roundNumber,
+                    score = round.score
+                )
+            }
+        }
+        historyStore.replaceRound(gameId, roundNumber, changes)
+    }
+    
+    override fun removeRoundScores(gameId: String, roundNumber: Int) {
+        historyStore.removeRound(gameId, roundNumber)
+    }
+    
+    override fun getScoreHistory(): Flow<List<GameTrackerScoreChange>> =
+        historyStore.history.map { historyStore.getHistory() }
+    
+    override suspend fun clearScoreHistory() {
+        historyStore.deleteAllChanges()
+    }
 }
