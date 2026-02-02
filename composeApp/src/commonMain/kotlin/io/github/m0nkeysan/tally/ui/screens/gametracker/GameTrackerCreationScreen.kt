@@ -113,7 +113,7 @@ fun GameTrackerCreationScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
                 )
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
@@ -149,10 +149,12 @@ fun GameTrackerCreationScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             // Scoring Logic
+                            Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 text = stringResource(Res.string.game_tracker_creation_scoring_logic),
                                 style = MaterialTheme.typography.titleMedium
                             )
+
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
