@@ -109,13 +109,11 @@ fun GameTrackerCreationScreen(
                 singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
             // Collapsible Game Settings Card
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
                 )
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
@@ -239,8 +237,6 @@ fun GameTrackerCreationScreen(
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
 
             // Player Selection
             FlexiblePlayerSelector(
