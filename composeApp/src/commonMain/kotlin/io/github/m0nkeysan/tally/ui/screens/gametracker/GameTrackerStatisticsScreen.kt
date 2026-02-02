@@ -58,7 +58,7 @@ import io.github.m0nkeysan.tally.generated.resources.game_tracker_stats_title
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_stats_total_games
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_stats_total_rounds
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_stats_win_rate
-import io.github.m0nkeysan.tally.ui.screens.yahtzee.formatAverage
+import io.github.m0nkeysan.tally.ui.utils.formatAverage
 import io.github.m0nkeysan.tally.ui.utils.parseColor
 import org.jetbrains.compose.resources.stringResource
 

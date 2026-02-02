@@ -44,7 +44,6 @@ import io.github.m0nkeysan.tally.generated.resources.Res
 import io.github.m0nkeysan.tally.generated.resources.action_back
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_avg_per_round
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_current_leader
-import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_current_streak
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_graph_title
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_highest_round
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_lead_changes
@@ -59,6 +58,7 @@ import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_tit
 import io.github.m0nkeysan.tally.ui.components.ProgressLineChart
 import io.github.m0nkeysan.tally.ui.components.ScoreDistributionChart
 import io.github.m0nkeysan.tally.ui.components.StreakBadge
+import io.github.m0nkeysan.tally.ui.utils.formatAverage
 import io.github.m0nkeysan.tally.ui.utils.parseColor
 import org.jetbrains.compose.resources.stringResource
 
@@ -296,7 +296,7 @@ private fun PlayerStatsCard(playerStats: PlayerRoundStats) {
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 StatRow(
                     label = stringResource(Res.string.game_tracker_game_stats_avg_per_round),
-                    value = String.format("%.1f", playerStats.averageScorePerRound)
+                    value = formatAverage(playerStats.averageScorePerRound)
                 )
                 if (playerStats.highestRoundScore != null) {
                     StatRow(

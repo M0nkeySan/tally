@@ -1,7 +1,6 @@
 package io.github.m0nkeysan.tally.ui.screens.gametracker
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -65,6 +64,7 @@ import io.github.m0nkeysan.tally.generated.resources.game_tracker_round_delete_d
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_round_delete_dialog_title
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_add_round
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_finish_game
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_game_stats
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_history
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_empty_rounds
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_round_title
@@ -373,18 +373,19 @@ private fun PlayerScoreCard(
                 modifier = Modifier.weight(1f)
             ) {
                 // Avatar
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(avatarColor, CircleShape),
-                    contentAlignment = Alignment.Center
+                Surface(
+                    shape = CircleShape,
+                    modifier = Modifier.size(32.dp),
+                    color = contentColor.copy(alpha = 0.2f)
                 ) {
-                    Text(
-                        text = player.name.take(1).uppercase(),
-                        color = contentColor,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(
+                            text = player.name.take(1),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = contentColor
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -392,7 +393,7 @@ private fun PlayerScoreCard(
                 Column {
                     Text(
                         text = player.name,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                         color = contentColor
                     )

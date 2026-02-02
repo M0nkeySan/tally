@@ -2,7 +2,6 @@ package io.github.m0nkeysan.tally.ui.screens.gametracker
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.m0nkeysan.tally.core.model.DistributionCategory
 import io.github.m0nkeysan.tally.core.model.GameTrackerGame
 import io.github.m0nkeysan.tally.core.model.GameTrackerGameStats
 import io.github.m0nkeysan.tally.core.model.GameTrackerRound
@@ -68,7 +67,7 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
     }
     
     private fun calculateGameStats(game: GameTrackerGame, rounds: List<GameTrackerRound>): GameTrackerGameStats {
-        val roundsByNumber = rounds.groupBy { it.roundNumber }.toSortedMap()
+        val roundsByNumber = rounds.groupBy { it.roundNumber }
         val totalRounds = roundsByNumber.size
         
         // Calculate progress data (cumulative scores per round)

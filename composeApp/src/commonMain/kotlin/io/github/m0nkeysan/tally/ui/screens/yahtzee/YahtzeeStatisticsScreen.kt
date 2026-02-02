@@ -105,6 +105,8 @@ import io.github.m0nkeysan.tally.ui.screens.yahtzee.components.GameSummaryRow
 import io.github.m0nkeysan.tally.ui.screens.yahtzee.components.GlobalCategoryHeatmap
 import io.github.m0nkeysan.tally.ui.screens.yahtzee.components.StatisticRow
 import io.github.m0nkeysan.tally.ui.theme.LocalCustomColors
+import io.github.m0nkeysan.tally.ui.utils.formatAverage
+import io.github.m0nkeysan.tally.ui.utils.formatPercentage
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
