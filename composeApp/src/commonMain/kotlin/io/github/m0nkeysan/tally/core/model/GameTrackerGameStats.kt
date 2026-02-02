@@ -23,7 +23,6 @@ data class GameTrackerGameStats(
 @Serializable
 data class PlayerRoundStats(
     val player: Player,
-    val roundsPlayed: Int,
     val totalScore: Int,
     val averageScorePerRound: Double,
     val highestRoundScore: Int?,

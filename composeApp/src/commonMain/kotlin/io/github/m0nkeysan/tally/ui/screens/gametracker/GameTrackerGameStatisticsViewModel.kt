@@ -32,13 +32,25 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val game = repository.getGameById(gameId)
+                val gameEntity = repository.getGameById(gameId) ?: return@launch
                 val rounds = repository.getRoundsForGame(gameId).first()
+
+
+                val playerIdsList = gameEntity.playerIds.split(",").filter { it.isNotEmpty() }
+                val players = playerIdsList.mapNotNull { playerId ->
+                    playerRepository.getPlayerById(playerId.trim())
+                }
+
+                if (players.isEmpty()) {
+                    throw IllegalStateException("No players found for game")
+                }
+
+                val game = gameEntity.copy(players = players)
                 
-                if (game != null && rounds.isNotEmpty()) {
+                if (rounds.isNotEmpty()) {
                     _stats.value = calculateGameStats(game, rounds)
-                } else if (game != null) {
-                    // Game exists but no rounds yet - create empty stats
+                } else {
+                    // Game exists but no rounds yet - create empty stats -> TODO : display a specific message to avoid useless stuff.
                     _stats.value = GameTrackerGameStats(
                         gameId = game.id,
                         gameName = game.name,
@@ -48,7 +60,6 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
                         playerStats = game.players.map { player ->
                             PlayerRoundStats(
                                 player = player,
-                                roundsPlayed = 0,
                                 totalScore = 0,
                                 averageScorePerRound = 0.0,
                                 highestRoundScore = null,
@@ -165,7 +176,6 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
         
         return PlayerRoundStats(
             player = player,
-            roundsPlayed = roundsPlayed,
             totalScore = totalScore,
             averageScorePerRound = averageScore,
             highestRoundScore = highestRound,

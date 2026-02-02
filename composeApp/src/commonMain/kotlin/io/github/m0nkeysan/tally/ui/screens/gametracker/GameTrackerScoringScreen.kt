@@ -290,7 +290,7 @@ fun GameTrackerScoringScreen(
 @Composable
 private fun LeaderboardSection(
     game: GameTrackerGame,
-    players: List<io.github.m0nkeysan.tally.core.model.Player>,
+    players: List<Player>,
     totalScores: Map<String, Int>
 ) {
     Column {
@@ -345,7 +345,7 @@ private fun LeaderboardSection(
 
 @Composable
 private fun PlayerScoreCard(
-    player: io.github.m0nkeysan.tally.core.model.Player,
+    player: Player,
     score: Int,
     hasReachedTarget: Boolean,
     isGameFinished: Boolean,
