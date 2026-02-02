@@ -386,7 +386,7 @@ private fun PlayerScoreCard(
                     Text(
                         text = player.name,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Normal,
+                        fontWeight = FontWeight.Bold,
                         color = contentColor
                     )
                     

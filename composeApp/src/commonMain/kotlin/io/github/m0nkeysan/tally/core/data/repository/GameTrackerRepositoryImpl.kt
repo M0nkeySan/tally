@@ -1,8 +1,8 @@
 package io.github.m0nkeysan.tally.core.data.repository
 
+import app.cash.sqldelight.async.coroutines.awaitAsList
 import app.cash.sqldelight.async.coroutines.awaitAsOne
 import app.cash.sqldelight.async.coroutines.awaitAsOneOrNull
-import app.cash.sqldelight.async.coroutines.awaitAsList
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import io.github.m0nkeysan.tally.core.domain.GameTrackerHistoryStore
@@ -10,9 +10,9 @@ import io.github.m0nkeysan.tally.core.domain.model.DurationMode
 import io.github.m0nkeysan.tally.core.domain.model.ScoringLogic
 import io.github.m0nkeysan.tally.core.domain.repository.GameTrackerRepository
 import io.github.m0nkeysan.tally.core.domain.repository.PlayerRepository
+import io.github.m0nkeysan.tally.core.model.GameTrackerGame
 import io.github.m0nkeysan.tally.core.model.GameTrackerGlobalStatistics
 import io.github.m0nkeysan.tally.core.model.GameTrackerPlayerStatistics
-import io.github.m0nkeysan.tally.core.model.GameTrackerGame
 import io.github.m0nkeysan.tally.core.model.GameTrackerRound
 import io.github.m0nkeysan.tally.core.model.GameTrackerScoreChange
 import io.github.m0nkeysan.tally.core.model.Player
@@ -291,7 +291,7 @@ class GameTrackerRepositoryImpl(
         // Get highest and lowest game scores
         val gameScores = gameTrackerQueries.getScoresForPlayerByGame(playerId)
             .awaitAsList()
-            .map { it.totalScore.toInt() }
+            .map { it.totalScore?.toInt() ?: 0 }
         
         val highestGameScore = gameScores.maxOrNull()
         val lowestGameScore = gameScores.minOrNull()

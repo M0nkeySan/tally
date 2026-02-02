@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.tally.core.model.GameTrackerPlayerStatistics
@@ -59,6 +58,8 @@ import io.github.m0nkeysan.tally.generated.resources.game_tracker_stats_title
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_stats_total_games
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_stats_total_rounds
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_stats_win_rate
+import io.github.m0nkeysan.tally.ui.screens.yahtzee.formatAverage
+import io.github.m0nkeysan.tally.ui.utils.parseColor
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -206,7 +207,7 @@ private fun GlobalStatisticsCard(
             )
             StatRow(
                 label = stringResource(Res.string.game_tracker_stats_avg_rounds_per_game),
-                value = String.format("%.1f", averageRoundsPerGame)
+                value = formatAverage(averageRoundsPerGame)
             )
         }
     }
@@ -231,7 +232,7 @@ private fun PlayerStatisticsCard(playerStats: GameTrackerPlayerStatistics) {
                     modifier = Modifier
                         .size(48.dp)
                         .background(
-                            color = Color(android.graphics.Color.parseColor(playerStats.player.avatarColor)),
+                            color = parseColor(playerStats.player.avatarColor),
                             shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
@@ -280,7 +281,7 @@ private fun PlayerStatisticsCard(playerStats: GameTrackerPlayerStatistics) {
                 )
                 StatRow(
                     label = stringResource(Res.string.game_tracker_stats_average_score),
-                    value = String.format("%.1f", playerStats.averageScore)
+                    value = formatAverage(playerStats.averageScore)
                 )
                 if (playerStats.highestGameScore != null) {
                     StatRow(
