@@ -34,6 +34,7 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -41,7 +42,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -71,7 +71,6 @@ import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_sectio
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_should_finish
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_target_reached
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_title
-import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_total_score
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_winner
 import io.github.m0nkeysan.tally.ui.components.AppSnackbarHost
 import io.github.m0nkeysan.tally.ui.components.showErrorSnackbar
@@ -229,7 +228,7 @@ fun GameTrackerScoringScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.surfaceVariant
-                                )
+                                ),
                             ) {
                                 Box(
                                     modifier = Modifier
@@ -341,12 +340,13 @@ private fun PlayerScoreCard(
     isWinner: Boolean
 ) {
     val avatarColor = parseColor(player.avatarColor)
-    val textColor = if (avatarColor.luminance() > 0.5) Color.Black else Color.White
+    val contentColor = if (avatarColor.luminance() > 0.5f) Color.Black.copy(alpha = 0.8f) else Color.White
 
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = if (isLeader) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+            containerColor = avatarColor,
+            contentColor = contentColor
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isLeader) 4.dp else 1.dp
@@ -372,7 +372,7 @@ private fun PlayerScoreCard(
                 ) {
                     Text(
                         text = player.name.take(1).uppercase(),
-                        color = textColor,
+                        color = contentColor,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -384,14 +384,16 @@ private fun PlayerScoreCard(
                     Text(
                         text = player.name,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = if (isLeader) FontWeight.Bold else FontWeight.Normal
+                        fontWeight = if (isLeader) FontWeight.Bold else FontWeight.Normal,
+                        color = contentColor
                     )
                     
                     if (hasReachedTarget && !isGameFinished) {
                         Text(
                             text = stringResource(Res.string.game_tracker_scoring_target_reached),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.primary
+                            color = contentColor.copy(alpha = 0.9f),
+                            fontWeight = FontWeight.Bold
                         )
                     }
                     
@@ -399,7 +401,7 @@ private fun PlayerScoreCard(
                         Text(
                             text = stringResource(Res.string.game_tracker_scoring_winner),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = contentColor.copy(alpha = 0.9f),
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -410,7 +412,7 @@ private fun PlayerScoreCard(
                 text = score.toString(),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = if (isLeader) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                color = contentColor
             )
         }
     }
@@ -460,7 +462,7 @@ private fun RoundCard(
                 },
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
-            )
+            ),
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)
