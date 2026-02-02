@@ -21,6 +21,7 @@ import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerHistoryScreen
 import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerRoundAdditionScreen
 import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerScoringScreen
 import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerSelectionScreen
+import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerStatisticsScreen
 import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerSummaryScreen
 import io.github.m0nkeysan.tally.ui.screens.home.HomeCustomizationScreen
 import io.github.m0nkeysan.tally.ui.screens.tarot.TarotGameCreationScreen
@@ -190,6 +191,9 @@ fun GameNavGraph() {
                 onCreateNewGame = { navController.navigateSafe(GameTrackerCreationRoute) },
                 onSelectGame = { gameId ->
                     navController.navigateSafe(GameTrackerScoringRoute(gameId))
+                },
+                onNavigateToStatistics = {
+                    navController.navigateSafe(GameTrackerStatisticsRoute)
                 }
             )
         }
@@ -265,6 +269,14 @@ fun GameNavGraph() {
 
         composable<GameTrackerHistoryRoute> {
             GameTrackerHistoryScreen(
+                onBack = {
+                    navController.popSafe()
+                }
+            )
+        }
+
+        composable<GameTrackerStatisticsRoute> {
+            GameTrackerStatisticsScreen(
                 onBack = {
                     navController.popSafe()
                 }

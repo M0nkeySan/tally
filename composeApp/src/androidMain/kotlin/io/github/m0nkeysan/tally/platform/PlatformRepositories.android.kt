@@ -109,7 +109,10 @@ actual object PlatformRepositories {
     }
 
     actual fun getGameTrackerRepository(): GameTrackerRepository {
-        return gameTrackerRepository ?: GameTrackerRepositoryImpl(getDatabase().gameTrackerQueries).also {
+        return gameTrackerRepository ?: GameTrackerRepositoryImpl(
+            getDatabase().gameTrackerQueries,
+            getPlayerRepository()
+        ).also {
             gameTrackerRepository = it
         }
     }

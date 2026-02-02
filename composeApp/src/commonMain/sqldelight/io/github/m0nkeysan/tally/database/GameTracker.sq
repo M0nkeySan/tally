@@ -105,3 +105,31 @@ DELETE FROM gameTrackerRoundEntity;
 
 selectAllRounds:
 SELECT * FROM gameTrackerRoundEntity ORDER BY gameId ASC, roundNumber ASC;
+
+-- Statistics queries
+countTotalGames:
+SELECT COUNT(*) FROM gameTrackerGameEntity;
+
+countCompletedGames:
+SELECT COUNT(*) FROM gameTrackerGameEntity WHERE isFinished = 1;
+
+countActiveGames:
+SELECT COUNT(*) FROM gameTrackerGameEntity WHERE isFinished = 0;
+
+countTotalRounds:
+SELECT COUNT(DISTINCT gameId || '-' || roundNumber) FROM gameTrackerRoundEntity;
+
+countWinsForPlayer:
+SELECT COUNT(*) FROM gameTrackerGameEntity WHERE winnerPlayerId = ? AND isFinished = 1;
+
+countRoundsForPlayer:
+SELECT COUNT(*) FROM gameTrackerRoundEntity WHERE playerId = ?;
+
+getTotalScoreForPlayer:
+SELECT COALESCE(SUM(score), 0) FROM gameTrackerRoundEntity WHERE playerId = ?;
+
+getScoresForPlayerByGame:
+SELECT gameId, SUM(score) AS totalScore 
+FROM gameTrackerRoundEntity 
+WHERE playerId = ? 
+GROUP BY gameId;

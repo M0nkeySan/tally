@@ -26,4 +26,5 @@ sealed interface Route
 @Serializable data class GameTrackerRoundAdditionRoute(val gameId: String, val roundNumber: Int, val roundId: String? = null): Route
 @Serializable data class GameTrackerSummaryRoute(val gameId: String): Route
 @Serializable object GameTrackerHistoryRoute : Route
+@Serializable object GameTrackerStatisticsRoute : Route
 @Serializable object HomeCustomizationRoute : Route

@@ -82,6 +82,25 @@
     <string name="game_tracker_history_cd_delete">Supprimer l\'historique</string>
     <string name="game_tracker_history_round_format">Manche %1$d</string>
     
+    <!-- Game Tracker Statistics -->
+    <string name="game_tracker_stats_title">Statistiques</string>
+    <string name="game_tracker_stats_subtitle">Performance globale</string>
+    <string name="game_tracker_stats_loading">Chargement des statistiques…</string>
+    <string name="game_tracker_stats_no_data">Aucune partie jouée. Commencez à jouer pour voir les statistiques !</string>
+    <string name="game_tracker_stats_global_title">Statistiques globales</string>
+    <string name="game_tracker_stats_player_stats">Statistiques des joueurs</string>
+    <string name="game_tracker_stats_total_games">Total des parties</string>
+    <string name="game_tracker_stats_completed_games">Parties terminées</string>
+    <string name="game_tracker_stats_active_games">Parties en cours</string>
+    <string name="game_tracker_stats_total_rounds">Total des manches</string>
+    <string name="game_tracker_stats_avg_rounds_per_game">Moyenne de manches par partie</string>
+    <string name="game_tracker_stats_games_played">Parties jouées</string>
+    <string name="game_tracker_stats_games_won">Parties gagnées</string>
+    <string name="game_tracker_stats_win_rate">Taux de victoire</string>
+    <string name="game_tracker_stats_average_score">Score moyen</string>
+    <string name="game_tracker_stats_highest_score">Score le plus élevé</string>
+    <string name="game_tracker_stats_lowest_score">Score le plus bas</string>
+    
     <!-- Game Tracker Round Addition -->
     <string name="game_tracker_round_title_add">Ajouter la manche %1$d</string>
     <string name="game_tracker_round_title_edit">Modifier la manche %1$d</string>

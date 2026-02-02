@@ -65,6 +65,7 @@ import io.github.m0nkeysan.tally.generated.resources.game_tracker_round_delete_d
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_round_delete_dialog_title
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_add_round
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_finish_game
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_history
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_empty_rounds
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_round_title
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_section_leaderboard
@@ -260,7 +261,6 @@ fun GameTrackerScoringScreen(
                             RoundCard(
                                 roundNumber = roundNumber,
                                 rounds = roundsByNumber[roundNumber] ?: emptyList(),
-                                players = state.players,
                                 onEditClick = { round ->
                                     onEditRound(roundNumber, round.id)
                                 },
@@ -424,7 +424,6 @@ private fun PlayerScoreCard(
 private fun RoundCard(
     roundNumber: Int,
     rounds: List<GameTrackerRound>,
-    players: List<io.github.m0nkeysan.tally.core.model.Player>,
     onEditClick: (GameTrackerRound) -> Unit,
     onDeleteClick: () -> Unit,
     isFinished: Boolean
@@ -478,31 +477,6 @@ private fun RoundCard(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                rounds.forEach { round ->
-                    val player = players.find { it.id == round.playerId }
-                    if (player != null) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 4.dp),
-                            horizontalArrangement = Arrangement.Start,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "• ",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                text = player.name,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
-                    }
-                }
             }
         }
     }

@@ -79,6 +79,25 @@
     <string name="game_tracker_history_cd_delete">Delete all history</string>
     <string name="game_tracker_history_round_format">Round %1$d</string>
     
+    <!-- Game Tracker Statistics -->
+    <string name="game_tracker_stats_title">Statistics</string>
+    <string name="game_tracker_stats_subtitle">Overall Performance</string>
+    <string name="game_tracker_stats_loading">Loading statistics…</string>
+    <string name="game_tracker_stats_no_data">No games played yet. Start playing to see statistics!</string>
+    <string name="game_tracker_stats_global_title">Global Statistics</string>
+    <string name="game_tracker_stats_player_stats">Player Statistics</string>
+    <string name="game_tracker_stats_total_games">Total Games</string>
+    <string name="game_tracker_stats_completed_games">Completed Games</string>
+    <string name="game_tracker_stats_active_games">Active Games</string>
+    <string name="game_tracker_stats_total_rounds">Total Rounds</string>
+    <string name="game_tracker_stats_avg_rounds_per_game">Average Rounds per Game</string>
+    <string name="game_tracker_stats_games_played">Games Played</string>
+    <string name="game_tracker_stats_games_won">Games Won</string>
+    <string name="game_tracker_stats_win_rate">Win Rate</string>
+    <string name="game_tracker_stats_average_score">Average Score</string>
+    <string name="game_tracker_stats_highest_score">Highest Score</string>
+    <string name="game_tracker_stats_lowest_score">Lowest Score</string>
+    
     <!-- Game Tracker Round Addition -->
     <string name="game_tracker_round_title_add">Add Round %1$d</string>
     <string name="game_tracker_round_title_edit">Edit Round %1$d</string>

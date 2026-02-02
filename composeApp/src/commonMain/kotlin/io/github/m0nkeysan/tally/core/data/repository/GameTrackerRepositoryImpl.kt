@@ -1,12 +1,17 @@
 package io.github.m0nkeysan.tally.core.data.repository
 
+import app.cash.sqldelight.async.coroutines.awaitAsOne
 import app.cash.sqldelight.async.coroutines.awaitAsOneOrNull
+import app.cash.sqldelight.async.coroutines.awaitAsList
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import io.github.m0nkeysan.tally.core.domain.GameTrackerHistoryStore
 import io.github.m0nkeysan.tally.core.domain.model.DurationMode
 import io.github.m0nkeysan.tally.core.domain.model.ScoringLogic
 import io.github.m0nkeysan.tally.core.domain.repository.GameTrackerRepository
+import io.github.m0nkeysan.tally.core.domain.repository.PlayerRepository
+import io.github.m0nkeysan.tally.core.model.GameTrackerGlobalStatistics
+import io.github.m0nkeysan.tally.core.model.GameTrackerPlayerStatistics
 import io.github.m0nkeysan.tally.core.model.GameTrackerGame
 import io.github.m0nkeysan.tally.core.model.GameTrackerRound
 import io.github.m0nkeysan.tally.core.model.GameTrackerScoreChange
@@ -17,10 +22,12 @@ import io.github.m0nkeysan.tally.database.GameTrackerQueries
 import io.github.m0nkeysan.tally.database.GameTrackerRoundEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class GameTrackerRepositoryImpl(
     private val gameTrackerQueries: GameTrackerQueries,
+    private val playerRepository: PlayerRepository,
     private val historyStore: GameTrackerHistoryStore = GameTrackerHistoryStore()
 ) : GameTrackerRepository {
 
@@ -225,5 +232,83 @@ class GameTrackerRepositoryImpl(
     
     override suspend fun clearScoreHistory() {
         historyStore.deleteAllChanges()
+    }
+    
+    // Statistics
+    override suspend fun getGlobalStatistics(): GameTrackerGlobalStatistics {
+        val totalGames = gameTrackerQueries.countTotalGames().awaitAsOne().toInt()
+        val completedGames = gameTrackerQueries.countCompletedGames().awaitAsOne().toInt()
+        val activeGames = gameTrackerQueries.countActiveGames().awaitAsOne().toInt()
+        val totalRounds = gameTrackerQueries.countTotalRounds().awaitAsOne().toInt()
+        val averageRoundsPerGame = if (totalGames > 0) {
+            totalRounds.toDouble() / totalGames
+        } else {
+            0.0
+        }
+        
+        // Get all players and calculate their individual statistics
+        val allPlayers = playerRepository.getAllPlayersIncludingInactive().first()
+        val playerStatistics = allPlayers.mapNotNull { player ->
+            getPlayerStatistics(player.id)
+        }.filter { it.gamesPlayed > 0 } // Only include players who have played
+        
+        return GameTrackerGlobalStatistics(
+            totalGames = totalGames,
+            completedGames = completedGames,
+            activeGames = activeGames,
+            totalRounds = totalRounds,
+            averageRoundsPerGame = averageRoundsPerGame,
+            playerStatistics = playerStatistics
+        )
+    }
+    
+    override suspend fun getPlayerStatistics(playerId: String): GameTrackerPlayerStatistics? {
+        val player = playerRepository.getPlayerById(playerId) ?: return null
+        
+        // Get games played
+        val gamesPlayed = gameTrackerQueries.countGamesWithPlayer(playerId).awaitAsOne().toInt()
+        
+        // Get games won
+        val gamesWon = gameTrackerQueries.countWinsForPlayer(playerId).awaitAsOne().toInt()
+        
+        // Calculate win rate
+        val winRate = if (gamesPlayed > 0) {
+            gamesWon.toDouble() / gamesPlayed
+        } else {
+            0.0
+        }
+        
+        // Get total score
+        val totalScore = gameTrackerQueries.getTotalScoreForPlayer(playerId).awaitAsOne().toInt()
+        
+        // Get average score
+        val averageScore = if (gamesPlayed > 0) {
+            totalScore.toDouble() / gamesPlayed
+        } else {
+            0.0
+        }
+        
+        // Get highest and lowest game scores
+        val gameScores = gameTrackerQueries.getScoresForPlayerByGame(playerId)
+            .awaitAsList()
+            .map { it.totalScore.toInt() }
+        
+        val highestGameScore = gameScores.maxOrNull()
+        val lowestGameScore = gameScores.minOrNull()
+        
+        // Get total rounds played
+        val totalRoundsPlayed = gameTrackerQueries.countRoundsForPlayer(playerId).awaitAsOne().toInt()
+        
+        return GameTrackerPlayerStatistics(
+            player = player,
+            gamesPlayed = gamesPlayed,
+            gamesWon = gamesWon,
+            winRate = winRate,
+            totalScore = totalScore,
+            averageScore = averageScore,
+            highestGameScore = highestGameScore,
+            lowestGameScore = lowestGameScore,
+            totalRoundsPlayed = totalRoundsPlayed
+        )
     }
 }

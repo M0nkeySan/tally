@@ -1,6 +1,8 @@
 package io.github.m0nkeysan.tally.core.domain.repository
 
 import io.github.m0nkeysan.tally.core.model.GameTrackerGame
+import io.github.m0nkeysan.tally.core.model.GameTrackerGlobalStatistics
+import io.github.m0nkeysan.tally.core.model.GameTrackerPlayerStatistics
 import io.github.m0nkeysan.tally.core.model.GameTrackerRound
 import io.github.m0nkeysan.tally.core.model.GameTrackerScoreChange
 import io.github.m0nkeysan.tally.core.model.Player
@@ -27,4 +29,8 @@ interface GameTrackerRepository {
     fun removeRoundScores(gameId: String, roundNumber: Int)
     fun getScoreHistory(): Flow<List<GameTrackerScoreChange>>
     suspend fun clearScoreHistory()
+    
+    // Statistics
+    suspend fun getGlobalStatistics(): GameTrackerGlobalStatistics
+    suspend fun getPlayerStatistics(playerId: String): GameTrackerPlayerStatistics?
 }

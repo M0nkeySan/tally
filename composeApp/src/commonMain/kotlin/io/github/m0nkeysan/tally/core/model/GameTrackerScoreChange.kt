@@ -1,6 +1,6 @@
 package io.github.m0nkeysan.tally.core.model
 
-import kotlinx.datetime.Clock
+import io.github.m0nkeysan.tally.core.utils.getCurrentTimeMillis
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -25,7 +25,7 @@ data class GameTrackerScoreChange(
             roundNumber: Int,
             score: Int
         ): GameTrackerScoreChange {
-            val now = Clock.System.now().toEpochMilliseconds()
+            val now = getCurrentTimeMillis()
             return GameTrackerScoreChange(
                 id = Uuid.random().toString(),
                 gameId = gameId,

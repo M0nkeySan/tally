@@ -22,6 +22,7 @@ fun GameTrackerSelectionScreen(
     onBack: () -> Unit,
     onCreateNewGame: () -> Unit,
     onSelectGame: (String) -> Unit,
+    onNavigateToStatistics: () -> Unit,
     viewModel: GameTrackerSelectionViewModel = viewModel { GameTrackerSelectionViewModel() }
 ) {
     val state by viewModel.selectionState.collectAsState()
@@ -74,6 +75,7 @@ fun GameTrackerSelectionScreen(
         onBack = onBack,
         isLoading = state.isLoading,
         error = state.error,
-        onDeleteAllGames = { viewModel.deleteAllGames() }
+        onDeleteAllGames = { viewModel.deleteAllGames() },
+        onNavigateToStatistics = onNavigateToStatistics
     )
 }
