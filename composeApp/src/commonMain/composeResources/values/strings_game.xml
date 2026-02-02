@@ -98,6 +98,28 @@
     <string name="game_tracker_stats_highest_score">Highest Score</string>
     <string name="game_tracker_stats_lowest_score">Lowest Score</string>
     
+    <!-- Game Tracker In-Game Statistics -->
+    <string name="game_tracker_game_stats_title">Game Statistics</string>
+    <string name="game_tracker_game_stats_graph_title">Score Progress</string>
+    <string name="game_tracker_game_stats_quick_stats">Quick Stats</string>
+    <string name="game_tracker_game_stats_player_stats">Player Performance</string>
+    <string name="game_tracker_game_stats_loading">Loading statistics…</string>
+    <string name="game_tracker_game_stats_no_rounds">No rounds yet. Add rounds to see statistics!</string>
+    <string name="game_tracker_game_stats_rounds_played">Rounds Played</string>
+    <string name="game_tracker_game_stats_current_leader">Current Leader</string>
+    <string name="game_tracker_game_stats_lead_changes">Lead Changes</string>
+    <string name="game_tracker_game_stats_avg_per_round">Avg per Round</string>
+    <string name="game_tracker_game_stats_highest_round">Highest Round</string>
+    <string name="game_tracker_game_stats_lowest_round">Lowest Round</string>
+    <string name="game_tracker_game_stats_current_streak">Current Streak</string>
+    <string name="game_tracker_game_stats_score_distribution">Score Distribution</string>
+    <string name="game_tracker_game_stats_dist_negative">Negative</string>
+    <string name="game_tracker_game_stats_dist_zero">Zero</string>
+    <string name="game_tracker_game_stats_dist_low">Low (1-25)</string>
+    <string name="game_tracker_game_stats_dist_medium">Medium (26-50)</string>
+    <string name="game_tracker_game_stats_dist_high">High (51+)</string>
+    <string name="game_tracker_scoring_cd_game_stats">View game statistics</string>
+    
     <!-- Game Tracker Round Addition -->
     <string name="game_tracker_round_title_add">Add Round %1$d</string>
     <string name="game_tracker_round_title_edit">Edit Round %1$d</string>

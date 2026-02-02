@@ -101,6 +101,28 @@
     <string name="game_tracker_stats_highest_score">Score le plus élevé</string>
     <string name="game_tracker_stats_lowest_score">Score le plus bas</string>
     
+    <!-- Game Tracker In-Game Statistics -->
+    <string name="game_tracker_game_stats_title">Statistiques de partie</string>
+    <string name="game_tracker_game_stats_graph_title">Progression des scores</string>
+    <string name="game_tracker_game_stats_quick_stats">Stats rapides</string>
+    <string name="game_tracker_game_stats_player_stats">Performance des joueurs</string>
+    <string name="game_tracker_game_stats_loading">Chargement des statistiques…</string>
+    <string name="game_tracker_game_stats_no_rounds">Aucune manche. Ajoutez des manches pour voir les statistiques !</string>
+    <string name="game_tracker_game_stats_rounds_played">Manches jouées</string>
+    <string name="game_tracker_game_stats_current_leader">Leader actuel</string>
+    <string name="game_tracker_game_stats_lead_changes">Changements de leader</string>
+    <string name="game_tracker_game_stats_avg_per_round">Moy par manche</string>
+    <string name="game_tracker_game_stats_highest_round">Meilleure manche</string>
+    <string name="game_tracker_game_stats_lowest_round">Pire manche</string>
+    <string name="game_tracker_game_stats_current_streak">Série actuelle</string>
+    <string name="game_tracker_game_stats_score_distribution">Distribution des scores</string>
+    <string name="game_tracker_game_stats_dist_negative">Négatif</string>
+    <string name="game_tracker_game_stats_dist_zero">Zéro</string>
+    <string name="game_tracker_game_stats_dist_low">Faible (1-25)</string>
+    <string name="game_tracker_game_stats_dist_medium">Moyen (26-50)</string>
+    <string name="game_tracker_game_stats_dist_high">Élevé (51+)</string>
+    <string name="game_tracker_scoring_cd_game_stats">Voir les statistiques de la partie</string>
+    
     <!-- Game Tracker Round Addition -->
     <string name="game_tracker_round_title_add">Ajouter la manche %1$d</string>
     <string name="game_tracker_round_title_edit">Modifier la manche %1$d</string>

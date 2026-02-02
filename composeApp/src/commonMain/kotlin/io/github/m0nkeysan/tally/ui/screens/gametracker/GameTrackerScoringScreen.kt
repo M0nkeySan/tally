@@ -87,6 +87,7 @@ fun GameTrackerScoringScreen(
     onEditRound: (Int, String) -> Unit,
     onFinishGame: () -> Unit,
     onNavigateToHistory: () -> Unit,
+    onNavigateToGameStats: () -> Unit,
     viewModel: GameTrackerScoringViewModel = viewModel { GameTrackerScoringViewModel() }
 ) {
     val state by viewModel.state.collectAsState()
@@ -151,6 +152,12 @@ fun GameTrackerScoringScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = onNavigateToGameStats) {
+                        Icon(
+                            GameIcons.BarChart,
+                            contentDescription = stringResource(Res.string.game_tracker_scoring_cd_game_stats)
+                        )
+                    }
                     IconButton(onClick = onNavigateToHistory) {
                         Icon(
                             GameIcons.History,

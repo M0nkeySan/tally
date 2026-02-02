@@ -27,4 +27,5 @@ sealed interface Route
 @Serializable data class GameTrackerSummaryRoute(val gameId: String): Route
 @Serializable object GameTrackerHistoryRoute : Route
 @Serializable object GameTrackerStatisticsRoute : Route
+@Serializable data class GameTrackerGameStatisticsRoute(val gameId: String): Route
 @Serializable object HomeCustomizationRoute : Route

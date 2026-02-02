@@ -17,6 +17,7 @@ import io.github.m0nkeysan.tally.ui.screens.counter.EditCounterScreen
 import io.github.m0nkeysan.tally.ui.screens.dice.DiceRollerScreen
 import io.github.m0nkeysan.tally.ui.screens.fingerselector.FingerSelectorScreen
 import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerCreationScreen
+import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerGameStatisticsScreen
 import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerHistoryScreen
 import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerRoundAdditionScreen
 import io.github.m0nkeysan.tally.ui.screens.gametracker.GameTrackerScoringScreen
@@ -232,6 +233,9 @@ fun GameNavGraph() {
                 },
                 onNavigateToHistory = {
                     navController.navigateSafe(GameTrackerHistoryRoute)
+                },
+                onNavigateToGameStats = {
+                    navController.navigateSafe(GameTrackerGameStatisticsRoute(route.gameId))
                 }
             )
         }
@@ -277,6 +281,16 @@ fun GameNavGraph() {
 
         composable<GameTrackerStatisticsRoute> {
             GameTrackerStatisticsScreen(
+                onBack = {
+                    navController.popSafe()
+                }
+            )
+        }
+
+        composable<GameTrackerGameStatisticsRoute> { backStackEntry ->
+            val route = backStackEntry.toRoute<GameTrackerGameStatisticsRoute>()
+            GameTrackerGameStatisticsScreen(
+                gameId = route.gameId,
                 onBack = {
                     navController.popSafe()
                 }
