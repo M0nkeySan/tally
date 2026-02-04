@@ -27,4 +27,5 @@ expect object GameIcons {
     val ViewModule: ImageVector
     val VisibilityOff: ImageVector
     val Check: ImageVector
+    val Scoreboard: ImageVector
 }

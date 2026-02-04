@@ -24,6 +24,7 @@ actual object PlatformRepositories {
     private var tarotStatisticsRepository: TarotStatisticsRepository? = null
     private var yahtzeeRepository: YahtzeeRepository? = null
     private var yahtzeeStatisticsRepository: YahtzeeStatisticsRepository? = null
+    private var gameTrackerRepository: GameTrackerRepository? = null
     private var gameQueryHelper: GameQueryHelper? = null
     private var historyStore: CounterHistoryStore? = null
     private var localeManager: LocaleManager? = null
@@ -107,8 +108,21 @@ actual object PlatformRepositories {
         }
     }
 
+    actual fun getGameTrackerRepository(): GameTrackerRepository {
+        return gameTrackerRepository ?: GameTrackerRepositoryImpl(
+            getDatabase().gameTrackerQueries,
+            getPlayerRepository()
+        ).also {
+            gameTrackerRepository = it
+        }
+    }
+
     actual fun getGameQueryHelper(): GameQueryHelper {
-        return gameQueryHelper ?: GameQueryHelperImpl(getDatabase().tarotQueries, getDatabase().yahtzeeQueries).also {
+        return gameQueryHelper ?: GameQueryHelperImpl(
+            getDatabase().tarotQueries,
+            getDatabase().yahtzeeQueries,
+            getDatabase().gameTrackerQueries
+        ).also {
             gameQueryHelper = it
         }
     }

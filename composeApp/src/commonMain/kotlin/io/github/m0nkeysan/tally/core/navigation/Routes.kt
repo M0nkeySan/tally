@@ -20,4 +20,12 @@ sealed interface Route
 @Serializable data class EditCounterRoute(val id: String, val name: String, val count: Int, val color: Long): Route
 @Serializable object HistoryRoute : Route
 @Serializable object DiceRollerRoute : Route
+@Serializable object GameTrackerRoute : Route
+@Serializable object GameTrackerCreationRoute : Route
+@Serializable data class GameTrackerScoringRoute(val gameId: String): Route
+@Serializable data class GameTrackerRoundAdditionRoute(val gameId: String, val roundNumber: Int, val roundId: String? = null): Route
+@Serializable data class GameTrackerSummaryRoute(val gameId: String): Route
+@Serializable object GameTrackerHistoryRoute : Route
+@Serializable object GameTrackerStatisticsRoute : Route
+@Serializable data class GameTrackerGameStatisticsRoute(val gameId: String): Route
 @Serializable object HomeCustomizationRoute : Route

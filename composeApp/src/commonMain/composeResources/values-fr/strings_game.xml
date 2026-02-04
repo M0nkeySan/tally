@@ -35,4 +35,133 @@
     <string name="game_deletion_dialog_tarot_message">Êtes-vous sûr de vouloir supprimer la partie '%1$s' ? Toutes les manches seront également supprimées.</string>
     <string name="game_deletion_dialog_yahtzee_title">Supprimer la partie</string>
     <string name="game_deletion_dialog_yahtzee_message">Êtes-vous sûr de vouloir supprimer '%1$s' ? Tous les scores seront perdus.</string>
+    <string name="game_deletion_dialog_game_tracker_title">Supprimer la partie</string>
+    <string name="game_deletion_dialog_game_tracker_message">Êtes-vous sûr de vouloir supprimer '%1$s' ? Toutes les manches et scores seront également supprimés.</string>
+    <string name="game_tracker_selection_title">Feuille de score</string>
+    
+    <!-- Game Tracker -->
+    <string name="game_tracker">Feuille de score</string>
+    <string name="desc_game_tracker">Suivez les scores et la progression de vos jeux personnalisés</string>
+    
+    <!-- Game Tracker Creation -->
+    <string name="game_tracker_creation_title">Nouvelle feuille de score</string>
+    <string name="game_tracker_creation_name_default">Partie</string>
+    <string name="game_tracker_creation_scoring_logic">Système de score</string>
+    <string name="game_tracker_scoring_high">Score le plus élevé gagne</string>
+    <string name="game_tracker_scoring_low">Score le plus bas gagne</string>
+    <string name="game_tracker_creation_target_score">Score cible (Optionnel)</string>
+    <string name="game_tracker_creation_enable_target">Activer le score cible</string>
+    <string name="game_tracker_creation_target_hint">Entrez le score cible</string>
+    <string name="game_tracker_creation_duration_mode">Durée de la partie</string>
+    <string name="game_tracker_duration_fixed">Manches fixes</string>
+    <string name="game_tracker_duration_infinite">Infini</string>
+    <string name="game_tracker_creation_round_count">Nombre de manches</string>
+    <string name="game_tracker_creation_round_count_hint">Entrez le nombre de manches</string>
+    <string name="game_tracker_creation_settings">Paramètres de la partie</string>
+    
+    <!-- Game Tracker Scoring -->
+    <string name="game_tracker_scoring_title">Feuille de score</string>
+    <string name="game_tracker_scoring_cd_add_round">Ajouter une nouvelle manche</string>
+    <string name="game_tracker_scoring_cd_finish_game">Terminer la partie</string>
+    <string name="game_tracker_scoring_cd_history">Voir l\'historique des scores</string>
+    <string name="game_tracker_scoring_section_leaderboard">Classement</string>
+    <string name="game_tracker_scoring_section_rounds">Historique des manches</string>
+    <string name="game_tracker_scoring_empty_rounds">Aucune manche pour le moment. Ajoutez la première !</string>
+    <string name="game_tracker_scoring_round_title">Manche %1$d</string>
+    <string name="game_tracker_scoring_total_score">Total : %1$d</string>
+    <string name="game_tracker_scoring_target_reached">🎯 Score cible atteint !</string>
+    <string name="game_tracker_scoring_should_finish">✓ Toutes les manches complétées</string>
+    <string name="game_tracker_scoring_winner">👑 Vainqueur !</string>
+    <string name="game_tracker_scoring_others">autres</string>
+    <string name="game_tracker_round_delete_dialog_title">Supprimer la manche</string>
+    <string name="game_tracker_round_delete_dialog_message">Êtes-vous sûr de vouloir supprimer la manche %1$d ?</string>
+    
+    <!-- Game Tracker History -->
+    <string name="game_tracker_history_title">Historique des scores</string>
+    <string name="game_tracker_history_subtitle">Manche par manche</string>
+    <string name="game_tracker_history_empty">Aucun score. Ajoutez des manches pour voir l\'historique !</string>
+    <string name="game_tracker_history_cd_delete">Supprimer l\'historique</string>
+    <string name="game_tracker_history_round_format">Manche %1$d</string>
+    
+    <!-- Game Tracker Statistics -->
+    <string name="game_tracker_stats_title">Statistiques</string>
+    <string name="game_tracker_stats_subtitle">Performance globale</string>
+    <string name="game_tracker_stats_loading">Chargement des statistiques…</string>
+    <string name="game_tracker_stats_no_data">Aucune partie jouée. Commencez à jouer pour voir les statistiques !</string>
+    <string name="game_tracker_stats_global_title">Statistiques globales</string>
+    <string name="game_tracker_stats_player_stats">Statistiques des joueurs</string>
+    <string name="game_tracker_stats_total_games">Total des parties</string>
+    <string name="game_tracker_stats_completed_games">Parties terminées</string>
+    <string name="game_tracker_stats_active_games">Parties en cours</string>
+    <string name="game_tracker_stats_total_rounds">Total des manches</string>
+    <string name="game_tracker_stats_avg_rounds_per_game">Moyenne de manches par partie</string>
+    <string name="game_tracker_stats_games_played">Parties jouées</string>
+    <string name="game_tracker_stats_games_won">Parties gagnées</string>
+    <string name="game_tracker_stats_win_rate">Taux de victoire</string>
+    <string name="game_tracker_stats_average_score">Score moyen</string>
+    <string name="game_tracker_stats_highest_score">Score le plus élevé</string>
+    <string name="game_tracker_stats_lowest_score">Score le plus bas</string>
+    <string name="game_tracker_stats_total_rounds_played">Total des manches jouées</string>
+
+    <!-- Game Tracker Statistics – Classements -->
+    <string name="game_tracker_stats_leaderboards_title">Classements</string>
+    <string name="game_tracker_stats_leaderboard_most_games">Plus de parties jouées</string>
+    <string name="game_tracker_stats_leaderboard_win_rate">Meilleur taux de victoire</string>
+    <string name="game_tracker_stats_leaderboard_win_rate_min">min. 3 parties</string>
+    <string name="game_tracker_stats_leaderboard_empty">Pas encore de données de classement</string>
+
+    <!-- Game Tracker Statistics – Records -->
+    <string name="game_tracker_stats_records_title">Records</string>
+    <string name="game_tracker_stats_record_highest_score">Meilleur score (Grand gagne)</string>
+    <string name="game_tracker_stats_record_lowest_score">Meilleur score (Petit gagne)</string>
+    <string name="game_tracker_stats_record_longest_game">Partie la plus longue</string>
+    <string name="game_tracker_stats_record_shortest_game">Partie la plus courte</string>
+    <string name="game_tracker_stats_record_by_in">%1$s dans "%2$s"</string>
+    <string name="game_tracker_stats_record_rounds">%1$d manches</string>
+    <string name="game_tracker_stats_records_empty">Pas encore de records. Terminez une partie pour voir les records !</string>
+
+    <!-- Game Tracker Statistics – Ligne joueur compacte -->
+    <string name="game_tracker_stats_player_count">Statistiques des joueurs (%1$d)</string>
+    <string name="game_tracker_stats_cd_expand_player">Afficher les détails du joueur</string>
+    <string name="game_tracker_stats_cd_collapse_player">Masquer les détails du joueur</string>
+    <string name="game_tracker_stats_cd_expand_section">Afficher la section</string>
+    <string name="game_tracker_stats_cd_collapse_section">Masquer la section</string>
+    
+    <!-- Game Tracker In-Game Statistics -->
+    <string name="game_tracker_game_stats_title">Statistiques de partie</string>
+    <string name="game_tracker_game_stats_graph_title">Progression des scores</string>
+    <string name="game_tracker_game_stats_quick_stats">Stats rapides</string>
+    <string name="game_tracker_game_stats_player_stats">Performance des joueurs</string>
+    <string name="game_tracker_game_stats_loading">Chargement des statistiques…</string>
+    <string name="game_tracker_game_stats_no_rounds">Aucune manche. Ajoutez des manches pour voir les statistiques !</string>
+    <string name="game_tracker_game_stats_rounds_played">Manches jouées</string>
+    <string name="game_tracker_game_stats_current_leader">Leader actuel</string>
+    <string name="game_tracker_game_stats_lead_changes">Changements de leader</string>
+    <string name="game_tracker_game_stats_avg_per_round">Moy par manche</string>
+    <string name="game_tracker_game_stats_highest_round">Meilleure manche</string>
+    <string name="game_tracker_game_stats_lowest_round">Pire manche</string>
+    <string name="game_tracker_game_stats_current_streak">Série actuelle</string>
+    <string name="game_tracker_game_stats_score_distribution">Distribution des scores</string>
+    <string name="game_tracker_game_stats_dist_negative">Négatif</string>
+    <string name="game_tracker_game_stats_dist_zero">Zéro</string>
+    <string name="game_tracker_game_stats_dist_low">Faible (1-25)</string>
+    <string name="game_tracker_game_stats_dist_medium">Moyen (26-50)</string>
+    <string name="game_tracker_game_stats_dist_high">Élevé (51+)</string>
+    <string name="game_tracker_scoring_cd_game_stats">Voir les statistiques de la partie</string>
+    
+    <!-- Game Tracker Round Addition -->
+    <string name="game_tracker_round_title_add">Ajouter la manche %1$d</string>
+    <string name="game_tracker_round_title_edit">Modifier la manche %1$d</string>
+    <string name="game_tracker_round_action_save">Enregistrer la manche</string>
+    <string name="game_tracker_round_player_score">Score de %1$s</string>
+    <string name="game_tracker_round_enter_score">Entrez le score</string>
+    <string name="game_tracker_round_invalid_score">Veuillez entrer un score valide pour tous les joueurs</string>
+
+    <!-- Game Tracker Summary -->
+    <string name="game_tracker_summary_title">Résultats de la partie</string>
+    <string name="game_tracker_summary_winner_title">Vainqueur !</string>
+    <string name="game_tracker_summary_draw_title">Égalité !</string>
+    <string name="game_tracker_summary_action_rematch">Revanche</string>
+    <string name="game_tracker_summary_action_finish">Terminer</string>
+    <string name="game_tracker_summary_final_scores">Scores finaux</string>
 </resources>

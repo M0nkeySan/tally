@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.m0nkeysan.tally.core.domain.engine.GameProgressionAnalyzer
 import io.github.m0nkeysan.tally.core.domain.engine.TarotScoringEngine
+import io.github.m0nkeysan.tally.core.domain.engine.TarotStatisticsEngine
 import io.github.m0nkeysan.tally.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.tally.core.domain.repository.TarotRepository
 import io.github.m0nkeysan.tally.core.domain.repository.TarotStatisticsRepository
@@ -154,6 +155,17 @@ class TarotStatisticsViewModel(
                     )
                 }
 
+                // Calculate progress data for chart (always, when rounds exist)
+                val progressData = if (game.rounds.isNotEmpty()) {
+                    TarotStatisticsEngine.calculateProgressData(
+                        players = game.players,
+                        rounds = game.rounds,
+                        playerCount = game.playerCount
+                    )
+                } else {
+                    emptyList()
+                }
+
                 val playerStats = game.players.mapNotNull { player ->
                     statsRepository.getPlayerStatistics(player.id)
                 }
@@ -170,6 +182,7 @@ class TarotStatisticsViewModel(
                         currentGameRankings = currentRankings,
                         takerPerformance = takerPerformanceMap,
                         hasMinimumRounds = hasMinimumRounds,
+                        progressData = progressData,
                         playerStatistics = playerStats,
                         bidStatistics = bidStats,
                         isLoading = false

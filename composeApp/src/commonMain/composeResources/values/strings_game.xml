@@ -6,12 +6,14 @@
     <string name="game_finger_selector">Finger Selector</string>
     <string name="game_counter">Counter</string>
     <string name="game_dice">Dice Roller</string>
+    <string name="game_tracker">Game Tracker</string>
 
     <!-- Descriptions -->
     <string name="desc_tarot">Score Tarot games for 3, 4, or 5 players</string>
     <string name="desc_yahtzee">Complete Yahtzee scorecard with automatic bonuses</string>
     <string name="desc_counter">Simple counter for any board game</string>
     <string name="desc_dice">Roll customizable dice for any board game</string>
+    <string name="desc_game_tracker">Track scores and progress for custom games</string>
 
     <!-- Game Operations -->
     <string name="game_delete_all_title">Delete All Games</string>
@@ -34,4 +36,129 @@
     <string name="game_deletion_dialog_tarot_message">Are you sure you want to delete the game '%1$s'? This will also delete all rounds in this game.</string>
     <string name="game_deletion_dialog_yahtzee_title">Delete Game</string>
     <string name="game_deletion_dialog_yahtzee_message">Are you sure you want to delete '%1$s'? All scores will be lost.</string>
+    <string name="game_deletion_dialog_game_tracker_title">Delete Game</string>
+    <string name="game_deletion_dialog_game_tracker_message">Are you sure you want to delete '%1$s'? This will also delete all rounds and scores.</string>
+    <string name="game_tracker_selection_title">Game Tracker</string>
+    
+    <!-- Game Tracker Creation -->
+    <string name="game_tracker_creation_title">New Game Tracker</string>
+    <string name="game_tracker_creation_name_default">Game</string>
+    <string name="game_tracker_creation_scoring_logic">Scoring</string>
+    <string name="game_tracker_scoring_high">High Score Wins</string>
+    <string name="game_tracker_scoring_low">Low Score Wins</string>
+    <string name="game_tracker_creation_target_score">Target Score (Optional)</string>
+    <string name="game_tracker_creation_enable_target">Enable Target Score</string>
+    <string name="game_tracker_creation_target_hint">Enter target score</string>
+    <string name="game_tracker_creation_duration_mode">Game Duration</string>
+    <string name="game_tracker_duration_fixed">Fixed Rounds</string>
+    <string name="game_tracker_duration_infinite">Infinite</string>
+    <string name="game_tracker_creation_round_count">Number of Rounds</string>
+    <string name="game_tracker_creation_round_count_hint">Enter number of rounds</string>
+    <string name="game_tracker_creation_settings">Game Settings</string>
+    
+    <!-- Game Tracker Scoring -->
+    <string name="game_tracker_scoring_title">Game Tracker</string>
+    <string name="game_tracker_scoring_cd_add_round">Add new round</string>
+    <string name="game_tracker_scoring_cd_finish_game">Finish game</string>
+    <string name="game_tracker_scoring_cd_history">View score history</string>
+    <string name="game_tracker_scoring_section_leaderboard">Leaderboard</string>
+    <string name="game_tracker_scoring_section_rounds">Round History</string>
+    <string name="game_tracker_scoring_empty_rounds">No rounds yet. Add the first round!</string>
+    <string name="game_tracker_scoring_round_title">Round %1$d</string>
+    <string name="game_tracker_scoring_total_score">Total: %1$d</string>
+    <string name="game_tracker_scoring_target_reached">🎯 Target Reached!</string>
+    <string name="game_tracker_scoring_should_finish">✓ All rounds complete</string>
+    <string name="game_tracker_scoring_winner">👑 Winner!</string>
+    <string name="game_tracker_scoring_others">others</string>
+    <string name="game_tracker_round_delete_dialog_title">Delete Round</string>
+    <string name="game_tracker_round_delete_dialog_message">Are you sure you want to delete round %1$d?</string>
+    
+    <!-- Game Tracker History -->
+    <string name="game_tracker_history_title">Score History</string>
+    <string name="game_tracker_history_subtitle">Round by Round</string>
+    <string name="game_tracker_history_empty">No scores yet. Add some rounds to see history!</string>
+    <string name="game_tracker_history_cd_delete">Delete all history</string>
+    <string name="game_tracker_history_round_format">Round %1$d</string>
+    
+    <!-- Game Tracker Statistics -->
+    <string name="game_tracker_stats_title">Statistics</string>
+    <string name="game_tracker_stats_subtitle">Overall Performance</string>
+    <string name="game_tracker_stats_loading">Loading statistics…</string>
+    <string name="game_tracker_stats_no_data">No games played yet. Start playing to see statistics!</string>
+    <string name="game_tracker_stats_global_title">Global Statistics</string>
+    <string name="game_tracker_stats_player_stats">Player Statistics</string>
+    <string name="game_tracker_stats_total_games">Total Games</string>
+    <string name="game_tracker_stats_completed_games">Completed Games</string>
+    <string name="game_tracker_stats_active_games">Active Games</string>
+    <string name="game_tracker_stats_total_rounds">Total Rounds</string>
+    <string name="game_tracker_stats_avg_rounds_per_game">Average Rounds per Game</string>
+    <string name="game_tracker_stats_games_played">Games Played</string>
+    <string name="game_tracker_stats_games_won">Games Won</string>
+    <string name="game_tracker_stats_win_rate">Win Rate</string>
+    <string name="game_tracker_stats_average_score">Average Score</string>
+    <string name="game_tracker_stats_highest_score">Highest Score</string>
+    <string name="game_tracker_stats_lowest_score">Lowest Score</string>
+    <string name="game_tracker_stats_total_rounds_played">Total Rounds Played</string>
+
+    <!-- Game Tracker Statistics – Leaderboards -->
+    <string name="game_tracker_stats_leaderboards_title">Leaderboards</string>
+    <string name="game_tracker_stats_leaderboard_most_games">Most Games Played</string>
+    <string name="game_tracker_stats_leaderboard_win_rate">Highest Win Rate</string>
+    <string name="game_tracker_stats_leaderboard_win_rate_min">min. 3 games</string>
+    <string name="game_tracker_stats_leaderboard_empty">No leaderboard data yet</string>
+
+    <!-- Game Tracker Statistics – Records -->
+    <string name="game_tracker_stats_records_title">Records</string>
+    <string name="game_tracker_stats_record_highest_score">Best Score (High Wins)</string>
+    <string name="game_tracker_stats_record_lowest_score">Best Score (Low Wins)</string>
+    <string name="game_tracker_stats_record_longest_game">Longest Game</string>
+    <string name="game_tracker_stats_record_shortest_game">Shortest Game</string>
+    <string name="game_tracker_stats_record_by_in">%1$s in "%2$s"</string>
+    <string name="game_tracker_stats_record_rounds">%1$d rounds</string>
+    <string name="game_tracker_stats_records_empty">No records yet. Complete a game to see records!</string>
+
+    <!-- Game Tracker Statistics – Player compact row -->
+    <string name="game_tracker_stats_player_count">Player Statistics (%1$d)</string>
+    <string name="game_tracker_stats_cd_expand_player">Expand player details</string>
+    <string name="game_tracker_stats_cd_collapse_player">Collapse player details</string>
+    <string name="game_tracker_stats_cd_expand_section">Expand section</string>
+    <string name="game_tracker_stats_cd_collapse_section">Collapse section</string>
+    
+    <!-- Game Tracker In-Game Statistics -->
+    <string name="game_tracker_game_stats_title">Game Statistics</string>
+    <string name="game_tracker_game_stats_graph_title">Score Progress</string>
+    <string name="game_tracker_game_stats_quick_stats">Quick Stats</string>
+    <string name="game_tracker_game_stats_player_stats">Player Performance</string>
+    <string name="game_tracker_game_stats_loading">Loading statistics…</string>
+    <string name="game_tracker_game_stats_no_rounds">No rounds yet. Add rounds to see statistics!</string>
+    <string name="game_tracker_game_stats_rounds_played">Rounds Played</string>
+    <string name="game_tracker_game_stats_current_leader">Current Leader</string>
+    <string name="game_tracker_game_stats_lead_changes">Lead Changes</string>
+    <string name="game_tracker_game_stats_avg_per_round">Avg per Round</string>
+    <string name="game_tracker_game_stats_highest_round">Highest Round</string>
+    <string name="game_tracker_game_stats_lowest_round">Lowest Round</string>
+    <string name="game_tracker_game_stats_current_streak">Current Streak</string>
+    <string name="game_tracker_game_stats_score_distribution">Score Distribution</string>
+    <string name="game_tracker_game_stats_dist_negative">Negative</string>
+    <string name="game_tracker_game_stats_dist_zero">Zero</string>
+    <string name="game_tracker_game_stats_dist_low">Low (1-25)</string>
+    <string name="game_tracker_game_stats_dist_medium">Medium (26-50)</string>
+    <string name="game_tracker_game_stats_dist_high">High (51+)</string>
+    <string name="game_tracker_scoring_cd_game_stats">View game statistics</string>
+    
+    <!-- Game Tracker Round Addition -->
+    <string name="game_tracker_round_title_add">Add Round %1$d</string>
+    <string name="game_tracker_round_title_edit">Edit Round %1$d</string>
+    <string name="game_tracker_round_action_save">Save Round</string>
+    <string name="game_tracker_round_player_score">%1$s's Score</string>
+    <string name="game_tracker_round_enter_score">Enter score</string>
+    <string name="game_tracker_round_invalid_score">Please enter a valid score for all players</string>
+
+    <!-- Game Tracker Summary -->
+    <string name="game_tracker_summary_title">Game Results</string>
+    <string name="game_tracker_summary_winner_title">Winner!</string>
+    <string name="game_tracker_summary_draw_title">It's a Draw!</string>
+    <string name="game_tracker_summary_action_rematch">Rematch</string>
+    <string name="game_tracker_summary_action_finish">Finish</string>
+    <string name="game_tracker_summary_final_scores">Final Scores</string>
 </resources>

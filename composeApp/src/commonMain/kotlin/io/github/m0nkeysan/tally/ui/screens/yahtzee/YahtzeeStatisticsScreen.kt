@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -88,6 +87,8 @@ import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_leaderboard_m
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_leaderboard_most_yahtzees
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_lower_section
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_no_data
+import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_no_finished_games_global
+import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_no_finished_games_player
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_overall_performance
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_personal_best
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_recent_games
@@ -100,11 +101,16 @@ import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_upper_section
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_wins
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_yahtzee_rate
 import io.github.m0nkeysan.tally.platform.PlatformRepositories
+import io.github.m0nkeysan.tally.ui.components.EmptyStateCard
+import io.github.m0nkeysan.tally.ui.components.LoadingState
+import io.github.m0nkeysan.tally.ui.components.SectionHeader
+import io.github.m0nkeysan.tally.ui.components.StatRow
 import io.github.m0nkeysan.tally.ui.screens.yahtzee.components.CategoryHeatmap
 import io.github.m0nkeysan.tally.ui.screens.yahtzee.components.GameSummaryRow
 import io.github.m0nkeysan.tally.ui.screens.yahtzee.components.GlobalCategoryHeatmap
-import io.github.m0nkeysan.tally.ui.screens.yahtzee.components.StatisticRow
 import io.github.m0nkeysan.tally.ui.theme.LocalCustomColors
+import io.github.m0nkeysan.tally.ui.utils.formatAverage
+import io.github.m0nkeysan.tally.ui.utils.formatPercentage
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -167,14 +173,7 @@ fun YahtzeeStatisticsScreen(
 
             // Content area
             when {
-                state.isLoading -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
+                state.isLoading -> LoadingState()
 
                 state.error != null -> {
                     Box(
@@ -317,20 +316,28 @@ private fun StatisticsContent(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Overall Performance Card
-        item {
-            OverallPerformanceCard(statistics = statistics)
-        }
-
-        // Score Box Analysis Card
-        item {
-            ScoreBoxAnalysisCard(statistics = statistics)
-        }
-
-        // Recent Games Card
-        if (statistics.recentGames.isNotEmpty()) {
+        if (statistics.finishedGames > 0) {
+            // Overall Performance Card
             item {
-                RecentGamesCard(games = statistics.recentGames)
+                OverallPerformanceCard(statistics = statistics)
+            }
+
+            // Score Box Analysis Card
+            item {
+                ScoreBoxAnalysisCard(statistics = statistics)
+            }
+
+            // Recent Games Card
+            if (statistics.recentGames.isNotEmpty()) {
+                item {
+                    RecentGamesCard(games = statistics.recentGames)
+                }
+            }
+        } else {
+            item {
+                EmptyStateCard(
+                    message = stringResource(Res.string.yahtzee_stats_no_finished_games_player)
+                )
             }
         }
 
@@ -356,48 +363,43 @@ private fun OverallPerformanceCard(statistics: YahtzeePlayerStatistics) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                text = stringResource(Res.string.yahtzee_stats_overall_performance),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+            SectionHeader(title = stringResource(Res.string.yahtzee_stats_overall_performance))
 
-            StatisticRow(
+            StatRow(
                 label = stringResource(Res.string.yahtzee_stats_total_games),
                 value = statistics.totalGames.toString()
             )
 
-            StatisticRow(
+            StatRow(
                 label = stringResource(Res.string.yahtzee_stats_finished_games),
                 value = statistics.finishedGames.toString()
             )
 
-            StatisticRow(
+            StatRow(
                 label = stringResource(Res.string.yahtzee_stats_wins),
                 value = stringResource(Res.string.yahtzee_format_wins, statistics.wins, formatPercentage(statistics.winRate)),
                 valueColor = LocalCustomColors.current.success
             )
 
-            StatisticRow(
+            StatRow(
                 label = stringResource(Res.string.yahtzee_stats_average_score),
                 value = formatAverage(statistics.averageScore),
                 valueColor = MaterialTheme.colorScheme.primary
             )
 
-            StatisticRow(
+            StatRow(
                 label = stringResource(Res.string.yahtzee_stats_personal_best),
                 value = statistics.highScore.toString(),
                 valueColor = LocalCustomColors.current.success
             )
 
-            StatisticRow(
+            StatRow(
                 label = stringResource(Res.string.yahtzee_stats_total_yahtzees),
                 value = statistics.totalYahtzees.toString(),
                 valueColor = LocalCustomColors.current.trophyGold
             )
 
-            StatisticRow(
+            StatRow(
                 label = stringResource(Res.string.yahtzee_stats_yahtzee_rate),
                 value = stringResource(Res.string.yahtzee_format_yahtzee_rate, formatAverage(statistics.yahtzeeRate)),
                 valueColor = LocalCustomColors.current.trophyGold
@@ -421,11 +423,7 @@ private fun ScoreBoxAnalysisCard(statistics: YahtzeePlayerStatistics) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(
-                text = stringResource(Res.string.yahtzee_stats_score_box),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            SectionHeader(title = stringResource(Res.string.yahtzee_stats_score_box))
 
             CategoryHeatmap(categoryStats = statistics.categoryStats)
 
@@ -506,12 +504,7 @@ private fun RecentGamesCard(games: List<io.github.m0nkeysan.tally.core.model.Gam
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                text = stringResource(Res.string.yahtzee_stats_recent_games),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+            SectionHeader(title = stringResource(Res.string.yahtzee_stats_recent_games))
 
             games.forEach { game ->
                 GameSummaryRow(game = game)
@@ -533,25 +526,33 @@ private fun GlobalStatisticsContent(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Overall Performance Card
-        item {
-            GlobalOverviewCard(statistics = statistics)
-        }
-
-        // Leaderboard Card
-        item {
-            GlobalLeaderboardCard(statistics = statistics)
-        }
-
-        // Category Analysis Card
-        item {
-            GlobalCategoryAnalysisCard(statistics = statistics)
-        }
-
-        // Recent Games Card
-        if (statistics.recentGames.isNotEmpty()) {
+        if (statistics.finishedGames > 0) {
+            // Overall Performance Card
             item {
-                GlobalRecentGamesCard(games = statistics.recentGames)
+                GlobalOverviewCard(statistics = statistics)
+            }
+
+            // Leaderboard Card
+            item {
+                GlobalLeaderboardCard(statistics = statistics)
+            }
+
+            // Category Analysis Card
+            item {
+                GlobalCategoryAnalysisCard(statistics = statistics)
+            }
+
+            // Recent Games Card
+            if (statistics.recentGames.isNotEmpty()) {
+                item {
+                    GlobalRecentGamesCard(games = statistics.recentGames)
+                }
+            }
+        } else {
+            item {
+                EmptyStateCard(
+                    message = stringResource(Res.string.yahtzee_stats_no_finished_games_global)
+                )
             }
         }
 
@@ -575,18 +576,14 @@ private fun GlobalOverviewCard(statistics: YahtzeeGlobalStatistics) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                text = stringResource(Res.string.yahtzee_stats_global_overall),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            SectionHeader(title = stringResource(Res.string.yahtzee_stats_global_overall))
 
-            StatisticRow(stringResource(Res.string.yahtzee_stats_total_games), statistics.totalGames.toString())
-            StatisticRow(stringResource(Res.string.yahtzee_stats_global_finished), statistics.finishedGames.toString())
-            StatisticRow(stringResource(Res.string.yahtzee_stats_global_total_players), statistics.totalPlayers.toString())
+            StatRow(stringResource(Res.string.yahtzee_stats_total_games), statistics.totalGames.toString())
+            StatRow(stringResource(Res.string.yahtzee_stats_global_finished), statistics.finishedGames.toString())
+            StatRow(stringResource(Res.string.yahtzee_stats_global_total_players), statistics.totalPlayers.toString())
             
             if (statistics.mostActivePlayer != null) {
-                StatisticRow(
+                StatRow(
                     stringResource(Res.string.yahtzee_stats_global_most_active),
                     stringResource(Res.string.yahtzee_format_active_player, statistics.mostActivePlayer.playerName, statistics.mostActivePlayer.gamesPlayed)
                 )
@@ -595,39 +592,39 @@ private fun GlobalOverviewCard(statistics: YahtzeeGlobalStatistics) {
             HorizontalDivider()
             
             if (statistics.allTimeHighScore != null) {
-                StatisticRow(
+                StatRow(
                     stringResource(Res.string.yahtzee_stats_global_high_score),
                     stringResource(Res.string.yahtzee_format_high_score, statistics.allTimeHighScore.score, statistics.allTimeHighScore.playerName),
                     valueColor = LocalCustomColors.current.trophyGold
                 )
             }
             
-            StatisticRow(
+            StatRow(
                 stringResource(Res.string.yahtzee_stats_global_average_score),
                 formatAverage(statistics.averageScore),
                 valueColor = MaterialTheme.colorScheme.primary
             )
             
-            StatisticRow(
+            StatRow(
                 stringResource(Res.string.yahtzee_stats_global_total_yahtzees),
                 statistics.totalYahtzees.toString(),
                 valueColor = LocalCustomColors.current.success
             )
             
-            StatisticRow(
+            StatRow(
                 stringResource(Res.string.yahtzee_stats_global_yahtzee_rate),
                 stringResource(Res.string.yahtzee_format_yahtzee_rate, formatAverage(statistics.yahtzeeRate))
             )
             
             if (statistics.mostYahtzeesInGame != null && statistics.mostYahtzeesInGame.count > 0) {
-                StatisticRow(
+                StatRow(
                     stringResource(Res.string.yahtzee_stats_global_most_yahtzees_game),
                     stringResource(Res.string.yahtzee_format_most_yahtzees, statistics.mostYahtzeesInGame.count, statistics.mostYahtzeesInGame.playerName),
                     valueColor = LocalCustomColors.current.trophyGold
                 )
             }
             
-            StatisticRow(stringResource(Res.string.yahtzee_stats_global_upper_bonus), formatPercentage(statistics.upperBonusRate))
+            StatRow(stringResource(Res.string.yahtzee_stats_global_upper_bonus), formatPercentage(statistics.upperBonusRate))
             
             HorizontalDivider()
             
@@ -638,19 +635,19 @@ private fun GlobalOverviewCard(statistics: YahtzeeGlobalStatistics) {
                 modifier = Modifier.padding(top = 8.dp)
             )
             
-            StatisticRow(stringResource(Res.string.yahtzee_stats_global_dice_rolls), statistics.estimatedDiceRolls.toString())
-            StatisticRow(stringResource(Res.string.yahtzee_stats_global_points_scored), statistics.totalPointsScored.toString())
-            StatisticRow(stringResource(Res.string.yahtzee_stats_global_avg_players), formatAverage(statistics.averagePlayersPerGame))
+            StatRow(stringResource(Res.string.yahtzee_stats_global_dice_rolls), statistics.estimatedDiceRolls.toString())
+            StatRow(stringResource(Res.string.yahtzee_stats_global_points_scored), statistics.totalPointsScored.toString())
+            StatRow(stringResource(Res.string.yahtzee_stats_global_avg_players), formatAverage(statistics.averagePlayersPerGame))
             
             if (statistics.luckiestPlayer != null) {
-                StatisticRow(
+                StatRow(
                     stringResource(Res.string.yahtzee_stats_global_luckiest),
                     stringResource(Res.string.yahtzee_format_luckiest_player, statistics.luckiestPlayer.playerName, formatAverage(statistics.luckiestPlayer.metric))
                 )
             }
             
             if (statistics.mostConsistentPlayer != null) {
-                StatisticRow(stringResource(Res.string.yahtzee_stats_global_most_consistent), statistics.mostConsistentPlayer.playerName)
+                StatRow(stringResource(Res.string.yahtzee_stats_global_most_consistent), statistics.mostConsistentPlayer.playerName)
             }
         }
     }
@@ -669,11 +666,7 @@ private fun GlobalLeaderboardCard(statistics: YahtzeeGlobalStatistics) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                text = stringResource(Res.string.yahtzee_stats_global_leaderboards),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            SectionHeader(title = stringResource(Res.string.yahtzee_stats_global_leaderboards))
             
             // Most Wins
             Text(
@@ -771,32 +764,28 @@ private fun GlobalCategoryAnalysisCard(statistics: YahtzeeGlobalStatistics) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(
-                text = stringResource(Res.string.yahtzee_stats_global_category),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            SectionHeader(title = stringResource(Res.string.yahtzee_stats_global_category))
 
             GlobalCategoryHeatmap(categoryStats = statistics.categoryStats)
 
             Spacer(modifier = Modifier.height(12.dp))
 
             if (statistics.mostScoredCategory != null) {
-                StatisticRow(
+                StatRow(
                     stringResource(Res.string.yahtzee_stats_global_most_scored),
                     statistics.mostScoredCategory.getLocalizedName()
                 )
             }
             
             if (statistics.leastScoredCategory != null) {
-                StatisticRow(
+                StatRow(
                     stringResource(Res.string.yahtzee_stats_global_least_scored),
                     statistics.leastScoredCategory.getLocalizedName()
                 )
             }
             
             if (statistics.highestCategoryAverage != null) {
-                StatisticRow(
+                StatRow(
                     stringResource(Res.string.yahtzee_stats_global_best_avg),
                     stringResource(Res.string.yahtzee_format_category_avg, statistics.highestCategoryAverage.category.getLocalizedName(), formatAverage(statistics.highestCategoryAverage.average))
                 )
@@ -818,11 +807,7 @@ private fun GlobalRecentGamesCard(games: List<io.github.m0nkeysan.tally.core.mod
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                text = stringResource(Res.string.yahtzee_stats_recent_games),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            SectionHeader(title = stringResource(Res.string.yahtzee_stats_recent_games))
 
             games.forEach { game ->
                 GlobalGameSummaryRow(game = game)
