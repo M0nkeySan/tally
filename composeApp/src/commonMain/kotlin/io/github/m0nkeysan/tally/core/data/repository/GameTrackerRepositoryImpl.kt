@@ -11,9 +11,14 @@ import io.github.m0nkeysan.tally.core.domain.model.ScoringLogic
 import io.github.m0nkeysan.tally.core.domain.repository.GameTrackerRepository
 import io.github.m0nkeysan.tally.core.domain.repository.PlayerRepository
 import io.github.m0nkeysan.tally.core.model.GameTrackerGame
+import io.github.m0nkeysan.tally.core.model.GameLengthRecord
+import io.github.m0nkeysan.tally.core.model.GameRecord
 import io.github.m0nkeysan.tally.core.model.GameTrackerGlobalStatistics
+import io.github.m0nkeysan.tally.core.model.GameTrackerLeaderboards
 import io.github.m0nkeysan.tally.core.model.GameTrackerPlayerStatistics
+import io.github.m0nkeysan.tally.core.model.GameTrackerRecords
 import io.github.m0nkeysan.tally.core.model.GameTrackerRound
+import io.github.m0nkeysan.tally.core.model.GameTrackerLeaderboardEntry
 import io.github.m0nkeysan.tally.core.model.GameTrackerScoreChange
 import io.github.m0nkeysan.tally.core.model.Player
 import io.github.m0nkeysan.tally.core.utils.getCurrentTimeMillis
@@ -250,7 +255,10 @@ class GameTrackerRepositoryImpl(
         val allPlayers = playerRepository.getAllPlayersIncludingInactive().first()
         val playerStatistics = allPlayers.mapNotNull { player ->
             getPlayerStatistics(player.id)
-        }.filter { it.gamesPlayed > 0 } // Only include players who have played
+        }.filter { it.gamesPlayed > 0 }
+        
+        val leaderboards = calculateLeaderboards(playerStatistics)
+        val records = calculateRecords()
         
         return GameTrackerGlobalStatistics(
             totalGames = totalGames,
@@ -258,7 +266,96 @@ class GameTrackerRepositoryImpl(
             activeGames = activeGames,
             totalRounds = totalRounds,
             averageRoundsPerGame = averageRoundsPerGame,
-            playerStatistics = playerStatistics
+            playerStatistics = playerStatistics,
+            leaderboards = leaderboards,
+            records = records
+        )
+    }
+
+    private fun calculateLeaderboards(
+        playerStatistics: List<GameTrackerPlayerStatistics>
+    ): GameTrackerLeaderboards {
+        val mostGamesPlayed = playerStatistics
+            .sortedByDescending { it.gamesPlayed }
+            .take(3)
+            .mapIndexed { index, stats ->
+                GameTrackerLeaderboardEntry(
+                    player = stats.player,
+                    value = stats.gamesPlayed.toString(),
+                    rank = index + 1
+                )
+            }
+
+        val highestWinRate = playerStatistics
+            .filter { it.gamesPlayed >= 3 }
+            .sortedByDescending { it.winRate }
+            .take(3)
+            .mapIndexed { index, stats ->
+                GameTrackerLeaderboardEntry(
+                    player = stats.player,
+                    value = stats.getWinRatePercentage(),
+                    rank = index + 1
+                )
+            }
+
+        return GameTrackerLeaderboards(
+            mostGamesPlayed = mostGamesPlayed,
+            highestWinRate = highestWinRate
+        )
+    }
+
+    private suspend fun calculateRecords(): GameTrackerRecords {
+        // Highest score in HIGH_SCORE_WINS games
+        val highRow = gameTrackerQueries.getHighestScoreInHighGames().awaitAsOneOrNull()
+        val highestScoreInHighGames = highRow?.let { row ->
+            playerRepository.getPlayerById(row.playerId)?.let { player ->
+                GameRecord(playerName = player.name, score = (row.totalScore ?: 0L).toInt(), gameName = row.gameName)
+            }
+        }
+
+        // Lowest score in LOW_SCORE_WINS games
+        val lowRow = gameTrackerQueries.getLowestScoreInLowGames().awaitAsOneOrNull()
+        val lowestScoreInLowGames = lowRow?.let { row ->
+            playerRepository.getPlayerById(row.playerId)?.let { player ->
+                GameRecord(playerName = player.name, score = (row.totalScore ?: 0L).toInt(), gameName = row.gameName)
+            }
+        }
+
+        // Longest game (any status)
+        val longestRow = gameTrackerQueries.getLongestGame().awaitAsOneOrNull()
+        val longestGame = longestRow?.let { row ->
+            buildGameLengthRecord(row.playerIds, row.roundCount.toInt(), row.gameName)
+        }
+
+        // Shortest completed game
+        val shortestRow = gameTrackerQueries.getShortestCompletedGame().awaitAsOneOrNull()
+        val shortestCompletedGame = shortestRow?.let { row ->
+            buildGameLengthRecord(row.playerIds, row.roundCount.toInt(), row.gameName)
+        }
+
+        return GameTrackerRecords(
+            highestScoreInHighGames = highestScoreInHighGames,
+            lowestScoreInLowGames = lowestScoreInLowGames,
+            longestGame = longestGame,
+            shortestCompletedGame = shortestCompletedGame
+        )
+    }
+
+    private suspend fun buildGameLengthRecord(
+        playerIds: String,
+        rounds: Int,
+        gameName: String
+    ): GameLengthRecord {
+        val allNames = playerIds.split(",").mapNotNull { id ->
+            playerRepository.getPlayerById(id.trim())?.name
+        }
+        val displayNames = allNames.take(3)
+        val remaining = (allNames.size - 3).coerceAtLeast(0)
+        return GameLengthRecord(
+            playerNames = displayNames,
+            remainingPlayers = remaining,
+            rounds = rounds,
+            gameName = gameName
         )
     }
     

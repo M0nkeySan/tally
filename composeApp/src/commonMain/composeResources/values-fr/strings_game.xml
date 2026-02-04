@@ -101,6 +101,31 @@
     <string name="game_tracker_stats_average_score">Score moyen</string>
     <string name="game_tracker_stats_highest_score">Score le plus élevé</string>
     <string name="game_tracker_stats_lowest_score">Score le plus bas</string>
+    <string name="game_tracker_stats_total_rounds_played">Total des manches jouées</string>
+
+    <!-- Game Tracker Statistics – Classements -->
+    <string name="game_tracker_stats_leaderboards_title">Classements</string>
+    <string name="game_tracker_stats_leaderboard_most_games">Plus de parties jouées</string>
+    <string name="game_tracker_stats_leaderboard_win_rate">Meilleur taux de victoire</string>
+    <string name="game_tracker_stats_leaderboard_win_rate_min">min. 3 parties</string>
+    <string name="game_tracker_stats_leaderboard_empty">Pas encore de données de classement</string>
+
+    <!-- Game Tracker Statistics – Records -->
+    <string name="game_tracker_stats_records_title">Records</string>
+    <string name="game_tracker_stats_record_highest_score">Meilleur score (Grand gagne)</string>
+    <string name="game_tracker_stats_record_lowest_score">Meilleur score (Petit gagne)</string>
+    <string name="game_tracker_stats_record_longest_game">Partie la plus longue</string>
+    <string name="game_tracker_stats_record_shortest_game">Partie la plus courte</string>
+    <string name="game_tracker_stats_record_by_in">%1$s dans "%2$s"</string>
+    <string name="game_tracker_stats_record_rounds">%1$d manches</string>
+    <string name="game_tracker_stats_records_empty">Pas encore de records. Terminez une partie pour voir les records !</string>
+
+    <!-- Game Tracker Statistics – Ligne joueur compacte -->
+    <string name="game_tracker_stats_player_count">Statistiques des joueurs (%1$d)</string>
+    <string name="game_tracker_stats_cd_expand_player">Afficher les détails du joueur</string>
+    <string name="game_tracker_stats_cd_collapse_player">Masquer les détails du joueur</string>
+    <string name="game_tracker_stats_cd_expand_section">Afficher la section</string>
+    <string name="game_tracker_stats_cd_collapse_section">Masquer la section</string>
     
     <!-- Game Tracker In-Game Statistics -->
     <string name="game_tracker_game_stats_title">Statistiques de partie</string>

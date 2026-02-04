@@ -15,6 +15,7 @@
     <string name="state_loading">Loading...</string>
     <string name="state_loading_games">Loading games...</string>
     <string name="state_error_title">Oops! Something went wrong</string>
+    <string name="state_no_data">No data</string>
 
     <!-- Common Content Descriptions (Accessibility) -->
     <string name="cd_back">Back</string>

@@ -21,13 +21,13 @@ import kotlinx.coroutines.launch
 class GameTrackerGameStatisticsViewModel : ViewModel() {
     private val repository = PlatformRepositories.getGameTrackerRepository()
     private val playerRepository = PlatformRepositories.getPlayerRepository()
-    
+
     private val _stats = MutableStateFlow<GameTrackerGameStats?>(null)
     val stats: StateFlow<GameTrackerGameStats?> = _stats.asStateFlow()
-    
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-    
+
     fun loadGameStats(gameId: String) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -35,6 +35,10 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
                 val gameEntity = repository.getGameById(gameId) ?: return@launch
                 val rounds = repository.getRoundsForGame(gameId).first()
 
+                if (rounds.isEmpty()) {
+                    _stats.value = null
+                    return@launch
+                }
 
                 val playerIdsList = gameEntity.playerIds.split(",").filter { it.isNotEmpty() }
                 val players = playerIdsList.mapNotNull { playerId ->
@@ -45,56 +49,34 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
                     throw IllegalStateException("No players found for game")
                 }
 
-                val game = gameEntity.copy(players = players)
-                
-                if (rounds.isNotEmpty()) {
-                    _stats.value = calculateGameStats(game, rounds)
-                } else {
-                    // Game exists but no rounds yet - create empty stats -> TODO : display a specific message to avoid useless stuff.
-                    _stats.value = GameTrackerGameStats(
-                        gameId = game.id,
-                        gameName = game.name,
-                        roundsPlayed = 0,
-                        currentLeader = null,
-                        leadChanges = 0,
-                        playerStats = game.players.map { player ->
-                            PlayerRoundStats(
-                                player = player,
-                                totalScore = 0,
-                                averageScorePerRound = 0.0,
-                                highestRoundScore = null,
-                                lowestRoundScore = null,
-                                currentStreak = Streak(StreakType.NEUTRAL, 0),
-                                scoreDistribution = ScoreDistribution(0, 0, 0, 0, 0)
-                            )
-                        },
-                        progressData = emptyList()
-                    )
-                }
+                _stats.value = calculateGameStats(gameEntity.copy(players = players), rounds)
             } finally {
                 _isLoading.value = false
             }
         }
     }
-    
-    private fun calculateGameStats(game: GameTrackerGame, rounds: List<GameTrackerRound>): GameTrackerGameStats {
+
+    private fun calculateGameStats(
+        game: GameTrackerGame,
+        rounds: List<GameTrackerRound>
+    ): GameTrackerGameStats {
         val roundsByNumber = rounds.groupBy { it.roundNumber }
         val totalRounds = roundsByNumber.size
-        
+
         // Calculate progress data (cumulative scores per round)
         val progressData = calculateProgressData(roundsByNumber, game.players)
-        
+
         // Calculate lead changes
         val leadChanges = calculateLeadChanges(roundsByNumber, game)
-        
+
         // Get current leader
         val currentLeader = game.getLeader(rounds)
-        
+
         // Calculate per-player stats
         val playerStats = game.players.map { player ->
             calculatePlayerStats(player, rounds, roundsByNumber, game)
         }
-        
+
         return GameTrackerGameStats(
             gameId = game.id,
             gameName = game.name,
@@ -105,25 +87,26 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
             progressData = progressData
         )
     }
-    
+
     private fun calculateProgressData(
         roundsByNumber: Map<Int, List<GameTrackerRound>>,
         players: List<Player>
     ): List<RoundProgressData> {
         val progressData = mutableListOf<RoundProgressData>()
         val cumulativeScores = mutableMapOf<String, Int>()
-        
+
         // Initialize cumulative scores to 0
         players.forEach { player ->
             cumulativeScores[player.id] = 0
         }
-        
+
         // Calculate cumulative scores for each round
         roundsByNumber.forEach { (roundNumber, roundScores) ->
             roundScores.forEach { round ->
-                cumulativeScores[round.playerId] = (cumulativeScores[round.playerId] ?: 0) + round.score
+                cumulativeScores[round.playerId] =
+                    (cumulativeScores[round.playerId] ?: 0) + round.score
             }
-            
+
             progressData.add(
                 RoundProgressData(
                     roundNumber = roundNumber,
@@ -131,32 +114,32 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
                 )
             )
         }
-        
+
         return progressData
     }
-    
+
     private fun calculateLeadChanges(
         roundsByNumber: Map<Int, List<GameTrackerRound>>,
         game: GameTrackerGame
     ): Int {
         var previousLeader: String? = null
         var changes = 0
-        
+
         val cumulativeRounds = mutableListOf<GameTrackerRound>()
-        
+
         roundsByNumber.forEach { (_, roundScores) ->
             cumulativeRounds.addAll(roundScores)
             val currentLeader = game.getLeader(cumulativeRounds)
-            
+
             if (previousLeader != null && currentLeader != null && currentLeader != previousLeader) {
                 changes++
             }
             previousLeader = currentLeader
         }
-        
+
         return changes
     }
-    
+
     private fun calculatePlayerStats(
         player: Player,
         allRounds: List<GameTrackerRound>,
@@ -167,13 +150,13 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
         val roundsPlayed = playerRounds.size
         val totalScore = playerRounds.sumOf { it.score }
         val averageScore = if (roundsPlayed > 0) totalScore.toDouble() / roundsPlayed else 0.0
-        
+
         val highestRound = playerRounds.maxOfOrNull { it.score }
         val lowestRound = playerRounds.minOfOrNull { it.score }
-        
+
         val streak = calculateStreak(player.id, roundsByNumber, game)
         val distribution = calculateScoreDistribution(playerRounds)
-        
+
         return PlayerRoundStats(
             player = player,
             totalScore = totalScore,
@@ -184,7 +167,7 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
             scoreDistribution = distribution
         )
     }
-    
+
     private fun calculateStreak(
         playerId: String,
         roundsByNumber: Map<Int, List<GameTrackerRound>>,
@@ -193,22 +176,22 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
         if (roundsByNumber.isEmpty()) {
             return Streak(StreakType.NEUTRAL, 0)
         }
-        
+
         val cumulativeRounds = mutableListOf<GameTrackerRound>()
         val leaders = mutableListOf<String?>()
-        
+
         // Calculate leader for each round based on cumulative scores
         roundsByNumber.forEach { (_, roundScores) ->
             cumulativeRounds.addAll(roundScores)
             leaders.add(game.getLeader(cumulativeRounds.toList()))
         }
-        
+
         // Take last 5 rounds for streak calculation
         val recentLeaders = leaders.takeLast(5)
-        
+
         var currentStreak = 0
         var streakType = StreakType.NEUTRAL
-        
+
         // Count consecutive leading or non-leading rounds
         for (leader in recentLeaders.reversed()) {
             if (leader == playerId) {
@@ -227,17 +210,17 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
                 }
             }
         }
-        
+
         return Streak(streakType, currentStreak)
     }
-    
+
     private fun calculateScoreDistribution(playerRounds: List<GameTrackerRound>): ScoreDistribution {
         var negative = 0
         var zero = 0
         var low = 0
         var medium = 0
         var high = 0
-        
+
         playerRounds.forEach { round ->
             when {
                 round.score < 0 -> negative++
@@ -247,7 +230,7 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
                 round.score > 50 -> high++
             }
         }
-        
+
         return ScoreDistribution(
             negative = negative,
             zero = zero,

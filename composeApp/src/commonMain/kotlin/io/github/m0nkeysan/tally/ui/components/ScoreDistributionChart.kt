@@ -22,6 +22,7 @@ import io.github.m0nkeysan.tally.core.model.DistributionCategory
 import io.github.m0nkeysan.tally.core.model.ScoreDistribution
 import io.github.m0nkeysan.tally.generated.resources.Res
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_dist_high
+import io.github.m0nkeysan.tally.generated.resources.state_no_data
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_dist_low
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_dist_medium
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_dist_negative
@@ -44,7 +45,7 @@ fun ScoreDistributionChart(
     
     if (total == 0) {
         Text(
-            text = "No data",
+            text = stringResource(Res.string.state_no_data),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = modifier

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.m0nkeysan.tally.GameIcons
 import io.github.m0nkeysan.tally.core.model.YahtzeeGlobalStatistics
 import io.github.m0nkeysan.tally.core.model.YahtzeePlayerStatistics
 import io.github.m0nkeysan.tally.core.model.getLocalizedName
@@ -88,6 +90,8 @@ import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_leaderboard_m
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_leaderboard_most_yahtzees
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_lower_section
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_no_data
+import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_no_finished_games_global
+import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_no_finished_games_player
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_overall_performance
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_personal_best
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_recent_games
@@ -319,26 +323,70 @@ private fun StatisticsContent(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Overall Performance Card
-        item {
-            OverallPerformanceCard(statistics = statistics)
-        }
-
-        // Score Box Analysis Card
-        item {
-            ScoreBoxAnalysisCard(statistics = statistics)
-        }
-
-        // Recent Games Card
-        if (statistics.recentGames.isNotEmpty()) {
+        if (statistics.finishedGames > 0) {
+            // Overall Performance Card
             item {
-                RecentGamesCard(games = statistics.recentGames)
+                OverallPerformanceCard(statistics = statistics)
+            }
+
+            // Score Box Analysis Card
+            item {
+                ScoreBoxAnalysisCard(statistics = statistics)
+            }
+
+            // Recent Games Card
+            if (statistics.recentGames.isNotEmpty()) {
+                item {
+                    RecentGamesCard(games = statistics.recentGames)
+                }
+            }
+        } else {
+            item {
+                EmptyStateCard(
+                    message = stringResource(Res.string.yahtzee_stats_no_finished_games_player)
+                )
             }
         }
 
         // Bottom spacing
         item {
             Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+private fun EmptyStateCard(message: String) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(48.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Icon(
+                    imageVector = GameIcons.BarChart,
+                    contentDescription = null,
+                    modifier = Modifier.size(64.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                )
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
@@ -535,25 +583,33 @@ private fun GlobalStatisticsContent(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Overall Performance Card
-        item {
-            GlobalOverviewCard(statistics = statistics)
-        }
-
-        // Leaderboard Card
-        item {
-            GlobalLeaderboardCard(statistics = statistics)
-        }
-
-        // Category Analysis Card
-        item {
-            GlobalCategoryAnalysisCard(statistics = statistics)
-        }
-
-        // Recent Games Card
-        if (statistics.recentGames.isNotEmpty()) {
+        if (statistics.finishedGames > 0) {
+            // Overall Performance Card
             item {
-                GlobalRecentGamesCard(games = statistics.recentGames)
+                GlobalOverviewCard(statistics = statistics)
+            }
+
+            // Leaderboard Card
+            item {
+                GlobalLeaderboardCard(statistics = statistics)
+            }
+
+            // Category Analysis Card
+            item {
+                GlobalCategoryAnalysisCard(statistics = statistics)
+            }
+
+            // Recent Games Card
+            if (statistics.recentGames.isNotEmpty()) {
+                item {
+                    GlobalRecentGamesCard(games = statistics.recentGames)
+                }
+            }
+        } else {
+            item {
+                EmptyStateCard(
+                    message = stringResource(Res.string.yahtzee_stats_no_finished_games_global)
+                )
             }
         }
 

@@ -98,6 +98,31 @@
     <string name="game_tracker_stats_average_score">Average Score</string>
     <string name="game_tracker_stats_highest_score">Highest Score</string>
     <string name="game_tracker_stats_lowest_score">Lowest Score</string>
+    <string name="game_tracker_stats_total_rounds_played">Total Rounds Played</string>
+
+    <!-- Game Tracker Statistics – Leaderboards -->
+    <string name="game_tracker_stats_leaderboards_title">Leaderboards</string>
+    <string name="game_tracker_stats_leaderboard_most_games">Most Games Played</string>
+    <string name="game_tracker_stats_leaderboard_win_rate">Highest Win Rate</string>
+    <string name="game_tracker_stats_leaderboard_win_rate_min">min. 3 games</string>
+    <string name="game_tracker_stats_leaderboard_empty">No leaderboard data yet</string>
+
+    <!-- Game Tracker Statistics – Records -->
+    <string name="game_tracker_stats_records_title">Records</string>
+    <string name="game_tracker_stats_record_highest_score">Best Score (High Wins)</string>
+    <string name="game_tracker_stats_record_lowest_score">Best Score (Low Wins)</string>
+    <string name="game_tracker_stats_record_longest_game">Longest Game</string>
+    <string name="game_tracker_stats_record_shortest_game">Shortest Game</string>
+    <string name="game_tracker_stats_record_by_in">%1$s in "%2$s"</string>
+    <string name="game_tracker_stats_record_rounds">%1$d rounds</string>
+    <string name="game_tracker_stats_records_empty">No records yet. Complete a game to see records!</string>
+
+    <!-- Game Tracker Statistics – Player compact row -->
+    <string name="game_tracker_stats_player_count">Player Statistics (%1$d)</string>
+    <string name="game_tracker_stats_cd_expand_player">Expand player details</string>
+    <string name="game_tracker_stats_cd_collapse_player">Collapse player details</string>
+    <string name="game_tracker_stats_cd_expand_section">Expand section</string>
+    <string name="game_tracker_stats_cd_collapse_section">Collapse section</string>
     
     <!-- Game Tracker In-Game Statistics -->
     <string name="game_tracker_game_stats_title">Game Statistics</string>

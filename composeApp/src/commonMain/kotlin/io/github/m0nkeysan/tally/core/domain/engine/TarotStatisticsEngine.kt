@@ -153,4 +153,99 @@ object TarotStatisticsEngine {
             }
         }
     }
+
+    /**
+     * Calculate cumulative score progression for all players across rounds.
+     * Returns a list of RoundProgressData for charting score evolution.
+     * 
+     * @param players List of players in the game
+     * @param rounds List of rounds sorted by round number
+     * @param playerCount Number of players (3-5)
+     * @return List of cumulative scores per round for charting
+     */
+    fun calculateProgressData(
+        players: List<Player>,
+        rounds: List<TarotRound>,
+        playerCount: Int
+    ): List<RoundProgressData> {
+        val progressData = mutableListOf<RoundProgressData>()
+        val cumulativeScores = players.associate { it.id to 0 }.toMutableMap()
+        
+        // Sort rounds by round number to ensure correct chronological order
+        rounds.sortedBy { it.roundNumber }.forEach { round ->
+            // Calculate scores for this specific round
+            val roundScores = calculateRoundScores(round, players, playerCount)
+            
+            // Update cumulative scores for each player
+            roundScores.forEach { (playerId, score) ->
+                cumulativeScores[playerId] = (cumulativeScores[playerId] ?: 0) + score
+            }
+            
+            // Store snapshot of cumulative scores after this round
+            progressData.add(
+                RoundProgressData(
+                    roundNumber = round.roundNumber,
+                    cumulativeScores = cumulativeScores.toMap()
+                )
+            )
+        }
+        
+        return progressData
+    }
+
+    /**
+     * Calculate individual player scores for a single round.
+     * Uses the same logic as TarotScoringEngine.calculateTotalScores but for one round.
+     * 
+     * @param round The round to calculate scores for
+     * @param players List of all players in the game
+     * @param playerCount Number of players (3-5)
+     * @return Map of playerId to score gained/lost in this round
+     */
+    private fun calculateRoundScores(
+        round: TarotRound,
+        players: List<Player>,
+        playerCount: Int
+    ): Map<String, Int> {
+        val scores = mutableMapOf<String, Int>()
+        val s = round.score
+        val takerPlayerId = round.takerPlayerId
+        val calledPlayerId = round.calledPlayerId
+        
+        when (playerCount) {
+            5 -> {
+                // 5 player game - taker can call a partner
+                if (calledPlayerId == null || calledPlayerId == takerPlayerId) {
+                    // Solo: taker gets 4x score, others lose 1x
+                    scores[takerPlayerId] = s * 4
+                    players.forEach { p ->
+                        if (p.id != takerPlayerId) {
+                            scores[p.id] = -s
+                        }
+                    }
+                } else {
+                    // With partner: taker gets 2x, partner gets 1x, others lose 1x
+                    scores[takerPlayerId] = s * 2
+                    scores[calledPlayerId] = s
+                    players.forEach { p ->
+                        if (p.id != takerPlayerId && p.id != calledPlayerId) {
+                            scores[p.id] = -s
+                        }
+                    }
+                }
+            }
+            else -> {
+                // 3 or 4 player game: taker vs all
+                val multiplier = playerCount - 1
+                scores[takerPlayerId] = s * multiplier
+                players.forEach { p ->
+                    if (p.id != takerPlayerId) {
+                        scores[p.id] = -s
+                    }
+                }
+            }
+        }
+        
+        return scores
+    }
 }
