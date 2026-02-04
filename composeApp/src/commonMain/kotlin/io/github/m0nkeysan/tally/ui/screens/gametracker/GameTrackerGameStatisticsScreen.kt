@@ -3,7 +3,6 @@ package io.github.m0nkeysan.tally.ui.screens.gametracker
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,19 +15,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,8 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -64,11 +57,15 @@ import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_qui
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_rounds_played
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_score_distribution
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_title
+import io.github.m0nkeysan.tally.ui.components.EmptyState
+import io.github.m0nkeysan.tally.ui.components.LoadingState
+import io.github.m0nkeysan.tally.ui.components.PlayerAvatar
 import io.github.m0nkeysan.tally.ui.components.ProgressLineChart
 import io.github.m0nkeysan.tally.ui.components.ScoreDistributionChart
+import io.github.m0nkeysan.tally.ui.components.SectionHeader
+import io.github.m0nkeysan.tally.ui.components.StatRow
 import io.github.m0nkeysan.tally.ui.components.StreakBadge
 import io.github.m0nkeysan.tally.ui.utils.formatAverage
-import io.github.m0nkeysan.tally.ui.utils.parseColor
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -106,7 +103,7 @@ fun GameTrackerGameStatisticsScreen(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            imageVector = GameIcons.ArrowBack,
                             contentDescription = stringResource(Res.string.action_back)
                         )
                     }
@@ -116,34 +113,15 @@ fun GameTrackerGameStatisticsScreen(
         }
     ) { paddingValues ->
         if (isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    CircularProgressIndicator()
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = stringResource(Res.string.game_tracker_game_stats_loading),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            }
+            LoadingState(
+                modifier = Modifier.padding(paddingValues),
+                message = stringResource(Res.string.game_tracker_game_stats_loading)
+            )
         } else if (stats == null || stats?.roundsPlayed == 0) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(Res.string.game_tracker_game_stats_no_rounds),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            EmptyState(
+                modifier = Modifier.padding(paddingValues),
+                message = stringResource(Res.string.game_tracker_game_stats_no_rounds)
+            )
         } else {
             stats?.let { gameStats ->
                 LazyColumn(
@@ -155,11 +133,7 @@ fun GameTrackerGameStatisticsScreen(
                 ) {
                     // Progress Graph Section
                     item {
-                        Text(
-                            text = stringResource(Res.string.game_tracker_game_stats_graph_title),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
+                        SectionHeader(title = stringResource(Res.string.game_tracker_game_stats_graph_title))
                     }
 
                     item {
@@ -180,12 +154,7 @@ fun GameTrackerGameStatisticsScreen(
 
                     // Quick Stats Section
                     item {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = stringResource(Res.string.game_tracker_game_stats_quick_stats),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
+                        SectionHeader(title = stringResource(Res.string.game_tracker_game_stats_quick_stats))
                     }
 
                     item {
@@ -198,12 +167,7 @@ fun GameTrackerGameStatisticsScreen(
 
                     // Player Statistics Section
                     item {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = stringResource(Res.string.game_tracker_game_stats_player_stats),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
+                        SectionHeader(title = stringResource(Res.string.game_tracker_game_stats_player_stats))
                     }
 
                     items(gameStats.playerStats) { playerStats ->
@@ -251,9 +215,6 @@ private fun QuickStatsCard(
 @Composable
 private fun PlayerStatsCard(playerStats: PlayerRoundStats) {
     var isExpanded by remember { mutableStateOf(true) }
-    val avatarColor = parseColor(playerStats.player.avatarColor)
-    val contentColor =
-        if (avatarColor.luminance() > 0.5f) Color.Black.copy(alpha = 0.8f) else Color.White
 
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -272,20 +233,11 @@ private fun PlayerStatsCard(playerStats: PlayerRoundStats) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Surface(
-                    shape = CircleShape,
-                    modifier = Modifier.size(32.dp),
-                    color = avatarColor
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(
-                            text = playerStats.player.name.take(1),
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = contentColor
-                        )
-                    }
-                }
+                PlayerAvatar(
+                    name = playerStats.player.name,
+                    avatarColorHex = playerStats.player.avatarColor,
+                    size = 32.dp
+                )
 
                 Spacer(modifier = Modifier.width(12.dp))
 
@@ -299,8 +251,9 @@ private fun PlayerStatsCard(playerStats: PlayerRoundStats) {
                 StreakBadge(streak = playerStats.currentStreak)
                 Icon(
                     imageVector = if (isExpanded) GameIcons.ExpandLess else GameIcons.ExpandMore,
-                    contentDescription = if (isExpanded) stringResource(Res.string.cd_toggle_collapse) else stringResource(
-                        Res.string.cd_toggle_expand
+                    contentDescription = stringResource(
+                        if (isExpanded) Res.string.cd_toggle_collapse
+                        else Res.string.cd_toggle_expand
                     ),
                     modifier = Modifier.size(24.dp)
                 )
@@ -357,24 +310,5 @@ private fun PlayerStatsCard(playerStats: PlayerRoundStats) {
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun StatRow(label: String, value: String) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold
-        )
     }
 }

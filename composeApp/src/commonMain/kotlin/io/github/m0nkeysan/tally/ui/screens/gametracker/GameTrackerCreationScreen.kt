@@ -1,6 +1,5 @@
 package io.github.m0nkeysan.tally.ui.screens.gametracker
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,30 +11,26 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.github.m0nkeysan.tally.GameIcons
 import io.github.m0nkeysan.tally.core.domain.model.DurationMode
 import io.github.m0nkeysan.tally.core.domain.model.ScoringLogic
 import io.github.m0nkeysan.tally.core.model.Player
 import io.github.m0nkeysan.tally.generated.resources.Res
-import io.github.m0nkeysan.tally.generated.resources.cd_toggle_collapse
-import io.github.m0nkeysan.tally.generated.resources.cd_toggle_expand
 import io.github.m0nkeysan.tally.generated.resources.game_creation_field_game_name
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_creation_duration_mode
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_creation_name_default
@@ -51,6 +46,7 @@ import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_high
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_low
 import io.github.m0nkeysan.tally.platform.getCurrentDateTimeString
 import io.github.m0nkeysan.tally.ui.components.FlexiblePlayerSelector
+import io.github.m0nkeysan.tally.ui.components.SectionHeader
 import io.github.m0nkeysan.tally.ui.screens.common.GameCreationTemplate
 import io.github.m0nkeysan.tally.ui.utils.generateRandomHexColor
 import org.jetbrains.compose.resources.stringResource
@@ -117,27 +113,11 @@ fun GameTrackerCreationScreen(
                 )
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    // Card Header (always visible - clickable)
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { isSettingsExpanded = !isSettingsExpanded }
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = stringResource(Res.string.game_tracker_creation_settings),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Icon(
-                            imageVector = if (isSettingsExpanded) GameIcons.ExpandLess else GameIcons.ExpandMore,
-                            contentDescription = if (isSettingsExpanded) 
-                                stringResource(Res.string.cd_toggle_collapse) 
-                                else stringResource(Res.string.cd_toggle_expand)
-                        )
-                    }
+                    SectionHeader(
+                        title = stringResource(Res.string.game_tracker_creation_settings),
+                        isExpanded = isSettingsExpanded,
+                        onToggle = { isSettingsExpanded = !isSettingsExpanded }
+                    )
                     
                     // Expanded content (conditional)
                     if (isSettingsExpanded) {

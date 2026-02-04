@@ -37,3 +37,13 @@ fun formatAverage(value: Double): String {
 fun formatPercentage(value: Double): String {
     return "${value.toInt()}%"
 }
+
+/**
+ * Medal emojis for top-3 rankings
+ */
+fun medalEmoji(rank: Int): String = when (rank) {
+    1 -> "\uD83E\uDD47" // 🥇
+    2 -> "\uD83E\uDD48" // 🥈
+    3 -> "\uD83E\uDD49" // 🥉
+    else -> ""
+}

@@ -1,7 +1,9 @@
 package io.github.m0nkeysan.tally.ui.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -126,16 +128,16 @@ fun ProgressLineChart(
 
 @Composable
 private fun PlayerLegend(players: List<Player>) {
-    Row(
+    FlowRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         players.forEach { player ->
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(end = 16.dp)
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
                     modifier = Modifier.size(12.dp),
