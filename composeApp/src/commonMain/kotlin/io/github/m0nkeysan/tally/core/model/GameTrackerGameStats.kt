@@ -1,5 +1,6 @@
 package io.github.m0nkeysan.tally.core.model
 
+import io.github.m0nkeysan.tally.core.domain.model.ScoringLogic
 import kotlinx.serialization.Serializable
 
 /**
@@ -10,6 +11,7 @@ import kotlinx.serialization.Serializable
 data class GameTrackerGameStats(
     val gameId: String,
     val gameName: String,
+    val scoringLogic: ScoringLogic,
     val roundsPlayed: Int,
     val currentLeader: String?, // Player ID
     val leadChanges: Int,

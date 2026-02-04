@@ -80,6 +80,7 @@ class GameTrackerGameStatisticsViewModel : ViewModel() {
         return GameTrackerGameStats(
             gameId = game.id,
             gameName = game.name,
+            scoringLogic = game.scoringLogic,
             roundsPlayed = totalRounds,
             currentLeader = currentLeader,
             leadChanges = leadChanges,

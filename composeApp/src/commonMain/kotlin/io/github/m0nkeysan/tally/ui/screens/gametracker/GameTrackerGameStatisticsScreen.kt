@@ -1,6 +1,10 @@
 package io.github.m0nkeysan.tally.ui.screens.gametracker
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,11 +38,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.tally.GameIcons
+import io.github.m0nkeysan.tally.core.domain.model.ScoringLogic
 import io.github.m0nkeysan.tally.core.model.PlayerRoundStats
 import io.github.m0nkeysan.tally.generated.resources.Res
 import io.github.m0nkeysan.tally.generated.resources.action_back
@@ -52,7 +56,7 @@ import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_lea
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_loading
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_lowest_round
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_no_rounds
-import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_player_stats
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_stats_player_count
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_quick_stats
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_rounds_played
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_score_distribution
@@ -66,6 +70,7 @@ import io.github.m0nkeysan.tally.ui.components.SectionHeader
 import io.github.m0nkeysan.tally.ui.components.StatRow
 import io.github.m0nkeysan.tally.ui.components.StreakBadge
 import io.github.m0nkeysan.tally.ui.utils.formatAverage
+import io.github.m0nkeysan.tally.ui.utils.medalEmoji
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -77,8 +82,27 @@ fun GameTrackerGameStatisticsScreen(
     val stats by viewModel.stats.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
+    // Collapsible states
+    var graphExpanded by remember { mutableStateOf(true) }
+    var quickStatsExpanded by remember { mutableStateOf(true) }
+    var playersExpanded by remember { mutableStateOf(true) }
+    var expandedPlayerId by remember { mutableStateOf<String?>(null) }
+
     LaunchedEffect(gameId) {
         viewModel.loadGameStats(gameId)
+    }
+
+    // Pre-compute medal map
+    val medalMap: Map<String, Int> = remember(stats) {
+        stats?.let { s ->
+            s.playerStats
+                .sortedWith(compareByDescending<PlayerRoundStats> { 
+                    if (s.scoringLogic == ScoringLogic.HIGH_SCORE_WINS) it.totalScore else -it.totalScore
+                })
+                .take(3)
+                .mapIndexed { index, pStats -> pStats.player.id to (index + 1) }
+                .toMap()
+        } ?: emptyMap()
     }
 
     Scaffold(
@@ -129,49 +153,91 @@ fun GameTrackerGameStatisticsScreen(
                         .fillMaxSize()
                         .padding(paddingValues),
                     contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     // Progress Graph Section
                     item {
-                        SectionHeader(title = stringResource(Res.string.game_tracker_game_stats_graph_title))
+                        SectionHeader(
+                            title = stringResource(Res.string.game_tracker_game_stats_graph_title),
+                            isExpanded = graphExpanded,
+                            onToggle = { graphExpanded = !graphExpanded }
+                        )
                     }
 
                     item {
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surface
-                            ),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                        AnimatedVisibility(
+                            visible = graphExpanded,
+                            enter = expandVertically(),
+                            exit = shrinkVertically()
                         ) {
-                            ProgressLineChart(
-                                progressData = gameStats.progressData,
-                                players = gameStats.playerStats.map { it.player },
-                                modifier = Modifier.padding(8.dp)
-                            )
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = MaterialTheme.colorScheme.surface
+                                ),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                            ) {
+                                ProgressLineChart(
+                                    progressData = gameStats.progressData,
+                                    players = gameStats.playerStats.map { it.player },
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            }
                         }
                     }
 
                     // Quick Stats Section
                     item {
-                        SectionHeader(title = stringResource(Res.string.game_tracker_game_stats_quick_stats))
+                        SectionHeader(
+                            title = stringResource(Res.string.game_tracker_game_stats_quick_stats),
+                            isExpanded = quickStatsExpanded,
+                            onToggle = { quickStatsExpanded = !quickStatsExpanded }
+                        )
                     }
 
                     item {
-                        QuickStatsCard(
-                            roundsPlayed = gameStats.roundsPlayed,
-                            currentLeader = gameStats.playerStats.find { it.player.id == gameStats.currentLeader }?.player?.name,
-                            leadChanges = gameStats.leadChanges
-                        )
+                        AnimatedVisibility(
+                            visible = quickStatsExpanded,
+                            enter = expandVertically(),
+                            exit = shrinkVertically()
+                        ) {
+                            QuickStatsCard(
+                                roundsPlayed = gameStats.roundsPlayed,
+                                currentLeader = gameStats.playerStats.find { it.player.id == gameStats.currentLeader }?.player?.name,
+                                leadChanges = gameStats.leadChanges
+                            )
+                        }
                     }
 
                     // Player Statistics Section
                     item {
-                        SectionHeader(title = stringResource(Res.string.game_tracker_game_stats_player_stats))
+                        SectionHeader(
+                            title = stringResource(
+                                Res.string.game_tracker_stats_player_count,
+                                gameStats.playerStats.size
+                            ),
+                            isExpanded = playersExpanded,
+                            onToggle = {
+                                playersExpanded = !playersExpanded
+                                if (!playersExpanded) expandedPlayerId = null
+                            }
+                        )
                     }
 
-                    items(gameStats.playerStats) { playerStats ->
-                        PlayerStatsCard(playerStats = playerStats)
+                    if (playersExpanded) {
+                        items(gameStats.playerStats.sortedWith(compareByDescending<PlayerRoundStats> { 
+                            if (gameStats.scoringLogic == ScoringLogic.HIGH_SCORE_WINS) it.totalScore else -it.totalScore
+                        })) { playerStats ->
+                            val isExpanded = expandedPlayerId == playerStats.player.id
+                            PlayerStatsCard(
+                                playerStats = playerStats,
+                                rank = medalMap[playerStats.player.id],
+                                isExpanded = isExpanded,
+                                onToggle = {
+                                    expandedPlayerId = if (isExpanded) null else playerStats.player.id
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -213,14 +279,19 @@ private fun QuickStatsCard(
 }
 
 @Composable
-private fun PlayerStatsCard(playerStats: PlayerRoundStats) {
-    var isExpanded by remember { mutableStateOf(true) }
-
+private fun PlayerStatsCard(
+    playerStats: PlayerRoundStats,
+    rank: Int?,
+    isExpanded: Boolean,
+    onToggle: () -> Unit
+) {
     Card(
-        modifier = Modifier.fillMaxWidth()
-            .animateContentSize(),
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = if (isExpanded)
+                MaterialTheme.colorScheme.surfaceContainerHighest
+            else
+                MaterialTheme.colorScheme.surfaceContainer
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
@@ -228,39 +299,69 @@ private fun PlayerStatsCard(playerStats: PlayerRoundStats) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { isExpanded = !isExpanded }
+                    .clickable(onClick = onToggle)
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                PlayerAvatar(
-                    name = playerStats.player.name,
-                    avatarColorHex = playerStats.player.avatarColor,
-                    size = 32.dp
-                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Medal emoji (only for top 3)
+                    if (rank != null && rank <= 3) {
+                        Text(
+                            text = medalEmoji(rank),
+                            style = MaterialTheme.typography.titleSmall
+                        )
+                    } else {
+                        // keep alignment consistent
+                        Spacer(modifier = Modifier.width(24.dp))
+                    }
 
-                Spacer(modifier = Modifier.width(12.dp))
+                    PlayerAvatar(
+                        name = playerStats.player.name,
+                        avatarColorHex = playerStats.player.avatarColor,
+                        size = 36.dp
+                    )
 
-                Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = playerStats.player.name,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
                 }
-                StreakBadge(streak = playerStats.currentStreak)
-                Icon(
-                    imageVector = if (isExpanded) GameIcons.ExpandLess else GameIcons.ExpandMore,
-                    contentDescription = stringResource(
-                        if (isExpanded) Res.string.cd_toggle_collapse
-                        else Res.string.cd_toggle_expand
-                    ),
-                    modifier = Modifier.size(24.dp)
-                )
+
+                // Right side: score + streak + expand icon
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = playerStats.totalScore.toString(),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    StreakBadge(streak = playerStats.currentStreak)
+                    Icon(
+                        imageVector = if (isExpanded) GameIcons.ExpandLess else GameIcons.ExpandMore,
+                        contentDescription = stringResource(
+                            if (isExpanded) Res.string.cd_toggle_collapse
+                            else Res.string.cd_toggle_expand
+                        ),
+                        modifier = Modifier.size(24.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
 
             // Expanded content
-            if (isExpanded) {
+            AnimatedVisibility(
+                visible = isExpanded,
+                enter = expandVertically(tween(durationMillis = 200)),
+                exit = shrinkVertically(tween(durationMillis = 200))
+            ) {
                 Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
                     HorizontalDivider(
                         thickness = 0.5.dp,
