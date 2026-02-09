@@ -63,7 +63,7 @@
     <string name="game_tracker_scoring_title">Feuille de score</string>
     <string name="game_tracker_scoring_cd_add_round">Ajouter une nouvelle manche</string>
     <string name="game_tracker_scoring_cd_finish_game">Terminer la partie</string>
-    <string name="game_tracker_scoring_cd_history">Voir l\'historique des scores</string>
+    <string name="game_tracker_scoring_cd_history">Voir l'historique des scores</string>
     <string name="game_tracker_scoring_section_leaderboard">Classement</string>
     <string name="game_tracker_scoring_section_rounds">Historique des manches</string>
     <string name="game_tracker_scoring_empty_rounds">Aucune manche pour le moment. Ajoutez la première !</string>
