@@ -80,7 +80,7 @@
     <string name="game_tracker_history_title">Historique des scores</string>
     <string name="game_tracker_history_subtitle">Manche par manche</string>
     <string name="game_tracker_history_empty">Aucun score. Ajoutez des manches pour voir l\'historique !</string>
-    <string name="game_tracker_history_cd_delete">Supprimer l\'historique</string>
+    <string name="game_tracker_history_cd_delete">Supprimer l'historique</string>
     <string name="game_tracker_history_round_format">Manche %1$d</string>
     
     <!-- Game Tracker Statistics -->
