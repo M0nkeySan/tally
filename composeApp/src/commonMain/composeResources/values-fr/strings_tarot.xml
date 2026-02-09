@@ -16,6 +16,7 @@
     <string name="tarot_stats_section_called_performance">Performance appelée</string>
     <string name="tarot_stats_section_round_breakdown">Détail des manches</string>
     <string name="tarot_stats_empty_rounds">Aucune manche jouée pour le moment</string>
+    <string name="tarot_stats_no_rounds_player_stats">Aucune manche jouée. Jouez des manches pour voir les statistiques des joueurs !</string>
     <string name="tarot_stats_section_current_standings">Classement actuel</string>
     <string name="tarot_stats_format_as_taker">%1$d/%2$d en preneur</string>
     <string name="tarot_stats_label_round">Manche %1$d</string>
@@ -25,6 +26,7 @@
     <string name="tarot_stats_label_bids_used">Enchères utilisées :</string>
     <string name="tarot_stats_label_with_partners">Avec partenaires :</string>
     <string name="tarot_stats_section_bids_in_game">Enchères dans cette partie</string>
+    <string name="tarot_stats_section_score_progression">Évolution des scores 📈</string>
 
     <!-- Tarot - Scoring -->
     <string name="tarot_scoring_screen_title">Pointage de la partie</string>

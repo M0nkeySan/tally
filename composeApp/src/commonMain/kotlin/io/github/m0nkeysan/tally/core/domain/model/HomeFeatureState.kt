@@ -11,5 +11,6 @@ val defaultFeatureStates = listOf(
     HomeFeatureState("tarot", enabled = true, order = 1),
     HomeFeatureState("yahtzee", enabled = true, order = 2),
     HomeFeatureState("counter", enabled = true, order = 3),
-    HomeFeatureState("dice_roller", enabled = true, order = 4)
+    HomeFeatureState("dice_roller", enabled = true, order = 4),
+    HomeFeatureState("game_tracker", enabled = true, order = 5)
 )

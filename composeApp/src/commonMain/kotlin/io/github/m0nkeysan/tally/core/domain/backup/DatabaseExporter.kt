@@ -7,6 +7,8 @@ import io.github.m0nkeysan.tally.database.TarotRoundEntity
 import io.github.m0nkeysan.tally.database.UserPreferencesEntity
 import io.github.m0nkeysan.tally.database.YahtzeeGameEntity
 import io.github.m0nkeysan.tally.database.YahtzeeScoreEntity
+import io.github.m0nkeysan.tally.database.GameTrackerGameEntity
+import io.github.m0nkeysan.tally.database.GameTrackerRoundEntity
 import kotlinx.serialization.Serializable
 
 /**
@@ -37,6 +39,8 @@ data class DatabaseBackup(
     val tarotRounds: List<TarotRoundData>,
     val yahtzeeGames: List<YahtzeeGameData>,
     val yahtzeeScores: List<YahtzeeScoreData>,
+    val gameTrackerGames: List<GameTrackerGameData> = emptyList(),
+    val gameTrackerRounds: List<GameTrackerRoundData> = emptyList(),
     val counters: List<CounterData>,
     val preferences: List<PreferenceData>
 )
@@ -114,6 +118,40 @@ data class YahtzeeScoreData(
     val playerId: String,
     val category: String,
     val score: Long
+)
+
+/**
+ * Serializable game tracker game data
+ */
+@Serializable
+data class GameTrackerGameData(
+    val id: String,
+    val name: String,
+    val playerCount: Long,
+    val playerIds: String,
+    val scoringLogic: String,
+    val targetScore: Long?,
+    val durationMode: String,
+    val fixedRoundCount: Long?,
+    val currentRound: Long,
+    val isFinished: Long,
+    val winnerPlayerId: String?,
+    val createdAt: Long,
+    val updatedAt: Long
+)
+
+/**
+ * Serializable game tracker round data
+ */
+@Serializable
+data class GameTrackerRoundData(
+    val id: String,
+    val gameId: String,
+    val roundNumber: Long,
+    val playerId: String,
+    val score: Long,
+    val notes: String?,
+    val createdAt: Long
 )
 
 /**
@@ -248,6 +286,58 @@ fun YahtzeeScoreData.toEntity() = YahtzeeScoreEntity(
     playerId = playerId,
     category = category,
     score = score
+)
+
+fun GameTrackerGameEntity.toData() = GameTrackerGameData(
+    id = id,
+    name = name,
+    playerCount = playerCount,
+    playerIds = playerIds,
+    scoringLogic = scoringLogic,
+    targetScore = targetScore,
+    durationMode = durationMode,
+    fixedRoundCount = fixedRoundCount,
+    currentRound = currentRound,
+    isFinished = isFinished,
+    winnerPlayerId = winnerPlayerId,
+    createdAt = createdAt,
+    updatedAt = updatedAt
+)
+
+fun GameTrackerGameData.toEntity() = GameTrackerGameEntity(
+    id = id,
+    name = name,
+    playerCount = playerCount,
+    playerIds = playerIds,
+    scoringLogic = scoringLogic,
+    targetScore = targetScore,
+    durationMode = durationMode,
+    fixedRoundCount = fixedRoundCount,
+    currentRound = currentRound,
+    isFinished = isFinished,
+    winnerPlayerId = winnerPlayerId,
+    createdAt = createdAt,
+    updatedAt = updatedAt
+)
+
+fun GameTrackerRoundEntity.toData() = GameTrackerRoundData(
+    id = id,
+    gameId = gameId,
+    roundNumber = roundNumber,
+    playerId = playerId,
+    score = score,
+    notes = notes,
+    createdAt = createdAt
+)
+
+fun GameTrackerRoundData.toEntity() = GameTrackerRoundEntity(
+    id = id,
+    gameId = gameId,
+    roundNumber = roundNumber,
+    playerId = playerId,
+    score = score,
+    notes = notes,
+    createdAt = createdAt
 )
 
 fun PersistentCounterEntity.toData() = CounterData(

@@ -1,0 +1,177 @@
+CREATE TABLE IF NOT EXISTS gameTrackerGameEntity (
+  id TEXT NOT NULL PRIMARY KEY,
+  name TEXT NOT NULL,
+  playerCount INTEGER NOT NULL,
+  playerIds TEXT NOT NULL,
+  scoringLogic TEXT NOT NULL,
+  targetScore INTEGER,
+  durationMode TEXT NOT NULL,
+  fixedRoundCount INTEGER,
+  currentRound INTEGER NOT NULL DEFAULT 1,
+  isFinished INTEGER NOT NULL DEFAULT 0,
+  winnerPlayerId TEXT,
+  createdAt INTEGER NOT NULL,
+  updatedAt INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS gameTrackerRoundEntity (
+  id TEXT NOT NULL PRIMARY KEY,
+  gameId TEXT NOT NULL,
+  roundNumber INTEGER NOT NULL,
+  playerId TEXT NOT NULL,
+  score INTEGER NOT NULL,
+  notes TEXT,
+  createdAt INTEGER NOT NULL,
+  FOREIGN KEY(gameId) REFERENCES gameTrackerGameEntity(id) ON DELETE CASCADE,
+  UNIQUE(gameId, roundNumber, playerId) ON CONFLICT REPLACE
+);
+
+CREATE INDEX IF NOT EXISTS idx_gameTrackerRound_gameId 
+ON gameTrackerRoundEntity(gameId);
+
+-- Game queries
+selectAllGames:
+SELECT * FROM gameTrackerGameEntity ORDER BY isFinished ASC, updatedAt DESC;
+
+selectGameById:
+SELECT * FROM gameTrackerGameEntity WHERE id = ?;
+
+selectGamesByPlayer:
+SELECT * FROM gameTrackerGameEntity 
+WHERE (',' || playerIds || ',') LIKE ('%,' || ? || ',%') 
+ORDER BY isFinished ASC, updatedAt DESC;
+
+insertGame:
+INSERT OR REPLACE INTO gameTrackerGameEntity(id, name, playerCount, playerIds, scoringLogic, targetScore, durationMode, fixedRoundCount, currentRound, isFinished, winnerPlayerId, createdAt, updatedAt)
+VALUES ?;
+
+updateGame:
+UPDATE gameTrackerGameEntity 
+SET name = ?, playerCount = ?, playerIds = ?, scoringLogic = ?, targetScore = ?, durationMode = ?, fixedRoundCount = ?, currentRound = ?, isFinished = ?, winnerPlayerId = ?, updatedAt = ?
+WHERE id = ?;
+
+deleteGame:
+DELETE FROM gameTrackerGameEntity WHERE id = ?;
+
+finishGame:
+UPDATE gameTrackerGameEntity 
+SET isFinished = 1, winnerPlayerId = ?, updatedAt = ?
+WHERE id = ?;
+
+countGamesWithPlayer:
+SELECT COUNT(*) FROM gameTrackerGameEntity WHERE playerIds LIKE '%' || ? || '%';
+
+deleteAllGames:
+DELETE FROM gameTrackerGameEntity;
+
+-- Round queries
+selectRoundsForGame:
+SELECT * FROM gameTrackerRoundEntity WHERE gameId = ? ORDER BY roundNumber ASC, playerId ASC;
+
+selectRoundById:
+SELECT * FROM gameTrackerRoundEntity WHERE id = ?;
+
+selectRoundsByPlayer:
+SELECT * FROM gameTrackerRoundEntity 
+WHERE gameId IN (
+    SELECT id FROM gameTrackerGameEntity 
+    WHERE (',' || playerIds || ',') LIKE ('%,' || ? || ',%')
+)
+ORDER BY gameId ASC, roundNumber ASC;
+
+selectRoundsForGames:
+SELECT * FROM gameTrackerRoundEntity WHERE gameId IN ? ORDER BY gameId ASC, roundNumber ASC;
+
+insertRound:
+INSERT OR REPLACE INTO gameTrackerRoundEntity(id, gameId, roundNumber, playerId, score, notes, createdAt)
+VALUES ?;
+
+updateRound:
+UPDATE gameTrackerRoundEntity 
+SET score = ?, notes = ?
+WHERE id = ?;
+
+deleteRound:
+DELETE FROM gameTrackerRoundEntity WHERE id = ?;
+
+deleteRoundsByNumber:
+DELETE FROM gameTrackerRoundEntity WHERE gameId = ? AND roundNumber = ?;
+
+deleteRoundsForGame:
+DELETE FROM gameTrackerRoundEntity WHERE gameId = ?;
+
+deleteAllRounds:
+DELETE FROM gameTrackerRoundEntity;
+
+selectAllRounds:
+SELECT * FROM gameTrackerRoundEntity ORDER BY gameId ASC, roundNumber ASC;
+
+-- Statistics queries
+countTotalGames:
+SELECT COUNT(*) FROM gameTrackerGameEntity;
+
+countCompletedGames:
+SELECT COUNT(*) FROM gameTrackerGameEntity WHERE isFinished = 1;
+
+countActiveGames:
+SELECT COUNT(*) FROM gameTrackerGameEntity WHERE isFinished = 0;
+
+countTotalRounds:
+SELECT COUNT(DISTINCT gameId || '-' || roundNumber) FROM gameTrackerRoundEntity;
+
+countWinsForPlayer:
+SELECT COUNT(*) FROM gameTrackerGameEntity WHERE winnerPlayerId = ? AND isFinished = 1;
+
+countRoundsForPlayer:
+SELECT COUNT(*) FROM gameTrackerRoundEntity WHERE playerId = ?;
+
+getTotalScoreForPlayer:
+SELECT COALESCE(SUM(score), 0) FROM gameTrackerRoundEntity WHERE playerId = ?;
+
+getScoresForPlayerByGame:
+SELECT gameId, SUM(score) AS totalScore 
+FROM gameTrackerRoundEntity 
+WHERE playerId = ? 
+GROUP BY gameId;
+
+-- Record queries: best score in HIGH_SCORE_WINS completed games
+getHighestScoreInHighGames:
+SELECT r.playerId, SUM(r.score) AS totalScore, g.name AS gameName
+FROM gameTrackerRoundEntity r
+JOIN gameTrackerGameEntity g ON r.gameId = g.id
+WHERE g.isFinished = 1 AND g.scoringLogic = 'HIGH_SCORE_WINS'
+GROUP BY r.gameId, r.playerId
+ORDER BY totalScore DESC
+LIMIT 1;
+
+-- Record queries: best score in LOW_SCORE_WINS completed games
+getLowestScoreInLowGames:
+SELECT r.playerId, SUM(r.score) AS totalScore, g.name AS gameName
+FROM gameTrackerRoundEntity r
+JOIN gameTrackerGameEntity g ON r.gameId = g.id
+WHERE g.isFinished = 1 AND g.scoringLogic = 'LOW_SCORE_WINS'
+GROUP BY r.gameId, r.playerId
+ORDER BY totalScore ASC
+LIMIT 1;
+
+-- Record queries: game with the most distinct rounds (any status)
+getLongestGame:
+SELECT g.id AS gameId, g.name AS gameName, g.playerIds,
+       COUNT(DISTINCT r.roundNumber) AS roundCount
+FROM gameTrackerGameEntity g
+JOIN gameTrackerRoundEntity r ON g.id = r.gameId
+GROUP BY g.id
+ORDER BY roundCount DESC
+LIMIT 1;
+
+-- Record queries: completed game with the fewest distinct rounds
+getShortestCompletedGame:
+SELECT g.id AS gameId, g.name AS gameName, g.playerIds,
+       COUNT(DISTINCT r.roundNumber) AS roundCount
+FROM gameTrackerGameEntity g
+JOIN gameTrackerRoundEntity r ON g.id = r.gameId
+WHERE g.isFinished = 1
+GROUP BY g.id
+HAVING roundCount > 0
+ORDER BY roundCount ASC
+LIMIT 1;

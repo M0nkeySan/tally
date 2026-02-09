@@ -1,4 +1,4 @@
-package io.github.m0nkeysan.tally.ui.screens.yahtzee.components
+package io.github.m0nkeysan.tally.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -12,14 +12,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 
 /**
- * Reusable row for displaying a statistic label and value
+ * A standard label-value row for statistics.
+ *
+ * @param label The descriptive text (e.g., "Games Played")
+ * @param value The value to display (e.g., "42")
+ * @param modifier Optional modifier
+ * @param valueColor Color for the value text (defaults to onSurface)
  */
 @Composable
-fun StatisticRow(
+fun StatRow(
     label: String,
     value: String,
     modifier: Modifier = Modifier,
-    valueColor: Color = MaterialTheme.colorScheme.primary
+    valueColor: Color = MaterialTheme.colorScheme.onSurface
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -29,7 +34,7 @@ fun StatisticRow(
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
             text = value,

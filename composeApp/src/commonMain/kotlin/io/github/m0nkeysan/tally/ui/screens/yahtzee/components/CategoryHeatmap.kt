@@ -24,12 +24,13 @@ import io.github.m0nkeysan.tally.core.model.CategoryStat
 import io.github.m0nkeysan.tally.core.model.GlobalCategoryStat
 import io.github.m0nkeysan.tally.core.model.YahtzeeCategory
 import io.github.m0nkeysan.tally.core.model.getLocalizedName
-import io.github.m0nkeysan.tally.ui.screens.yahtzee.formatAverage
-import io.github.m0nkeysan.tally.ui.screens.yahtzee.getCategoryColor
-import org.jetbrains.compose.resources.stringResource
+import io.github.m0nkeysan.tally.generated.resources.Res
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_heatmap_lower
 import io.github.m0nkeysan.tally.generated.resources.yahtzee_stats_heatmap_upper
-import io.github.m0nkeysan.tally.generated.resources.Res
+import io.github.m0nkeysan.tally.ui.screens.yahtzee.getCategoryColor
+import io.github.m0nkeysan.tally.ui.utils.formatAverage
+import io.github.m0nkeysan.tally.ui.utils.getCategoryColor
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Color-coded heatmap displaying average scores for each Yahtzee category

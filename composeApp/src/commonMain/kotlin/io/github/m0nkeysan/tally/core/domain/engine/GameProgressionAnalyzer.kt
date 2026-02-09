@@ -17,9 +17,9 @@ class GameProgressionAnalyzer() {
     ): Map<String, TakerPerformance> {
         if (rounds.size < 3) return emptyMap()
         
-        return players.mapIndexed { index, player ->
+        return players.map { player ->
             val takerRounds = rounds.filter { 
-                it.takerPlayerId.toIntOrNull() == index 
+                it.takerPlayerId == player.id
             }
             
             val wins = takerRounds.filter { it.score > 0 }
@@ -37,7 +37,7 @@ class GameProgressionAnalyzer() {
             val totalLost = losses.sumOf { it.score }
             
             val partnerStats = if (playerCount == 5) {
-                calculatePartnerStats(index, players, rounds)
+                calculatePartnerStats(player.id, players, rounds)
             } else null
             
             player.id to TakerPerformance(
@@ -62,14 +62,14 @@ class GameProgressionAnalyzer() {
     // ============ PRIVATE HELPER FUNCTIONS ============
     
     private fun calculatePartnerStats(
-        playerIndex: Int,
+        playerId: String,
         allPlayers: List<Player>,
         rounds: List<TarotRound>
     ): Map<String, PartnerStat>? {
         val takerRoundsWithPartner = rounds.filter { round ->
-            round.takerPlayerId.toIntOrNull() == playerIndex &&
+            round.takerPlayerId == playerId &&
             round.calledPlayerId != null &&
-            round.calledPlayerId != playerIndex.toString()
+            round.calledPlayerId != playerId
         }
         
         if (takerRoundsWithPartner.isEmpty()) return null
@@ -77,8 +77,7 @@ class GameProgressionAnalyzer() {
         return takerRoundsWithPartner
             .groupBy { it.calledPlayerId }
             .mapNotNull { (partnerId, partnerRounds) ->
-                val partnerIdx = partnerId?.toIntOrNull() ?: return@mapNotNull null
-                val partner = allPlayers.getOrNull(partnerIdx) ?: return@mapNotNull null
+                val partner = allPlayers.find { it.id == partnerId } ?: return@mapNotNull null
                 
                 val wins = partnerRounds.count { it.score > 0 }
                 val losses = partnerRounds.size - wins

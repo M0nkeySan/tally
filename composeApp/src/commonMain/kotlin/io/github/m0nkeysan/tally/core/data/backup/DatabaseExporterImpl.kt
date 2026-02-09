@@ -24,6 +24,7 @@ class DatabaseExporterImpl(
         val playerQueries = database.playerQueries
         val tarotQueries = database.tarotQueries
         val yahtzeeQueries = database.yahtzeeQueries
+        val gameTrackerQueries = database.gameTrackerQueries
         val counterQueries = database.counterQueries
         val preferencesQueries = database.preferencesQueries
         
@@ -57,6 +58,18 @@ class DatabaseExporterImpl(
             .mapToList(Dispatchers.Default)
             .first()
             .map { it.toData() }
+
+        val gameTrackerGames = gameTrackerQueries.selectAllGames()
+            .asFlow()
+            .mapToList(Dispatchers.Default)
+            .first()
+            .map { it.toData() }
+
+        val gameTrackerRounds = gameTrackerQueries.selectAllRounds()
+            .asFlow()
+            .mapToList(Dispatchers.Default)
+            .first()
+            .map { it.toData() }
         
         val counters = counterQueries.selectAllCounters()
             .asFlow()
@@ -78,6 +91,8 @@ class DatabaseExporterImpl(
             tarotRounds = tarotRounds,
             yahtzeeGames = yahtzeeGames,
             yahtzeeScores = yahtzeeScores,
+            gameTrackerGames = gameTrackerGames,
+            gameTrackerRounds = gameTrackerRounds,
             counters = counters,
             preferences = preferences
         )
@@ -91,6 +106,8 @@ class DatabaseExporterImpl(
             database.tarotQueries.deleteAllRounds()
             database.yahtzeeQueries.deleteAllGames()
             database.yahtzeeQueries.deleteAllScores()
+            database.gameTrackerQueries.deleteAllGames()
+            database.gameTrackerQueries.deleteAllRounds()
             database.counterQueries.deleteAllCounters()
             database.preferencesQueries.deleteAllPreferences()
             
@@ -121,6 +138,14 @@ class DatabaseExporterImpl(
             
             backup.yahtzeeScores.forEach { score ->
                 database.yahtzeeQueries.insertScore(score.toEntity())
+            }
+
+            backup.gameTrackerGames.forEach { game ->
+                database.gameTrackerQueries.insertGame(game.toEntity())
+            }
+
+            backup.gameTrackerRounds.forEach { round ->
+                database.gameTrackerQueries.insertRound(round.toEntity())
             }
             
             backup.counters.forEach { counter ->

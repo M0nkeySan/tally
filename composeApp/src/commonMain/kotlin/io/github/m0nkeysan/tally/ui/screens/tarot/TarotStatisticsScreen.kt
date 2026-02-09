@@ -20,7 +20,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.m0nkeysan.tally.GameIcons
@@ -58,6 +56,7 @@ import io.github.m0nkeysan.tally.generated.resources.tarot_stats_contract_lost
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_contract_won
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_empty_rounds
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_format_as_taker
+import io.github.m0nkeysan.tally.generated.resources.tarot_stats_no_rounds_player_stats
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_label_as_taker
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_label_avg_bouts
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_label_avg_lost
@@ -74,12 +73,17 @@ import io.github.m0nkeysan.tally.generated.resources.tarot_stats_section_called_
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_section_current_standings
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_section_performance_details
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_section_round_breakdown
+import io.github.m0nkeysan.tally.generated.resources.tarot_stats_section_score_progression
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_section_taker_performance
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_tab_current_game
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_tab_player_stats
 import io.github.m0nkeysan.tally.generated.resources.tarot_stats_title
 import io.github.m0nkeysan.tally.platform.PlatformRepositories
+import io.github.m0nkeysan.tally.ui.components.EmptyStateCard
 import io.github.m0nkeysan.tally.ui.components.ErrorState
+import io.github.m0nkeysan.tally.ui.components.LoadingState
+import io.github.m0nkeysan.tally.ui.components.ProgressLineChart
+import io.github.m0nkeysan.tally.ui.components.SectionHeader
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -149,12 +153,7 @@ fun TarotStatisticsScreen(
         ) {
             // Loading state
             if (state.isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
+                LoadingState()
                 return@Column
             }
 
@@ -204,7 +203,7 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // Player Rankings Card
-        if (state.currentGameRankings.isNotEmpty()) {
+        if (state.roundBreakdown.isNotEmpty() && state.currentGameRankings.isNotEmpty()) {
             item {
                 PlayerRankingsCard(state.currentGameRankings)
             }
@@ -231,19 +230,7 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Text(
-                            stringResource(Res.string.tarot_stats_section_round_breakdown),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier
-                                .background(
-                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                    MaterialTheme.shapes.small
-                                )
-                                .padding(8.dp)
-                                .fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
+                        SectionHeader(title = stringResource(Res.string.tarot_stats_section_round_breakdown))
                         state.roundBreakdown.reversed().forEach { round ->
                             RoundBreakdownItem(round)
                         }
@@ -252,36 +239,10 @@ private fun CurrentGameTab(state: TarotStatisticsState) {
             }
         } else {
             item {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-                    )
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(32.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Icon(
-                                imageVector = GameIcons.History,
-                                contentDescription = null,
-                                modifier = Modifier.size(48.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                            )
-                            Text(
-                                stringResource(Res.string.tarot_stats_empty_rounds),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                }
+                EmptyStateCard(
+                    message = stringResource(Res.string.tarot_stats_empty_rounds),
+                    icon = GameIcons.History
+                )
             }
         }
 
@@ -301,18 +262,52 @@ private fun PlayerStatsTab(state: TarotStatisticsState) {
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Per-player statistics for current game
-        state.game?.let { game ->
-            state.roundBreakdown.let { rounds ->
-                game.players.forEach { player ->
-                    item {
-                        CurrentGamePlayerStatsCard(
-                            player = player,
-                            rounds = rounds,
-                            allRounds = game.rounds
+        if (state.roundBreakdown.isNotEmpty()) {
+            // Progress Chart - BEFORE player cards
+            if (state.progressData.isNotEmpty()) {
+                item {
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surface
                         )
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            SectionHeader(title = stringResource(Res.string.tarot_stats_section_score_progression))
+                            
+                            state.game?.let { game ->
+                                ProgressLineChart(
+                                    progressData = state.progressData,
+                                    players = game.players,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            }
+                        }
                     }
                 }
+            }
+            
+            // Per-player statistics for current game
+            state.game?.let { game ->
+                state.roundBreakdown.let { rounds ->
+                    game.players.forEach { player ->
+                        item {
+                            CurrentGamePlayerStatsCard(
+                                player = player,
+                                rounds = rounds,
+                                allRounds = game.rounds
+                            )
+                        }
+                    }
+                }
+            }
+        } else {
+            item {
+                EmptyStateCard(message = stringResource(Res.string.tarot_stats_no_rounds_player_stats))
             }
         }
 
@@ -338,19 +333,7 @@ private fun PlayerRankingsCard(rankings: List<PlayerRanking>) {
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                stringResource(Res.string.tarot_stats_section_current_standings),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .background(
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                        MaterialTheme.shapes.small
-                    )
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
+            SectionHeader(title = stringResource(Res.string.tarot_stats_section_current_standings))
 
             rankings.forEach { ranking ->
                 RankingRow(ranking)
@@ -509,11 +492,7 @@ private fun TakerPerformanceCard(performanceMap: Map<String, TakerPerformance>) 
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                stringResource(Res.string.tarot_stats_section_taker_performance),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            SectionHeader(title = stringResource(Res.string.tarot_stats_section_taker_performance))
 
             performanceMap.values.forEach { performance ->
                 TakerPerformanceRow(performance)
@@ -650,8 +629,9 @@ private fun CurrentGamePlayerStatsCard(
                 )
                 Icon(
                     imageVector = if (isExpanded) GameIcons.ExpandLess else GameIcons.ExpandMore,
-                    contentDescription = if (isExpanded) stringResource(Res.string.cd_toggle_collapse) else stringResource(
-                        Res.string.cd_toggle_expand
+                    contentDescription = stringResource(
+                        if (isExpanded) Res.string.cd_toggle_collapse
+                        else Res.string.cd_toggle_expand
                     ),
                     modifier = Modifier.size(24.dp)
                 )
@@ -779,19 +759,7 @@ private fun CurrentGamePlayerStatsCard(
                                     }
                                 }
 
-                                Text(
-                                    stringResource(Res.string.tarot_stats_section_bids_in_game),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier
-                                        .background(
-                                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                            MaterialTheme.shapes.small
-                                        )
-                                        .padding(8.dp)
-                                        .fillMaxWidth(),
-                                    textAlign = TextAlign.Center
-                                )
+                                SectionHeader(title = stringResource(Res.string.tarot_stats_section_bids_in_game))
                                 bidsInGame.forEach { (bid, count) ->
                                     Row(
                                         modifier = Modifier
@@ -821,19 +789,7 @@ private fun CurrentGamePlayerStatsCard(
                         // Detailed averages section - use playerGameRounds with RoundStatistic
                         if (playerGameRounds.isNotEmpty()) {
                             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Text(
-                                    stringResource(Res.string.tarot_stats_section_performance_details),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier
-                                        .background(
-                                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                            MaterialTheme.shapes.small
-                                        )
-                                        .padding(8.dp)
-                                        .fillMaxWidth(),
-                                    textAlign = TextAlign.Center
-                                )
+                                SectionHeader(title = stringResource(Res.string.tarot_stats_section_performance_details))
 
                                 // Average bouts
                                 val totalBouts = playerGameRounds.sumOf { it.bouts }
@@ -881,19 +837,7 @@ private fun CurrentGamePlayerStatsCard(
                     // Called player statistics - outside playerAllRounds check so it shows for called-only players
                     if (calledRounds > 0) {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(
-                                stringResource(Res.string.tarot_stats_section_called_performance),
-                                style = MaterialTheme.typography.labelMedium,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier
-                                    .background(
-                                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                        MaterialTheme.shapes.small
-                                    )
-                                    .padding(8.dp)
-                                    .fillMaxWidth(),
-                                textAlign = TextAlign.Center
-                            )
+                            SectionHeader(title = stringResource(Res.string.tarot_stats_section_called_performance))
 
                             // Called win/loss statistics
                             val calledGameRounds =

@@ -44,6 +44,8 @@
     <string name="yahtzee_stats_global">⭐ Global Statistics</string>
     <string name="yahtzee_stats_select_player">Select Player</string>
     <string name="yahtzee_stats_no_data">No data available</string>
+    <string name="yahtzee_stats_no_finished_games_player">No finished games yet for this player. Complete a game to see their statistics!</string>
+    <string name="yahtzee_stats_no_finished_games_global">No finished games yet. Complete your first game to see global statistics!</string>
 
     <!-- Player Statistics Sections -->
     <string name="yahtzee_stats_overall_performance">📊 Overall Performance</string>

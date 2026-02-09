@@ -85,47 +85,45 @@ fun AppTheme(
         )
     } else {
         lightColorScheme(
-            // Primary colors - Indigo
-            primary = Color(0xFF6366F1),                        // Indigo - modern, professional
-            onPrimary = Color.White,                            // White for contrast
-            primaryContainer = Color(0xFFE0E7FF),               // Very light indigo
-            onPrimaryContainer = Color(0xFF6366F1),             // Indigo
+            // Primary
+            primary = Color(0xFF4F46E5),
+            onPrimary = Color.White,
+            primaryContainer = Color(0xFFE0E7FF),
+            onPrimaryContainer = Color(0xFF4338CA),
 
-            // Secondary colors - Emerald
-            secondary = Color(0xFF10B981),                      // Emerald green
-            onSecondary = Color.White,                          // White for contrast
-            secondaryContainer = Color(0xFFD1FAE5),             // Very light green
-            onSecondaryContainer = Color(0xFF10B981),           // Emerald green
+            // Secondary
+            secondary = Color(0xFF059669),
+            onSecondary = Color.White,
+            secondaryContainer = Color(0xFFD1FAE5),
+            onSecondaryContainer = Color(0xFF065F46),
 
-            // Tertiary colors - Amber
-            tertiary = Color(0xFFF59E0B),                       // Amber - warnings
-            onTertiary = Color.White,                           // White for contrast
-            tertiaryContainer = Color(0xFFFEF3C7),              // Very light amber
-            onTertiaryContainer = Color(0xFFF59E0B),            // Amber
+            // Tertiary
+            tertiary = Color(0xFFD97706),
+            onTertiary = Color.White,
+            tertiaryContainer = Color(0xFFFEF3C7),
+            onTertiaryContainer = Color(0xFF92400E),
 
-            // Error colors - Red
-            error = Color(0xFFEF4444),                          // Bright red
-            onError = Color.White,                              // White for contrast
-            errorContainer = Color(0xFFFDEDEB),                 // Very light red
-            onErrorContainer = Color(0xFFEF4444),               // Bright red
+            // Background
+            background = Color(0xFFF8FAFC),
+            onBackground = Color(0xFF0F172A),
 
-            // Background colors
-            background = Color(0xFFFFFFFF),                     // White
-            onBackground = Color(0xFF111827),                   // Dark text
+            // Surface
+            surface = Color.White,
+            onSurface = Color(0xFF0F172A),
 
-            // Surface colors
-            surface = Color.White,                              // White
-            onSurface = Color(0xFF111827),                      // Dark text
-            surfaceVariant = Color(0xFFF3F4F6),                 // Light gray
-            onSurfaceVariant = Color(0xFF6B7280),               // Medium gray
-            surfaceContainer = Color(0xFFE5E7EB),               // Medium gray for hierarchy
+            // SurfaceVariant
+            surfaceVariant = Color(0xFFF1F5F9),
+            onSurfaceVariant = Color(0xFF64748B),
 
-            // Outline colors
-            outline = Color(0xFFE5E7EB),                        // Light gray divider
-            outlineVariant = Color(0xFFCAC4D0),                 // Light purple variant
+            // surfaceContainer
+            surfaceContainer = Color(0xFFE2E8F0),
 
-            // Scrim color (overlay)
-            scrim = Color.Black                                 // Black scrim
+            // Outline
+            outline = Color(0xFFE2E8F0),
+            outlineVariant = Color(0xFFCBD5E1),
+
+            error = Color(0xFFDC2626),
+            onError = Color.White,
         )
     }
 

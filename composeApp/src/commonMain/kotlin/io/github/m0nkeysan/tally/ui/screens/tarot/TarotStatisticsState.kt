@@ -4,6 +4,7 @@ import io.github.m0nkeysan.tally.core.model.BidStatistic
 import io.github.m0nkeysan.tally.core.model.GameStatistics
 import io.github.m0nkeysan.tally.core.model.PlayerRanking
 import io.github.m0nkeysan.tally.core.model.PlayerStatistics
+import io.github.m0nkeysan.tally.core.model.RoundProgressData
 import io.github.m0nkeysan.tally.core.model.RoundStatistic
 import io.github.m0nkeysan.tally.core.model.TakerPerformance
 import io.github.m0nkeysan.tally.core.model.TarotGame
@@ -26,6 +27,9 @@ data class TarotStatisticsState(
     // Game progression statistics (only when 3+ rounds)
     val takerPerformance: Map<String, TakerPerformance> = emptyMap(),
     val hasMinimumRounds: Boolean = false,
+    
+    // Score progression data for chart
+    val progressData: List<RoundProgressData> = emptyList(),
     
     // Cross-game player statistics
     val playerStatistics: List<PlayerStatistics> = emptyList(),
