@@ -57,6 +57,7 @@ import io.github.m0nkeysan.tally.core.domain.model.ScoringLogic
 import io.github.m0nkeysan.tally.core.model.GameTrackerGame
 import io.github.m0nkeysan.tally.core.model.GameTrackerRound
 import io.github.m0nkeysan.tally.core.model.Player
+import io.github.m0nkeysan.tally.core.model.WinStatus
 import io.github.m0nkeysan.tally.generated.resources.Res
 import io.github.m0nkeysan.tally.generated.resources.action_back
 import io.github.m0nkeysan.tally.generated.resources.action_cancel
@@ -73,6 +74,7 @@ import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_round_
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_section_leaderboard
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_section_rounds
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_should_finish
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_target_exceeded
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_target_reached
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_title
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_winner
@@ -226,6 +228,7 @@ fun GameTrackerScoringScreen(
                         LeaderboardSection(
                             game = state.game!!,
                             players = state.players,
+                            rounds = state.rounds,
                             totalScores = state.totalScores
                         )
                     }
@@ -291,8 +294,11 @@ fun GameTrackerScoringScreen(
 private fun LeaderboardSection(
     game: GameTrackerGame,
     players: List<Player>,
+    rounds: List<GameTrackerRound>,
     totalScores: Map<String, Int>
 ) {
+    val winStatus = game.checkWinConditions(rounds)
+
     Column {
         Text(
             text = stringResource(Res.string.game_tracker_scoring_section_leaderboard),
@@ -309,14 +315,14 @@ private fun LeaderboardSection(
 
         sortedPlayers.forEachIndexed { index, player ->
             val score = totalScores[player.id] ?: 0
-            val hasReachedTarget = game.targetScore != null && 
-                ((game.scoringLogic == ScoringLogic.HIGH_SCORE_WINS && score >= game.targetScore) ||
-                 (game.scoringLogic == ScoringLogic.LOW_SCORE_WINS && score <= game.targetScore))
+            val isTargetReached = winStatus is WinStatus.TargetReached && player.id in winStatus.playerIds
+            val isTargetExceeded = winStatus is WinStatus.TargetExceeded && player.id in winStatus.loserPlayerIds
             
             PlayerScoreCard(
                 player = player,
                 score = score,
-                hasReachedTarget = hasReachedTarget,
+                hasReachedTarget = isTargetReached,
+                hasExceededTarget = isTargetExceeded,
                 isGameFinished = game.isFinished,
                 isWinner = game.isFinished && game.winnerPlayerId == player.id
             )
@@ -348,6 +354,7 @@ private fun PlayerScoreCard(
     player: Player,
     score: Int,
     hasReachedTarget: Boolean,
+    hasExceededTarget: Boolean,
     isGameFinished: Boolean,
     isWinner: Boolean
 ) {
@@ -404,6 +411,15 @@ private fun PlayerScoreCard(
                     if (hasReachedTarget && !isGameFinished) {
                         Text(
                             text = stringResource(Res.string.game_tracker_scoring_target_reached),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = contentColor.copy(alpha = 0.9f),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    if (hasExceededTarget && !isGameFinished) {
+                        Text(
+                            text = stringResource(Res.string.game_tracker_scoring_target_exceeded),
                             style = MaterialTheme.typography.bodySmall,
                             color = contentColor.copy(alpha = 0.9f),
                             fontWeight = FontWeight.Bold

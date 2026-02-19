@@ -46,12 +46,12 @@
     <!-- Game Tracker Creation -->
     <string name="game_tracker_creation_title">Nouvelle feuille de score</string>
     <string name="game_tracker_creation_name_default">Partie</string>
-    <string name="game_tracker_creation_scoring_logic">Système de score</string>
-    <string name="game_tracker_scoring_high">Score le plus élevé gagne</string>
-    <string name="game_tracker_scoring_low">Score le plus bas gagne</string>
-    <string name="game_tracker_creation_target_score">Score cible (Optionnel)</string>
-    <string name="game_tracker_creation_enable_target">Activer le score cible</string>
-    <string name="game_tracker_creation_target_hint">Entrez le score cible</string>
+    <string name="game_tracker_creation_scoring_logic">Gagnant</string>
+    <string name="game_tracker_scoring_high">Plus haut score</string>
+    <string name="game_tracker_scoring_low">Plus bas score</string>
+    <string name="game_tracker_creation_target_score">Score limite (Optionnel)</string>
+    <string name="game_tracker_creation_enable_target">Activer le score limite</string>
+    <string name="game_tracker_creation_target_hint">Entrez le score limite</string>
     <string name="game_tracker_creation_duration_mode">Durée de la partie</string>
     <string name="game_tracker_duration_fixed">Manches fixes</string>
     <string name="game_tracker_duration_infinite">Infini</string>
@@ -70,6 +70,7 @@
     <string name="game_tracker_scoring_round_title">Manche %1$d</string>
     <string name="game_tracker_scoring_total_score">Total : %1$d</string>
     <string name="game_tracker_scoring_target_reached">🎯 Score cible atteint !</string>
+    <string name="game_tracker_scoring_target_exceeded">⚠ Score de défaite atteint !</string>
     <string name="game_tracker_scoring_should_finish">✓ Toutes les manches complétées</string>
     <string name="game_tracker_scoring_winner">👑 Vainqueur !</string>
     <string name="game_tracker_scoring_others">autres</string>

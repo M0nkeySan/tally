@@ -79,13 +79,17 @@ data class GameTrackerGame(
         // Check target score reached (indicator only, don't auto-finish)
         if (targetScore != null) {
             val playersAtTarget = totals.filter { (_, score) ->
-                when (scoringLogic) {
-                    ScoringLogic.HIGH_SCORE_WINS -> score >= targetScore
-                    ScoringLogic.LOW_SCORE_WINS -> score <= targetScore
-                }
+                if (targetScore > 0) score >= targetScore
+                else if (targetScore < 0) score <= targetScore
+                else score == 0
             }
+
             if (playersAtTarget.isNotEmpty()) {
-                return WinStatus.TargetReached(playersAtTarget.keys.toList())
+                return if (scoringLogic == ScoringLogic.LOW_SCORE_WINS) {
+                    WinStatus.TargetExceeded(playersAtTarget.keys.toList())
+                } else {
+                    WinStatus.TargetReached(playersAtTarget.keys.toList())
+                }
             }
         }
 
@@ -131,6 +135,7 @@ data class GameTrackerGame(
 sealed class WinStatus {
     object InProgress : WinStatus()
     data class TargetReached(val playerIds: List<String>) : WinStatus()
+    data class TargetExceeded(val loserPlayerIds: List<String>) : WinStatus()
     data class ShouldFinish(val leaderId: String?) : WinStatus()
     data class GameComplete(val winnerId: String?) : WinStatus()
 }

@@ -43,12 +43,12 @@
     <!-- Game Tracker Creation -->
     <string name="game_tracker_creation_title">New Game Tracker</string>
     <string name="game_tracker_creation_name_default">Game</string>
-    <string name="game_tracker_creation_scoring_logic">Scoring</string>
-    <string name="game_tracker_scoring_high">High Score Wins</string>
-    <string name="game_tracker_scoring_low">Low Score Wins</string>
-    <string name="game_tracker_creation_target_score">Target Score (Optional)</string>
-    <string name="game_tracker_creation_enable_target">Enable Target Score</string>
-    <string name="game_tracker_creation_target_hint">Enter target score</string>
+    <string name="game_tracker_creation_scoring_logic">Winner</string>
+    <string name="game_tracker_scoring_high">Highest Score</string>
+    <string name="game_tracker_scoring_low">Lowest Score</string>
+    <string name="game_tracker_creation_target_score">Score Limit (Optional)</string>
+    <string name="game_tracker_creation_enable_target">Enable Limit Score</string>
+    <string name="game_tracker_creation_target_hint">Enter limit score</string>
     <string name="game_tracker_creation_duration_mode">Game Duration</string>
     <string name="game_tracker_duration_fixed">Fixed Rounds</string>
     <string name="game_tracker_duration_infinite">Infinite</string>
@@ -67,6 +67,7 @@
     <string name="game_tracker_scoring_round_title">Round %1$d</string>
     <string name="game_tracker_scoring_total_score">Total: %1$d</string>
     <string name="game_tracker_scoring_target_reached">🎯 Target Reached!</string>
+    <string name="game_tracker_scoring_target_exceeded">⚠ Losing Target Reached!</string>
     <string name="game_tracker_scoring_should_finish">✓ All rounds complete</string>
     <string name="game_tracker_scoring_winner">👑 Winner!</string>
     <string name="game_tracker_scoring_others">others</string>
