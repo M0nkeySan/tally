@@ -274,6 +274,7 @@ fun GameTrackerScoringScreen(
                                 roundNumber = roundNumber,
                                 rounds = roundsByNumber[roundNumber] ?: emptyList(),
                                 players = state.players,
+                                scoringLogic = state.game?.scoringLogic ?: ScoringLogic.HIGH_SCORE_WINS,
                                 onEditClick = { round ->
                                     onEditRound(roundNumber, round.id)
                                 },
@@ -452,6 +453,7 @@ private fun RoundCard(
     roundNumber: Int,
     rounds: List<GameTrackerRound>,
     players: List<Player>,
+    scoringLogic: ScoringLogic,
     onEditClick: (GameTrackerRound) -> Unit,
     onDeleteClick: () -> Unit,
     isFinished: Boolean
@@ -528,17 +530,23 @@ private fun RoundCard(
                 if (rounds.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(4.dp))
                     
+                    // Determine which scorer is "best" and which is "worst" based on scoring logic
+                    val bestPlayer = if (scoringLogic == ScoringLogic.HIGH_SCORE_WINS) highestPlayer else lowestPlayer
+                    val bestScore = if (scoringLogic == ScoringLogic.HIGH_SCORE_WINS) highestScore else lowestScore
+                    val worstPlayer = if (scoringLogic == ScoringLogic.HIGH_SCORE_WINS) lowestPlayer else highestPlayer
+                    val worstScore = if (scoringLogic == ScoringLogic.HIGH_SCORE_WINS) lowestScore else highestScore
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Highest scorer
-                        highestPlayer?.let { player ->
-                            val scoreText = if (highestScore != null && highestScore >= 0) {
-                                "+$highestScore"
+                        // Best scorer
+                        bestPlayer?.let { player ->
+                            val scoreText = if (bestScore != null && bestScore >= 0) {
+                                "+$bestScore"
                             } else {
-                                "$highestScore"
+                                "$bestScore"
                             }
                             Text(
                                 text = "📈 ${player.name} ($scoreText)",
@@ -546,25 +554,25 @@ private fun RoundCard(
                                 color = io.github.m0nkeysan.tally.ui.theme.LocalCustomColors.current.success
                             )
                         }
-                        
+
                         // Separator
-                        if (highestPlayer != null && (lowestPlayer != null || otherCount > 0)) {
+                        if (bestPlayer != null && (worstPlayer != null || otherCount > 0)) {
                             Text(
                                 text = " | ",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
-                        
-                        // Lowest scorer (only if different from highest)
-                        if (lowestPlayer != null && lowestPlayer.id != highestPlayer?.id) {
-                            val scoreText = if (lowestScore != null && lowestScore >= 0) {
-                                "+$lowestScore"
+
+                        // Worst scorer (only if different from best)
+                        if (worstPlayer != null && worstPlayer.id != bestPlayer?.id) {
+                            val scoreText = if (worstScore != null && worstScore >= 0) {
+                                "+$worstScore"
                             } else {
-                                "$lowestScore"
+                                "$worstScore"
                             }
                             Text(
-                                text = "📉 ${lowestPlayer.name} ($scoreText)",
+                                text = "📉 ${worstPlayer.name} ($scoreText)",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.error
                             )
@@ -572,8 +580,8 @@ private fun RoundCard(
                         
                         // Others count
                         if (otherCount > 0) {
-                            // Add separator if we showed lowest
-                            if (lowestPlayer != null && lowestPlayer.id != highestPlayer?.id) {
+                            // Add separator if we showed worst
+                            if (worstPlayer != null && worstPlayer.id != bestPlayer?.id) {
                                 Text(
                                     text = " | ",
                                     style = MaterialTheme.typography.bodyMedium,
