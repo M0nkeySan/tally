@@ -69,7 +69,6 @@ import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_fin
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_game_stats
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_cd_history
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_empty_rounds
-import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_others
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_round_title
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_section_leaderboard
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_scoring_section_rounds
@@ -465,23 +464,15 @@ private fun RoundCard(
             dismissState.snapTo(SwipeToDismissBoxValue.Settled)
         }
     }
-    
-    // Calculate highlights
+
     val highestScore = rounds.maxOfOrNull { it.score }
     val lowestScore = rounds.minOfOrNull { it.score }
-    
-    val highestScorer = rounds.find { it.score == highestScore }
-    val lowestScorer = rounds.find { it.score == lowestScore }
-    
-    val highestPlayer = highestScorer?.let { round ->
-        players.find { it.id == round.playerId }
-    }
-    val lowestPlayer = lowestScorer?.let { round ->
-        players.find { it.id == round.playerId }
-    }
-    
-    // Count "others" (players who are neither highest nor lowest)
-    val otherCount = if (rounds.size > 2) rounds.size - 2 else 0
+
+    val bestScore = if (scoringLogic == ScoringLogic.HIGH_SCORE_WINS) highestScore else lowestScore
+    val worstScore = if (scoringLogic == ScoringLogic.HIGH_SCORE_WINS) lowestScore else highestScore
+
+    val bestScorers = rounds.filter { it.score == bestScore }
+    val worstScorers = rounds.filter { it.score == worstScore }
 
     SwipeToDismissBox(
         state = dismissState,
@@ -529,74 +520,73 @@ private fun RoundCard(
                 // Score highlights
                 if (rounds.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(4.dp))
-                    
-                    // Determine which scorer is "best" and which is "worst" based on scoring logic
-                    val bestPlayer = if (scoringLogic == ScoringLogic.HIGH_SCORE_WINS) highestPlayer else lowestPlayer
-                    val bestScore = if (scoringLogic == ScoringLogic.HIGH_SCORE_WINS) highestScore else lowestScore
-                    val worstPlayer = if (scoringLogic == ScoringLogic.HIGH_SCORE_WINS) lowestPlayer else highestPlayer
-                    val worstScore = if (scoringLogic == ScoringLogic.HIGH_SCORE_WINS) lowestScore else highestScore
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // Best scorer
-                        bestPlayer?.let { player ->
-                            val scoreText = if (bestScore != null && bestScore >= 0) {
-                                "+$bestScore"
-                            } else {
-                                "$bestScore"
+                    val isTied = bestScorers.size == rounds.size
+                    val bestScoreValue = bestScore ?: return@Column
+
+                    if (isTied) {
+                        val allNames = bestScorers.mapNotNull { round ->
+                            players.find { it.id == round.playerId }?.name
+                        }.joinToString(", ")
+                        val scoreText = formatScore(bestScoreValue)
+                        Text(
+                            text = "$allNames ($scoreText)",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    } else {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // Best scorer(s)
+                            val bestNames = bestScorers.mapNotNull { round ->
+                                players.find { it.id == round.playerId }?.name
                             }
+                            val bestText = formatScoreDisplay(bestNames, bestScoreValue, isBest = true)
                             Text(
-                                text = "📈 ${player.name} ($scoreText)",
+                                text = bestText,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = io.github.m0nkeysan.tally.ui.theme.LocalCustomColors.current.success
                             )
-                        }
 
-                        // Separator
-                        if (bestPlayer != null && (worstPlayer != null || otherCount > 0)) {
-                            Text(
-                                text = " | ",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-
-                        // Worst scorer (only if different from best)
-                        if (worstPlayer != null && worstPlayer.id != bestPlayer?.id) {
-                            val scoreText = if (worstScore != null && worstScore >= 0) {
-                                "+$worstScore"
-                            } else {
-                                "$worstScore"
-                            }
-                            Text(
-                                text = "📉 ${worstPlayer.name} ($scoreText)",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.error
-                            )
-                        }
-                        
-                        // Others count
-                        if (otherCount > 0) {
-                            // Add separator if we showed worst
-                            if (worstPlayer != null && worstPlayer.id != bestPlayer?.id) {
+                            // Worst scorer(s) - only if different from best
+                            if (worstScorers.isNotEmpty() && worstScorers != bestScorers) {
                                 Text(
                                     text = " | ",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
+                                val worstScoreValue = worstScore ?: return@Column
+                                val worstNames = worstScorers.mapNotNull { round ->
+                                    players.find { it.id == round.playerId }?.name
+                                }
+                                val worstText = formatScoreDisplay(worstNames, worstScoreValue, isBest = false)
+                                Text(
+                                    text = worstText,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.error
+                                )
                             }
-                            Text(
-                                text = "+$otherCount ${stringResource(Res.string.game_tracker_scoring_others)}",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
                         }
                     }
                 }
             }
+        }
+    }
+
+    private fun formatScore(score: Int): String {
+        return if (score >= 0) "+$score" else "$score"
+    }
+
+    private fun formatScoreDisplay(names: List<String>, score: Int, isBest: Boolean): String {
+        val emoji = if (isBest) "📈" else "📉"
+        val scoreText = formatScore(score)
+        return if (names.size == 1) {
+            "$emoji ${names.first()} ($scoreText)"
+        } else {
+            "${names.joinToString(", ")} ($scoreText)"
         }
     }
 }

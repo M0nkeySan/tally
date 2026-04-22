@@ -49,12 +49,12 @@ import io.github.m0nkeysan.tally.generated.resources.action_back
 import io.github.m0nkeysan.tally.generated.resources.cd_toggle_collapse
 import io.github.m0nkeysan.tally.generated.resources.cd_toggle_expand
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_avg_per_round
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_best_round
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_current_leader
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_graph_title
-import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_highest_round
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_lead_changes
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_loading
-import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_lowest_round
+import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_worst_round
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_no_rounds
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_stats_player_count
 import io.github.m0nkeysan.tally.generated.resources.game_tracker_game_stats_quick_stats
@@ -231,6 +231,7 @@ fun GameTrackerGameStatisticsScreen(
                             val isExpanded = expandedPlayerId == playerStats.player.id
                             PlayerStatsCard(
                                 playerStats = playerStats,
+                                scoringLogic = gameStats.scoringLogic,
                                 rank = medalMap[playerStats.player.id],
                                 isExpanded = isExpanded,
                                 onToggle = {
@@ -281,6 +282,7 @@ private fun QuickStatsCard(
 @Composable
 private fun PlayerStatsCard(
     playerStats: PlayerRoundStats,
+    scoringLogic: ScoringLogic,
     rank: Int?,
     isExpanded: Boolean,
     onToggle: () -> Unit
@@ -375,16 +377,20 @@ private fun PlayerStatsCard(
                             label = stringResource(Res.string.game_tracker_game_stats_avg_per_round),
                             value = formatAverage(playerStats.averageScorePerRound)
                         )
-                        if (playerStats.highestRoundScore != null) {
+                        val (bestRoundScore, worstRoundScore) = when(scoringLogic) {
+                               ScoringLogic.HIGH_SCORE_WINS ->  playerStats.highestRoundScore to playerStats.lowestRoundScore
+                               ScoringLogic.LOW_SCORE_WINS -> playerStats.lowestRoundScore to playerStats.highestRoundScore
+                        }
+                        if (bestRoundScore != null) {
                             StatRow(
-                                label = stringResource(Res.string.game_tracker_game_stats_highest_round),
-                                value = playerStats.highestRoundScore.toString()
+                                label = stringResource(Res.string.game_tracker_game_stats_best_round),
+                                value = bestRoundScore.toString()
                             )
                         }
-                        if (playerStats.lowestRoundScore != null) {
+                        if (worstRoundScore != null) {
                             StatRow(
-                                label = stringResource(Res.string.game_tracker_game_stats_lowest_round),
-                                value = playerStats.lowestRoundScore.toString()
+                                label = stringResource(Res.string.game_tracker_game_stats_worst_round),
+                                value = worstRoundScore.toString()
                             )
                         }
                     }

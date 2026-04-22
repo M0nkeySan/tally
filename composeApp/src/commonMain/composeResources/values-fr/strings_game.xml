@@ -74,6 +74,7 @@
     <string name="game_tracker_scoring_should_finish">✓ Toutes les manches complétées</string>
     <string name="game_tracker_scoring_winner">👑 Vainqueur !</string>
     <string name="game_tracker_scoring_others">autres</string>
+    <string name="game_tracker_scoring_tied_format">%1$s et %2$d joueur%3$s</string>
     <string name="game_tracker_round_delete_dialog_title">Supprimer la manche</string>
     <string name="game_tracker_round_delete_dialog_message">Êtes-vous sûr de vouloir supprimer la manche %1$d ?</string>
     
@@ -139,8 +140,8 @@
     <string name="game_tracker_game_stats_current_leader">Leader actuel</string>
     <string name="game_tracker_game_stats_lead_changes">Changements de leader</string>
     <string name="game_tracker_game_stats_avg_per_round">Moy par manche</string>
-    <string name="game_tracker_game_stats_highest_round">Meilleure manche</string>
-    <string name="game_tracker_game_stats_lowest_round">Pire manche</string>
+    <string name="game_tracker_game_stats_best_round">Meilleure manche</string>
+    <string name="game_tracker_game_stats_worst_round">Pire manche</string>
     <string name="game_tracker_game_stats_current_streak">Série actuelle</string>
     <string name="game_tracker_game_stats_score_distribution">Distribution des scores</string>
     <string name="game_tracker_game_stats_dist_negative">Négatif</string>

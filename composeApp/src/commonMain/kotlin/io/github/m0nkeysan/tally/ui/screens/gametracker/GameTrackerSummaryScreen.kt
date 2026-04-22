@@ -111,8 +111,9 @@ fun GameTrackerSummaryScreen(
                     ScoringLogic.LOW_SCORE_WINS -> players.sortedBy { scores[it.id] ?: 0 }
                 }
 
-                val winner = sortedPlayers.firstOrNull()
-                val isDraw = sortedPlayers.size > 1 && scores[sortedPlayers[0].id] == scores[sortedPlayers[1].id]
+                val topScore = sortedPlayers.firstOrNull()?.let { scores[it.id] } ?: 0
+                val winners = sortedPlayers.filter { scores[it.id] == topScore }
+                val isDraw = winners.size > 1
 
                 Column(
                     modifier = Modifier
@@ -132,8 +133,8 @@ fun GameTrackerSummaryScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Winner Avatar
-                    winner?.let { w ->
+                    // Winner Avatar(s)
+                    winners.forEachIndexed { index, w ->
                         val avatarColor = parseColor(w.avatarColor)
                         Box(
                             modifier = Modifier
@@ -174,6 +175,10 @@ fun GameTrackerSummaryScreen(
                                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
                             )
+                        }
+
+                        if (index < winners.size - 1) {
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
 

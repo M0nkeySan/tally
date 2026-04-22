@@ -71,6 +71,7 @@
     <string name="game_tracker_scoring_should_finish">✓ All rounds complete</string>
     <string name="game_tracker_scoring_winner">👑 Winner!</string>
     <string name="game_tracker_scoring_others">others</string>
+    <string name="game_tracker_scoring_tied_format">%1$s and %2$d player%3$s</string>
     <string name="game_tracker_round_delete_dialog_title">Delete Round</string>
     <string name="game_tracker_round_delete_dialog_message">Are you sure you want to delete round %1$d?</string>
     
@@ -136,8 +137,8 @@
     <string name="game_tracker_game_stats_current_leader">Current Leader</string>
     <string name="game_tracker_game_stats_lead_changes">Lead Changes</string>
     <string name="game_tracker_game_stats_avg_per_round">Avg per Round</string>
-    <string name="game_tracker_game_stats_highest_round">Highest Round</string>
-    <string name="game_tracker_game_stats_lowest_round">Lowest Round</string>
+    <string name="game_tracker_game_stats_best_round">Best Round</string>
+    <string name="game_tracker_game_stats_worst_round">Worst Round</string>
     <string name="game_tracker_game_stats_current_streak">Current Streak</string>
     <string name="game_tracker_game_stats_score_distribution">Score Distribution</string>
     <string name="game_tracker_game_stats_dist_negative">Negative</string>
